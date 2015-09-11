@@ -1,0 +1,474 @@
+2015-07-19 17:17:15 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:461
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:17:15 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437297435.2495
+    'REQUEST_TIME' => 1437297435
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]
+2015-07-19 17:19:25 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:461
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:19:25 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437297565.0801
+    'REQUEST_TIME' => 1437297565
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]
+2015-07-19 17:20:02 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:461
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:20:02 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437297602.515
+    'REQUEST_TIME' => 1437297602
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]
+2015-07-19 17:20:11 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:461
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:20:11 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437297611.4185
+    'REQUEST_TIME' => 1437297611
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]
+2015-07-19 17:26:44 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:464
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:26:44 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437298004.8363
+    'REQUEST_TIME' => 1437298004
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]
+2015-07-19 17:37:49 [-][-][-][error][yii\console\Exception] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Module.php:463
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(166): yii\base\Module->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#2 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#3 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#4 {main}
+
+Next exception 'yii\console\Exception' with message 'Unknown command "test".' in /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php:168
+Stack trace:
+#0 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/console/Application.php(142): yii\console\Application->runAction('test', Array)
+#1 /Users/wushuiyong/workspace/git/zlog/vendor/yiisoft/yii2/base/Application.php(375): yii\console\Application->handleRequest(Object(yii\console\Request))
+#2 /Users/wushuiyong/workspace/git/zlog/yii(26): yii\base\Application->run()
+#3 {main}
+2015-07-19 17:37:49 [-][-][-][info][application] $_SERVER = [
+    'SSH_AUTH_SOCK' => '/private/tmp/com.apple.launchd.xv9zqw89r1/Listeners'
+    'Apple_PubSub_Socket_Render' => '/private/tmp/com.apple.launchd.4irIAOiOzG/Render'
+    'COLORFGBG' => '7;0'
+    'ITERM_PROFILE' => 'Default'
+    'XPC_FLAGS' => '0x0'
+    'LANG' => 'zh_CN.UTF-8'
+    'PWD' => '/Users/wushuiyong/workspace/git/zlog'
+    'SHELL' => '/bin/zsh'
+    'SECURITYSESSIONID' => '186a5'
+    'TERM_PROGRAM' => 'iTerm.app'
+    'PATH' => '/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongodb/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/bin:/usr/local/mongo/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/imagick/bin:/usr/local/re2c/bin:/Users/wushuiyong/play:/usr/local/lib/node_modules:/usr/local/scws/bin:/usr/local/zeromq/bin:/usr/local/mysql/bin:/usr/local/nginx:/usr/local/php/bin:/usr/local/mongodb:/usr/local/protobuf/bin:/usr/local/scala/bin:/Users/wushuiyong/bin:/usr/local/bin:/usr/local/mhash/bin:/usr/local/hive/lib:/usr/local/hive/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:/usr/local/scala/bin:/usr/local/sqoop/bin:/usr/local/spark/bin:/Users/wushuiyong/.composer/vendor/bin:/usr/local/graphviz/bin:/usr/local/libevent/bin:/usr/local/memcached/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
+    'COMMAND_MODE' => 'unix2003'
+    'TERM' => 'xterm-256color'
+    'HOME' => '/Users/wushuiyong'
+    'TMPDIR' => '/var/folders/lf/1rxm2w79725d_4yklb2m5_x00000gn/T/'
+    'USER' => 'wushuiyong'
+    'XPC_SERVICE_NAME' => '0'
+    'LOGNAME' => 'wushuiyong'
+    '__CF_USER_TEXT_ENCODING' => '0x1F5:0x19:0x34'
+    'ITERM_SESSION_ID' => 'w0t0p0'
+    'SHLVL' => '1'
+    'OLDPWD' => '/Users/wushuiyong/workspace/yii2'
+    'LOCAL' => '/usr/local'
+    'JAVA_HOME' => '/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home'
+    'HADOOP' => '/usr/local/hadoop'
+    'HADOOP_HOME' => '/usr/local/hadoop'
+    'HADOOP_MAPRED_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_HOME' => '/usr/local/hadoop'
+    'HADOOP_HDFS_HOME' => '/usr/local/hadoop'
+    'YARN_HOME' => '/usr/local/hadoop'
+    'HADOOP_COMMON_LIB_NATIVE_DIR' => '/usr/local/hadoop/lib/native'
+    'HADOOP_OPTS' => '-Djava.library.path=/lib'
+    'HIVE_HOME' => '/usr/local/hive'
+    'SQOOP_HOME' => '/usr/local/sqoop'
+    'SPARK_HOME' => '/usr/local/spark'
+    'SCALA_HOME' => '/usr/local/scala'
+    'COMPOSER_HOME' => '/usr/local/vendor'
+    'NODE_PATH' => '/usr/local/lib/node_modules'
+    'MAGICK_HOME' => '/usr/local/imagick'
+    'RE2C_HOME' => '/usr/local/re2c'
+    'CLASSPATH' => '.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:.:/Library/Java/JavaVirtualMachines/jdk1.7.0_75.jdk/Contents/Home/lib:/usr/local/hadoop/lib:/usr/local/hive/lib:'
+    'LD_LIBRARY_PATH' => '/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib:/usr/local/imagick/lib'
+    'ZSH' => '/Users/wushuiyong/.oh-my-zsh'
+    'PAGER' => 'less'
+    'LESS' => '-R'
+    'LC_CTYPE' => 'zh_CN.UTF-8'
+    'LSCOLORS' => 'Gxfxcxdxbxegedabagacad'
+    'AUTOJUMP_SOURCED' => '1'
+    'AUTOJUMP_ERROR_PATH' => '/Users/wushuiyong/Library/autojump/errors.log'
+    'KAFKA_HOME' => '/usr/local/kafka'
+    '_' => '/Users/wushuiyong/workspace/git/zlog/./yii'
+    'PHP_SELF' => './yii'
+    'SCRIPT_NAME' => './yii'
+    'SCRIPT_FILENAME' => './yii'
+    'PATH_TRANSLATED' => './yii'
+    'DOCUMENT_ROOT' => ''
+    'REQUEST_TIME_FLOAT' => 1437298669.2788
+    'REQUEST_TIME' => 1437298669
+    'argv' => [
+        0 => './yii'
+        1 => 'test'
+    ]
+    'argc' => 2
+]

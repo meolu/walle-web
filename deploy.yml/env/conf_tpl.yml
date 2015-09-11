@@ -1,0 +1,29 @@
+#production
+scm:
+  type: git
+  url: git@github.com:meolu/walle-web.git
+  branch: master
+deployment:
+  user: wushuiyong 
+  from: /var/www/deploy/from
+  env: simulate
+  excludes:
+    - READ.ME
+  strategy: targz
+releases:
+  user: wushuiyong
+  enabled: true
+  max: 10
+  to: /var/www/deploy/to
+  symlink: walle 
+  directory: releases
+hosts:
+    - 127.0.0.1
+tasks:
+  pre-deploy:
+  on-deploy:
+  post-release:
+    - cp -rf {WORKSPACE}/deploy.yml {VERSION}/
+  post-deploy:
+
+                                                                                                                                    
