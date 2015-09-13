@@ -10,6 +10,7 @@ Walle景愿是做一个web系统工具，实现最基础的上线部署，以及
 	* 用户分身份注册、登录
 	* 开发者发起上线任务申请
 	* 管理者审核上线任务
+  * 支持多项目部署
 	* 开发者一键部署上线
   * 快速回滚
 	* 查看上线日志
@@ -64,7 +65,6 @@ tasks:
 To Do List
 ----------
 
-* 支持多项目部署
 * 日志查询
 * 日志图表展示
 * 日志订阅
@@ -72,6 +72,9 @@ To Do List
 
 截图
 ---
+#### 注册发普通开发者和管理角色
+![](https://raw.github.com/meolu/walle-web/master/screenshots/login.gif)
+
 #### 提交上线任务
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/submit.gif)
 
@@ -80,3 +83,7 @@ To Do List
 
 #### 发起上线
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/deploy.png)
+
+
+### 有问题加群
+** QQ：482939318 **
