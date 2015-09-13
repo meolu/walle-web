@@ -79,7 +79,7 @@ class WalleController extends Controller {
                 $this->_postRelease();
                 $this->_link();
             } else {
-                $this->_link($dbConf->version);
+                $this->_link($this->_task->ex_link_id);
             }
 
 
@@ -90,7 +90,10 @@ class WalleController extends Controller {
             }
             // 记录此次上线的版本（软链号）和上线之前的版本
             $this->_task->link_id = $this->_config->getReleases('release_id');
-            $this->_task->ex_link_id = $dbConf->version;
+            // 对于回滚的任务不记录线上版本
+            $this->_task->ex_link_id = $this->_task->link_id == $this->_task->ex_link_id
+                ? $this->_task->link_id
+                : $dbConf->version;
             $this->_task->status = Task::STATUS_DONE;
             $this->_task->save();
 
@@ -232,6 +235,9 @@ class WalleController extends Controller {
         if ($this->_task->user_id != \Yii::$app->user->id) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
+        if ($this->_task->_ex_link_id == $this->_task->_ex_link_id) {
+            throw new \Exception('已回滚的任务不能再次回滚：（');
+        }
         $rollbackTask = new Task();
         $conf = Conf::findOne($this->_task->project_id);
         // 只有线上才需要审核
@@ -242,6 +248,7 @@ class WalleController extends Controller {
             'status' => $status,
             'action' => Task::ACTION_ROLLBACK,
             'link_id' => $this->_task->ex_link_id,
+            'ex_link_id' => $this->_task->ex_link_id,
             'created_at' => time(),
             'title' => $this->_task->title . ' - 回滚',
             'commit_id' => $this->_task->commit_id,
