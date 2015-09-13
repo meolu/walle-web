@@ -32,6 +32,7 @@ use app\models\Task;
         <table class="table table-striped table-bordered table-hover">
             <tbody><tr>
                 <th>任务名称</th>
+                <th>项目</th>
                 <th>上线commit号</th>
                 <th>当前状态</th>
                 <th>操作</th>
@@ -39,6 +40,7 @@ use app\models\Task;
             <?php foreach ($list as $item) { ?>
             <tr>
                 <td><?= $item['title'] ?></td>
+                <td><?= $item['conf']['name'] ?></td>
                 <td><?= $item['commit_id'] ?></td>
                 <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>">
                     <?= \Yii::t('status', 'task_status_' . $item['status']) ?>

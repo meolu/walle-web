@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use app\models\Conf;
 /**
  * This is the model class for table "task".
  *
@@ -73,5 +73,9 @@ class Task extends \yii\db\ActiveRecord
             'commit_id' => 'commit_id',
             'ex_link_id' => 'ex_link_id',
         ];
+    }
+
+    public function getConf() {
+        return $this->hasOne(Conf::className(), ['id' => 'project_id']);
     }
 }
