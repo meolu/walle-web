@@ -19,9 +19,9 @@ use app\models\Conf;
         <div class="form-group">
 	        <label>项目环境级别</label>
 	        <select name="level" aria-hidden="true" tabindex="-1" id="commit_history" class="form-control select2 select2-hidden-accessible">
-	            <option value="<?= Conf::LEVEL_TEST ?>" selected="<?= $conf->level == Conf::LEVEL_TEST ? true : false ?>">测试环境</option>
-                <option value="<?= Conf::LEVEL_SIMU ?>" selected="<?= $conf->level == Conf::LEVEL_SIMU ? true : false ?>">模拟线上环境</option>
-                <option value="<?= Conf::LEVEL_PROD ?>" selected="<?= $conf->level == Conf::LEVEL_PROD ? true : false ?>">线上环境</option>
+	            <option value="<?= Conf::LEVEL_TEST ?>" <?= $conf->level == Conf::LEVEL_TEST ? 'selected="true"' : '' ?>>测试环境</option>
+                <option value="<?= Conf::LEVEL_SIMU ?>" <?= $conf->level == Conf::LEVEL_SIMU ? 'selected="true"' : '' ?>>模拟线上环境</option>
+                <option value="<?= Conf::LEVEL_PROD ?>" <?= $conf->level == Conf::LEVEL_PROD ? 'selected="true"' : '' ?>>线上环境</option>
             </select>
 	      </div>
       </div><!-- /.box-body -->
