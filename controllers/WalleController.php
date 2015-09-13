@@ -64,8 +64,12 @@ class WalleController extends Controller {
         if (!in_array($this->_task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) {
             throw new \Exception('任务不能被重复执行：）');
         }
-        // 配置
+
+        // yml配置
         $this->_config = new Config(Conf::getConfigFile($this->_task->project_id));
+        // db配置
+        $dbConf = Conf::findOne($this->_task->project_id);
+
         try {
             if ($this->_task->action == Task::ACTION_ONLINE) {
                 $this->_checkPermission();
@@ -75,7 +79,7 @@ class WalleController extends Controller {
                 $this->_postRelease();
                 $this->_link();
             } else {
-                $this->_link($this->_task->ex_link_id);
+                $this->_link($dbConf->version);
             }
 
 
@@ -84,7 +88,6 @@ class WalleController extends Controller {
                 $online = new DynamicConf();
                 $online->name = DynamicConf::K_ONLINE_VERSION;
             }
-            $dbConf = Conf::findOne($this->_task->project_id);
             // 记录此次上线的版本（软链号）和上线之前的版本
             $this->_task->link_id = $this->_config->getReleases('release_id');
             $this->_task->ex_link_id = $dbConf->version;
