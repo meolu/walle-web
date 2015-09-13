@@ -25,7 +25,7 @@ class WalleController extends Controller {
     public function actionIndex($kw = null) {
         $user = User::findOne(\Yii::$app->user->id);
         $list = Task::find()
-            ->select(['title', 'status', 'id', 'commit_id'])
+            ->select(['title', 'status', 'id', 'commit_id', 'project_id'])
             ->with('conf');
         if ($user->role != User::ROLE_ADMIN) {
             $list->where(['user_id' => \Yii::$app->user->id]);
