@@ -97,8 +97,8 @@ class WalleController extends Controller {
             $this->_task->status = Task::STATUS_DONE;
             $this->_task->save();
 
-            // 记录当前线上版本（软链）
-            $dbConf->version = $this->_config->getReleases('release_id');
+            // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
+            $dbConf->version = $this->_task->link_id;
             $dbConf->save();
         } catch (\Exception $e) {
             $this->_task->status = Task::STATUS_FAILED;
