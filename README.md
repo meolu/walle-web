@@ -73,7 +73,7 @@ To Do List
 截图
 ---
 #### 注册发普通开发者和管理角色
-![](https://raw.github.com/meolu/walle-web/master/screenshots/login.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
 #### 提交上线任务
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/submit.gif)
