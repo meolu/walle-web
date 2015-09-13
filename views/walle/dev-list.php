@@ -61,7 +61,7 @@ use app\models\Task;
         $this = $(this);
         $.post('/walle/rollback', {taskId: $this.data('id')}, function(o) {
             if (!o.code) {
-                window.location.href="/walle/deploy?taskId=" + o.data.taskId;
+                window.location.href=o.data.url;
             } else {
                 alert(o.msg);
             }

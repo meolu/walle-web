@@ -94,12 +94,6 @@ use \app\models\Task;
             }
             timer = setInterval(getProcess, 100);
         })
-
-        function setProcessStatus() {
-            $.get("/walle/get-process?taskId=" + task_id, function (data) {
-
-            })
-        }
     })
 
 </script>
