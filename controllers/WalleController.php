@@ -235,7 +235,7 @@ class WalleController extends Controller {
         if ($this->_task->user_id != \Yii::$app->user->id) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
-        if ($this->_task->_ex_link_id == $this->_task->ex_link_id) {
+        if ($this->_task->ex_link_id == $this->_task->ex_link_id) {
             throw new \Exception('已回滚的任务不能再次回滚：（');
         }
         $rollbackTask = new Task();
