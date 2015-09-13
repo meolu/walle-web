@@ -10,4 +10,5 @@ return [
     'user.emailConfirmationTokenExpire' => 43200, // 5 days
 
     'config.dir' => '/deploy.yml/env',
+    'mail-suffix' => 'huamanshu.com',
 ];

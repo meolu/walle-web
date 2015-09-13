@@ -102,9 +102,10 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     public function validateEmail($attribute, $params) {
-        if (!preg_match('/.*@social-touch.com$/', $this->$attribute)) {
+        $mailSuffix = \Yii::$app->params['mail-suffix'];
+        if (!preg_match("/.*@{$mailSuffix}$/", $this->$attribute)) {
             $this->addError($attribute, '我猜你丫是外星人，没有st邮箱不可注册：）');
-        }
+        } 
     }
     /**
      * @inheritdoc
