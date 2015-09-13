@@ -84,22 +84,15 @@ class WalleController extends Controller {
                 $online = new DynamicConf();
                 $online->name = DynamicConf::K_ONLINE_VERSION;
             }
-            $exLinkId = $online->value;
-            $online->value = $this->_config->getReleases('release_id');
-            $online->save();
-
+            // 记录此次上线的版本（软链号）和上线之前的版本
             $this->_task->link_id = $this->_config->getReleases('release_id');
-            $this->_task->ex_link_id = $exLinkId;
+            $this->_task->ex_link_id = $this->_config->version;
             $this->_task->status = Task::STATUS_DONE;
             $this->_task->save();
 
-            $online = DynamicConf::findOne(DynamicConf::K_ONLINE_VERSION);
-            if (!$online) {
-                $online = new DynamicConf();
-                $online->name = DynamicConf::K_ONLINE_VERSION;
-            }
-            $online->value = $this->_config->getReleases('release_id');
-            $online->save();
+            // 记录当前线上版本（软链）
+            $this->_config->version = $this->_config->getReleases('release_id');
+            $this->_config->save();
         } catch (\Exception $e) {
             $this->_task->status = Task::STATUS_FAILED;
             $this->_task->save();
