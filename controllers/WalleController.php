@@ -89,11 +89,11 @@ class WalleController extends Controller {
                 $online->name = DynamicConf::K_ONLINE_VERSION;
             }
             // 记录此次上线的版本（软链号）和上线之前的版本
-            $this->_task->link_id = $this->_config->getReleases('release_id');
-            // 对于回滚的任务不记录线上版本
-            $this->_task->ex_link_id = $this->_task->link_id == $this->_task->ex_link_id
-                ? $this->_task->link_id
-                : $dbConf->version;
+            /// 对于回滚的任务不记录线上版本
+            if ($this->_task->action == Task::ACTION_ONLINE) {
+                $this->_task->link_id = $this->_config->getReleases('release_id');
+                $this->_task->ex_link_id = $dbConf->version;
+            }
             $this->_task->status = Task::STATUS_DONE;
             $this->_task->save();
 
