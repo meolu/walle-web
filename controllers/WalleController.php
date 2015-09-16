@@ -99,6 +99,7 @@ class WalleController extends Controller {
                 $this->_task->ex_link_id = $dbConf->version;
             }
             $this->_task->status = Task::STATUS_DONE;
+            $this->_task->created_time = time();
             $this->_task->save();
 
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
@@ -118,6 +119,7 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     public function actionConfigEdit($projectId = null) {
+        if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) throw new \Exception('非管理员不能操作：（');
         $conf = $projectId ? Conf::findOne($projectId) : new Conf();
         $confName = $projectId && $conf ? $conf->conf : static::getParam('conf');
         if (\Yii::$app->request->getIsPost()) {

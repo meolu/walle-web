@@ -65,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <span class="red">Walle</span>
                             <span class="white">瓦力平台</span>
                         </h1>
+                        <h4 class="blue">&copy; 时趣广告</h4>
                     </div>
 
                     <div class="space-6"></div>

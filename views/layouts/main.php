@@ -131,12 +131,14 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
             </script>
 
             <ul class="nav nav-list">
+                <?php if (\Yii::$app->user->identity->role == app\models\User::ROLE_ADMIN) { ?>
                 <li class="<?= \Yii::$app->controller->action->id == 'config' ? 'active' : '' ?>">
                     <a href="/walle/config/">
                         <i class="icon-cogs"></i>
                         <span class="menu-text"> 项目配置 </span>
                     </a>
                 </li>
+                <?php } ?>
                 <li class="<?= \Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">
                     <a href="/walle/index/">
                         <i class="icon-list-alt"></i>

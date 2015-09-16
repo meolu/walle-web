@@ -164,7 +164,7 @@ class SiteController extends Controller
             $name .= " (#$code)";
         }
 
-        if ($exception instanceof UserException) {
+        if ($exception instanceof \Exception) {
             $message = $exception->getMessage();
         } else {
             $message = Yii::t('yii', 'An internal server error occurred.');

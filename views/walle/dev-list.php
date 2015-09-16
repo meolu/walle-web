@@ -65,7 +65,7 @@ use yii\widgets\LinkPager;
             </tbody></table>
     </div><!-- /.box-body -->
 
-    <?=LinkPager::widget(['pagination' => $pages]); ?>
+    <?= LinkPager::widget(['pagination' => $pages]); ?>
 </div>
 
 <script>

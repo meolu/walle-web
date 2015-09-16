@@ -11,16 +11,36 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
-<div class="site-error">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="well">
+    <h1 class="grey lighter smaller">
+        <span class="blue bigger-125">
+            <i class="icon-random"></i>
+Something Went Wrong
 
-    <div class="alert alert-danger">
+        </span>
+    </h1>
+
+    <hr>
+    <h3 class="lighter smaller">
         <?= nl2br(Html::encode($message)) ?>
+    </h3>
+
+    <div class="space"></div>
+
+
+    <hr>
+    <div class="space"></div>
+
+    <div class="center">
+        <a href="#" class="btn btn-grey" onclick="window.history.go(-1)">
+            <i class="icon-arrow-left"></i>
+            Go Back
+        </a>
+
+        <a href="/" class="btn btn-primary">
+            <i class="icon-dashboard"></i>
+            Dashboard
+        </a>
     </div>
-
-    <p>
-        <?= $exception ?>
-    </p>
-
 </div>
