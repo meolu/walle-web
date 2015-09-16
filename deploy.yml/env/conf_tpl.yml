@@ -1,7 +1,7 @@
 #production
 scm:
   type: git
-  url: git@git.social-touch.com:wushuiyong/walle-web.git
+  url: git@github.com:meolu/walle-web.git
   branch: master
 deployment:
   user: wushuiyong 
