@@ -13,6 +13,7 @@ use app\models\Record;
 use walle\command\Command;
 use app\models\Conf;
 use app\models\User;
+use yii\data\Pagination;
 
 class WalleController extends Controller {
 
@@ -22,10 +23,10 @@ class WalleController extends Controller {
 
     public $enableCsrfValidation = false;
 
-    public function actionIndex($kw = null) {
+    public function actionIndex($kw = null, $page = 1, $size = 10) {
+        $size = $this->getParam('per-page') ?: $size;
         $user = User::findOne(\Yii::$app->user->id);
         $list = Task::find()
-            ->select(['title', 'status', 'id', 'commit_id', 'project_id'])
             ->with('conf');
         if ($user->role != User::ROLE_ADMIN) {
             $list->where(['user_id' => \Yii::$app->user->id]);
@@ -35,12 +36,15 @@ class WalleController extends Controller {
         if ($kw) {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
         }
-        $tasks = $list->orderBy('id desc')
+        $tasks = $list->orderBy('id desc');
+        $list = $tasks->offset(($page - 1) * $size)->limit(10)
             ->asArray()->all();
 
         $view = $user->role == User::ROLE_ADMIN ? 'admin-list' : 'dev-list';
+        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
         return $this->render($view, [
-            'list' => $tasks,
+            'list'  => $list,
+            'pages' => $pages,
         ]);
     }
 
@@ -160,6 +164,19 @@ class WalleController extends Controller {
      * @param null $projectId
      * @return string
      */
+    public function actionCheck() {
+
+        $projects = Conf::find()->asArray()->all();
+        return $this->render('check', [
+            'projects' => $projects,
+        ]);
+    }
+
+    /**
+     * 提交任务
+     * @param null $projectId
+     * @return string
+     */
     public function actionSubmit($projectId = null) {
         if (\Yii::$app->request->getIsPost()) {
             $task = new Task();
@@ -187,6 +204,21 @@ class WalleController extends Controller {
         return $this->render('select-project', [
             'projects' => $projects,
         ]);
+    }
+
+    /**
+     * 获取线上文件md5
+     * @param $projectId
+     */
+    public function actionFileMd5($projectId, $file) {
+        $cmd = new RemoteCmd();
+        $config = new Config(Conf::getConfigFile($projectId));
+        $cmd->setConfig($config);
+        $projectDir = $config->getReleases('destination');
+        $file = sprintf("%s/%s", rtrim($projectDir, '/'), $file);
+        $cmd->getFileMd5($file);
+        $log = $cmd->getExeLog();
+        $this->renderJson(join("<br>", explode(PHP_EOL, $log)));
     }
 
     /**
@@ -218,6 +250,31 @@ class WalleController extends Controller {
         $task->status = $operation == 'pass' ? Task::STATUS_PASS : Task::STATUS_REFUSE;
         $task->save();
         static::renderJson(['status' => \Yii::t('status', 'task_status_' . $task->status)]);
+    }
+
+
+    /**
+     * 上线管理
+     * @param $taskId
+     * @return string
+     * @throws \Exception
+     */
+    public function actionDeleteTask() {
+        $taskId = $this->getParam('taskId');
+        $task = Task::findOne($taskId);
+        if (!$task) {
+            throw new \Exception('任务号不存在：）');
+        }
+        if ($task->user_id != \Yii::$app->user->id) {
+            throw new \Exception('不可以操作其它人的任务：）');
+        }
+        if ($task->status == Task::STATUS_DONE) {
+            throw new \Exception('不可以删除已上线成功的任务：）');
+        }
+        $ret = $task->delete();
+        if (!$ret) throw new \Exception('删除失败');
+        $this->renderJson([]);
+
     }
 
     /**

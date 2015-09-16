@@ -1,7 +1,7 @@
 #production
 scm:
   type: git
-  url: git@github.com:meolu/walle-web.git
+  url: git@git.social-touch.com:wushuiyong/walle-web.git
   branch: master
 deployment:
   user: wushuiyong 
@@ -12,11 +12,9 @@ deployment:
   strategy: targz
 releases:
   user: wushuiyong
-  enabled: true
   max: 10
-  to: /var/www/deploy/to
-  symlink: walle 
-  directory: releases
+  destination: /var/www/deploy/to/walle
+  release: /var/www/deploy/to/releases
 hosts:
     - 127.0.0.1
 tasks:

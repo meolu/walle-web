@@ -21,9 +21,9 @@ return [
     'task_status_3_color' => 'text-success',
     'task_status_4_color' => 'text-danger',
 
-    'conf_level_1' => 'test',
-    'conf_level_2' => 'simu',
-    'conf_level_3' => 'prod',
+    'conf_level_1' => '测试环境',
+    'conf_level_2' => '仿真环境',
+    'conf_level_3' => '线上环境',
     'conf_status_0' => '无效',
     'conf_status_1' => '有效',
     'conf_status_0_color' => 'text-danger',

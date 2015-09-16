@@ -4,6 +4,7 @@
  */
 $this->title = '上线任务列表';
 use app\models\Task;
+use yii\widgets\LinkPager;
 ?>
 <div class="box">
     <div class="box-header">
@@ -29,10 +30,11 @@ use app\models\Task;
         </a>
     </div><!-- /.box-header -->
     <div class="box-body table-responsive no-padding">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover" id="task-list">
             <tbody><tr>
                 <th>任务名称</th>
                 <th>项目</th>
+                <th>上线时间</th>
                 <th>上线commit号</th>
                 <th>当前状态</th>
                 <th>操作</th>
@@ -41,6 +43,7 @@ use app\models\Task;
             <tr>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['conf']['name'] ?></td>
+                <td><?= date("Y-m-d H:i:s", $item['created_at']) ?></td>
                 <td><?= $item['commit_id'] ?></td>
                 <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>">
                     <?= \Yii::t('status', 'task_status_' . $item['status']) ?>
@@ -51,13 +54,20 @@ use app\models\Task;
                     <?php } elseif ($item['status'] == Task::STATUS_DONE) { ?>
                         <button class="btn btn-xs btn-warning task-operation task-rollback" data-id="<?= $item['id'] ?>">回滚此次上线</button>
                     <?php } ?>
+                    <?php if ($item['status'] != Task::STATUS_DONE) { ?>
+                    <button class="btn btn-xs btn-danger btn-delete" data-id="<?= $item['id'] ?>"><i class="icon-trash bigger-120"></i></button>
+                    <?php } ?>
+
                 </td>
             </tr>
             <?php } ?>
 
             </tbody></table>
     </div><!-- /.box-body -->
+
+    <?=LinkPager::widget(['pagination' => $pages]); ?>
 </div>
+
 <script>
     $('.task-rollback').click(function(e) {
         $this = $(this);
@@ -68,5 +78,18 @@ use app\models\Task;
                 alert(o.msg);
             }
         })
+    })
+    $('.btn-delete').click(function(e) {
+        $this = $(this);
+        if (confirm('确定要删除该记录？')) {
+            $.post('/walle/delete-task', {taskId: $this.data('id')}, function(o) {
+                if (!o.code) {
+                    $this.closest("tr").remove();
+                } else {
+                    alert('删除失败');
+                }
+            })
+        }
+
     })
 </script>

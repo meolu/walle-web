@@ -131,67 +131,31 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
             </script>
 
             <ul class="nav nav-list">
-                <li>
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-desktop"></i>
-                        <span class="menu-text"> 上线部署 </span>
-                        <b class="arrow icon-angle-down"></b>
+                <li class="<?= \Yii::$app->controller->action->id == 'config' ? 'active' : '' ?>">
+                    <a href="/walle/config/">
+                        <i class="icon-cogs"></i>
+                        <span class="menu-text"> 项目配置 </span>
                     </a>
-
-                    <ul class="submenu">
-                        <li>
-                            <a href="/walle/config/">
-                                <i class="icon-double-angle-right"></i>
-                                项目配置
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/walle/index">
-                                <i class="icon-double-angle-right"></i>
-                                我的上线任务
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/walle/submit/">
-                                <i class="icon-double-angle-right"></i>
-                                提交上线任务
-                            </a>
-                        </li>
-
-                    </ul>
                 </li>
-<!---->
-<!--                <li>-->
-<!--                    <a href="#" class="dropdown-toggle">-->
-<!--                        <i class="icon-list"></i>-->
-<!--                        <span class="menu-text"> 日志监控 </span>-->
-<!---->
-<!--                        <b class="arrow icon-angle-down"></b>-->
-<!--                    </a>-->
-<!---->
-<!--                    <ul class="submenu">-->
-<!--                        <li>-->
-<!--                            <a href="/logger/search">-->
-<!--                                <i class="icon-double-angle-right"></i>-->
-<!--                                日志查看-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="/subscribe/index">-->
-<!--                                <i class="icon-double-angle-right"></i>-->
-<!--                                日志订阅-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li>-->
-<!--                            <a href="/logger/index">-->
-<!--                                <i class="icon-double-angle-right"></i>-->
-<!--                                报表-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-<!--                </li>-->
+                <li class="<?= \Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">
+                    <a href="/walle/index/">
+                        <i class="icon-list-alt"></i>
+                        <span class="menu-text"> 我的上线任务 </span>
+                    </a>
+                </li>
+                <li class="<?= \Yii::$app->controller->action->id == 'submit' ? 'active' : '' ?>">
+                    <a href="/walle/submit/">
+                        <i class="icon-cloud-upload"></i>
+                        <span class="menu-text"> 提交上线任务 </span>
+                    </a>
+                </li>
+
+                <li class="<?= \Yii::$app->controller->action->id == 'check' ? 'active' : '' ?>">
+                    <a href="/walle/check/">
+                        <i class=" icon-eye-open"></i>
+                        <span class="menu-text"> 线上检查 </span>
+                    </a>
+                </li>
 
             </ul><!-- /.nav-list -->
 
@@ -285,50 +249,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
 
         var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
-        var data = [
-            { label: "social networks",  data: 38.7, color: "#68BC31"},
-            { label: "search engines",  data: 24.5, color: "#2091CF"},
-            { label: "ad campaigns",  data: 8.2, color: "#AF4E96"},
-            { label: "direct traffic",  data: 18.6, color: "#DA5430"},
-            { label: "other",  data: 10, color: "#FEE074"}
-        ]
-        function drawPieChart(placeholder, data, position) {
-            $.plot(placeholder, data, {
-                series: {
-                    pie: {
-                        show: true,
-                        tilt:0.8,
-                        highlight: {
-                            opacity: 0.25
-                        },
-                        stroke: {
-                            color: '#fff',
-                            width: 2
-                        },
-                        startAngle: 2
-                    }
-                },
-                legend: {
-                    show: true,
-                    position: position || "ne",
-                    labelBoxBorderColor: null,
-                    margin:[-30,15]
-                }
-                ,
-                grid: {
-                    hoverable: true,
-                    clickable: true
-                }
-            })
-        }
-        drawPieChart(placeholder, data);
 
-        /**
-         we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-         so that's not needed actually.
-         */
-        placeholder.data('chart', data);
-        placeholder.data('draw', drawPieChart);
 
 
 
@@ -371,33 +292,6 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
         }
 
 
-        var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
-        $.plot("#sales-charts", [
-            { label: "Domains", data: d1 },
-            { label: "Hosting", data: d2 },
-            { label: "Services", data: d3 }
-        ], {
-            hoverable: true,
-            shadowSize: 0,
-            series: {
-                lines: { show: true },
-                points: { show: true }
-            },
-            xaxis: {
-                tickLength: 0
-            },
-            yaxis: {
-                ticks: 10,
-                min: -2,
-                max: 2,
-                tickDecimals: 3
-            },
-            grid: {
-                backgroundColor: { colors: [ "#fff", "#fff" ] },
-                borderWidth: 1,
-                borderColor:'#555'
-            }
-        });
 
 
         $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});

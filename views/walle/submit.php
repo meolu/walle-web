@@ -12,7 +12,7 @@ $this->title = '发起上线';
           <input class="form-control" id="exampleInputEmail1" placeholder="上线标题" type="name" name="title">
         </div>
         <div class="form-group">
-	        <label>版本选取</label>
+	        <label>版本选取 <i class="get-history icon-spinner icon-spin orange bigger-125"></i></label>
 	        <select name="commit" aria-hidden="true" tabindex="-1" id="commit_history" class="form-control select2 select2-hidden-accessible">
 	        </select>
 	      </div>
@@ -32,6 +32,7 @@ $this->title = '发起上线';
 				select += '<option value="' + value.id + '">' + value.message +'</option>';
 			})
 			$('#commit_history').append(select);
+            $('.get-history').hide()
 		});
 		
 	})
