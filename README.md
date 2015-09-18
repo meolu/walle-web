@@ -33,39 +33,11 @@ composer install
 ./yii migrate/up  # 导入数据库
 ```
 
-配置project示例
+快速开始
 -------
-
-deploy.yml/env/conf_tpl.yml
-```
-#production
-scm:
-  type: git
-  url: git@github.com:meolu/walle-web.git
-  branch: development
-deployment:
-  user: www
-  from: /data/www/walle-deploy
-  env: test
-  excludes:
-    - READ.ME
-  strategy: targz
-releases:
-  user: www
-  max: 10
-  destination: /data/www/walle
-  release: /data/www/walle-deploy/releases
-hosts:
-    - 127.0.0.1
-tasks:
-  pre-deploy:
-    - cp -rf {WORKSPACE}/web/index-test.php {WORKSPACE}/web/index.php
-    - cp -rf /data/www/yii2_test/vendor {WORKSPACE}/
-    - cp -rf {WORKSPACE}/yii-test {WORKSPACE}/yii
-  on-deploy:
-  post-release:
-  post-deploy:                                                                                                                                                                                    
-```
+* 首先[配置一个项目](https://raw.github.com/meolu/walle-web/master/screenshots/task-list.png)
+* 提交上线任务
+* 发起上线
 
 
 To Do List

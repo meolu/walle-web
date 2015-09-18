@@ -1,6 +1,5 @@
 #production
 scm:
-  type: git
   url: git@github.com:meolu/walle-web.git
   branch: development
 deployment:
@@ -9,19 +8,18 @@ deployment:
   env: test
   excludes:
     - READ.ME
-  strategy: targz
 releases:
   user: www
-  max: 10
   destination: /data/www/walle
   release: /data/www/walle-deploy/releases
 hosts:
     - 127.0.0.1
 tasks:
   pre-deploy:
+    - test -d {WORKSPACE}
+  post-deploy:
     - cp -rf {WORKSPACE}/web/index-test.php {WORKSPACE}/web/index.php
     - cp -rf /data/www/yii2_test/vendor {WORKSPACE}/
     - cp -rf {WORKSPACE}/yii-test {WORKSPACE}/yii
-  on-deploy:
   post-release:
-  post-deploy:
+    - /usr/local/nginx/sbin/nginx -s reload
