@@ -3,6 +3,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
+    'controllerNamespace' => 'app\controllers',
     'defaultRoute' => 'walle/index',
     'components' => [
         'db' => [
@@ -11,10 +12,6 @@ $config = [
             'username'  => 'username',
             'password'  => 'password',
             'charset'   => 'utf8',
-        ],
-        'mongodb' => [
-            'class' => '\yii\mongodb\Connection',
-            'dsn' => 'mongodb://localhost:27017/local',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
