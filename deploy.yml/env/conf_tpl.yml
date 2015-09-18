@@ -2,26 +2,26 @@
 scm:
   type: git
   url: git@github.com:meolu/walle-web.git
-  branch: master
+  branch: development
 deployment:
-  user: wushuiyong 
-  from: /var/www/deploy/from
-  env: simulate
+  user: www
+  from: /data/www/walle-deploy
+  env: test
   excludes:
     - READ.ME
   strategy: targz
 releases:
-  user: wushuiyong
+  user: www
   max: 10
-  destination: /var/www/deploy/to/walle
-  release: /var/www/deploy/to/releases
+  destination: /data/www/walle
+  release: /data/www/walle-deploy/releases
 hosts:
     - 127.0.0.1
 tasks:
   pre-deploy:
+    - cp -rf {WORKSPACE}/web/index-test.php {WORKSPACE}/web/index.php
+    - cp -rf /data/www/yii2_test/vendor {WORKSPACE}/
+    - cp -rf {WORKSPACE}/yii-test {WORKSPACE}/yii
   on-deploy:
   post-release:
-    - cp -rf {WORKSPACE}/deploy.yml {VERSION}/
   post-deploy:
-
-                                                                                                                                    
