@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\User;
 use Yii;
 use app\models\Conf;
 /**
@@ -75,6 +76,20 @@ class Task extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * width('user')
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * with('conf')
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getConf() {
         return $this->hasOne(Conf::className(), ['id' => 'project_id']);
     }

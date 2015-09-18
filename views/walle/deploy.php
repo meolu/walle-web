@@ -92,7 +92,7 @@ use \app\models\Task;
                     }
                 });
             }
-            timer = setInterval(getProcess, 100);
+            timer = setInterval(getProcess, 600);
         })
     })
 

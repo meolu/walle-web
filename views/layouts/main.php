@@ -81,7 +81,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <span class="user-info"><?= $userName ?></span>
+                        <span class="user-info" style="top:12px"><?= $userName ?></span>
                         <i class="icon-caret-down"></i>
                     </a>
 

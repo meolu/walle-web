@@ -27,6 +27,7 @@ class WalleController extends Controller {
         $size = $this->getParam('per-page') ?: $size;
         $user = User::findOne(\Yii::$app->user->id);
         $list = Task::find()
+            ->with('user')
             ->with('conf');
         if ($user->role != User::ROLE_ADMIN) {
             $list->where(['user_id' => \Yii::$app->user->id]);
@@ -99,7 +100,7 @@ class WalleController extends Controller {
                 $this->_task->ex_link_id = $dbConf->version;
             }
             $this->_task->status = Task::STATUS_DONE;
-            $this->_task->created_time = time();
+            $this->_task->created_at = time();
             $this->_task->save();
 
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
