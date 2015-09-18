@@ -35,7 +35,7 @@ composer install
 
 快速开始
 -------
-* 首先[配置一个项目](https://raw.github.com/meolu/walle-web/master/screenshots/task-list.png)
+* 首先[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
 * 提交上线任务
 * 发起上线
 
