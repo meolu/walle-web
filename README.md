@@ -55,7 +55,7 @@ To Do List
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/walle-web/master/screenshots/submit.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 #### 上线列表
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/task-list.png)
