@@ -62,7 +62,7 @@ To Do List
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/deploy.png)
 
 ## CHANGELOG
-瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle/blob/master/CHANGELOG.md)
+瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
 
 
 ## 有问题加群
