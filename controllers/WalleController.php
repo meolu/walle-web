@@ -10,16 +10,14 @@
 namespace app\controllers;
 
 use yii\data\Pagination;
-use app\components\Controller;
-use app\models\DynamicConf;
+use walle\command\Command;
+use walle\command\Folder;
 use walle\command\Git;
-use walle\command\Sync;
 use walle\command\Task as WalleTask;
-use walle\command\RemoteCmd;
 use walle\config\Config;
+use app\components\Controller;
 use app\models\Task;
 use app\models\Record;
-use walle\command\Command;
 use app\models\Conf;
 use app\models\User;
 
@@ -233,7 +231,7 @@ class WalleController extends Controller {
      * @param $projectId
      */
     public function actionFileMd5($projectId, $file) {
-        $cmd    = new RemoteCmd();
+        $cmd    = new Folder();
         $config = new Config(Conf::getConfigFile($projectId));
 
         $cmd->setConfig($config);
@@ -397,17 +395,16 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _checkPermission() {
-        $sync = new Sync();
+        $folder = new Folder();
         $sTime = Command::getMs();
-        $sync->setConfig($this->_config);
+        $folder->setConfig($this->_config);
         // 本地宿主机目录检查
-        $sync->initDirector();
+        $folder->initDirector();
         // 远程目标目录检查
-        $ret = $sync->directorAndPermission();
-        // 记录执行日志
-        $log = $sync->getExeLog();
+        $ret = $folder->directorAndPermission();
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($sync, $this->_task->id, Record::ACTION_PERMSSION, $duration);
+        Record::saveRecord($folder, $this->_task->id, Record::ACTION_PERMSSION, $duration);
 
         if (!$ret) throw new \Exception('检查目录和权限出错');
         return true;
@@ -425,7 +422,7 @@ class WalleController extends Controller {
         $sTime = Command::getMs();
         $ret = $git->setConfig($this->_config)
             ->rollback($this->_task->commit_id); // 更新到指定版本
-        // 记录执行日志
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($git, $this->_task->id, Record::ACTION_CLONE, $duration);
 
@@ -438,6 +435,7 @@ class WalleController extends Controller {
         $sTime = Command::getMs();
         $task->setConfig($this->_config);
         $ret = $task->preDeploy();
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->_task->id, Record::ACTION_CLONE, $duration);
 
@@ -456,6 +454,7 @@ class WalleController extends Controller {
         $sTime = Command::getMs();
         $task->setConfig($this->_config);
         $ret = $task->postRelease();
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->_task->id, Record::ACTION_CLONE, $duration);
 
@@ -465,19 +464,20 @@ class WalleController extends Controller {
 
     /**
      * 同步文件到服务器
+     * 
      * @return bool
      * @throws \Exception
      */
     private function _rsync() {
-        $sync = new Sync();
-        $sync->setConfig($this->_config);
+        $folder = new Folder();
+        $folder->setConfig($this->_config);
         // 同步文件
         foreach ($this->_config->getHosts() as $remoteHost) {
             $sTime = Command::getMs();
-            $ret = $sync->syncFiles($remoteHost);
-            // 记录执行日志
+            $ret = $folder->syncFiles($remoteHost);
+            // 记录执行时间
             $duration = Command::getMs() - $sTime;
-            Record::saveRecord($sync, $this->_task->id, Record::ACTION_SYNC, $duration);
+            Record::saveRecord($folder, $this->_task->id, Record::ACTION_SYNC, $duration);
             if (!$ret) throw new \Exception('同步文件到服务器出错');
         }
         return true;
@@ -488,13 +488,13 @@ class WalleController extends Controller {
      */
     private function _link($version = null) {
         // 创建链接指向
-        $remote = new RemoteCmd();
+        $folder = new Folder();
         $sTime = Command::getMs();
-        $ret = $remote->setConfig($this->_config)->link($version);
-        // 记录执行日志
+        $ret = $folder->setConfig($this->_config)->link($version);
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        $ret = Record::saveRecord($remote, $this->_task->id, Record::ACTION_LINK, $duration);
-        
+        Record::saveRecord($folder, $this->_task->id, Record::ACTION_LINK, $duration);
+
         if (!$ret) throw new \Exception($version ? '回滚失败' : '创建链接指向出错');
         return true;
     }
