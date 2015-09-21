@@ -401,7 +401,7 @@ class WalleController extends Controller {
         // 本地宿主机目录检查
         $folder->initDirector();
         // 远程目标目录检查
-        $ret = $folder->directorAndPermission();
+        $ret = $folder->folderAndPermission();
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($folder, $this->_task->id, Record::ACTION_PERMSSION, $duration);
@@ -464,7 +464,7 @@ class WalleController extends Controller {
 
     /**
      * 同步文件到服务器
-     * 
+     *
      * @return bool
      * @throws \Exception
      */
