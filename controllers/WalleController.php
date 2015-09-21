@@ -1,6 +1,15 @@
 <?php
+/* *****************************************************************
+ * @Author: wushuiyong
+ * @Created Time : 一  9/21 13:48:30 2015
+ *
+ * @File Name: WalleController.php
+ * @Description:
+ * *****************************************************************/
 
 namespace app\controllers;
+
+use yii\data\Pagination;
 use app\components\Controller;
 use app\models\DynamicConf;
 use walle\command\Git;
@@ -13,17 +22,30 @@ use app\models\Record;
 use walle\command\Command;
 use app\models\Conf;
 use app\models\User;
-use yii\data\Pagination;
 
 class WalleController extends Controller {
 
+    /**
+     * 项目配置
+     */
     private $_config;
 
+    /**
+     * 上线任务配置
+     */
     private $_task;
 
     public $enableCsrfValidation = false;
 
-    public function actionIndex($kw = null, $page = 1, $size = 10) {
+    /**
+     * @param \yii\base\Action $action
+     * @return bool
+     */
+    public function beforeAction($action) {
+        return parent::beforeAction($action);
+    }
+
+    public function actionIndex($page = 1, $size = 10) {
         $size = $this->getParam('per-page') ?: $size;
         $user = User::findOne(\Yii::$app->user->id);
         $list = Task::find()
@@ -51,6 +73,7 @@ class WalleController extends Controller {
 
     /**
      * 发起上线
+     *
      * @throws \Exception
      */
     public function actionStartDeploy() {
@@ -87,12 +110,6 @@ class WalleController extends Controller {
                 $this->_link($this->_task->ex_link_id);
             }
 
-
-            $online = DynamicConf::findOne(DynamicConf::K_ONLINE_VERSION);
-            if (!$online) {
-                $online = new DynamicConf();
-                $online->name = DynamicConf::K_ONLINE_VERSION;
-            }
             // 记录此次上线的版本（软链号）和上线之前的版本
             /// 对于回滚的任务不记录线上版本
             if ($this->_task->action == Task::ACTION_ONLINE) {
@@ -115,6 +132,7 @@ class WalleController extends Controller {
 
     /**
      * 配置项目
+     *
      * @param $projectId
      * @return string
      * @throws \Exception
@@ -147,11 +165,11 @@ class WalleController extends Controller {
 
     /**
      * 配置项目列表
+     *
      * @return string
      */
     public function actionConfig() {
         $conf = Conf::find();
-
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
             $conf->where(['like', "name", $kw]);
@@ -164,11 +182,10 @@ class WalleController extends Controller {
 
     /**
      * 提交任务
-     * @param null $projectId
+     *
      * @return string
      */
     public function actionCheck() {
-
         $projects = Conf::find()->asArray()->all();
         return $this->render('check', [
             'projects' => $projects,
@@ -177,6 +194,7 @@ class WalleController extends Controller {
 
     /**
      * 提交任务
+     *
      * @param null $projectId
      * @return string
      */
@@ -211,21 +229,26 @@ class WalleController extends Controller {
 
     /**
      * 获取线上文件md5
+     *
      * @param $projectId
      */
     public function actionFileMd5($projectId, $file) {
-        $cmd = new RemoteCmd();
+        $cmd    = new RemoteCmd();
         $config = new Config(Conf::getConfigFile($projectId));
+
         $cmd->setConfig($config);
         $projectDir = $config->getReleases('destination');
         $file = sprintf("%s/%s", rtrim($projectDir, '/'), $file);
+
         $cmd->getFileMd5($file);
         $log = $cmd->getExeLog();
+
         $this->renderJson(join("<br>", explode(PHP_EOL, $log)));
     }
 
     /**
      * 获取commit历史
+     *
      * @param $projectId
      */
     public function actionGetCommitHistory($projectId) {
@@ -242,6 +265,7 @@ class WalleController extends Controller {
 
     /**
      * 任务审核
+     *
      * @param $id
      * @param $operation
      */
@@ -258,7 +282,7 @@ class WalleController extends Controller {
 
     /**
      * 上线管理
-     * @param $taskId
+     *
      * @return string
      * @throws \Exception
      */
@@ -275,14 +299,15 @@ class WalleController extends Controller {
             throw new \Exception('不可以删除已上线成功的任务：）');
         }
         $ret = $task->delete();
+
         if (!$ret) throw new \Exception('删除失败');
         $this->renderJson([]);
 
     }
 
     /**
-     * 上线管理
-     * @param $taskId
+     * 生成回滚任务
+     *
      * @return string
      * @throws \Exception
      */
@@ -314,10 +339,11 @@ class WalleController extends Controller {
             'commit_id' => $this->_task->commit_id,
         ];
         if ($rollbackTask->save()) {
+            $url = in_array($conf->level, [Conf::LEVEL_PROD])
+                ? '/walle/index'
+                : '/walle/deploy?taskId=' . $rollbackTask->id;
             $this->renderJson([
-                'url' => in_array($conf->level, [Conf::LEVEL_PROD])
-                    ? '/walle/index'
-                    : '/walle/deploy?taskId=' . $rollbackTask->id,
+                'url' => $url,
             ]);
         } else {
             $this->renderJson([], -1, '生成回滚任务失败');
@@ -326,6 +352,7 @@ class WalleController extends Controller {
 
     /**
      * 上线管理
+     *
      * @param $taskId
      * @return string
      * @throws \Exception
@@ -347,6 +374,7 @@ class WalleController extends Controller {
 
     /**
      * 获取上线进度
+     *
      * @param $taskId
      */
     public function actionGetProcess($taskId) {
@@ -364,6 +392,7 @@ class WalleController extends Controller {
 
     /**
      * 检查目录和权限
+     *
      * @return bool
      * @throws \Exception
      */
@@ -371,20 +400,22 @@ class WalleController extends Controller {
         $sync = new Sync();
         $sTime = Command::getMs();
         $sync->setConfig($this->_config);
-        // 本地目录检查
+        // 本地宿主机目录检查
         $sync->initDirector();
-        // 远程目录检查
+        // 远程目标目录检查
         $ret = $sync->directorAndPermission();
         // 记录执行日志
         $log = $sync->getExeLog();
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($sync, $this->_task->id, Record::ACTION_PERMSSION, $duration);
+
         if (!$ret) throw new \Exception('检查目录和权限出错');
         return true;
     }
 
     /**
      * 更新代码文件
+     *
      * @return bool
      * @throws \Exception
      */
@@ -397,6 +428,7 @@ class WalleController extends Controller {
         // 记录执行日志
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($git, $this->_task->id, Record::ACTION_CLONE, $duration);
+
         if (!$ret) throw new \Exception('更新代码文件出错');
         return true;
     }
@@ -408,6 +440,7 @@ class WalleController extends Controller {
         $ret = $task->preDeploy();
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->_task->id, Record::ACTION_CLONE, $duration);
+
         if (!$ret) throw new \Exception('前置操作失败');
         return true;
     }
@@ -425,6 +458,7 @@ class WalleController extends Controller {
         $ret = $task->postRelease();
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->_task->id, Record::ACTION_CLONE, $duration);
+
         if (!$ret) throw new \Exception('前置操作失败');
         return true;
     }
@@ -442,9 +476,8 @@ class WalleController extends Controller {
             $sTime = Command::getMs();
             $ret = $sync->syncFiles($remoteHost);
             // 记录执行日志
-//            $log = $ret ?: $remoteHost . PHP_EOL . $sync->getLog();
             $duration = Command::getMs() - $sTime;
-            $x = Record::saveRecord($sync, $this->_task->id, Record::ACTION_SYNC, $duration);
+            Record::saveRecord($sync, $this->_task->id, Record::ACTION_SYNC, $duration);
             if (!$ret) throw new \Exception('同步文件到服务器出错');
         }
         return true;
@@ -461,6 +494,7 @@ class WalleController extends Controller {
         // 记录执行日志
         $duration = Command::getMs() - $sTime;
         $ret = Record::saveRecord($remote, $this->_task->id, Record::ACTION_LINK, $duration);
+        
         if (!$ret) throw new \Exception($version ? '回滚失败' : '创建链接指向出错');
         return true;
     }
