@@ -1,4 +1,4 @@
-Walle 瓦力 web ui
+Walle 瓦力 web部署系统
 ==========================
 
 功能
@@ -45,9 +45,7 @@ To Do List
 
 * 部署出错详细信息优化
 * 项目配置模块拆分
-* 部署任务时的进度清单
-* 项目绑定测试同学
-* 部署耗时
+* 测试环境支持分支选择
 
 截图
 ---
@@ -63,6 +61,9 @@ To Do List
 #### 发起上线
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/deploy.png)
 
+## CHANGELOG
+瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle/blob/master/CHANGELOG.md)
 
-### 有问题加群
+
+## 有问题加群
 **QQ：482939318**
