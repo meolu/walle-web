@@ -13,13 +13,17 @@ Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamans
 * 开发者一键部署上线
 * 快速回滚
 * 查看上线日志
+* 部署前准备任务（前置检查）
+* 代码检出后处理任务（如vendor，环境配置）
+* 同步到各目标机器后收尾任务（如重启）
+* 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
 
 依赖
 ---
 
 * git
-* web ui的运行环境php、nginx（apache）、mysql
+* web ui的运行环境php5.4、nginx（apache）、mysql
 * composer，安装walle、yii2
 * ssh
 
@@ -29,14 +33,28 @@ Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamans
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
-composer install
+composer install  # 如果缺少bower-asset的话， 先安装：composer install global require "fxp/composer-asset-plugin:1.0.0-beta3"
 ./yii migrate/up  # 导入数据库
 ```
 
 快速开始
 -------
-* 首先[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
-* 提交上线任务
+* 首先，配置邮箱，如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录
+	```php
+	vi config/params.php
+	'mail-suffix' => '公司邮箱后缀.com' 
+
+	vi config/web.php +20
+	# 配置mail smtp模块
+    'host' => 'ip or host',               # smtp 发件地址
+    'username' => 'admin@huamanshu.com',  # smtp 发件用户名
+    'password' => 'password',             # smtp 发件人的密码
+    'port' => 25,                         # smtp 端口
+    'encryption' => 'tls',                # smtp 协议
+    ```
+* 注册一个管理员身份用户，[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
+* 有公司邮箱的开发者注册，提交上线任务
+* 管理员审核上线任务
 * 发起上线
 
 

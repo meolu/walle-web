@@ -10,5 +10,7 @@ return [
     'user.emailConfirmationTokenExpire' => 43200, // 5 days
 
     'config.dir' => '/deploy.yml/env',
-    'mail-suffix' => 'huamanshu.com',
+    'mail-suffix' => [
+        '公司邮箱后缀.com', //  限制只有公司同学可注册，可多个
+    ]
 ];
