@@ -135,7 +135,9 @@ abstract class Command {
         $logDir = \Yii::$app->params['log.dir'];
         $logFile = realpath($logDir) . '/log-' . date('Ymd') . '.log';
 
-        if (self::$logFile === null && is_writable($logFile)) {
+        if (!is_writable($logFile)) return;
+
+        if (self::$logFile === null) {
             self::$logFile = fopen($logFile, 'w');
         }
 
