@@ -33,7 +33,7 @@ Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamans
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
-composer install  # 如果缺少bower-asset的话， 先安装：composer install global require "fxp/composer-asset-plugin:1.0.0-beta3"
+composer install  # 如果缺少bower-asset的话， 先安装：composer install global require "fxp/composer-asset-plugin:*"
 ./yii migrate/up  # 导入数据库
 ```
 
