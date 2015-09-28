@@ -171,7 +171,7 @@ class SiteController extends Controller
         }
 
         if (Yii::$app->getRequest()->getIsAjax()) {
-            static::renderJson([], $code, $message);
+            static::renderJson([], $code ?: -1, $message);
         } else {
             return $this->render('error', [
                 'name' => $name,
