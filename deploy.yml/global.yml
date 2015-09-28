@@ -1,8 +1,0 @@
-# global settings
-name: app name
-email: wushuiyong@huamanshu.com
-notifications: true
-logging: true
-maxlogs: 30
-ssh_needs_tty: false
-

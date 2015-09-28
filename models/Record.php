@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use walle\command\Command;
+use app\components\Command;
 
 /**
  * This is the model class for table "record".
@@ -96,16 +96,15 @@ class Record extends \yii\db\ActiveRecord
     public static function saveRecord(Command $commandObj, $task_id, $action, $duration) {
         $record = new static();
         $record->attributes = [
-            'user_id' => \Yii::$app->user->id,
-            'task_id' => $task_id,
-            'status' => (int)$commandObj->getExeStatus(),
-            'action' => $action,
+            'user_id'    => \Yii::$app->user->id,
+            'task_id'    => $task_id,
+            'status'     => (int)$commandObj->getExeStatus(),
+            'action'     => $action,
             'created_at' => time(),
-            'command'=> var_export($commandObj->getExeCommand(), true),
-            'memo'   => var_export($commandObj->getExeLog(), true),
-            'duration' => $duration,
+            'command'    => var_export($commandObj->getExeCommand(), true),
+            'memo'       => var_export($commandObj->getExeLog(), true),
+            'duration'   => $duration,
         ];
-//        file_put_contents('/tmp/xx', var_export($record->attributes, true).PHP_EOL.PHP_EOL, 8);
         return $record->save();
     }
 }

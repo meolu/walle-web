@@ -1,10 +1,11 @@
 <?php
 $config = [
     'id' => 'basic',
+    'timeZone'   => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
     'extensions' => require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
     'controllerNamespace' => 'app\controllers',
-    'defaultRoute' => 'walle/index',
+    'defaultRoute' => 'task/index',
     'components' => [
         'db' => [
             'class'     => 'yii\db\Connection',

@@ -40,30 +40,31 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
 快速开始
 -------
 * 首先，配置邮箱，如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录
-	```php
-	vi config/params.php
-	'mail-suffix' => '公司邮箱后缀.com' 
+    ```php
+    vi config/params.php
+    'mail-suffix' => [
+        '公司邮箱后缀.com',
+    ]
 
-	vi config/web.php +20
-	# 配置mail smtp模块
+    vi config/web.php +20
+    # 配置mail smtp模块
     'host' => 'ip or host',               # smtp 发件地址
     'username' => 'admin@huamanshu.com',  # smtp 发件用户名
     'password' => 'password',             # smtp 发件人的密码
     'port' => 25,                         # smtp 端口
     'encryption' => 'tls',                # smtp 协议
     ```
-* 注册一个管理员身份用户，[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
-* 有公司邮箱的开发者注册，提交上线任务
+* 注册一个管理员身份用户(已有`admin/admin`)，[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
+* 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
 * 管理员审核上线任务
-* 发起上线
+* 开发者发起上线
 
 
 To Do List
 ----------
 
 * 部署出错详细信息优化
-* 项目配置模块拆分
-* 测试环境支持分支选择
+* 项目的开发同学分组可见权限
 
 截图
 ---
@@ -83,5 +84,5 @@ To Do List
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
 
 
-## 有问题加群
+## 交流群（有问必答）
 **QQ：482939318**

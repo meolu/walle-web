@@ -28,5 +28,30 @@ class GlobalHelper {
             ->setSubject('Complete registration with ' . Yii::$app->name)
             ->send();
     }
-}
 
+    /**
+     * 字符串转换成数组
+     *
+     * @param $string
+     * @param $delimiter
+     * @return array
+     */
+    public static function str2arr($string, $delimiter = PHP_EOL) {
+        return explode($delimiter, $string);
+    }
+
+    /**
+     * 转换成utf8
+     * @param $text
+     * @return string
+     */
+    public static function convert2Utf8($text) {
+        $encoding = mb_detect_encoding($text, mb_detect_order(), false);
+        if ($encoding == "UTF-8") {
+            $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8');
+        }
+        $out = iconv(mb_detect_encoding($text, mb_detect_order(), false), "UTF-8//IGNORE", $text);
+
+        return $out;
+    }
+}

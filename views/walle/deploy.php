@@ -25,7 +25,7 @@ use \app\models\Task;
         <?php if (in_array($task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) { ?>
             <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>">部署</button>
         <?php } ?>
-        <a class="btn btn-success btn-return" href="/walle/index">返回</a></h4>
+        <a class="btn btn-success btn-return" href="/task/index">返回</a></h4>
 
     <div class="status">
         <span><i class="fa fa-circle-o text-yellow step-1"></i>权限、目录检查</span>

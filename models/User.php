@@ -104,7 +104,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function validateEmail($attribute, $params) {
         // 支持多邮箱绑定
         $mailSuffix = join('|@', \Yii::$app->params['mail-suffix']);
-        file_put_contents('/tmp/x', "/.*(@{$mailSuffix})$/", 8);
         if (!preg_match("/.*(@{$mailSuffix})$/", $this->$attribute)) {
             $this->addError($attribute, "没有" . join('，', \Yii::$app->params['mail-suffix']) . "邮箱不可注册：）");
         }

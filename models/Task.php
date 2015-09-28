@@ -2,23 +2,34 @@
 
 namespace app\models;
 
-use app\models\User;
 use Yii;
-use app\models\Conf;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+
 /**
  * This is the model class for table "task".
  *
  * @property integer $id
- * @property string $userid
+ * @property string $user_id
+ * @property integer $project_id
+ * @property integer $action
  * @property integer $status
- * @property integer $at
  * @property string $title
- * @property string $commitid
+ * @property string $link_id
+ * @property string $ex_link_id
+ * @property string $commit_id
+ * @property integer $created_at
+ * @property integer $updated_at
  */
 class Task extends \yii\db\ActiveRecord
 {
+    /**
+     * 普通上线任务
+     */
     const ACTION_ONLINE = 0;
-
+    /**
+     * 回滚任务
+     */
     const ACTION_ROLLBACK = 1;
     /**
      * 任务新提交
@@ -51,12 +62,28 @@ class Task extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['user_id', 'status', 'created_at', 'title', 'commit_id', 'project_id'], 'required'],
-            [['user_id', 'status', 'created_at', 'project_id', 'action'], 'integer'],
-            [['title', 'commit_id', 'link_id', 'ex_link_id'], 'string', 'max' => 100],
+            [['user_id', 'project_id', 'status', 'title', 'commit_id'], 'required'],
+            [['user_id', 'project_id', 'action', 'status'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['title', 'link_id', 'ex_link_id', 'commit_id'], 'string', 'max' => 100],
         ];
     }
 
@@ -67,13 +94,26 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'user_id',
+            'user_id' => 'User ID',
+            'project_id' => 'Project ID',
+            'action' => 'Action',
             'status' => 'Status',
-            'created_at' => 'created_at',
             'title' => 'Title',
-            'commit_id' => 'commit_id',
-            'ex_link_id' => 'ex_link_id',
+            'link_id' => 'Link ID',
+            'ex_link_id' => 'Ex Link ID',
+            'commit_id' => 'Commit ID',
+            'created_at' => 'Created At',
         ];
+    }
+
+    /**
+     * 是否能进行部署
+     *
+     * @param $status
+     * @return bool
+     */
+    public static function canDeploy($status) {
+        return in_array($status, [static::STATUS_PASS, static::STATUS_FAILED]);
     }
 
     /**

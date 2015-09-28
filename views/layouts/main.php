@@ -31,6 +31,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     <link rel="stylesheet" href="/dist/css/ace.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-rtl.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="/dist/css/walle.css" />
 
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="/dist/css/ace-ie.min.css" />
@@ -132,21 +133,23 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
             <ul class="nav nav-list">
                 <?php if (\Yii::$app->user->identity->role == app\models\User::ROLE_ADMIN) { ?>
-                <li class="<?= \Yii::$app->controller->action->id == 'config' ? 'active' : '' ?>">
-                    <a href="/walle/config/">
+                <li class="<?= \Yii::$app->controller->id == 'conf' ? 'active' : '' ?>">
+                    <a href="/conf/">
                         <i class="icon-cogs"></i>
                         <span class="menu-text"> 项目配置 </span>
                     </a>
                 </li>
                 <?php } ?>
-                <li class="<?= \Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>">
-                    <a href="/walle/index/">
+                <li class="<?= \Yii::$app->controller->id == 'task' && \Yii::$app->controller->action->id == 'index'
+                    ? 'active' : '' ?>">
+                    <a href="/task/">
                         <i class="icon-list-alt"></i>
                         <span class="menu-text"> 我的上线任务 </span>
                     </a>
                 </li>
-                <li class="<?= \Yii::$app->controller->action->id == 'submit' ? 'active' : '' ?>">
-                    <a href="/walle/submit/">
+                <li class="<?= \Yii::$app->controller->id == 'task' && \Yii::$app->controller->action->id == 'submit'
+                    ? 'active' : '' ?>">
+                    <a href="/task/submit/">
                         <i class="icon-cloud-upload"></i>
                         <span class="menu-text"> 提交上线任务 </span>
                     </a>
@@ -158,9 +161,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                         <span class="menu-text"> 线上检查 </span>
                     </a>
                 </li>
-
             </ul><!-- /.nav-list -->
-
         </div>
 
         <div class="main-content">
@@ -192,9 +193,6 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
 <!-- basic scripts -->
 
-
-
-
 <script type="text/javascript">
     if("ontouchend" in document) document.write("<script src='/dist/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
 </script>
@@ -225,76 +223,8 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
 <script type="text/javascript">
     jQuery(function($) {
-        $('.easy-pie-chart.percentage').each(function(){
-            var $box = $(this).closest('.infobox');
-            var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-            var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-            var size = parseInt($(this).data('size')) || 50;
-            $(this).easyPieChart({
-                barColor: barColor,
-                trackColor: trackColor,
-                scaleColor: false,
-                lineCap: 'butt',
-                lineWidth: parseInt(size/10),
-                animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
-                size: size
-            });
-        })
-
-        $('.sparkline').each(function(){
-            var $box = $(this).closest('.infobox');
-            var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
-            $(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
-        });
-
-
-
-
-        var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
-
-
-
-
         var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
         var previousPoint = null;
-
-        placeholder.on('plothover', function (event, pos, item) {
-            if(item) {
-                if (previousPoint != item.seriesIndex) {
-                    previousPoint = item.seriesIndex;
-                    var tip = item.series['label'] + " : " + item.series['percent']+'%';
-                    $tooltip.show().children(0).text(tip);
-                }
-                $tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
-            } else {
-                $tooltip.hide();
-                previousPoint = null;
-            }
-
-        });
-
-
-
-
-
-
-        var d1 = [];
-        for (var i = 0; i < Math.PI * 2; i += 0.5) {
-            d1.push([i, Math.sin(i)]);
-        }
-
-        var d2 = [];
-        for (var i = 0; i < Math.PI * 2; i += 0.5) {
-            d2.push([i, Math.cos(i)]);
-        }
-
-        var d3 = [];
-        for (var i = 0; i < Math.PI * 2; i += 0.2) {
-            d3.push([i, Math.tan(i)]);
-        }
-
-
-
 
         $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
         function tooltip_placement(context, source) {
@@ -310,43 +240,8 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
             return 'left';
         }
 
-
-        $('.dialogs,.comments').slimScroll({
-            height: '300px'
-        });
-
-
-        //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
-        //so disable dragging when clicking on label
-        var agent = navigator.userAgent.toLowerCase();
-        if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
-            $('#tasks').on('touchstart', function(e){
-                var li = $(e.target).closest('#tasks li');
-                if(li.length == 0)return;
-                var label = li.find('label.inline').get(0);
-                if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
-            });
-
-        $('#tasks').sortable({
-                opacity:0.8,
-                revert:true,
-                forceHelperSize:true,
-                placeholder: 'draggable-placeholder',
-                forcePlaceholderSize:true,
-                tolerance:'pointer',
-                stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
-                    $(ui.item).css('z-index', 'auto');
-                }
-            }
-        );
-        $('#tasks').disableSelection();
-        $('#tasks input:checkbox').removeAttr('checked').on('click', function(){
-            if(this.checked) $(this).closest('li').addClass('selected');
-            else $(this).closest('li').removeClass('selected');
-        });
-
-
     })
+
 </script>
     <?php $this->endBody() ?>
   </body>

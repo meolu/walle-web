@@ -8,9 +8,5 @@ use yii\helpers\Html;
 
 $confirmationLink = Yii::$app->urlManager->createAbsoluteUrl(['site/confirm-email', 'token' => $user->email_confirmation_token]);
 ?>
-
-Hello <?= Html::encode($user->username) ?>,
-
-Follow the link below to complete your registration:
-
-<?= Html::a(Html::encode($confirmationLink), $confirmationLink) ?>
+点击完成注册
+ <?= Html::a('确认激活', $confirmationLink) ?>
