@@ -17,9 +17,9 @@ class m150927_061454_alter_conf_to_mysql extends Migration
         $this->addColumn(Conf::tableName(), 'release_to', Schema::TYPE_STRING . '(200) NOT NULL COMMENT "目标机器的目录，相当于nginx的root，可直接web访问"');
         $this->addColumn(Conf::tableName(), 'release_library', Schema::TYPE_STRING . '(200) NOT NULL COMMENT "目标机器版本发布库"');
         $this->addColumn(Conf::tableName(), 'hosts', Schema::TYPE_STRING . '(500) NOT NULL COMMENT "目标机器列表"');
-        $this->addColumn(Conf::tableName(), 'pre_deploy', Schema::TYPE_STRING . '(50) DEFAULT "" COMMENT "部署前置任务"');
-        $this->addColumn(Conf::tableName(), 'post_deploy', Schema::TYPE_STRING . '(50) DEFAULT "" COMMENT "同步之前任务"');
-        $this->addColumn(Conf::tableName(), 'post_release', Schema::TYPE_STRING . '(50) DEFAULT "" COMMENT "同步之后任务"');
+        $this->addColumn(Conf::tableName(), 'pre_deploy', Schema::TYPE_STRING . '(500) DEFAULT "" COMMENT "部署前置任务"');
+        $this->addColumn(Conf::tableName(), 'post_deploy', Schema::TYPE_STRING . '(500) DEFAULT "" COMMENT "同步之前任务"');
+        $this->addColumn(Conf::tableName(), 'post_release', Schema::TYPE_STRING . '(500) DEFAULT "" COMMENT "同步之后任务"');
         $this->addColumn(Conf::tableName(), 'git_type', Schema::TYPE_STRING . '(50) DEFAULT "branch" COMMENT "两种上线方式，分支、tag"');
         $this->addColumn(Conf::tableName(), 'audit', Schema::TYPE_SMALLINT . '(1) DEFAULT 0 COMMENT "是否需要审核任务0不需要，1需要"');
         $this->dropColumn(Conf::tableName(), 'created_at');
