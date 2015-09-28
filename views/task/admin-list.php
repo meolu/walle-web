@@ -122,7 +122,7 @@ use yii\widgets\LinkPager;
                     if (!o.code) {
                         $this.closest("tr").remove();
                     } else {
-                        alert('删除失败');
+                        alert('删除失败: ' + o.msg);
                     }
                 })
             }
