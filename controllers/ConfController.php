@@ -56,8 +56,7 @@ class ConfController extends Controller
      * @return string
      * @throws \Exception
      */
-    public function actionDelete() {
-        $confId = $this->getParam('confId');
+    public function actionDelete($confId) {
         $conf = Conf::findOne($confId);
         if (!$conf) {
             throw new \Exception('项目不存在：）');
@@ -65,7 +64,7 @@ class ConfController extends Controller
         if ($conf->user_id != \Yii::$app->user->id) {
             throw new \Exception('不可以操作其它人的项目：）');
         }
-        if ($conf->delete()) throw new \Exception('删除失败');
+        if (!$conf->delete()) throw new \Exception('删除失败');
         $this->renderJson([]);
 
     }

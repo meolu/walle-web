@@ -71,7 +71,7 @@ $this->title = '项目配置';
     $('.btn-delete').click(function(e) {
         $this = $(this);
         if (confirm('确定要删除该记录？')) {
-            $.post('/conf/delete', {confId: $this.data('id')}, function(o) {
+            $.get('/conf/delete', {confId: $this.data('id')}, function(o) {
                 if (!o.code) {
                     $this.closest("tr").remove();
                 } else {
