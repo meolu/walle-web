@@ -22,7 +22,8 @@ class m150927_061454_alter_conf_to_mysql extends Migration
         $this->addColumn(Conf::tableName(), 'post_release', Schema::TYPE_STRING . '(50) DEFAULT "" COMMENT "同步之后任务"');
         $this->addColumn(Conf::tableName(), 'git_type', Schema::TYPE_STRING . '(50) DEFAULT "branch" COMMENT "两种上线方式，分支、tag"');
         $this->addColumn(Conf::tableName(), 'audit', Schema::TYPE_SMALLINT . '(1) DEFAULT 0 COMMENT "是否需要审核任务0不需要，1需要"');
-        $this->alterColumn(Conf::tableName(), 'created_at', Schema::TYPE_DATETIME . ' COMMENT "创建时间" after audit');
+        $this->dropColumn(Conf::tableName(), 'created_at');
+        $this->addColumn(Conf::tableName(), 'created_at', Schema::TYPE_DATETIME . ' COMMENT "创建时间" after audit');
         $this->addColumn(Conf::tableName(), 'updated_at', Schema::TYPE_DATETIME . ' COMMENT "修改时间"');
         $this->dropColumn(Task::tableName(), 'created_at');
         $this->addColumn(Task::tableName(), 'created_at', Schema::TYPE_DATETIME . ' COMMENT "创建时间"');
