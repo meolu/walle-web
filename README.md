@@ -82,13 +82,16 @@ composer update
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
 
 #### 上线列表
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
 #### 配置管理
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+
+#### 演示
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 ## CHANGELOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
