@@ -46,15 +46,16 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
         '公司邮箱后缀.com',
     ]
 
-    vi config/web.php +20
+    vi config/web.php +25
     # 配置mail smtp模块
-    'host' => 'ip or host',               # smtp 发件地址
-    'username' => 'admin@huamanshu.com',  # smtp 发件用户名
-    'password' => 'password',             # smtp 发件人的密码
-    'port' => 25,                         # smtp 端口
-    'encryption' => 'tls',                # smtp 协议
+    'class'      => 'Swift_SmtpTransport',
+    'host'       => 'ip or host',           # smtp 发件地址
+    'username'   => 'admin@huamanshu.com',  # smtp 发件用户名
+    'password'   => 'password',             # smtp 发件人的密码
+    'port'       => 25,                     # smtp 端口
+    'encryption' => 'tls',                  # smtp 协议
     ```
-* 注册一个管理员身份用户(已有`admin/admin`)，[配置一个项目](https://github.com/meolu/walle-web/blob/master/yml-config.md)
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
 * 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
 * 管理员审核上线任务
 * 开发者发起上线
@@ -65,6 +66,14 @@ To Do List
 
 * 部署出错详细信息优化
 * 项目的开发同学分组可见权限
+
+持续更新开启更多功能
+-----------------
+```
+git pull
+composer update
+./yii migrate    # 更新数据库
+```
 
 截图
 ---
