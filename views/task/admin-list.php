@@ -29,7 +29,7 @@ use yii\widgets\LinkPager;
             创建上线任务
         </a>
     </div><!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <div class="box-body table-responsive no-padding clearfix">
         <table class="table table-hover">
             <tbody><tr>
                 <th>开发者</th>

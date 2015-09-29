@@ -23,11 +23,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     <link rel="stylesheet" href="/dist/css/font-awesome-ie7.min.css" />
     <![endif]-->
 
-    <!-- page specific plugin styles -->
-
-
     <!-- ace styles -->
-
     <link rel="stylesheet" href="/dist/css/ace.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-rtl.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-skins.min.css" />
@@ -36,24 +32,21 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="/dist/css/ace-ie.min.css" />
     <![endif]-->
-    <!--[if !IE]> -->
 
+    <!--[if !IE]> -->
     <script type="text/javascript">
         window.jQuery || document.write("<script src='/dist/js/jquery-2.0.3.min.js'>"+"<"+"script>");
     </script>
-
     <!-- <![endif]-->
 
     <!--[if IE]>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='/dist/js/jquery-1.10.2.min.js'>"+"<"+"script>");
-    </script>
+    <script src='/dist/js/jquery-1.10.2.min.js'> <script>;
     <![endif]-->
-    <!-- inline styles related to this page -->
+
 
     <!-- ace settings handler -->
-
     <script src="/dist/js/ace-extra.min.js"></script>
+    <script src="/dist/js/bootstrap.min.js"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
@@ -196,7 +189,6 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 <script type="text/javascript">
     if("ontouchend" in document) document.write("<script src='/dist/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
 </script>
-<script src="/dist/js/bootstrap.min.js"></script>
 <script src="/dist/js/typeahead-bs2.min.js"></script>
 
 <!-- page specific plugin scripts -->
@@ -221,28 +213,6 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
 <!-- inline scripts related to this page -->
 
-<script type="text/javascript">
-    jQuery(function($) {
-        var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
-        var previousPoint = null;
-
-        $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-        function tooltip_placement(context, source) {
-            var $source = $(source);
-            var $parent = $source.closest('.tab-content')
-            var off1 = $parent.offset();
-            var w1 = $parent.width();
-
-            var off2 = $source.offset();
-            var w2 = $source.width();
-
-            if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-            return 'left';
-        }
-
-    })
-
-</script>
     <?php $this->endBody() ?>
   </body>
 </html>

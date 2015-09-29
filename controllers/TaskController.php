@@ -4,27 +4,14 @@ namespace app\controllers;
 
 use yii;
 use yii\data\Pagination;
-use walle\command\Command;
-use walle\command\Folder;
-use walle\command\Git;
-use walle\command\Task as WalleTask;
 use app\components\Controller;
 use app\models\Task;
-use app\models\Record;
 use app\models\Conf;
 use app\models\User;
 
 class TaskController extends Controller {
     
     protected $task;
-
-    /**
-     * @param \yii\base\Action $action
-     * @return bool
-     */
-    public function beforeAction($action) {
-        return parent::beforeAction($action);
-    }
 
     public function actionIndex($page = 1, $size = 10) {
         $size = $this->getParam('per-page') ?: $size;
@@ -62,9 +49,11 @@ class TaskController extends Controller {
     public function actionSubmit($projectId = null) {
         $task = new Task();
         if ($projectId) {
-            $conf = Conf::findOne($projectId);
+            $conf = Conf::find()
+                ->where(['id' => $projectId, 'status' => Conf::STATUS_VALID])
+                ->one();
         }
-        if (\Yii::$app->request->getIsPost() && $task->load(\Yii::$app->request->post())) {
+        if (\Yii::$app->request->getIsPost() && $conf && $task->load(\Yii::$app->request->post())) {
             // 是否需要审核
             $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
             $task->user_id = \Yii::$app->user->id;
@@ -128,10 +117,17 @@ class TaskController extends Controller {
         if ($this->task->ex_link_id == $this->task->link_id) {
             throw new \Exception('已回滚的任务不能再次回滚：（');
         }
-        $rollbackTask = new Task();
-        $conf = Conf::findOne($this->task->project_id);
+        $conf = Conf::find()
+            ->where(['id' => $this->task->project_id, 'status' => Conf::STATUS_VALID])
+            ->one();
+        if (!$conf) {
+            throw new \Exception('此项目已关闭，不能再回滚：(');
+        }
+
         // 是否需要审核
         $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
+
+        $rollbackTask = new Task();
         $rollbackTask->attributes = [
             'user_id' => \Yii::$app->user->id,
             'project_id' => $this->task->project_id,

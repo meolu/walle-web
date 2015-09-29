@@ -26,7 +26,7 @@ $this->title = '项目配置';
             新建项目
         </a>
     </div><!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <div class="box-body table-responsive no-padding clearfix">
         <table class="table table-striped table-bordered table-hover">
             <tbody><tr>
                 <th>项目名称</th>

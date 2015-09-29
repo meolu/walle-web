@@ -28,7 +28,7 @@ use yii\widgets\LinkPager;
             创建上线任务
         </a>
     </div><!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
+    <div class="box-body table-responsive no-padding clearfix">
         <table class="table table-striped table-bordered table-hover" id="task-list">
             <tbody><tr>
                 <th>项目</th>
