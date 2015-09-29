@@ -9,7 +9,7 @@ use \app\models\Task;
     .status > span {
         float: left;
         font-size: 12px;
-        width: 25%;
+        width: 14%;
         text-align: right;
     }
     .btn-deploy {
@@ -30,24 +30,29 @@ use \app\models\Task;
     <div class="status">
         <span><i class="fa fa-circle-o text-yellow step-1"></i>权限、目录检查</span>
         <span><i class="fa fa-circle-o text-yellow step-2"></i>代码检出</span>
-        <span><i class="fa fa-circle-o text-yellow step-3"></i>同步至服务器</span>
-        <span><i class="fa fa-circle-o text-yellow step-4"></i>更新全量服务器</span>
+        <span><i class="fa fa-circle-o text-yellow step-3"></i>部署前置任务</span>
+        <span><i class="fa fa-circle-o text-yellow step-4"></i>部署后置任务</span>
+        <span><i class="fa fa-circle-o text-yellow step-5"></i>同步至服务器</span>
+        <span><i class="fa fa-circle-o text-yellow step-6"></i>同步后置任务</span>
+        <span><i class="fa fa-circle-o text-yellow step-7"></i>更新全量服务器</span>
     </div>
     <div style="clear:both"></div>
     <div class="progress progress-small progress-striped active">
-        <div class="progress-bar progress-status progress-status" style="width: 0%;"></div>
+        <div class="progress-bar progress-status progress-bar-success" style="width: <?= $task->status == Task::STATUS_DONE ? 100 : 0 ?>%;"></div>
     </div>
 
-    <div class="alert alert-block alert-success result-success" style="<?php if ($task->status != Task::STATUS_DONE) { ?>display: none <?php } ?>">
-        <h4>上线成功!</h4>
+    <div class="alert alert-block alert-success result-success" style="<?= $task->status != Task::STATUS_DONE ? 'display: none' : '' ?>">
+        <h4><i class="icon-thumbs-up"></i>上线成功!</h4>
         <p>辛苦了，小主：）</p>
 
     </div>
 
     <div class="alert alert-block alert-danger result-failed" style="display: none">
-        <h4>上线出错:（</h4>
+        <h4><i class="icon-bell-alt"></i>上线出错:（</h4>
         <span class="error-msg">
         </span>
+        <br><br>
+        <i class="icon-bullhorn"></i><span>请联系SA或者重新部署</span>
     </div>
 
 </div>
@@ -58,17 +63,25 @@ use \app\models\Task;
             $this = $(this);
             $this.addClass('disabled');
             var task_id = $(this).data('id');
-            $.post("/walle/start-deploy", {taskId: task_id});
-            $('.progress-status').attr('aria-valuenow', 10).width('10%');
+            var action = '';
+            var detail = '';
+            $.post("/walle/start-deploy", {taskId: task_id}, function(o) {
+                action = o.code ? o.msg + ':' : '';
+                $('.error-msg').text(action + detail);
+            });
+            $('.progress-status').attr('aria-valuenow', 10).width('5%');
             $('.result-failed').hide();
             function getProcess() {
-                $.get("/walle/get-process?taskId=" + task_id, function (ret) {
-                    data = ret.data;
+                $.get("/walle/get-process?taskId=" + task_id, function (o) {
+                    data = o.data;
+                    // 执行失败
                     if (0 == data.status) {
                         clearInterval(timer);
                         $('.step-' + data.step).removeClass('text-yellow').addClass('text-red');
                         $('.progress-status').removeClass('progress-bar-success').addClass('progress-bar-danger');
-                        $('.error-msg').text(data.memo);
+                        $('.error-msg').text(o.msg + ':' + data.memo);
+                        detail = data.memo + '<br>' + data.command;
+                        $('.error-msg').html(action + detail);
                         $('.result-failed').show();
                         $this.removeClass('disabled');
                         return;

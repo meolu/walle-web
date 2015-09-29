@@ -77,6 +77,7 @@ class WalleController extends Controller {
                 $this->_checkPermission();
                 $this->_gitUpdate();
                 $this->_preDeploy();
+                $this->_postDeploy();
                 $this->_rsync();
                 $this->_postRelease();
                 $this->_link($this->task->link_id);
@@ -190,7 +191,6 @@ class WalleController extends Controller {
         ]);
     }
 
-
     /**
      * 获取上线进度
      *
@@ -198,13 +198,12 @@ class WalleController extends Controller {
      */
     public function actionGetProcess($taskId) {
         $record = Record::find()
-            ->select(['action', 'status', 'memo'])
+            ->select(['percent' => 'action', 'status', 'memo', 'command'])
             ->where(['task_id' => $taskId,])
             ->orderBy('id desc')
             ->asArray()->one();
-        $record['percent'] = isset(Record::$ACTION_PERCENT[$record['action']])
-            ? Record::$ACTION_PERCENT[$record['action']]
-            : 0;
+        $record['memo'] = stripslashes($record['memo']);
+        $record['command'] = stripslashes($record['command']);
 
         static::renderJson($record);
     }
@@ -262,6 +261,13 @@ class WalleController extends Controller {
         return true;
     }
 
+    /**
+     * 部署前置触发任务
+     * 在部署代码之前的准备工作，如git的一些前置检查、vendor的安装（更新）
+     *
+     * @return bool
+     * @throws \Exception
+     */
     private function _preDeploy() {
         $task = new WalleTask();
         $sTime = Command::getMs();
@@ -269,14 +275,36 @@ class WalleController extends Controller {
         $ret = $task->preDeploy();
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($task, $this->task->id, Record::ACTION_CLONE, $duration);
+        Record::saveRecord($task, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration);
+
+        if (!$ret) throw new \Exception('前置操作失败');
+        return true;
+    }
+
+
+    /**
+     * 部署后置触发任务
+     * git代码检出之后，可能做一些调整处理，如vendor拷贝，配置环境适配（mv config-test.php config.php）
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function _postDeploy() {
+        $task = new WalleTask();
+        $sTime = Command::getMs();
+        $task->setConfig($this->conf);
+        $ret = $task->postDeploy();
+        // 记录执行时间
+        $duration = Command::getMs() - $sTime;
+        Record::saveRecord($task, $this->task->id, Record::ACTION_POST_DEPLOY, $duration);
 
         if (!$ret) throw new \Exception('前置操作失败');
         return true;
     }
 
     /**
-     * 部署时触发操作
+     * 同步完所有目标机器时触发任务
+     * 所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task）
      *
      * @return bool
      * @throws \Exception
@@ -288,7 +316,7 @@ class WalleController extends Controller {
         $ret = $task->postRelease($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($task, $this->task->id, Record::ACTION_CLONE, $duration);
+        Record::saveRecord($task, $this->task->id, Record::ACTION_POST_RELEASE, $duration);
 
         if (!$ret) throw new \Exception('前置操作失败');
         return true;

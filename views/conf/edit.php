@@ -39,7 +39,7 @@ use yii\widgets\ActiveForm;
                                   'data-rel'       => 'tooltip',
                                   'data-title'     => '代码的检出存放路径',
                               ])
-                          ->label('检出仓库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
+                          ->label('代码存储仓库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'excludes')
                           ->textarea([
                               'placeholder'    => '.git' . PHP_EOL . 'README.md',
@@ -169,7 +169,7 @@ use yii\widgets\ActiveForm;
                   'data-rel'       => 'tooltip',
                   'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
               ])
-              ->label('git地址', ['class' => 'control-label bolder blue']) ?>
+              ->label('git地址<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
         <!-- git 配置 end-->
 
         <div class="form-group">
@@ -200,7 +200,7 @@ use yii\widgets\ActiveForm;
         <div class="form-group">
             <label class="control-label bolder blue">是否启用:
                 <input name="Conf[status]" value="0" type="hidden">
-                <input name="Conf[status]" value="1" id="xxxx" <?= $conf->status ? 'checked' : '' ?> type="checkbox" class="ace ace-switch ace-switch-6"  data-rel="tooltip" data-title="关闭时，用户不能对此项目发起上线" data-placement="right">
+                <input name="Conf[status]" value="1" <?= $conf->status ? 'checked' : '' ?> type="checkbox" class="ace ace-switch ace-switch-6"  data-rel="tooltip" data-title="关闭时，用户不能对此项目发起上线" data-placement="right">
                 <span class="lbl"></span>
             </label>
         </div>
