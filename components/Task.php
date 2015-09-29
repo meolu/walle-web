@@ -24,7 +24,7 @@ class Task extends Command {
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = trim(rtrim($this->getConfig()->deploy_from, '/'));
+        $workspace = rtrim(Conf::getDeployFromDir(), '/');
         $pattern = [
             '#{WORKSPACE}#',
         ];
@@ -51,7 +51,7 @@ class Task extends Command {
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = trim(rtrim($this->getConfig()->deploy_from, '/'));
+        $workspace = rtrim(Conf::getDeployFromDir(), '/');
         $pattern = [
             '#{WORKSPACE}#',
         ];
@@ -77,7 +77,7 @@ class Task extends Command {
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = trim(rtrim($this->getConfig()->release_to, '/'));
+        $workspace = rtrim(Conf::getDeployFromDir(), '/');
         $version   = Conf::getReleaseVersionDir($version);
         $pattern = [
             '#{WORKSPACE}#',

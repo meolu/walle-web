@@ -39,7 +39,8 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
 
 快速开始
 -------
-* 首先，配置邮箱，如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录
+* nginx/apache的webroot配置指向`walle-web/web`
+* 配置邮箱（如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录）
     ```php
     vi config/params.php
     'mail-suffix' => [
@@ -81,13 +82,13 @@ composer update
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.gif)
 
 #### 上线列表
-![](https://raw.github.com/meolu/walle-web/master/screenshots/task-list.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
-#### 发起上线
-![](https://raw.github.com/meolu/walle-web/master/screenshots/deploy.png)
+#### 配置管理
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
 
 ## CHANGELOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
