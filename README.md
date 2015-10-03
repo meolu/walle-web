@@ -1,101 +1,108 @@
-Walle 瓦力 web部署系统
-==========================
+Walle - A Deployment Tool
+=========================
+Walle is a deployment tool written in PHP with yii2 out of the box.
 
-Walle 一个web部署系统工具，可能也是个持续发布工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。
+See [walle](http://www.huamanshu.com/walle.html) for more information and documentation.
 
-* 用户分身份注册、登录
-* 开发者发起上线任务申请
-* 管理者审核上线任务
-* 支持多项目部署
-* 开发者一键部署上线
-* 快速回滚
-* 查看上线日志
-* 部署前准备任务（前置检查）
-* 代码检出后处理任务（如vendor，环境配置）
-* 同步到各目标机器后收尾任务（如重启）
-* 执行sql构建（不要担心忘记测试环境sql同步）
-* 线上文件指纹确认
-* 项目的用户权限管理
+See [English Readme](https://github.com/meolu/walle-web/blob/master/README-zh.md)
+
+* User signup by admin/develop identity
+* Developer submit a task, deploy task
+* Admin audit task
+* Multiple project
+* Quick rollback
+* Group relation of project
+* Task of pre-deploy（e.g: test ENV var）
+* Task of post-deploy（e.g: vendor）
+* Task of post-release（e.g: restart service）
+* Checkout file md5
 
 
-依赖
----
+Requirements
+------------
 
 * bash(git、ssh)
 * LNMP、LAMP(php5.4+)
 * composer
 
-安装
-----
+That's all! It's base package of PHP envirament!
+
+
+Installation
+------------
 ```
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
-vi config/web.php # 设置mysql连接
-composer install  # 如果缺少bower-asset的话， 先安装：composer install global require "fxp/composer-asset-plugin:*"
-./yii migrate/up  # 导入数据库
+vi config/web.php # set up module db mysql connection info
+composer install  # error cause by bower-asset, install：composer install global require "fxp/composer-asset-plugin:*"
+./yii migrate/up  # migrate database
 ```
 
-快速开始
--------
-* nginx/apache的webroot配置指向`walle-web/web`
-* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，以免信息外泄）
+
+Quick Start
+-------------
+
+* set up nginx/apache webroot `walle-web/web`
+* config email smtp（config your company's email smtp after trying in case leakaging Information）
     ```php
     vi config/params.php
-    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    'support.email' => 'service@huamanshu.com', // the same with `username` of the module of `config/web.php`
     'mail-suffix'   => [
         'huamanshu.com',
     ]
 
     vi config/web.php +25
-    # 配置mail smtp模块
+    # config module of mail smtp
     'class'      => 'Swift_SmtpTransport',
-    'host'       => 'ip or host',            # smtp 发件地址
-    'username'   => 'service@huamanshu.com', # smtp 发件用户名
-    'password'   => 'password',              # smtp 发件人的密码
-    'port'       => 25,                      # smtp 端口
-    'encryption' => 'tls',                   # smtp 协议
+    'host'       => 'ip or host',            # smtp host
+    'username'   => 'service@huamanshu.com', # smtp send user
+    'password'   => 'password',              # smtp password
+    'port'       => 25,                      # smtp port
+    'encryption' => 'tls',                   # smtp agreement
     ```
-* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
-* 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
-* 管理员审核上线任务
-* 开发者发起上线
+* signup a admin user(`admin/admin` exists),then config a project
+* signup a develop user(`demo/demo` exists),submit a task
+* admin audit task
+* deveop deploy the audited task
+
 
 
 To Do List
 ----------
 
-* 同项目同时部署加锁等待
-* 静态资源管理器
+* the same project add lock while deploying
+* a manager of static source
 
-持续更新开启更多功能
+Update
 -----------------
 ```
 git pull
-./yii migrate    # 更新数据库
+./yii migrate
 ```
 
-截图
----
-#### 注册发普通开发者和管理角色
+
+screenshot
+----------
+#### signup a admin/developer
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
-#### 提交上线任务
+#### sumbit a task
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
 
-#### 上线列表
+#### list of task
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
-#### 配置管理
+#### project config
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
 
-#### 演示
+#### demo show
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 ## CHANGELOG
-瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
+[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
 
 
-交流讨论
--------
+Discussing
+----------
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
-- QQ（有问必答）: 482939318
+- QQ: 482939318
