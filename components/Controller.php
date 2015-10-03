@@ -13,6 +13,20 @@ use yii;
 
 class Controller extends yii\web\Controller {
 
+    public $uid = null;
+
+    /**
+     * @param \yii\base\Action $action
+     * @return bool
+     */
+    public function beforeAction($action) {
+        parent::beforeAction($action);
+        if (Yii::$app->user->id) {
+            $this->uid = Yii::$app->user->id;
+        }
+        return true;
+    }
+
     /**
      * json渲染. PS:调用此方法之前若有输出将会出错
      *

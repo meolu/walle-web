@@ -7,9 +7,22 @@ use yii\data\Pagination;
 use app\components\Controller;
 use app\models\Conf;
 use app\models\User;
+use app\models\Group;
 
 class ConfController extends Controller
 {
+
+    /**
+     * @param \yii\base\Action $action
+     * @return bool
+     */
+    public function beforeAction($action) {
+        parent::beforeAction($action);
+        if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) {
+            throw new \Exception('非管理员不能操作：（');
+        }
+        return true;
+    }
 
     /**
      * 配置项目列表
@@ -34,11 +47,66 @@ class ConfController extends Controller
      * @return string
      * @throws \Exception
      */
+    public function actionPreview($projectId) {
+        $this->layout = 'modal';
+        $conf = Conf::findOne($projectId);
+        if (!$conf) throw new \Exception('找不到项目');
+
+        return $this->render('preview', [
+            'conf' => $conf,
+        ]);
+    }
+
+    /**
+     * 配置项目
+     *
+     * @param $projectId
+     * @return string
+     * @throws \Exception
+     */
+    public function actionGroup($projectId) {
+        // 配置信息
+        $conf = Conf::findOne($projectId);
+        if (!$conf) {
+            throw new \Exception('项目不存在：）');
+        }
+        if ($conf->user_id != $this->uid) {
+            throw new \Exception('不可以操作其它人的项目：）');
+        }
+        // 添加用户
+        if (\Yii::$app->request->getIsPost()) {
+            Group::addGroupUser($projectId, \Yii::$app->request->post('user'));
+        }
+        // 项目的分组用户
+        $group = Group::find()
+            ->with('user')
+            ->where(['project_id' => $projectId])
+            ->indexBy('user_id')
+            ->asArray()->all();
+        // 所有用户
+        $users = User::find()
+            ->select(['id', 'email', 'realname'])
+            ->where(['is_email_verified' => 1])
+            ->asArray()->all();
+
+        return $this->render('group', [
+            'conf'  => $conf,
+            'users' => $users,
+            'group' => $group,
+        ]);
+    }
+
+    /**
+     * 配置项目
+     *
+     * @param $projectId
+     * @return string
+     * @throws \Exception
+     */
     public function actionEdit($projectId = null) {
-        if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) throw new \Exception('非管理员不能操作：（');
         $conf = $projectId ? Conf::findOne($projectId) : new Conf();
         if (\Yii::$app->request->getIsPost() && $conf->load(Yii::$app->request->post())) {
-            $conf->user_id = \Yii::$app->user->id;
+            $conf->user_id = $this->uid;
             if ($conf->save()) {
                 $this->redirect('/conf/');
             }
@@ -56,16 +124,35 @@ class ConfController extends Controller
      * @return string
      * @throws \Exception
      */
-    public function actionDelete($confId) {
-        $conf = Conf::findOne($confId);
+    public function actionDelete($projectId) {
+        $conf = Conf::findOne($projectId);
         if (!$conf) {
             throw new \Exception('项目不存在：）');
         }
-        if ($conf->user_id != \Yii::$app->user->id) {
+        if ($conf->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的项目：）');
         }
         if (!$conf->delete()) throw new \Exception('删除失败');
         $this->renderJson([]);
+    }
 
+    /**
+     * 删除项目的用户关系
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function actionDeleteRelation($id) {
+        $group = Group::findOne($id);
+        if (!$group) {
+            throw new \Exception('关系不存在：）');
+        }
+        $conf = Conf::findOne($group->project_id);
+        if ($conf->user_id != $this->uid) {
+            throw new \Exception('不可以操作其它人的项目：）');
+        }
+
+        if (!$group->delete()) throw new \Exception('删除失败');
+        $this->renderJson([]);
     }
 }

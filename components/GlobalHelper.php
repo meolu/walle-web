@@ -9,6 +9,7 @@
 
 namespace app\components;
 
+use app\models\User;
 use yii;
 
 class GlobalHelper {
@@ -53,5 +54,9 @@ class GlobalHelper {
         $out = iconv(mb_detect_encoding($text, mb_detect_order(), false), "UTF-8//IGNORE", $text);
 
         return $out;
+    }
+
+    public static function formatAvatar($pic) {
+        return rtrim(User::AVATAR_ROOT, '/') . '/' . $pic;
     }
 }

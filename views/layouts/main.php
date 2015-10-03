@@ -24,6 +24,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     <![endif]-->
 
     <!-- ace styles -->
+    <link rel="stylesheet" href="/dist/css/chosen.css" />
     <link rel="stylesheet" href="/dist/css/ace.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-rtl.min.css" />
     <link rel="stylesheet" href="/dist/css/ace-skins.min.css" />
@@ -88,7 +89,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                         </li>
 
                         <li>
-                            <a href="#">
+                            <a href="/user/">
                                 <i class="icon-user"></i>
                                 个人资料
                             </a>
@@ -203,6 +204,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 <script src="/dist/js/jquery.easy-pie-chart.min.js"></script>
 <script src="/dist/js/jquery.sparkline.min.js"></script>
 <script src="/dist/js/flot/jquery.flot.min.js"></script>
+<script src="/dist/js/chosen.jquery.min.js"></script>
 <script src="/dist/js/flot/jquery.flot.pie.min.js"></script>
 <script src="/dist/js/flot/jquery.flot.resize.min.js"></script>
 
@@ -212,9 +214,24 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 <script src="/dist/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
+<script>
 
+    jQuery(function($) {
+        $(".chosen-select").chosen();
+        $('#chosen-multiple-style').on('click', function (e) {
+            var target = $(e.target).find('input[type=radio]');
+            var which = parseInt(target.val());
+            if (which == 2) $('#form-field-select-4').addClass('tag-input-style');
+            else $('#form-field-select-4').removeClass('tag-input-style');
+        });
+
+
+    })
+</script>
     <?php $this->endBody() ?>
+
   </body>
 </html>
 <?php $this->endPage() ?>
+
 

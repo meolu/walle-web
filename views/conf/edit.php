@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-      <div class="box-body">
+    <div class="box-body">
           <?= $form->field($conf, 'name')
               ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
           <?= $form->field($conf, 'level')->dropDownList([

@@ -45,11 +45,13 @@ $this->title = '项目配置';
                     <td><?= \Yii::t('status', 'conf_status_' . $item['status']) ?></td>
                     <td class="<?= \Yii::t('status', 'conf_status_' . $item['status'] . '_color') ?>">
                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                            <!-- 预览功能 暂时没有时间写
-                            <a class="blue" href="">
-                                <i class="icon-zoom-in bigger-130"></i>
+                            <a href="/conf/preview/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
+                                <i class="icon-zoom-in bigger-130"></i>查看
                             </a>
-                            <-->
+
+                            <a href="/conf/group/?projectId=<?= $item['id'] ?>" class="green">
+                                <i class="icon-group bigger-130"></i>成员
+                            </a>
 
                             <a class="green" href="/conf/edit?projectId=<?= $item['id'] ?>">
                                 <i class="icon-pencil bigger-130"></i>修改
@@ -61,24 +63,34 @@ $this->title = '项目配置';
                         </div>
                     </td>
                 </tr>
-            <?php } ?>
+                <?php } ?>
+            </tbody>
+        </table>
 
-            </tbody></table>
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        </div>
+
     </div><!-- /.box-body -->
 </div>
 
 <script>
-    $('.btn-delete').click(function(e) {
-        $this = $(this);
-        if (confirm('确定要删除该记录？')) {
-            $.get('/conf/delete', {confId: $this.data('id')}, function(o) {
-                if (!o.code) {
-                    $this.closest("tr").remove();
-                } else {
-                    alert('删除失败: ' + o.msg);
-                }
-            })
-        }
-
-    })
+    jQuery(function($) {
+        $('.btn-delete').click(function(e) {
+            $this = $(this);
+            if (confirm('确定要删除该记录？')) {
+                $.get('/conf/delete', {projectId: $this.data('id')}, function(o) {
+                    if (!o.code) {
+                        $this.closest("tr").remove();
+                    } else {
+                        alert('删除失败: ' + o.msg);
+                    }
+                })
+            }
+        })
+        $("#myModal").on("hidden.bs.modal", function() {
+            console.log('hidden')
+            $(this).removeData("bs.modal");
+        });
+    });
 </script>

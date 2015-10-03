@@ -35,14 +35,6 @@ class WalleController extends Controller {
 
     public $enableCsrfValidation = false;
 
-    /**
-     * @param \yii\base\Action $action
-     * @return bool
-     */
-    public function beforeAction($action) {
-        return parent::beforeAction($action);
-    }
-
 
     /**
      * 发起上线
@@ -58,7 +50,7 @@ class WalleController extends Controller {
         if (!$this->task) {
             throw new \Exception('任务号不存在：）');
         }
-        if ($this->task->user_id != \Yii::$app->user->id) {
+        if ($this->task->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
         // 任务失败或者审核通过时可发起上线
@@ -182,7 +174,7 @@ class WalleController extends Controller {
         if (!$this->task) {
             throw new \Exception('任务号不存在：）');
         }
-        if ($this->task->user_id != \Yii::$app->user->id) {
+        if ($this->task->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
 

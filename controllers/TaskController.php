@@ -8,6 +8,7 @@ use app\components\Controller;
 use app\models\Task;
 use app\models\Conf;
 use app\models\User;
+use app\models\Group;
 
 class TaskController extends Controller {
     
@@ -15,12 +16,11 @@ class TaskController extends Controller {
 
     public function actionIndex($page = 1, $size = 10) {
         $size = $this->getParam('per-page') ?: $size;
-        $user = User::findOne(\Yii::$app->user->id);
         $list = Task::find()
             ->with('user')
             ->with('conf');
-        if ($user->role != User::ROLE_ADMIN) {
-            $list->where(['user_id' => \Yii::$app->user->id]);
+        if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) {
+            $list->where(['user_id' => $this->uid]);
         }
 
         $kw = \Yii::$app->request->post('kw');
@@ -31,7 +31,7 @@ class TaskController extends Controller {
         $list = $tasks->offset(($page - 1) * $size)->limit(10)
             ->asArray()->all();
 
-        $view = $user->role == User::ROLE_ADMIN ? 'admin-list' : 'dev-list';
+        $view = \Yii::$app->user->identity->role == User::ROLE_ADMIN ? 'admin-list' : 'dev-list';
         $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
         return $this->render($view, [
             'list'  => $list,
@@ -53,14 +53,22 @@ class TaskController extends Controller {
                 ->where(['id' => $projectId, 'status' => Conf::STATUS_VALID])
                 ->one();
         }
-        if (\Yii::$app->request->getIsPost() && $conf && $task->load(\Yii::$app->request->post())) {
-            // 是否需要审核
-            $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
-            $task->user_id = \Yii::$app->user->id;
-            $task->project_id = $projectId;
-            $task->status = $status;
-            if ($task->save()) {
-                $this->redirect('/task/');
+        if (\Yii::$app->request->getIsPost()) {
+            if (!$conf) throw new \Exception('未知的项目，请确认：）');
+            $group = Group::find()
+                ->where(['user_id' => $this->uid, 'project_id' => $projectId])
+                ->count();
+            if (!$group) throw new \Exception('非该项目成员，无权限');
+
+            if ($task->load(\Yii::$app->request->post())) {
+                // 是否需要审核
+                $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
+                $task->user_id = $this->uid;
+                $task->project_id = $projectId;
+                $task->status = $status;
+                if ($task->save()) {
+                    $this->redirect('/task/');
+                }
             }
         }
         if ($projectId) {
@@ -69,8 +77,10 @@ class TaskController extends Controller {
                 'conf' => $conf,
             ]);
         }
+        // 成员所属项目
         $projects = Conf::find()
-            ->where(['status' => Conf::STATUS_VALID])
+            ->leftJoin(Group::tableName(), '`group`.project_id=conf.id')
+            ->where(['conf.status' => Conf::STATUS_VALID, '`group`.user_id' => $this->uid])
             ->asArray()->all();
         return $this->render('select-project', [
             'projects' => $projects,
@@ -89,7 +99,7 @@ class TaskController extends Controller {
         if (!$task) {
             throw new \Exception('任务号不存在：）');
         }
-        if ($task->user_id != \Yii::$app->user->id) {
+        if ($task->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
         if ($task->status == Task::STATUS_DONE) {
@@ -111,7 +121,7 @@ class TaskController extends Controller {
         if (!$this->task) {
             throw new \Exception('任务号不存在：）');
         }
-        if ($this->task->user_id != \Yii::$app->user->id) {
+        if ($this->task->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的任务：）');
         }
         if ($this->task->ex_link_id == $this->task->link_id) {
@@ -129,7 +139,7 @@ class TaskController extends Controller {
 
         $rollbackTask = new Task();
         $rollbackTask->attributes = [
-            'user_id' => \Yii::$app->user->id,
+            'user_id' => $this->uid,
             'project_id' => $this->task->project_id,
             'status' => $status,
             'action' => Task::ACTION_ROLLBACK,

@@ -1,3 +1,13 @@
 .tip {
     display: none;
 }
+.profile-users .memberdiv .popover {
+    min-width: 200px;
+}
+
+.profile-users .memberdiv .popover-content {
+    min-width: 200px;
+}
+.show {
+    display: block;
+}

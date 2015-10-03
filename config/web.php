@@ -27,11 +27,11 @@ $config = [
             'useFileTransport' => false,
             'transport' => [
                 'class'      => 'Swift_SmtpTransport',
-                'host'       => 'ip or host',           # smtp 发件地址
-                'username'   => 'admin@huamanshu.com',  # smtp 发件用户名
-                'password'   => 'password',             # smtp 发件人的密码
-                'port'       => 25,                     # smtp 端口
-                'encryption' => 'tls',                  # smtp 协议
+                'host'       => 'smtp.exmail.qq.com',     # smtp 发件地址
+                'username'   => 'service@huamanshu.com',  # smtp 发件用户名
+                'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
+                'port'       => 25,                       # smtp 端口
+                'encryption' => 'tls',                    # smtp 协议
             ],
             'messageConfig' => [
                 'charset' => 'UTF-8',

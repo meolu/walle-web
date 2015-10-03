@@ -18,6 +18,7 @@ use app\models\queries\UserQuery;
  * @property string $password_reset_token
  * @property string $email_confirmation_token
  * @property string $email
+ * @property string $avatar
  * @property string $auth_key
  * @property integer $role
  * @property integer $status
@@ -40,6 +41,12 @@ class User extends ActiveRecord implements IdentityInterface
      * 开发者
      */
     const ROLE_DEV   = 2;
+
+    /**
+     * 头像目录
+     */
+    const AVATAR_ROOT = '/dist/avatars/';
+
     /**
      * @var string|null the current password value from form input
      */
@@ -93,11 +100,11 @@ class User extends ActiveRecord implements IdentityInterface
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
             ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'validateEmail'],
-            ['email', 'email'],
-            ['email', 'unique'],
+            [['avatar', 'realname'], 'string'],
+            [['email', 'avatar'], 'filter', 'filter' => 'trim'],
+            ['email', 'validateEmail', 'on'=>'signup'],
+            ['email', 'email', 'on'=>'signup'],
+            ['email', 'unique', 'on'=>'signup'],
         ];
     }
 
@@ -128,10 +135,10 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->isNewRecord) {
             $this->generateAuthKey();
             $this->generateEmailConfirmationToken();
+            // 名字与邮箱
+            $this->realname = $this->username;
+            $this->username = $this->email;
         }
-        $this->realname = $this->username;
-        $this->username = $this->email;
-
         return parent::beforeSave($insert);
     }
 
