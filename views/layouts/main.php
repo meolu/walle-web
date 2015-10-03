@@ -6,6 +6,7 @@ use yii\widgets\Breadcrumbs;
 use app\models\User;
 use app\assets\AppAsset;
 use app\widgets\Alert;
+use app\components\GlobalHelper;
 
 $user = User::findOne(\Yii::$app->user->id);
 $userName =  \Yii::$app->user->id ? $user->getName() : '';
@@ -76,17 +77,20 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" src="<?= GlobalHelper::formatAvatar($user->avatar) ?>">
                         <span class="user-info" style="top:12px"><?= $userName ?></span>
                         <i class="icon-caret-down"></i>
                     </a>
 
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                        <!-- 设置功能暂无
                         <li>
                             <a href="#">
                                 <i class="icon-cog"></i>
                                 设置
                             </a>
                         </li>
+                        -->
 
                         <li>
                             <a href="/user/">
