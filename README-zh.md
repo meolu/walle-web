@@ -1,7 +1,7 @@
 Walle 瓦力 web部署系统
 ==========================
 
-Walle 一个web部署系统工具，可能也是个持续发布工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md)
+Walle 一个web部署系统工具，可能也是个持续发布工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/README.md)
 
 * 用户分身份注册、登录
 * 开发者发起上线任务申请、部署
