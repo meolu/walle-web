@@ -4,7 +4,7 @@ Walle 瓦力 web部署系统
 功能
 ---
 
-Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。
+Walle 一个web部署系统工具，可能也是个持续发布工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。
 
 * 用户分身份注册、登录
 * 开发者发起上线任务申请
@@ -18,7 +18,7 @@ Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamans
 * 同步到各目标机器后收尾任务（如重启）
 * 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
-* 项目的用户管理
+* 项目的用户权限管理
 
 
 依赖
@@ -42,7 +42,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
 快速开始
 -------
 * nginx/apache的webroot配置指向`walle-web/web`
-* 配置邮箱（如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录）
+* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，以免信息外泄）
     ```php
     vi config/params.php
     'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
@@ -68,8 +68,8 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
 To Do List
 ----------
 
-* 部署出错详细信息优化
-* 项目的开发同学分组可见权限
+* 同项目同时部署加锁等待
+* 静态资源管理器
 
 持续更新开启更多功能
 -----------------
