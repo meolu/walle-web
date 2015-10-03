@@ -1,9 +1,6 @@
 Walle 瓦力 web部署系统
 ==========================
 
-功能
----
-
 Walle 一个web部署系统工具，可能也是个持续发布工具，[官网主页](http://www.huamanshu.com/walle.html)了解更多。
 
 * 用户分身份注册、登录
@@ -24,10 +21,9 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，[官网�
 依赖
 ---
 
-* git
-* web ui的运行环境php5.4、nginx（apache）、mysql
-* composer，安装walle、yii2
-* ssh
+* bash(git、ssh)
+* LNMP、LAMP(php5.4+)
+* composer
 
 安装
 ----
@@ -99,5 +95,7 @@ git pull
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
 
 
-## 交流群（有问必答）
-**QQ：482939318**
+交流讨论
+-------
+- [submit issue](https://github.com/meolu/walle-web/issues/new)
+- QQ（有问必答）: 482939318
