@@ -18,6 +18,8 @@ Walle景愿是做一个web部署系统工具，[官网主页](http://www.huamans
 * 同步到各目标机器后收尾任务（如重启）
 * 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
+* 项目的用户管理
+
 
 依赖
 ---
@@ -43,18 +45,19 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer instal
 * 配置邮箱（如果没有，好吧，先忽略，注册完手动修改user表的is_email_verified=1即可登录）
     ```php
     vi config/params.php
-    'mail-suffix' => [
-        '公司邮箱后缀.com',
+    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    'mail-suffix'   => [
+        'huamanshu.com',
     ]
 
     vi config/web.php +25
     # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
-    'host'       => 'ip or host',           # smtp 发件地址
-    'username'   => 'admin@huamanshu.com',  # smtp 发件用户名
-    'password'   => 'password',             # smtp 发件人的密码
-    'port'       => 25,                     # smtp 端口
-    'encryption' => 'tls',                  # smtp 协议
+    'host'       => 'ip or host',            # smtp 发件地址
+    'username'   => 'service@huamanshu.com', # smtp 发件用户名
+    'password'   => 'password',              # smtp 发件人的密码
+    'port'       => 25,                      # smtp 端口
+    'encryption' => 'tls',                   # smtp 协议
     ```
 * 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
 * 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
@@ -72,7 +75,6 @@ To Do List
 -----------------
 ```
 git pull
-composer update
 ./yii migrate    # 更新数据库
 ```
 
