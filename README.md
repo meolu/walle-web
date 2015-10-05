@@ -8,6 +8,7 @@ See [walle website](http://www.huamanshu.com/walle.html) for more information an
 * Developer submit a task, deploy task
 * Admin audit task
 * Multiple project
+* Multiple Task Parallel
 * Quick rollback
 * Group relation of project
 * Task of pre-deploy（e.g: test ENV var）
@@ -68,7 +69,6 @@ Quick Start
 To Do List
 ----------
 
-* the same project add lock while deploying
 * a manager of static source
 
 Update
