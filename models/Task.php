@@ -126,11 +126,11 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * with('conf')
+     * with('project')
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getConf() {
-        return $this->hasOne(Conf::className(), ['id' => 'project_id']);
+    public function getProject() {
+        return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
 }

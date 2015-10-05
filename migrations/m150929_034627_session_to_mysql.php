@@ -17,9 +17,9 @@ class m150929_034627_session_to_mysql extends Migration
     public function down()
     {
         $this->dropTable('session');
-        echo "m150929_034627_session_to_mysql cannot be reverted.\n";
+        echo "m150929_034627_session_to_mysql is reverted.\n";
 
-        return false;
+        return true;
     }
 
     /*

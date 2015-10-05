@@ -3,8 +3,7 @@
  * @var yii\web\View $this
  */
 $this->title = '配置项目';
-use app\models\Conf;
-
+use app\models\Project;
 use yii\widgets\ActiveForm;
 ?>
 <div class="box">
@@ -13,9 +12,9 @@ use yii\widgets\ActiveForm;
           <?= $form->field($conf, 'name')
               ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
           <?= $form->field($conf, 'level')->dropDownList([
-              Conf::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Conf::LEVEL_TEST),
-              Conf::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Conf::LEVEL_SIMU),
-              Conf::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Conf::LEVEL_PROD),
+              Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
+              Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
+              Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
           ])->label('项目环境级别<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
         <!-- 宿主机 配置-->
         <div class="row">
@@ -176,14 +175,14 @@ use yii\widgets\ActiveForm;
             <label class="control-label bolder blue">分支/tag上线:</label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="测试环境推荐选项，可以选择branch和commit" data-placement="right">
                 <label>
-                    <input name="Conf[git_type]" value="<?= Conf::GIT_BRANCH ?>" <?= $conf->git_type == Conf::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
+                    <input name="Conf[git_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->git_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="仿真和生产环境推荐选项" data-placement="right">
                 <label>
-                    <input name="Conf[git_type]" value="<?= Conf::GIT_TAG ?>" <?= $conf->git_type == Conf::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
+                    <input name="Conf[git_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->git_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
                 </label>
             </div>

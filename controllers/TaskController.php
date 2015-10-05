@@ -6,7 +6,7 @@ use yii;
 use yii\data\Pagination;
 use app\components\Controller;
 use app\models\Task;
-use app\models\Conf;
+use app\models\Project;
 use app\models\User;
 use app\models\Group;
 
@@ -18,7 +18,7 @@ class TaskController extends Controller {
         $size = $this->getParam('per-page') ?: $size;
         $list = Task::find()
             ->with('user')
-            ->with('conf');
+            ->with('project');
         if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) {
             $list->where(['user_id' => $this->uid]);
         }
@@ -49,8 +49,8 @@ class TaskController extends Controller {
     public function actionSubmit($projectId = null) {
         $task = new Task();
         if ($projectId) {
-            $conf = Conf::find()
-                ->where(['id' => $projectId, 'status' => Conf::STATUS_VALID])
+            $conf = Project::find()
+                ->where(['id' => $projectId, 'status' => Project::STATUS_VALID])
                 ->one();
         }
         if (\Yii::$app->request->getIsPost()) {
@@ -62,7 +62,7 @@ class TaskController extends Controller {
 
             if ($task->load(\Yii::$app->request->post())) {
                 // 是否需要审核
-                $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
+                $status = $conf->audit == Project::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
                 $task->user_id = $this->uid;
                 $task->project_id = $projectId;
                 $task->status = $status;
@@ -78,9 +78,9 @@ class TaskController extends Controller {
             ]);
         }
         // 成员所属项目
-        $projects = Conf::find()
-            ->leftJoin(Group::tableName(), '`group`.project_id=conf.id')
-            ->where(['conf.status' => Conf::STATUS_VALID, '`group`.user_id' => $this->uid])
+        $projects = Project::find()
+            ->leftJoin(Group::tableName(), '`group`.project_id=project.id')
+            ->where(['project.status' => Project::STATUS_VALID, '`group`.user_id' => $this->uid])
             ->asArray()->all();
         return $this->render('select-project', [
             'projects' => $projects,
@@ -127,15 +127,15 @@ class TaskController extends Controller {
         if ($this->task->ex_link_id == $this->task->link_id) {
             throw new \Exception('已回滚的任务不能再次回滚：（');
         }
-        $conf = Conf::find()
-            ->where(['id' => $this->task->project_id, 'status' => Conf::STATUS_VALID])
+        $conf = Project::find()
+            ->where(['id' => $this->task->project_id, 'status' => Project::STATUS_VALID])
             ->one();
         if (!$conf) {
             throw new \Exception('此项目已关闭，不能再回滚：(');
         }
 
         // 是否需要审核
-        $status = $conf->audit == Conf::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
+        $status = $conf->audit == Project::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
 
         $rollbackTask = new Task();
         $rollbackTask->attributes = [
@@ -149,7 +149,7 @@ class TaskController extends Controller {
             'commit_id' => $this->task->commit_id,
         ];
         if ($rollbackTask->save()) {
-            $url = $conf->audit == Conf::AUDIT_YES
+            $url = $conf->audit == Project::AUDIT_YES
                 ? '/task/'
                 : '/walle/deploy?taskId=' . $rollbackTask->id;
             $this->renderJson([

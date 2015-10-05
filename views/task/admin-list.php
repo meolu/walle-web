@@ -43,7 +43,7 @@ use yii\widgets\LinkPager;
             <?php foreach ($list as $item) { ?>
             <tr>
                 <td><?= $item['user']['realname'] ?></td>
-                <td><?= $item['conf']['name'] ?></td>
+                <td><?= $item['project']['name'] ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['commit_id'] ?></td>

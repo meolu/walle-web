@@ -9,43 +9,44 @@
 namespace app\components;
 
 
-use app\models\Conf;
+use app\models\Project;
 
 class Git extends Command {
 
-    public function updateRepo($branch = 'master') {
-        $destination = Conf::getDeployFromDir();
+    public function updateRepo($branch = 'master', $gitDir = null) {
+        $gitDir = $gitDir ?: Project::getDeployFromDir();
+        $dotGit = rtrim($gitDir, '/') . '/.git';
+        file_put_contents('/tmp/cmd', $dotGit . PHP_EOL, 8);
         // 存在git目录，直接pull
-        if (file_exists($destination)) {
-            $cmd[] = sprintf('cd %s ', $destination);
+        if (file_exists($dotGit)) {
+            $cmd[] = sprintf('cd %s ', $gitDir);
             $cmd[] = sprintf('/usr/bin/env git fetch --all');
-            $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch); //$this->getConfig()->branch
+            $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
         // 不存在，则先checkout
         else {
-            $parentDir = dirname($destination);
-            $baseName = basename($destination);
-            $cmd[] = sprintf('mkdir -p %s ', $parentDir);
-            $cmd[] = sprintf('cd %s ', $parentDir);
-            $cmd[] = sprintf('/usr/bin/env git clone %s %s', $this->getConfig()->git_url, $baseName);
-            $cmd[] = sprintf('cd %s', $destination);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch); //$this->getConfig()->getScm('branch')
+            $cmd[] = sprintf('mkdir -p %s ', $gitDir);
+            $cmd[] = sprintf('cd %s ', $gitDir);
+            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->git_url);
+            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
     }
 
     /**
-     * 回滚到指定commit版本
+     * 更新到指定commit版本
      *
      * @param string $commit
      * @return bool
      */
-    public function rollback($commit) {
-        $destination = Conf::getDeployFromDir();
+    public function updateToVersion($commit, $version) {
+        // 先更新
+        $destination = Project::getDeployWorkspace($version);
+        $this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = sprintf('/usr/bin/env git reset %s', $commit);
         $cmd[] = '/usr/bin/env git checkout .';
@@ -61,8 +62,8 @@ class Git extends Command {
      */
     public function getBranchList() {
         // 先更新
-        $this->updateRepo();
-        $destination = Conf::getDeployFromDir();
+        $destination = Project::getDeployFromDir();
+        $this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git branch -a --list';
         $command = join(' && ', $cmd);
@@ -93,8 +94,8 @@ class Git extends Command {
      */
     public function getCommitList($branch = 'master', $count = 20) {
         // 先更新
-        $this->updateRepo($branch);
-        $destination = Conf::getDeployFromDir();
+        $destination = Project::getDeployFromDir();
+        $this->updateRepo($branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty="%h - %an %s" ';
         $command = join(' && ', $cmd);
@@ -124,7 +125,7 @@ class Git extends Command {
     public function getTagList($count = 20) {
         // 先更新
         $this->updateRepo();
-        $destination = Conf::getDeployFromDir();
+        $destination = Project::getDeployFromDir();
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git tag -l ';
         $command = join(' && ', $cmd);

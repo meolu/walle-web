@@ -5,7 +5,7 @@ namespace app\controllers;
 use yii;
 use yii\data\Pagination;
 use app\components\Controller;
-use app\models\Conf;
+use app\models\Project;
 use app\models\User;
 use app\models\Group;
 
@@ -29,14 +29,14 @@ class ConfController extends Controller
      *
      */
     public function actionIndex() {
-        $conf = Conf::find();
+        $project = Project::find();
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
-            $conf->where(['like', "name", $kw]);
+            $project->where(['like', "name", $kw]);
         }
-        $conf = $conf->asArray()->all();
+        $project = $project->asArray()->all();
         return $this->render('index', [
-            'list' => $conf,
+            'list' => $project,
         ]);
     }
 
@@ -49,11 +49,11 @@ class ConfController extends Controller
      */
     public function actionPreview($projectId) {
         $this->layout = 'modal';
-        $conf = Conf::findOne($projectId);
-        if (!$conf) throw new \Exception('找不到项目');
+        $project = Project::findOne($projectId);
+        if (!$project) throw new \Exception('找不到项目');
 
         return $this->render('preview', [
-            'conf' => $conf,
+            'conf' => $project,
         ]);
     }
 
@@ -66,11 +66,11 @@ class ConfController extends Controller
      */
     public function actionGroup($projectId) {
         // 配置信息
-        $conf = Conf::findOne($projectId);
-        if (!$conf) {
+        $project = Project::findOne($projectId);
+        if (!$project) {
             throw new \Exception('项目不存在：）');
         }
-        if ($conf->user_id != $this->uid) {
+        if ($project->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的项目：）');
         }
         // 添加用户
@@ -90,7 +90,7 @@ class ConfController extends Controller
             ->asArray()->all();
 
         return $this->render('group', [
-            'conf'  => $conf,
+            'conf'  => $project,
             'users' => $users,
             'group' => $group,
         ]);
@@ -104,17 +104,17 @@ class ConfController extends Controller
      * @throws \Exception
      */
     public function actionEdit($projectId = null) {
-        $conf = $projectId ? Conf::findOne($projectId) : new Conf();
-        if (\Yii::$app->request->getIsPost() && $conf->load(Yii::$app->request->post())) {
-            $conf->user_id = $this->uid;
-            if ($conf->save()) {
+        $project = $projectId ? Project::findOne($projectId) : new Project();
+        if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
+            $project->user_id = $this->uid;
+            if ($project->save()) {
                 $this->redirect('/conf/');
             }
         }
 
-        if ($projectId && !$conf) throw new \Exception('找不到项目配置');
+        if ($projectId && !$project) throw new \Exception('找不到项目配置');
         return $this->render('edit', [
-            'conf' => $conf,
+            'conf' => $project,
         ]);
     }
 
@@ -125,14 +125,14 @@ class ConfController extends Controller
      * @throws \Exception
      */
     public function actionDelete($projectId) {
-        $conf = Conf::findOne($projectId);
-        if (!$conf) {
+        $project = Project::findOne($projectId);
+        if (!$project) {
             throw new \Exception('项目不存在：）');
         }
-        if ($conf->user_id != $this->uid) {
+        if ($project->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的项目：）');
         }
-        if (!$conf->delete()) throw new \Exception('删除失败');
+        if (!$project->delete()) throw new \Exception('删除失败');
         $this->renderJson([]);
     }
 
@@ -147,8 +147,8 @@ class ConfController extends Controller
         if (!$group) {
             throw new \Exception('关系不存在：）');
         }
-        $conf = Conf::findOne($group->project_id);
-        if ($conf->user_id != $this->uid) {
+        $project = Project::findOne($group->project_id);
+        if ($project->user_id != $this->uid) {
             throw new \Exception('不可以操作其它人的项目：）');
         }
 

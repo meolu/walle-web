@@ -21,7 +21,7 @@ class m150929_115951_project_user_group extends Migration
         $this->dropTable('group');
         $this->dropColumn(\app\models\User::tableName(), 'avatar');
 
-        return false;
+        return true;
     }
 
     /*

@@ -38,7 +38,7 @@ class GlobalHelper {
      * @return array
      */
     public static function str2arr($string, $delimiter = PHP_EOL) {
-        return explode($delimiter, $string);
+        return array_map('trim', explode($delimiter, $string));
     }
 
     /**

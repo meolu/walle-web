@@ -29,7 +29,7 @@ use yii\db\Expression;
  * @property string $git_type
  * @property integer $audit
  */
-class Conf extends \yii\db\ActiveRecord
+class Project extends \yii\db\ActiveRecord
 {
 
     // 有效状态
@@ -65,7 +65,7 @@ class Conf extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'conf';
+        return 'project';
     }
 
     /**
@@ -153,6 +153,20 @@ class Conf extends \yii\db\ActiveRecord
     }
 
     /**
+     * 拼接宿主机的部署隔离工作空间
+     * {deploy_from}/{env}/{project}-YYmmdd-HHiiss
+     *
+     * @return string
+     */
+    public static function getDeployWorkspace($version) {
+        $from    = static::$CONF->deploy_from;
+        $env     = isset(static::$LEVEL[static::$CONF->level]) ? static::$LEVEL[static::$CONF->level] : 'unknow';
+        $project = static::getGitProjectName(static::$CONF->git_url);
+
+        return sprintf("%s/%s/%s-%s", rtrim($from, '/'), rtrim($env, '/'), $project, $version);
+    }
+
+    /**
      * 拼接宿主机的仓库目录
      * {deploy_from}/{env}/{project}
      *
@@ -160,8 +174,8 @@ class Conf extends \yii\db\ActiveRecord
      */
     public static function getDeployFromDir() {
         $from    = static::$CONF->deploy_from;
-        $env     = isset(Conf::$LEVEL[static::$CONF->level]) ? Conf::$LEVEL[static::$CONF->level] : 'unknow';
-        $project = Conf::getGitProjectName(static::$CONF->git_url);
+        $env     = isset(static::$LEVEL[static::$CONF->level]) ? static::$LEVEL[static::$CONF->level] : 'unknow';
+        $project = static::getGitProjectName(static::$CONF->git_url);
 
         return sprintf("%s/%s/%s", rtrim($from, '/'), rtrim($env, '/'), $project);
     }
@@ -173,9 +187,11 @@ class Conf extends \yii\db\ActiveRecord
      * @param $version
      * @return string
      */
-    public static function getReleaseVersionDir($version) {
+    public static function getReleaseVersionDir($version = null) {
+        $version = $version ?: static::$CONF->link_id;
+
         return sprintf('%s/%s/%s', rtrim(static::$CONF->release_library, '/'),
-            Conf::getGitProjectName(static::$CONF->git_url), $version);
+            static::getGitProjectName(static::$CONF->git_url), $version);
     }
 
     /**

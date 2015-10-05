@@ -18,7 +18,7 @@ use app\components\Task as WalleTask;
 use app\components\Controller;
 use app\models\Task;
 use app\models\Record;
-use app\models\Conf;
+use app\models\Project;
 use app\models\User;
 
 class WalleController extends Controller {
@@ -59,20 +59,21 @@ class WalleController extends Controller {
         }
 
         // 配置
-        $this->conf = Conf::getConf($this->task->project_id);
+        $this->conf = Project::getConf($this->task->project_id);
         // db配置
-        $dbConf = Conf::findOne($this->task->project_id);
+        $dbConf = Project::findOne($this->task->project_id);
 
         try {
             if ($this->task->action == Task::ACTION_ONLINE) {
                 $this->_makeVersion();
-                $this->_checkPermission();
+                $this->_initWorkspace();
                 $this->_gitUpdate();
                 $this->_preDeploy();
                 $this->_postDeploy();
                 $this->_rsync();
                 $this->_postRelease();
                 $this->_link($this->task->link_id);
+                $this->_cleanUp($this->task->link_id);
             } else {
                 $this->_link($this->task->ex_link_id);
             }
@@ -93,6 +94,9 @@ class WalleController extends Controller {
         } catch (\Exception $e) {
             $this->task->status = Task::STATUS_FAILED;
             $this->task->save();
+            // 清理本地部署空间
+            $this->_cleanUp($this->task->link_id);
+
             throw $e;
         }
     }
@@ -104,7 +108,7 @@ class WalleController extends Controller {
      * @return string
      */
     public function actionCheck() {
-        $projects = Conf::find()->asArray()->all();
+        $projects = Project::find()->asArray()->all();
         return $this->render('check', [
             'projects' => $projects,
         ]);
@@ -118,7 +122,7 @@ class WalleController extends Controller {
      */
     public function actionFileMd5($projectId, $file) {
         // 配置
-        $this->conf = Conf::getConf($projectId);
+        $this->conf = Project::getConf($projectId);
 
         $cmd = new Folder();
         $cmd->setConfig($this->conf);
@@ -138,7 +142,7 @@ class WalleController extends Controller {
      */
     public function actionGetBranch($projectId) {
         $git = new Git();
-        $conf = Conf::getConf($projectId);
+        $conf = Project::getConf($projectId);
         $git->setConfig($conf);
         $list = $git->getBranchList();
 
@@ -152,9 +156,9 @@ class WalleController extends Controller {
      */
     public function actionGetCommitHistory($projectId, $branch = 'master') {
         $git = new Git();
-        $conf = Conf::getConf($projectId);
+        $conf = Project::getConf($projectId);
         $git->setConfig($conf);
-        if ($conf->git_type == Conf::GIT_TAG) {
+        if ($conf->git_type == Project::GIT_TAG) {
             $list = $git->getTagList();
         } else {
             $list = $git->getCommitList($branch);
@@ -210,26 +214,27 @@ class WalleController extends Controller {
     }
 
     /**
-     * 检查目录和权限
+     * 检查目录和权限，工作空间的准备
+     * 每一个版本都单独开辟一个工作空间，防止代码污染
      *
      * @return bool
      * @throws \Exception
      */
-    private function _checkPermission() {
+    private function _initWorkspace() {
         $folder = new Folder();
         $sTime = Command::getMs();
         $folder->setConfig($this->conf);
-        // 本地宿主机目录检查
-        $folder->initDirector();
+        // 本地宿主机工作区初始化
+        $folder->initLocalWorkspace($this->task->link_id);
         // 本地宿主机代码仓库检查
 
         // 远程目标目录检查，并且生成版本目录
-        $ret = $folder->folderAndPermission($this->task->link_id);
+        $ret = $folder->initRemoteVersion($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($folder, $this->task->id, Record::ACTION_PERMSSION, $duration);
 
-        if (!$ret) throw new \Exception('检查目录和权限出错');
+        if (!$ret) throw new \Exception('初始化部署隔离空间出错');
         return true;
     }
 
@@ -244,7 +249,7 @@ class WalleController extends Controller {
         $git = new Git();
         $sTime = Command::getMs();
         $ret = $git->setConfig($this->conf)
-            ->rollback($this->task->commit_id); // 更新到指定版本
+            ->updateToVersion($this->task->commit_id, $this->task->link_id); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($git, $this->task->id, Record::ACTION_CLONE, $duration);
@@ -264,12 +269,12 @@ class WalleController extends Controller {
         $task = new WalleTask();
         $sTime = Command::getMs();
         $task->setConfig($this->conf);
-        $ret = $task->preDeploy();
+        $ret = $task->preDeploy($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration);
 
-        if (!$ret) throw new \Exception('前置操作失败');
+        if (!$ret) throw new \Exception('前置任务操作失败');
         return true;
     }
 
@@ -285,12 +290,12 @@ class WalleController extends Controller {
         $task = new WalleTask();
         $sTime = Command::getMs();
         $task->setConfig($this->conf);
-        $ret = $task->postDeploy();
+        $ret = $task->postDeploy($this->task->link_id);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->task->id, Record::ACTION_POST_DEPLOY, $duration);
 
-        if (!$ret) throw new \Exception('前置操作失败');
+        if (!$ret) throw new \Exception('后置任务操作失败');
         return true;
     }
 
@@ -310,7 +315,7 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($task, $this->task->id, Record::ACTION_POST_RELEASE, $duration);
 
-        if (!$ret) throw new \Exception('前置操作失败');
+        if (!$ret) throw new \Exception('同步代码后置任务操作失败');
         return true;
     }
 
@@ -324,7 +329,7 @@ class WalleController extends Controller {
         $folder = new Folder();
         $folder->setConfig($this->conf);
         // 同步文件
-        foreach (Conf::getHosts() as $remoteHost) {
+        foreach (Project::getHosts() as $remoteHost) {
             $sTime = Command::getMs();
             $ret = $folder->syncFiles($remoteHost, $this->task->link_id);
             // 记录执行时间
@@ -348,7 +353,18 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($folder, $this->task->id, Record::ACTION_LINK, $duration);
 
-        if (!$ret) throw new \Exception($version ? '回滚失败' : '创建链接指向出错');
+        if (!$ret) throw new \Exception('创建链接出错');
+        return true;
+    }
+
+    /**
+     * 收尾工作
+     */
+    private function _cleanUp($version = null) {
+        // 创建链接指向
+        $folder = new Folder();
+        $folder->setConfig($this->conf)
+            ->cleanUp($version);
         return true;
     }
 

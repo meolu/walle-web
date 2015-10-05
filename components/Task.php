@@ -9,7 +9,7 @@
 namespace app\components;
 
 
-use app\models\Conf;
+use app\models\Project;
 
 class Task extends Command {
 
@@ -19,12 +19,12 @@ class Task extends Command {
      *
      * @return bool
      */
-    public function preDeploy() {
+    public function preDeploy($version) {
         $tasks = GlobalHelper::str2arr($this->getConfig()->pre_deploy);
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = rtrim(Conf::getDeployFromDir(), '/');
+        $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
         ];
@@ -46,12 +46,12 @@ class Task extends Command {
      *
      * @return bool
      */
-    public function postDeploy() {
+    public function postDeploy($version) {
         $tasks = GlobalHelper::str2arr($this->getConfig()->post_deploy);
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = rtrim(Conf::getDeployFromDir(), '/');
+        $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
         ];
@@ -77,8 +77,8 @@ class Task extends Command {
         if (empty($tasks)) return true;
 
         $cmd = [];
-        $workspace = rtrim(Conf::getDeployFromDir(), '/');
-        $version   = Conf::getReleaseVersionDir($version);
+        $workspace = rtrim(Project::getDeployWorkspace($version), '/');
+        $version   = Project::getReleaseVersionDir($version);
         $pattern = [
             '#{WORKSPACE}#',
             '#{VERSION}#',

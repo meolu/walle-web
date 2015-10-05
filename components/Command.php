@@ -44,6 +44,7 @@ abstract class Command {
 
 
     final protected function runLocalCommand($command) {
+        $command = trim($command);
         file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
         $this->log('---------------------------------');
         $this->log('---- Executing: $ ' . $command);
@@ -114,21 +115,6 @@ abstract class Command {
         return $this->config;
     }
 
-    /**
-     * rsync时，要排除的文件
-     *
-     * @param array $excludes
-     * @return string
-     */
-    protected function excludes($excludes) {
-        $excludesRsync = '';
-        foreach ($excludes as $exclude) {
-            $excludesRsync .= ' --exclude=' . escapeshellarg($exclude) . ' ';
-        }
-
-        return trim($excludesRsync);
-    }
-
     public static function log($message) {
         if (empty(\Yii::$app->params['log.dir'])) return;
 
@@ -175,8 +161,14 @@ abstract class Command {
         return $this->status;
     }
 
+    /**
+     * 获取耗时毫秒数
+     *
+     * @return int
+     */
     public static function getMs() {
         return intval(microtime(true) * 1000);
     }
+
 
 }
