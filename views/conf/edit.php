@@ -175,14 +175,14 @@ use yii\widgets\ActiveForm;
             <label class="control-label bolder blue">分支/tag上线:</label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="测试环境推荐选项，可以选择branch和commit" data-placement="right">
                 <label>
-                    <input name="Conf[git_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->git_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
+                    <input name="Project[git_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->git_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="仿真和生产环境推荐选项" data-placement="right">
                 <label>
-                    <input name="Conf[git_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->git_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
+                    <input name="Project[git_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->git_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
                 </label>
             </div>
@@ -190,16 +190,16 @@ use yii\widgets\ActiveForm;
         <div class="form-group">
             <label class="control-label bolder blue" for="form-field-2">
                 是否开启审核:
-                <input name="Conf[audit]" value="0" type="hidden">
-                <input name="Conf[audit]" value="1" type="checkbox" <?= $conf->audit ? 'checked' : '' ?> class="ace ace-switch ace-switch-5"  data-rel="tooltip" data-title="开启时，用户提交上线任务需要审核方可上线" data-placement="right">
+                <input name="Project[audit]" value="0" type="hidden">
+                <input name="Project[audit]" value="1" type="checkbox" <?= $conf->audit ? 'checked' : '' ?> class="ace ace-switch ace-switch-5"  data-rel="tooltip" data-title="开启时，用户提交上线任务需要审核方可上线" data-placement="right">
                 <span class="lbl"></span>
             </label>
         </div>
 
         <div class="form-group">
             <label class="control-label bolder blue">是否启用:
-                <input name="Conf[status]" value="0" type="hidden">
-                <input name="Conf[status]" value="1" <?= $conf->status ? 'checked' : '' ?> type="checkbox" class="ace ace-switch ace-switch-6"  data-rel="tooltip" data-title="关闭时，用户不能对此项目发起上线" data-placement="right">
+                <input name="Project[status]" value="0" type="hidden">
+                <input name="Project[status]" value="1" <?= $conf->status ? 'checked' : '' ?> type="checkbox" class="ace ace-switch ace-switch-6"  data-rel="tooltip" data-title="关闭时，用户不能对此项目发起上线" data-placement="right">
                 <span class="lbl"></span>
             </label>
         </div>
