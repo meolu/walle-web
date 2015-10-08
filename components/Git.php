@@ -19,10 +19,10 @@ class Git extends Command {
         // 存在git目录，直接pull
         if (file_exists($dotGit)) {
             $cmd[] = sprintf('cd %s ', $gitDir);
+            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $cmd[] = sprintf('/usr/bin/env git fetch --all');
             $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git pull');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -65,6 +65,7 @@ class Git extends Command {
         $destination = Project::getDeployFromDir();
         $this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
+        $cmd[] = '/usr/bin/env git pull';
         $cmd[] = '/usr/bin/env git branch -a';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -76,16 +77,19 @@ class Git extends Command {
         foreach ($list as &$item) {
             $item = trim($item);
             $remotePrefix = 'remotes/origin/';
-            // 只取远端的分支
-            if (strcmp(substr($item, 0, strlen($remotePrefix)), $remotePrefix) === 0) {
+            $remoteHeadPrefix = 'remotes/origin/HEAD';
+
+            // 只取远端的分支，排除当前分支
+            if (strcmp(substr($item, 0, strlen($remotePrefix)), $remotePrefix) === 0
+                && strcmp(substr($item, 0, strlen($remoteHeadPrefix)), $remoteHeadPrefix) !== 0) {
                 $item = substr($item, strlen($remotePrefix));
                 $history[] = [
                     'id'      => $item,
                     'message' => $item,
                 ];
             }
-
         }
+
         return $history;
     }
 

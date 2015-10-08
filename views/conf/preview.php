@@ -127,7 +127,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 是否需要审核 </div>
 
         <div class="profile-info-value">
-            <span><?= $conf->audit ?></span>
+            <span><?= \Yii::t('status', 'bool_' . $conf->audit) ?></span>
         </div>
     </div>
 
@@ -135,7 +135,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 是否有效 </div>
 
         <div class="profile-info-value">
-            <span><?= $conf->status ?></span>
+            <span><?= \Yii::t('status', 'bool_' . $conf->status) ?></span>
         </div>
     </div>
 </div>
