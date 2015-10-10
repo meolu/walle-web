@@ -101,5 +101,6 @@ git pull
 
 交流讨论
 -------
+- [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/qa.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - QQ（有问必答）: 482939318
