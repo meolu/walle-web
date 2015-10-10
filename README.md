@@ -12,7 +12,7 @@ See [walle website](http://www.huamanshu.com/walle.html) for more information an
 * Quick rollback
 * Group relation of project
 * Task of pre-deploy（e.g: test ENV var）
-* Task of post-deploy（e.g: vendor）
+* Task of post-deploy（e.g: vendor, java's mvn ant）
 * Task of post-release（e.g: restart service）
 * Checkout file md5
 
@@ -33,7 +33,7 @@ Installation
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # set up module db mysql connection info
-composer install  # error cause by bower-asset, install：composer install global require "fxp/composer-asset-plugin:*"
+composer install  # error cause by bower-asset, install：composer global require "fxp/composer-asset-plugin:*"
 ./yii migrate/up  # migrate database
 ```
 
@@ -81,6 +81,10 @@ git pull
 
 screenshot
 ----------
+
+#### project config
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+
 #### signup a admin/developer
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
@@ -90,8 +94,8 @@ screenshot
 #### list of task
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
-#### project config
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+#### deploy flow
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
 
 #### demo show
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)

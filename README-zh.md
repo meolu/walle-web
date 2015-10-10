@@ -32,7 +32,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
-composer install  # 如果缺少bower-asset的话， 先安装：composer require global require "fxp/composer-asset-plugin:*"
+composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
 ./yii migrate/up  # 导入数据库
 ```
 
