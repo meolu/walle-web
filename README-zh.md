@@ -1,7 +1,7 @@
 Walle 瓦力 web部署系统
 ==========================
 
-Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！
+Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！除了支持PHP，对于JAVA等需要编译的项目同时支持。
 
 [官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/README.md)，喜欢请为我标star吧：）
 
@@ -13,7 +13,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * 快速回滚
 * 项目的用户权限管理
 * 部署前准备任务（前置检查）
-* 代码检出后处理任务（如vendor，环境配置）
+* 代码检出后处理任务（如vendor，环境配置，java mvn、ant编译构建）
 * 同步到各目标机器后收尾任务（如重启）
 * 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
@@ -32,7 +32,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
-composer install  # 如果缺少bower-asset的话， 先安装：composer install global require "fxp/composer-asset-plugin:*"
+composer install  # 如果缺少bower-asset的话， 先安装：composer require global require "fxp/composer-asset-plugin:*"
 ./yii migrate/up  # 导入数据库
 ```
 
@@ -76,6 +76,10 @@ git pull
 
 截图
 ---
+
+#### 配置管理
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+
 #### 注册发普通开发者和管理角色
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
@@ -85,8 +89,8 @@ git pull
 #### 上线列表
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
-#### 配置管理
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+#### 上线流程图
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
 
 #### 演示
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
