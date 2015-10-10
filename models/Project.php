@@ -201,4 +201,29 @@ class Project extends \yii\db\ActiveRecord
         return GlobalHelper::str2arr(static::$CONF->hosts);
     }
 
+    /**
+     * 添加数据保存事件afterSave
+     *
+     * @author wushuiyong
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        // 插入一条管理员关系
+        if ($insert) {
+            Group::addGroupUser($this->attributes['id'], [$this->attributes['user_id']], Group::TYPE_ADMIN);
+        }
+    }
+
+    /**
+     * 添加数据删除事件afterDelete
+     *
+     * @author wushuiyong
+     */
+    public function afterDelete() {
+        parent::afterDelete();
+        // 删除所有该项目的关系
+        Group::deleteAll(['project_id' => $this->attributes['id']]);
+    }
 }

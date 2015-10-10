@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
               <div class="widget-header widget-header-flat">
                   <h4 class="lighter"><i class="icon-dashboard orange"></i>宿主机</h4>
                   <div class="widget-toolbar">
-                      <a href="#" data-action="collapse">
+                      <a href="javascript:;" data-action="collapse">
                           <i class="icon-chevron-up"></i>
                       </a>
                   </div>
@@ -58,7 +58,7 @@ use yii\widgets\ActiveForm;
               <div class="widget-header widget-header-flat">
                   <h4 class="lighter"><i class="icon-cloud-upload orange"></i>目标机器</h4>
                   <div class="widget-toolbar">
-                      <a href="#" data-action="collapse">
+                      <a href="javascript:;" data-action="collapse">
                           <i class="icon-chevron-up"></i>
                       </a>
                   </div>
@@ -111,7 +111,7 @@ use yii\widgets\ActiveForm;
                   <h4 class="lighter"><i class="icon-tasks orange"></i>高级任务</h4>
                   <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="right" data-content="{WORKSPACE}：webroot    {VERSION}：发布的版本库的当前版本" title="" data-original-title="辅助变量">?</span>
                   <div class="widget-toolbar">
-                      <a href="#" data-action="collapse">
+                      <a href="javascript:;" data-action="collapse">
                           <i class="icon-chevron-up"></i>
                       </a>
                   </div>

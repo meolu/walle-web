@@ -11,7 +11,7 @@ use app\models\Project;
         <div class="widget-header">
             <h4 class="lighter">测试环境</h4>
 
-            <div class="widget-toolbar no-border"><a href="#" data-action="collapse">
+            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
                 </a>
             </div>
@@ -34,7 +34,7 @@ use app\models\Project;
         <div class="widget-header">
             <h4 class="lighter">仿真环境</h4>
 
-            <div class="widget-toolbar no-border"><a href="#" data-action="collapse">
+            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
                 </a>
             </div>
@@ -57,7 +57,7 @@ use app\models\Project;
         <div class="widget-header">
             <h4 class="lighter">线上环境</h4>
 
-            <div class="widget-toolbar no-border"><a href="#" data-action="collapse">
+            <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
                 </a>
             </div>

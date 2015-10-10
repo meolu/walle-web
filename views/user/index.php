@@ -19,7 +19,7 @@ use \app\components\GlobalHelper;
 
                 <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
                     <div class="inline position-relative">
-                        <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                        <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
                             <i class="icon-circle light-green middle"></i>
                             &nbsp;
                             <span class="white"><?= $user->realname ?></span>

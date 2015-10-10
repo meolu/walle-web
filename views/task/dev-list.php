@@ -54,12 +54,12 @@ use yii\widgets\LinkPager;
                             <i class="icon-cloud-upload text-success bigger-130"></i>上线
                         </a>
                     <?php } elseif ($item['status'] == Task::STATUS_DONE) { ?>
-                        <a href="#" class="brown">
+                        <a href="javascript:;" class="brown">
                             <i class="icon-reply bigger-130 task-rollback" data-id="<?= $item['id'] ?>"></i>回滚
                         </a>
                     <?php } ?>
                     <?php if ($item['status'] != Task::STATUS_DONE) { ?>
-                        <a class="red btn-delete" href="#" data-id="<?= $item['id'] ?>">
+                        <a class="red btn-delete" href="javascript:;" data-id="<?= $item['id'] ?>">
                             <i class="icon-trash bigger-130"></i>删除
                         </a>
                     <?php } ?>

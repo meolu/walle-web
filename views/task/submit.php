@@ -16,7 +16,7 @@ use app\models\Project;
         <?php if ($conf->git_type == Project::GIT_BRANCH) { ?>
           <div class="form-group">
               <label>选取分支
-                  <a class="show-tip icon-refresh green" href="#"></a>
+                  <a class="show-tip icon-refresh green" href="javascript:;"></a>
                   <span class="tip">查看所有分支</span>
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i></label>
               <select name="commit" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">

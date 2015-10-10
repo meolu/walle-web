@@ -45,7 +45,7 @@ abstract class Command {
 
     final protected function runLocalCommand($command) {
         $command = trim($command);
-        file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
+        // file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
         $this->log('---------------------------------');
         $this->log('---- Executing: $ ' . $command);
 
@@ -119,10 +119,9 @@ abstract class Command {
         if (empty(\Yii::$app->params['log.dir'])) return;
 
         $logDir = \Yii::$app->params['log.dir'];
-        $logFile = realpath($logDir) . '/log-' . date('Ymd') . '.log';
+        if (!file_exists($logDir)) return;
 
-        if (!is_writable($logFile)) return;
-
+        $logFile = realpath($logDir) . '/walle-' . date('Ymd') . '.log';
         if (self::$logFile === null) {
             self::$logFile = fopen($logFile, 'w');
         }

@@ -18,10 +18,15 @@ class TaskController extends Controller {
         $size = $this->getParam('per-page') ?: $size;
         $list = Task::find()
             ->with('user')
-            ->with('project');
-        if (\Yii::$app->user->identity->role != User::ROLE_ADMIN) {
-            $list->where(['user_id' => $this->uid]);
+            ->with('project')
+            ->where(['user_id' => $this->uid]);
+
+        // 有审核权限的任务
+        $auditProjects = Group::getAuditProjectIds($this->uid);
+        if ($auditProjects) {
+            $list->orWhere(['project_id' => $auditProjects]);
         }
+
 
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
@@ -31,11 +36,11 @@ class TaskController extends Controller {
         $list = $tasks->offset(($page - 1) * $size)->limit(10)
             ->asArray()->all();
 
-        $view = \Yii::$app->user->identity->role == User::ROLE_ADMIN ? 'admin-list' : 'dev-list';
         $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
-        return $this->render($view, [
+        return $this->render('list', [
             'list'  => $list,
             'pages' => $pages,
+            'audit' => $auditProjects,
         ]);
     }
 
@@ -172,6 +177,11 @@ class TaskController extends Controller {
         if (!$task) {
             static::renderJson([], -1, '任务号不存在');
         }
+        // 是否为该项目的审核管理员（超级管理员可以不用审核，如果想审核就得设置为审核管理员，要不只能维护配置）
+        if (!Group::isAuditAdmin($this->uid, $task->project_id)) {
+            throw new \Exception('不可以操作其它人的任务：）');
+        }
+
         $task->status = $operation ? Task::STATUS_PASS : Task::STATUS_REFUSE;
         $task->save();
         static::renderJson(['status' => \Yii::t('status', 'task_status_' . $task->status)]);

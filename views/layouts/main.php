@@ -67,7 +67,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
     <div class="navbar-container" id="navbar-container">
         <div class="navbar-header pull-left">
-            <a href="#" class="navbar-brand">
+            <a href="javascript:;" class="navbar-brand">
                 <small>Walle</small>
             </a><!-- /.brand -->
         </div><!-- /.navbar-header -->
@@ -76,7 +76,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
             <ul class="nav ace-nav">
 
                 <li class="light-blue">
-                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                    <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
                         <img class="nav-user-photo" src="<?= GlobalHelper::formatAvatar($user->avatar) ?>">
                         <span class="user-info" style="top:12px"><?= $userName ?></span>
                         <i class="icon-caret-down"></i>
@@ -85,7 +85,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <!-- 设置功能暂无
                         <li>
-                            <a href="#">
+                            <a href="javascript:;">
                                 <i class="icon-cog"></i>
                                 设置
                             </a>
@@ -120,7 +120,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     </script>
 
     <div class="main-container-inner">
-        <a class="menu-toggler" id="menu-toggler" href="#">
+        <a class="menu-toggler" id="menu-toggler" href="javascript:;">
             <span class="menu-text"></span>
         </a>
 
@@ -184,7 +184,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
     </div><!-- /.main-container-inner -->
 
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <a href="javascript:;" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
         <i class="icon-double-angle-up icon-only bigger-110"></i>
     </a>
 </div><!-- /.main-container -->

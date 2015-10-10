@@ -155,4 +155,27 @@ class ConfController extends Controller
         if (!$group->delete()) throw new \Exception('删除失败');
         $this->renderJson([]);
     }
+
+    /**
+     * 项目审核管理员设置
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function actionEditRelation($id, $type = 0) {
+        $group = Group::findOne($id);
+        if (!$group) {
+            throw new \Exception('关系不存在：）');
+        }
+        $project = Project::findOne($group->project_id);
+        if ($project->user_id != $this->uid) {
+            throw new \Exception('不可以操作其它人的项目：）');
+        }
+        if (!in_array($type, [Group::TYPE_ADMIN, Group::TYPE_USER])) {
+            throw new \Exception('未知的关系类型：）');
+        }
+        $group->type = (int)$type;
+        if (!$group->save()) throw new \Exception('更新失败');
+        $this->renderJson([]);
+    }
 }

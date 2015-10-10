@@ -6,6 +6,7 @@ $this->title = '项目成员管理';
 
 use yii\widgets\ActiveForm;
 use app\models\User;
+use app\models\Group;
 
 ?>
 <div class="row">
@@ -44,16 +45,17 @@ use app\models\User;
     <div class="itemdiv memberdiv">
         <div class="inline position-relative">
             <div class="user">
-                <a href="#">
+                <a href="javascript:;">
                     <img src="<?= User::AVATAR_ROOT . ($relation['user']['avatar'] ?: 'default.jpg') ?>" alt="Bob Doe's avatar">
                 </a>
             </div>
 
             <div class="body">
                 <div class="name">
-                    <a href="#"><span class="user-status status-online"></span>
-                        <?= $relation['user']['realname'] ?>
-                    </a>
+                    <?php if ($relation['type'] == Group::TYPE_ADMIN) { ?>
+                        <i class="icon-user-md light-orange bigger-110" title="审核管理员可审核上线任务"></i>
+                    <?php } ?>
+                    <?= $relation['user']['realname'] ?>
                     <a href="javascript:void(0)" class="pink remove-relation" data-id="<?= $relation['id'] ?>">
                         <i class="icon-trash"></i>
                     </a>
@@ -66,7 +68,12 @@ use app\models\User;
                 <div class="popover-content">
                     <div class="bolder"><?= $relation['user']['email'] ?></div>
                     <div class="hr dotted hr-8"></div>
+
                     <div class="tools action-buttons">
+                        <a href="javascript:;" class="bind-admin" data-id="<?= $relation['id'] ?>" data-type="<?= (int)!$relation['type'] ?>" title="审核管理员可审核上线任务">
+                            <i class="icon-user-md light-orange bigger-110"></i>
+                            <?= $relation['type'] == Group::TYPE_USER ? '设为审核管理员' : '取消审核管理员' ?>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -80,7 +87,6 @@ use app\models\User;
     jQuery(function($) {
         // 组关系删除
         $('.remove-relation').click(function(e) {
-            console.log('xxx')
             $this = $(this);
             if (confirm('确定要删除该记录？')) {
                 $.get('/conf/delete-relation?id=' + $this.data('id'), function(o) {
@@ -91,6 +97,20 @@ use app\models\User;
                     }
                 })
             }
+        })
+        // 组关系成员设为管理员
+        $('.bind-admin').click(function(e) {
+            $this = $(this);
+            var url = '/conf/edit-relation'
+                    + '?id=' + $this.data('id')
+                    + '&type=' + $this.data('type');
+            $.get(url , function(o) {
+                if (!o.code) {
+                    location.reload()
+                } else {
+                    alert('设置失败: ' + o.msg);
+                }
+            })
         })
         // 浮出层
         $('#relation-users .memberdiv').on('mouseenter', function(){

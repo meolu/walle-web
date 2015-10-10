@@ -33,7 +33,7 @@ Something Went Wrong
     <div class="space"></div>
 
     <div class="center">
-        <a href="#" class="btn btn-grey" onclick="window.history.go(-1)">
+        <a href="javascript:;" class="btn btn-grey" onclick="window.history.go(-1)">
             <i class="icon-arrow-left"></i>
             Go Back
         </a>

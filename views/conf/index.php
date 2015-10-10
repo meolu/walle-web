@@ -57,7 +57,7 @@ $this->title = '项目配置';
                                 <i class="icon-pencil bigger-130"></i>修改
                             </a>
 
-                            <a class="red btn-delete" data-id="<?= $item['id'] ?>" href="#">
+                            <a class="red btn-delete" data-id="<?= $item['id'] ?>" href="javascript:;">
                                 <i class="icon-trash bigger-130"></i>删除
                             </a>
                         </div>
@@ -89,7 +89,6 @@ $this->title = '项目配置';
             }
         })
         $("#myModal").on("hidden.bs.modal", function() {
-            console.log('hidden')
             $(this).removeData("bs.modal");
         });
     });

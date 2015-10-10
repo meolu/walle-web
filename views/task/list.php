@@ -32,7 +32,9 @@ use yii\widgets\LinkPager;
     <div class="box-body table-responsive no-padding clearfix">
         <table class="table table-hover">
             <tbody><tr>
+                <?php if ($audit) { ?>
                 <th>开发者</th>
+                <?php } ?>
                 <th>项目</th>
                 <th>任务名称</th>
                 <th>上线时间</th>
@@ -42,12 +44,15 @@ use yii\widgets\LinkPager;
             </tr>
             <?php foreach ($list as $item) { ?>
             <tr>
+                <?php if ($audit) { ?>
                 <td><?= $item['user']['realname'] ?></td>
+                <?php } ?>
                 <td><?= $item['project']['name'] ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['commit_id'] ?></td>
-                <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>"><?= \Yii::t('status', 'task_status_' . $item['status']) ?></td>
+                <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>">
+                    <?= \Yii::t('status', 'task_status_' . $item['status']) ?></td>
                 <td>
                     <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
                     <?php if ($audit && !in_array($item['status'],[Task::STATUS_DONE, Task::STATUS_FAILED])) { ?>
