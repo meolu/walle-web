@@ -20,7 +20,7 @@ use app\models\User;
     <div class="row col-sm-4" style="margin-top: 5px;float:right;">
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
             <div class="input-group">
-                <select multiple="" name="user" class="width-80 chosen-select" id="form-field-select-4" data-placeholder="通过邮箱查找用户">
+                <select multiple="" name="user[]" class="width-80 chosen-select" id="form-field-select-4" data-placeholder="通过邮箱查找用户">
                     <option value="">&nbsp;</option>
                     <?php foreach ($users as $info) { ?>
                         <option value="<?= $info['id'] ?>"><?=  $info['email'] ?> - <?= $info['realname'] ?></option>

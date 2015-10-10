@@ -61,19 +61,25 @@ class Group extends \yii\db\ActiveRecord
      * @param $userId
      * @return bool
      */
-    public static function addGroupUser($projectId, $userId) {
+    public static function addGroupUser($projectId, $userIds) {
         // 是否已在组内
-        $exists = Group::find()
-            ->where(['project_id' => $projectId, 'user_id' => $userId])
-            ->count();
-        if ($exists) return true;
+        $exitsUids = Group::find()
+            ->select(['user_id'])
+            ->where(['project_id' => $projectId, 'user_id' => $userIds])
+            ->column();
+        $notExists = array_diff($userIds, $exitsUids);
+        if (!$notExists) return true;
 
         $group = new Group();
-        $group->attributes = [
-            'project_id' => $projectId,
-            'user_id'    => $userId,
-        ];
-        return $group->save();
+        foreach ($notExists as $uid) {
+            $relation = clone $group;
+            $relation->attributes = [
+                'project_id' => $projectId,
+                'user_id'    => $uid,
+            ];
+            $relation->save();
+        }
+        return true;
     }
 
 }

@@ -74,7 +74,7 @@ class ConfController extends Controller
             throw new \Exception('不可以操作其它人的项目：）');
         }
         // 添加用户
-        if (\Yii::$app->request->getIsPost()) {
+        if (\Yii::$app->request->getIsPost() && \Yii::$app->request->post('user')) {
             Group::addGroupUser($projectId, \Yii::$app->request->post('user'));
         }
         // 项目的分组用户
