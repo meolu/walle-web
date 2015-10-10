@@ -2,7 +2,7 @@ Walle - A Deployment Tool
 =========================
 Walle is a deployment tool written in PHP with yii2 out of the box.
 
-See [walle website](http://www.huamanshu.com/walle.html) for more information and documentation. [查看中文说明](https://github.com/meolu/walle-web/blob/master/README-zh.md)
+See [walle website](http://www.huamanshu.com/walle.html) for more information and documentation. [查看中文说明](https://github.com/meolu/walle-web/blob/master/README-zh.md), star me if like : )
 
 * User signup by admin/develop identity
 * Developer submit a task, deploy task
