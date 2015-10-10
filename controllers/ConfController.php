@@ -82,6 +82,7 @@ class ConfController extends Controller
             ->with('user')
             ->where(['project_id' => $projectId])
             ->indexBy('user_id')
+            ->orderBy(['type' => SORT_DESC])
             ->asArray()->all();
         // 所有用户
         $users = User::find()
