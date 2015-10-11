@@ -38,7 +38,7 @@ class Group extends \yii\db\ActiveRecord
     {
         return [
             [['project_id', 'user_id'], 'required'],
-            [['project_id', 'type'], 'integer'],
+            [['project_id', 'user_id', 'type'], 'integer'],
         ];
     }
 
