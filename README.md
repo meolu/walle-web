@@ -1,112 +1,108 @@
-Walle - A Deployment Tool
-=========================
+Walle 瓦力 web部署系统
+==========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
-Walle is a deployment tool written in PHP with yii2 out of the box.
+Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！
+支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等均支持。
 
-See [walle website](http://www.huamanshu.com/walle.html) for more information and documentation. [查看中文说明](https://github.com/meolu/walle-web/blob/master/README-zh.md), star me if like : )
+[官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md)，喜欢请为我标star吧：）
 
-* User signup by admin/develop identity
-* Developer submit a task, deploy task
-* Admin audit task
-* Multiple project
-* Multiple Task Parallel
-* Quick rollback
-* Group relation of project
-* Task of pre-deploy（e.g: test ENV var）
-* Task of post-deploy（e.g: vendor, java's mvn ant）
-* Task of post-release（e.g: restart service）
-* Checkout file md5
+* 用户分身份注册、登录
+* 开发者发起上线任务申请、部署
+* 管理者审核上线任务
+* 支持多项目部署
+* 支持多项目多任务并行
+* 快速回滚
+* 项目的用户权限管理
+* 部署前准备任务（前置检查）
+* 代码检出后处理任务（如vendor，环境配置，java mvn、ant编译构建）
+* 同步到各目标机器后收尾任务（如重启）
+* 执行sql构建（不要担心忘记测试环境sql同步）
+* 线上文件指纹确认
 
 
-Requirements
-------------
+依赖
+---
 
 * bash(git、ssh)
 * LNMP、LAMP(php5.4+)
 * composer
 
-That's all! It's base package of PHP envirament!
-
-
-Installation
-------------
+安装
+----
 ```
 git clone git@github.com:meolu/walle-web.git
 cd walle-web
-vi config/web.php # set up module db mysql connection info
-composer install  # error cause by bower-asset, install：composer global require "fxp/composer-asset-plugin:*"
-./yii migrate/up  # migrate database
+vi config/web.php # 设置mysql连接
+composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
+./yii migrate/up  # 导入数据库
 ```
 
-
-Quick Start
--------------
-
-* set up nginx/apache webroot `walle-web/web`
-* config email smtp（config your company's email smtp after trying in case leakaging Information）
+快速开始
+-------
+* nginx/apache的webroot配置指向`walle-web/web`
+* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，以免信息外泄）
     ```php
     vi config/params.php
-    'support.email' => 'service@huamanshu.com', // the same with `username` of the module of `config/web.php`
-    'mail-suffix'   => [
-        'huamanshu.com',
+    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    'mail-suffix'   => [                        // 允许注册的邮箱后缀
+        'huamanshu.com',                        // 如果想用qq邮箱注册，请更改为qq.com
     ]
 
     vi config/web.php +25
-    # config module of mail smtp
+    # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
-    'host'       => 'ip or host',            # smtp host
-    'username'   => 'service@huamanshu.com', # smtp send user
-    'password'   => 'password',              # smtp password
-    'port'       => 25,                      # smtp port
-    'encryption' => 'tls',                   # smtp agreement
+    'host'       => 'ip or host',            # smtp 发件地址
+    'username'   => 'service@huamanshu.com', # smtp 发件用户名
+    'password'   => 'password',              # smtp 发件人的密码
+    'port'       => 25,                      # smtp 端口
+    'encryption' => 'tls',                   # smtp 协议
     ```
-* signup a admin user(`admin/admin` exists),then config a project
-* signup a develop user(`demo/demo` exists),submit a task
-* admin audit task
-* deveop deploy the audited task
-
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
+* 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
+* 管理员审核上线任务
+* 开发者发起上线
 
 
 To Do List
 ----------
 
-* a manager of static source
+* 静态资源管理器
 
-Update
+持续更新开启更多功能
 -----------------
 ```
 git pull
-./yii migrate
+./yii migrate    # 更新数据库
 ```
 
+截图
+---
 
-screenshot
-----------
-
-#### project config
+#### 配置管理
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
 
-#### signup a admin/developer
+#### 注册发普通开发者和管理角色
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
 
-#### sumbit a task
+#### 提交上线任务
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
 
-#### list of task
+#### 上线列表
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
-#### deploy flow
+#### 上线流程图
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
 
-#### demo show
+#### 演示
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 ## CHANGELOG
-[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
+瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/CHANGELOG.md)
 
 
-Discussing
-----------
+交流讨论
+-------
+- [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/qa.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
-- QQ: 482939318
+- QQ（有问必答）: 482939318
