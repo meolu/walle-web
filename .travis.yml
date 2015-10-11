@@ -18,7 +18,7 @@ install:
 before_script:
   - mysql -e 'CREATE DATABASE walle;';
 
-script: phpunit --configuration phpunit.xml --coverage-text
+script: phpunit -c tests/phpunit.xml
 
 matrix:
   fast_finish: true
