@@ -69,15 +69,13 @@ abstract class Command {
 
     final protected function runRemoteCommand($command) {
         $this->log = '';
-        $needs_tty = ''; #($this->getConfig()->general('ssh_needs_tty', false) ? '-t' : '');
+        $needs_tty = '';
 
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
-            $remoteHost = trim($remoteHost);
-            $localCommand = 'ssh ' . $needs_tty . ' -p 22 '
-                . '-q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
-//            . $this->getConfig()->getConnectTimeoutOption()
+            $localCommand = 'ssh ' . $needs_tty . ' -p ' . $this->getHostPort($remoteHost)
+                . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
                 . ($this->getConfig()->release_user ? $this->getConfig()->release_user . '@' : '')
-                . $remoteHost;
+                . $this->getHostName($remoteHost);
             $remoteCommand = str_replace('"', '\"', trim($command));
             $localCommand .= ' "sh -c \"' . $remoteCommand . '\"" ';
             static::log('Run remote command ' . $remoteCommand);
@@ -167,6 +165,29 @@ abstract class Command {
      */
     public static function getMs() {
         return intval(microtime(true) * 1000);
+    }
+
+    /**
+     * 获取目标机器的ip或别名
+     *
+     * @param $host
+     * @return mixed
+     */
+    protected function getHostName($host) {
+        list($hostName,) = explode(':', $host);
+        return $hostName;
+    }
+
+    /**
+     * 获取目标机器的ssh端口
+     *
+     * @param $host
+     * @param int $default
+     * @return int
+     */
+    protected function getHostPort($host, $default = 22) {
+        $hostInfo = explode(':', $host);
+        return !empty($hostInfo[1]) ? $hostInfo[1] : $default;
     }
 
 
