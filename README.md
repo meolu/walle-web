@@ -1,5 +1,7 @@
 Walle - A Deployment Tool
 =========================
+[![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+
 Walle is a deployment tool written in PHP with yii2 out of the box.
 
 See [walle website](http://www.huamanshu.com/walle.html) for more information and documentation. [查看中文说明](https://github.com/meolu/walle-web/blob/master/README-zh.md), star me if like : )
