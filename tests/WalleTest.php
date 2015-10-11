@@ -6,15 +6,20 @@
  * @File Name: tests/WalleTest.php
  * @Description:
  * *****************************************************************/
-class WalleTest extends PHPUnit_Framework_TestCase
+namespace tests;
+
+class WalleTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp() {
+        echo __METHOD__;
     }
 
     public function tearDown() {
+        echo __METHOD__;
     }
 
     public function testWalle() {
+        echo __METHOD__;
         $this->assertEquals('walle-web', 'walle-web');
     }
 
