@@ -91,10 +91,11 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['user_id', 'git_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts'], 'required'],
             [['user_id', 'level', 'status', 'audit'], 'integer'],
-            [['name', 'version'], 'string', 'max' => 20],
             [['excludes', 'hosts', 'pre_deploy', 'post_deploy', 'post_release'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['git_url', 'deploy_from', 'release_to', 'release_library'], 'string', 'max' => 200],
+            [['name'], 'string', 'max' => 100],
+            [['version'], 'string', 'max' => 20],
+            [['deploy_from', 'release_to', 'release_library', 'git_url'], 'string', 'max' => 200],
             [['release_user', 'git_type'], 'string', 'max' => 50],
         ];
     }

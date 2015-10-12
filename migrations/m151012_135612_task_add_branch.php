@@ -7,7 +7,7 @@ class m151012_135612_task_add_branch extends Migration
     public function up()
     {
         $this->addColumn(\app\models\Task::tableName(), 'branch', \yii\db\Schema::TYPE_STRING . '(100) DEFAULT "master" comment "选择上线的分支"');
-
+        $this->alterColumn(\app\models\Project::tableName(), 'name', \yii\db\Schema::TYPE_STRING . '(100) DEFAULT "master" comment "项目名字"');
     }
 
     public function down()
