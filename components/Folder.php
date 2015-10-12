@@ -38,7 +38,6 @@ class Folder extends Command {
 
     /**
      * rsync 同步文件
-     * 后续ssh -p参数的端口可以加入可配置，可能会出现非22端口
      *
      * @param $remoteHost 远程host，格式：host 、host:port
      * @return bool
@@ -46,7 +45,8 @@ class Folder extends Command {
     public function syncFiles($remoteHost, $version) {
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
 
-        $command = sprintf('rsync -avz --rsh="ssh -p 22" %s %s %s%s:%s',
+        $command = sprintf('rsync -avz --rsh="ssh -p %s" %s %s %s%s:%s',
+            $this->getHostPort($remoteHost),
             $this->excludes($excludes),
             rtrim(Project::getDeployWorkspace($version), '/') . '/',
             $this->getConfig()->release_user . '@',
