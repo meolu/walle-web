@@ -18,8 +18,9 @@ use app\models\Project;
               <label>选取分支
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>
                   <span class="tip">查看所有分支</span>
-                  <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i></label>
-              <select name="commit" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
+                  <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
+              </label>
+              <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
                   <option value="master">master</option>
               </select>
           </div>
@@ -70,9 +71,11 @@ use app\models\Project;
                 }
                 var select = '';
                 $.each(data.data, function (key, value) {
-                    select += '<option value="' + value.id + '">' + value.message + '</option>';
+                    // 默认选中 master 分支
+                    var checked = value.id == 'master' ? 'selected' : '';
+                    select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
                 })
-                $('#branch').append(select);
+                $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
             });

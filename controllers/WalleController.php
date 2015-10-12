@@ -249,7 +249,7 @@ class WalleController extends Controller {
         $git = new Git();
         $sTime = Command::getMs();
         $ret = $git->setConfig($this->conf)
-            ->updateToVersion($this->task->commit_id, $this->task->link_id); // 更新到指定版本
+            ->updateToVersion($this->task->branch, $this->task->commit_id, $this->task->link_id); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($git, $this->task->id, Record::ACTION_CLONE, $duration);

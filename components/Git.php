@@ -22,7 +22,6 @@ class Git extends Command {
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $cmd[] = sprintf('/usr/bin/env git fetch --all');
             $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -43,10 +42,10 @@ class Git extends Command {
      * @param string $commit
      * @return bool
      */
-    public function updateToVersion($commit, $version) {
+    public function updateToVersion($branch, $commit, $version) {
         // 先更新
         $destination = Project::getDeployWorkspace($version);
-        $this->updateRepo('master', $destination);
+        $this->updateRepo($branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = sprintf('/usr/bin/env git reset %s', $commit);
         $cmd[] = '/usr/bin/env git checkout .';
@@ -61,9 +60,9 @@ class Git extends Command {
      * @return array
      */
     public function getBranchList() {
-        // 先更新
         $destination = Project::getDeployFromDir();
-        $this->updateRepo('master', $destination);
+        // 先更新，其实没有必要更新
+        ///$this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git pull';
         $cmd[] = '/usr/bin/env git branch -a';
