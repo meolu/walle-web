@@ -29,10 +29,11 @@ class ConfController extends Controller
      *
      */
     public function actionIndex() {
-        $project = Project::find();
+        $project = Project::find()
+            ->where(['user_id' => $this->uid]);
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
-            $project->where(['like', "name", $kw]);
+            $project->andWhere(['like', "name", $kw]);
         }
         $project = $project->asArray()->all();
         return $this->render('index', [
@@ -106,6 +107,15 @@ class ConfController extends Controller
      */
     public function actionEdit($projectId = null) {
         $project = $projectId ? Project::findOne($projectId) : new Project();
+
+        if ($projectId && !$project) {
+            throw new \Exception('找不到项目配置');
+        }
+
+        if ($this->uid != $project->user_id) {
+            throw new \Exception('非项目创建人，不可修改');
+        }
+
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
             if ($project->save()) {
@@ -113,7 +123,6 @@ class ConfController extends Controller
             }
         }
 
-        if ($projectId && !$project) throw new \Exception('找不到项目配置');
         return $this->render('edit', [
             'conf' => $project,
         ]);
