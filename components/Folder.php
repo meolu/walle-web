@@ -49,8 +49,8 @@ class Folder extends Command {
         $command = sprintf('rsync -avz --rsh="ssh -p 22" %s %s %s%s:%s',
             $this->excludes($excludes),
             rtrim(Project::getDeployWorkspace($version), '/') . '/',
-            ($this->getConfig()->release_user ? $this->getConfig()->release_user . '@' : ''),
-            $remoteHost,
+            $this->getConfig()->release_user . '@',
+            $this->getHostName($remoteHost),
             Project::getReleaseVersionDir($version));
 
         return $this->runLocalCommand($command);

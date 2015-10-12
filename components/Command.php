@@ -74,7 +74,7 @@ abstract class Command {
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
             $localCommand = 'ssh ' . $needs_tty . ' -p ' . $this->getHostPort($remoteHost)
                 . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
-                . ($this->getConfig()->release_user ? $this->getConfig()->release_user . '@' : '')
+                . $this->getConfig()->release_user . '@'
                 . $this->getHostName($remoteHost);
             $remoteCommand = str_replace('"', '\"', trim($command));
             $localCommand .= ' "sh -c \"' . $remoteCommand . '\"" ';
