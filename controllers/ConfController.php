@@ -112,7 +112,7 @@ class ConfController extends Controller
             throw new \Exception('找不到项目配置');
         }
 
-        if ($this->uid != $project->user_id) {
+        if ($projectId && $this->uid != $project->user_id) {
             throw new \Exception('非项目创建人，不可修改');
         }
 
