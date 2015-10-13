@@ -63,7 +63,7 @@ class Task extends Command {
             $cmd[] = preg_replace($pattern, $replace, $task);
         }
         $command = join(' && ', $cmd);
-        return $this->runRemoteCommand($command);
+        return $this->runLocalCommand($command);
     }
 
     /**
@@ -91,7 +91,7 @@ class Task extends Command {
             $cmd[] = preg_replace($pattern, $replace, $task);
         }
         $command = join(' && ', $cmd);
-        return $this->runLocalCommand($command);
+        return $this->runRemoteCommand($command);
     }
 
 }
