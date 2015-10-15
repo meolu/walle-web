@@ -380,11 +380,17 @@ class WalleController extends Controller {
         $folder     = new Folder();
 
         // pre-release task
-        $cmd[] = WalleTask::getRemoteTaskCommand($this->conf->pre_release, $version);
+        if (($preRelease = WalleTask::getRemoteTaskCommand($this->conf->pre_release, $version))) {
+            $cmd[] = $preRelease;
+        }
         // link
-        $cmd[] = $folder->setConfig($this->conf)->getLinkCommand($version);
+        if (($linkCmd = $folder->setConfig($this->conf)->getLinkCommand($version))) {
+            $cmd[] = $linkCmd;
+        }
         // post-release task
-        $cmd[] = WalleTask::getRemoteTaskCommand($this->conf->post_release, $version);
+        if (($postRelease = WalleTask::getRemoteTaskCommand($this->conf->post_release, $version))) {
+            $cmd[] = $postRelease;
+        }
 
         $sTime = Command::getMs();
         // run the task package
