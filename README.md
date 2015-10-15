@@ -41,7 +41,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 快速开始
 -------
 * nginx/apache的webroot配置指向`walle-web/web`
-* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，以免信息外泄）
+* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，可跳过）
     ```php
     vi config/params.php
     'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
@@ -66,12 +66,6 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
 To Do List
 ----------
-- 项目管理员审核
-- 配置检测
-    - 宿主机用户是否有git权限
-    - 宿主机用户是否能免密码登录目标机器
-    - 宿主机用户是否有目录权限
-    - 目标机用户是否有目录权限
 - Travis CI 集成
 - 静态资源管理器
 - 邮件提醒：可配置提醒事件
