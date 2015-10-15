@@ -59,5 +59,16 @@ class Controller extends yii\web\Controller {
         $get  = Yii::$app->request->get($name);
         return isset($_POST[$name]) ? $post : (isset($_GET[$name]) ? $get : $default);
     }
+
+    /**
+     * 需要项目管理员权限
+     *
+     * @throws \Exception
+     */
+    protected function validateAdmin() {
+        if (!GlobalHelper::isValidAdmin()) {
+            throw new \Exception('非管理员不能操作：（');
+        }
+    }
 }
 

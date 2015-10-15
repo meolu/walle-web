@@ -62,6 +62,10 @@ class SiteController extends Controller
     public function actionSignup() {
         $user = new User(['scenario' => 'signup']);
         if ($user->load(Yii::$app->request->post())) {
+            // 项目管理员需要审核
+            if ($user->role == User::ROLE_ADMIN) {
+                $user->status = User::STATUS_INACTIVE;
+            }
             if ($user->save()) {
                 $params = Yii::$app->params;
                 Yii::$app->mail->compose('confirmEmail', ['user' => $user])
