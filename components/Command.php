@@ -8,7 +8,6 @@
  * *****************************************************************/
 namespace app\components;
 
-use app\models\Conf;
 
 abstract class Command {
 
@@ -18,13 +17,6 @@ abstract class Command {
      * @var mixed
      */
     protected static $logFile = null;
-
-
-    /**
-     * Enables or Disables Logging
-     * @var boolean
-     */
-    private static $logEnabled = true;
 
     /**
      * Config
@@ -42,7 +34,12 @@ abstract class Command {
 
     protected $log = null;
 
-
+    /**
+     * 执行本地宿主机命令
+     *
+     * @param $command
+     * @return bool|int true 成功，false 失败
+     */
     final protected function runLocalCommand($command) {
         $command = trim($command);
         // file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
@@ -68,6 +65,12 @@ abstract class Command {
         return $this->status;
     }
 
+    /**
+     * 执行远程目标机器命令
+     *
+     * @param $command
+     * @return bool
+     */
     final protected function runRemoteCommand($command) {
         $this->log = '';
         $needs_tty = '';

@@ -56,7 +56,22 @@ class GlobalHelper {
         return $out;
     }
 
+    /**
+     * @param $pic
+     * @return string
+     */
     public static function formatAvatar($pic) {
         return rtrim(User::AVATAR_ROOT, '/') . '/' . $pic;
+    }
+
+    /**
+     * 当前登录是否为管理员（已激活）
+     *
+     * @return bool
+     */
+    public static function isValidAdmin() {
+        return \Yii::$app->user
+            && \Yii::$app->user->identity->role == \app\models\User::ROLE_ADMIN
+            && \Yii::$app->user->identity->status == \app\models\User::STATUS_ACTIVE;
     }
 }

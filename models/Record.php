@@ -23,45 +23,32 @@ class Record extends \yii\db\ActiveRecord
     /**
      * 服务器权限检查
      */
-    const ACTION_PERMSSION = 10;
+    const ACTION_PERMSSION = 24;
 
     /**
      * 部署前置触发任务
      */
-    const ACTION_PRE_DEPLOY = 15;
+    const ACTION_PRE_DEPLOY = 40;
 
     /**
      * 本地代码更新
      */
-    const ACTION_CLONE = 30;
+    const ACTION_CLONE = 53;
 
     /**
      * 部署后置触发任务
      */
-    const ACTION_POST_DEPLOY = 50;
+    const ACTION_POST_DEPLOY = 64;
 
     /**
      * 同步代码到服务器
      */
-    const ACTION_SYNC  = 60;
+    const ACTION_SYNC  = 78;
 
     /**
-     * 同步完所有目标机器时触发任务
+     * 更新完所有目标机器时触发任务，最后一个得是100
      */
-    const ACTION_POST_RELEASE = 70;
-
-    /**
-     * 软链接，最后一个得是100
-     */
-    const ACTION_LINK  = 100;
-
-
-    public static $ACTION_PERCENT = [
-        self::ACTION_PERMSSION => '25',
-        self::ACTION_CLONE => '50',
-        self::ACTION_SYNC => '75',
-        self::ACTION_LINK => '100',
-    ];
+    const ACTION_UPDATE_REMOTE = 100;
 
     /**
      * @inheritdoc

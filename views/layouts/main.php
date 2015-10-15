@@ -74,6 +74,77 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
         <div class="navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
+                <?php if (GlobalHelper::isValidAdmin() && ($count = count(User::getInactiveAdminList()))) { ?>
+                <li class="light-blue">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <i class="icon-bell-alt"></i>
+                        <span class="badge badge-important"><?= $count ?></span>
+                    </a>
+
+                    <ul class="pull-right dropdown-navbar navbar-green dropdown-menu dropdown-caret dropdown-close">
+
+                        <li class="dropdown-header">
+                            <i class="icon-envelope"></i>
+                            消息通知
+                        </li>
+                        <li>
+                            <a href="/user/audit/">
+                                <div class="clearfix">
+                                    <span class="pull-left">
+                                        <i class="btn btn-xs btn-primary icon-user"></i>
+                                        项目管理员申请
+                                    </span>
+                                    <span class="pull-right badge badge-info"><?= $count ?></span>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- 等待开启
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+											<span class="pull-left">
+												<i class="btn btn-xs no-hover btn-pink icon-comment"></i>
+												新闻评论
+											</span>
+                                    <span class="pull-right badge badge-info">+12</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+											<span class="pull-left">
+												<i class="btn btn-xs no-hover btn-success icon-shopping-cart"></i>
+												新订单
+											</span>
+                                    <span class="pull-right badge badge-success">+8</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <div class="clearfix">
+											<span class="pull-left">
+												<i class="btn btn-xs no-hover btn-info icon-twitter"></i>
+												粉丝
+											</span>
+                                    <span class="pull-right badge badge-info">+11</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                查看所有通知
+                                <i class="icon-arrow-right"></i>
+                            </a>
+                        </li>
+                        -->
+                    </ul>
+                </li>
+                <?php } ?>
 
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">

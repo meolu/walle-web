@@ -67,7 +67,10 @@ use \app\components\GlobalHelper;
                     <div class="profile-info-name"> 级别 </div>
 
                     <div class="profile-info-value">
-                        <span><?= \Yii::t('status', 'user_role_' . $user->role) ?></span>
+                        <span>
+                            <?= \Yii::t('status', 'user_role_' . $user->role) ?>
+                            <?= $user->status == \app\models\User::STATUS_INACTIVE ? '（未激活）' : '' ?>
+                        </span>
                     </div>
                 </div>
 

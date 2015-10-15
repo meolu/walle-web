@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 排除文件 </div>
 
         <div class="profile-info-value">
-            <span><?= str_replace("\n", "<br>", $conf->excludes) ?></span>
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->excludes) ?></span>
         </div>
     </div>
     <!-- 宿主机 配置 end-->
@@ -82,7 +82,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 机器列表 </div>
 
         <div class="profile-info-value">
-            <span><?= str_replace("\n", "<br>", $conf->hosts) ?></span>
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->hosts) ?></span>
         </div>
     </div>
     <!-- 目标机器 配置 end-->
@@ -94,7 +94,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> pre_deploy </div>
 
         <div class="profile-info-value">
-            <span><?= str_replace("\n", "<br>", $conf->pre_deploy) ?></span>
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->pre_deploy) ?></span>
         </div>
     </div>
 
@@ -102,7 +102,15 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> post_deploy </div>
 
         <div class="profile-info-value">
-            <span><?= str_replace("\n", "<br>", $conf->post_deploy) ?></span>
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->post_deploy) ?></span>
+        </div>
+    </div>
+
+    <div class="profile-info-row">
+        <div class="profile-info-name"> pre_release </div>
+
+        <div class="profile-info-value">
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->pre_release) ?></span>
         </div>
     </div>
 
@@ -110,7 +118,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> post_release </div>
 
         <div class="profile-info-value">
-            <span><?= str_replace("\n", "<br>", $conf->post_release) ?></span>
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->post_release) ?></span>
         </div>
     </div>
     <!-- 目标机器 配置 end-->

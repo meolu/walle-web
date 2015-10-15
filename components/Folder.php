@@ -62,7 +62,7 @@ class Folder extends Command {
      * @param null $version
      * @return bool
      */
-    public function link($version) {
+    public function getLinkCommand($version) {
         $user = $this->getConfig()->release_user;
         $project = Project::getGitProjectName($this->getConfig()->git_url);
         $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
@@ -71,9 +71,8 @@ class Folder extends Command {
         $cmd[] = sprintf('ln -sfn %s %s', $linkFrom, $currentTmp);
         $cmd[] = sprintf('chown -h %s %s', $user, $currentTmp);
         $cmd[] = sprintf('mv -fT %s %s', $currentTmp, $this->getConfig()->release_to);
-        $command = join(' && ', $cmd);
 
-        return $this->runRemoteCommand($command);
+        return join(' && ', $cmd);
     }
 
     /**

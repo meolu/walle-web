@@ -28,7 +28,10 @@ use app\models\queries\UserQuery;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    // 管理员未审核通过
+    const STATUS_INACTIVE = 0;
+
+    // 管理员审核通过
     const STATUS_ACTIVE = 10;
 
     const ROLE_USER = 10;
@@ -92,7 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['username','email','password','role'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
 
             ['role', 'default', 'value' => self::ROLE_DEV],
             ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_DEV, self::ROLE_ADMIN]],
@@ -271,5 +274,14 @@ class User extends ActiveRecord implements IdentityInterface
         if ($save) {
             return $this->save();
         }
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getInactiveAdminList() {
+        return static::find()
+            ->where(['is_email_verified' => 1, 'role' => static::ROLE_ADMIN, 'status' => static::STATUS_INACTIVE])
+            ->asArray()->all();
     }
 }
