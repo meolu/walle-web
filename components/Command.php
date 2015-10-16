@@ -8,7 +8,6 @@
  * *****************************************************************/
 namespace app\components;
 
-use app\models\Conf;
 
 abstract class Command {
 
@@ -18,13 +17,6 @@ abstract class Command {
      * @var mixed
      */
     protected static $logFile = null;
-
-
-    /**
-     * Enables or Disables Logging
-     * @var boolean
-     */
-    private static $logEnabled = true;
 
     /**
      * Config
@@ -42,7 +34,12 @@ abstract class Command {
 
     protected $log = null;
 
-
+    /**
+     * 执行本地宿主机命令
+     *
+     * @param $command
+     * @return bool|int true 成功，false 失败
+     */
     final protected function runLocalCommand($command) {
         $command = trim($command);
         // file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
@@ -61,24 +58,29 @@ abstract class Command {
         $log = implode(PHP_EOL, $log);
         $this->log = trim($log);
 
+        $this->log($command);
         $this->log($log);
         $this->log('---------------------------------');
 
         return $this->status;
     }
 
+    /**
+     * 执行远程目标机器命令
+     *
+     * @param $command
+     * @return bool
+     */
     final protected function runRemoteCommand($command) {
         $this->log = '';
-        $needs_tty = ''; #($this->getConfig()->general('ssh_needs_tty', false) ? '-t' : '');
+        $needs_tty = '';
 
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
-            $remoteHost = trim($remoteHost);
-            $localCommand = 'ssh ' . $needs_tty . ' -p 22 '
-                . '-q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
-//            . $this->getConfig()->getConnectTimeoutOption()
-                . ($this->getConfig()->release_user ? $this->getConfig()->release_user . '@' : '')
-                . $remoteHost;
-            $remoteCommand = str_replace('"', '\"', trim($command));
+            $localCommand = 'ssh ' . $needs_tty . ' -p ' . $this->getHostPort($remoteHost)
+                . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
+                . $this->getConfig()->release_user . '@'
+                . $this->getHostName($remoteHost);
+            $remoteCommand = str_replace('"', '\\\"', trim($command));
             $localCommand .= ' "sh -c \"' . $remoteCommand . '\"" ';
             static::log('Run remote command ' . $remoteCommand);
 
@@ -167,6 +169,29 @@ abstract class Command {
      */
     public static function getMs() {
         return intval(microtime(true) * 1000);
+    }
+
+    /**
+     * 获取目标机器的ip或别名
+     *
+     * @param $host
+     * @return mixed
+     */
+    protected function getHostName($host) {
+        list($hostName,) = explode(':', $host);
+        return $hostName;
+    }
+
+    /**
+     * 获取目标机器的ssh端口
+     *
+     * @param $host
+     * @param int $default
+     * @return int
+     */
+    protected function getHostPort($host, $default = 22) {
+        $hostInfo = explode(':', $host);
+        return !empty($hostInfo[1]) ? $hostInfo[1] : $default;
     }
 
 

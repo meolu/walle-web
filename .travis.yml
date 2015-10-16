@@ -1,0 +1,28 @@
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+
+mysql:
+  database: travis_ci_drupal_module_example_test
+  username: root
+  encoding: utf8
+
+install:
+  - travis_retry composer self-update && composer --version
+  - travis_retry composer global require "fxp/composer-asset-plugin:~1.0.3"
+  - composer install --prefer-source --no-interaction --dev
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+
+before_script:
+  - mysql -e 'CREATE DATABASE walle;';
+
+script: phpunit -c tests/phpunit.xml
+
+matrix:
+  fast_finish: true
+
+notifications:
+    on_success: never
+    on_failure: always

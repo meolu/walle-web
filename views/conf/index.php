@@ -48,15 +48,18 @@ $this->title = '项目配置';
                             <a href="/conf/preview/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="icon-zoom-in bigger-130"></i>查看
                             </a>
-
-                            <a href="/conf/group/?projectId=<?= $item['id'] ?>" class="green">
+                            <a href="/conf/detection/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
+                                <i class="icon-screenshot bigger-130"></i>检测
+                            </a>
+                            <a class="btn-copy" href="javascript:;" data-id="<?= $item['id'] ?>">
+                                <i class="icon-copy bigger-130"></i>复制
+                            </a>
+                            <a href="/conf/group/?projectId=<?= $item['id'] ?>">
                                 <i class="icon-group bigger-130"></i>成员
                             </a>
-
-                            <a class="green" href="/conf/edit?projectId=<?= $item['id'] ?>">
+                            <a href="/conf/edit?projectId=<?= $item['id'] ?>">
                                 <i class="icon-pencil bigger-130"></i>修改
                             </a>
-
                             <a class="red btn-delete" data-id="<?= $item['id'] ?>" href="javascript:;">
                                 <i class="icon-trash bigger-130"></i>删除
                             </a>
@@ -78,12 +81,24 @@ $this->title = '项目配置';
     jQuery(function($) {
         $('.btn-delete').click(function(e) {
             $this = $(this);
-            if (confirm('确定要删除该记录？')) {
+            if (confirm('确定要删除该项目？')) {
                 $.get('/conf/delete', {projectId: $this.data('id')}, function(o) {
                     if (!o.code) {
                         $this.closest("tr").remove();
                     } else {
                         alert('删除失败: ' + o.msg);
+                    }
+                })
+            }
+        })
+        $('.btn-copy').click(function(e) {
+            $this = $(this);
+            if (confirm('确定要复制该项目？')) {
+                $.get('/conf/copy', {projectId: $this.data('id')}, function(o) {
+                    if (!o.code) {
+                        location.reload();
+                    } else {
+                        alert('复制失败: ' + o.msg);
                     }
                 })
             }

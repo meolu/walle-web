@@ -60,19 +60,15 @@ class WalleController extends Controller {
 
         // 配置
         $this->conf = Project::getConf($this->task->project_id);
-        // db配置
-        $dbConf = Project::findOne($this->task->project_id);
-
         try {
             if ($this->task->action == Task::ACTION_ONLINE) {
                 $this->_makeVersion();
                 $this->_initWorkspace();
-                $this->_gitUpdate();
                 $this->_preDeploy();
+                $this->_gitUpdate();
                 $this->_postDeploy();
                 $this->_rsync();
-                $this->_postRelease();
-                $this->_link($this->task->link_id);
+                $this->_updateRemoteServers($this->task->link_id);
                 $this->_cleanUp($this->task->link_id);
             } else {
                 $this->_link($this->task->ex_link_id);
@@ -83,14 +79,14 @@ class WalleController extends Controller {
             // 记录此次上线的版本（软链号）和上线之前的版本
             ///对于回滚的任务不记录线上版本
             if ($this->task->action == Task::ACTION_ONLINE) {
-                $this->task->ex_link_id = $dbConf->version;
+                $this->task->ex_link_id = $this->conf->version;
             }
             $this->task->status = Task::STATUS_DONE;
             $this->task->save();
 
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
-            $dbConf->version = $this->task->link_id;
-            $dbConf->save();
+            $this->conf->version = $this->task->link_id;
+            $this->conf->save();
         } catch (\Exception $e) {
             $this->task->status = Task::STATUS_FAILED;
             $this->task->save();
@@ -112,6 +108,58 @@ class WalleController extends Controller {
         return $this->render('check', [
             'projects' => $projects,
         ]);
+    }
+
+    /**
+     * 项目配置检测，提前发现配置不当之处。
+     *
+     * @return string
+     */
+    public function actionDetection($projectId) {
+        $project = Project::getConf($projectId);
+        $log = [];
+        $code = 0;
+
+        // 本地git ssh-key是否加入deploy-keys列表
+        $git = new Git();
+        try {
+            $ret = $git->setConfig($project)->updateRepo();
+            if (!$ret) {
+                $code = -1;
+                $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库权限，
+                并且把ssh-key加入git的deploy-keys列表。详细错误：%s', Get_Current_User(), $git->getExeLog());
+            }
+        } catch (\Exception $e) {
+            $code = -1;
+            $log[] = sprintf('宿主机检测时发生系统错误：%s', $e->getMessage());
+        }
+
+        // 权限与免密码登录检测
+        $task = new WalleTask();
+        try {
+            $task->setConfig($project);
+            $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir('detection'));
+            $ret = $task->runRemoteTaskCommandPackage([$command]);
+            if (!$ret) {
+                $code = -1;
+                $log[] = sprintf('目标机器代码检出检测出错，请确认php进程用户%s用户加入目标机器的%s用户ssh-key信任列表，
+                    且%s有目标机器发布版本库写入权限。详细错误：%s',
+                    Get_Current_User(), $project->release_user, $project->release_user, $task->getExeLog());
+            }
+            // 清除
+            $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
+            $task->runRemoteTaskCommandPackage([$command]);
+        } catch (\Exception $e) {
+            $code = -1;
+            $log[] = sprintf('目标机检测时发生系统错误：%s', $e->getMessage());
+        }
+
+        // task 检测todo...
+
+        if ($code === 0) {
+            $log[] = '配置检测通过，恭喜：）';
+        }
+        $this->renderJson(join("<br>", $log), $code);
     }
 
 
@@ -226,7 +274,6 @@ class WalleController extends Controller {
         $folder->setConfig($this->conf);
         // 本地宿主机工作区初始化
         $folder->initLocalWorkspace($this->task->link_id);
-        // 本地宿主机代码仓库检查
 
         // 远程目标目录检查，并且生成版本目录
         $ret = $folder->initRemoteVersion($this->task->link_id);
@@ -249,7 +296,7 @@ class WalleController extends Controller {
         $git = new Git();
         $sTime = Command::getMs();
         $ret = $git->setConfig($this->conf)
-            ->updateToVersion($this->task->commit_id, $this->task->link_id); // 更新到指定版本
+            ->updateToVersion($this->task->branch, $this->task->commit_id, $this->task->link_id); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($git, $this->task->id, Record::ACTION_CLONE, $duration);
@@ -300,26 +347,6 @@ class WalleController extends Controller {
     }
 
     /**
-     * 同步完所有目标机器时触发任务
-     * 所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task）
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    private function _postRelease() {
-        $task = new WalleTask();
-        $sTime = Command::getMs();
-        $task->setConfig($this->conf);
-        $ret = $task->postRelease($this->task->link_id);
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($task, $this->task->id, Record::ACTION_POST_RELEASE, $duration);
-
-        if (!$ret) throw new \Exception('同步代码后置任务操作失败');
-        return true;
-    }
-
-    /**
      * 同步文件到服务器
      *
      * @return bool
@@ -341,20 +368,37 @@ class WalleController extends Controller {
     }
 
     /**
-     * 软链接
+     * 执行远程服务器任务集合
+     * 对于目标机器更多的时候是一台机器完成一组命令，而不是每条命令逐台机器执行
+     *
+     * @param $version
+     * @throws \Exception
      */
-    private function _link($version = null) {
-        // 创建链接指向
-        $folder = new Folder();
+    private function _updateRemoteServers($version) {
+        $cmd = [];
+        $taskWorker = new WalleTask();
+        $folder     = new Folder();
+
+        // pre-release task
+        if (($preRelease = WalleTask::getRemoteTaskCommand($this->conf->pre_release, $version))) {
+            $cmd[] = $preRelease;
+        }
+        // link
+        if (($linkCmd = $folder->setConfig($this->conf)->getLinkCommand($version))) {
+            $cmd[] = $linkCmd;
+        }
+        // post-release task
+        if (($postRelease = WalleTask::getRemoteTaskCommand($this->conf->post_release, $version))) {
+            $cmd[] = $postRelease;
+        }
+
         $sTime = Command::getMs();
-        $ret = $folder->setConfig($this->conf)
-            ->link($version);
+        // run the task package
+        $ret = $taskWorker->setConfig($this->conf)->runRemoteTaskCommandPackage($cmd);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($folder, $this->task->id, Record::ACTION_LINK, $duration);
-
-        if (!$ret) throw new \Exception('创建链接出错');
-        return true;
+        Record::saveRecord($taskWorker, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
+        if (!$ret) throw new \Exception('全量更新服务器出错');
     }
 
     /**

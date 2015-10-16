@@ -91,9 +91,11 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['user_id', 'git_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts'], 'required'],
             [['user_id', 'level', 'status', 'audit'], 'integer'],
-            [['name', 'version'], 'string', 'max' => 20],
-            [['git_url', 'deploy_from', 'release_to', 'release_library'], 'string', 'max' => 200],
-            [['excludes', 'pre_deploy', 'post_deploy', 'post_release', 'hosts'], 'string', 'max' => 500],
+            [['excludes', 'hosts', 'pre_deploy', 'post_deploy', 'pre_release', 'post_release'], 'string'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['name'], 'string', 'max' => 100],
+            [['version'], 'string', 'max' => 20],
+            [['deploy_from', 'release_to', 'release_library', 'git_url'], 'string', 'max' => 200],
             [['release_user', 'git_type'], 'string', 'max' => 50],
         ];
     }
@@ -117,9 +119,10 @@ class Project extends \yii\db\ActiveRecord
             'release_to'      => '代码的webroot',
             'release_library' => '发布版本库',
             'hosts'           => '目标机器',
-            'pre_deploy'      => '部署前置任务',
-            'post_deploy'     => '同步前置任务',
-            'post_release'    => '同步后置任务',
+            'pre_deploy'      => '宿主机代码检出前置任务',
+            'post_deploy'     => '宿主机同步前置任务',
+            'pre_release'     => '目标机更新版本前置任务',
+            'post_release'    => '目标机更新版本后置任务',
             'git_type'        => '分支/tag',
             'audit'           => '任务需要审核？',
         ];

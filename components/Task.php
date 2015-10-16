@@ -67,14 +67,15 @@ class Task extends Command {
     }
 
     /**
-     * 同步代码之后触发任务
-     * 所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task）
+     * 获取远程服务器要操作的任务命令
      *
-     * @return bool
+     * @param $task    string
+     * @param $version string
+     * @return string string
      */
-    public function postRelease($version) {
-        $tasks = GlobalHelper::str2arr($this->getConfig()->post_release);
-        if (empty($tasks)) return true;
+    public static function getRemoteTaskCommand($task, $version) {
+        $tasks = GlobalHelper::str2arr($task);
+        if (empty($tasks)) return '';
 
         $cmd = [];
         $workspace = rtrim(Project::getDeployWorkspace($version), '/');
@@ -90,8 +91,19 @@ class Task extends Command {
         foreach ($tasks as $task) {
             $cmd[] = preg_replace($pattern, $replace, $task);
         }
-        $command = join(' && ', $cmd);
-        return $this->runLocalCommand($command);
+        return join(' && ', $cmd);
+    }
+
+    /**
+     * 执行远程服务器任务集合
+     * 对于目标机器更多的时候是一台机器完成一组命令，而不是每条命令逐台机器执行
+     *
+     * @param $tasks
+     * @return mixed
+     */
+    public function runRemoteTaskCommandPackage($tasks) {
+        $task = join(' && ', $tasks);
+        return $this->runRemoteCommand($task);
     }
 
 }

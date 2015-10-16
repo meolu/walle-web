@@ -30,7 +30,7 @@ use yii\widgets\LinkPager;
         </a>
     </div><!-- /.box-header -->
     <div class="box-body table-responsive no-padding clearfix">
-        <table class="table table-hover">
+        <table class="table table-striped table-bordered table-hover">
             <tbody><tr>
                 <?php if ($audit) { ?>
                 <th>开发者</th>
@@ -38,6 +38,7 @@ use yii\widgets\LinkPager;
                 <th>项目</th>
                 <th>任务名称</th>
                 <th>上线时间</th>
+                <th>分支</th>
                 <th>上线commit号</th>
                 <th>当前状态</th>
                 <th>操作</th>
@@ -50,6 +51,7 @@ use yii\widgets\LinkPager;
                 <td><?= $item['project']['name'] ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
+                <td><?= $item['branch'] ?></td>
                 <td><?= $item['commit_id'] ?></td>
                 <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>">
                     <?= \Yii::t('status', 'task_status_' . $item['status']) ?></td>

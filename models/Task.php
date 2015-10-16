@@ -83,7 +83,7 @@ class Task extends \yii\db\ActiveRecord
             [['user_id', 'project_id', 'status', 'title', 'commit_id'], 'required'],
             [['user_id', 'project_id', 'action', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['title', 'link_id', 'ex_link_id', 'commit_id'], 'string', 'max' => 100],
+            [['title', 'link_id', 'ex_link_id', 'commit_id', 'branch'], 'string', 'max' => 100],
         ];
     }
 

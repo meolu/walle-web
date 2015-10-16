@@ -29,12 +29,11 @@ use \app\models\Task;
 
     <div class="status">
         <span><i class="fa fa-circle-o text-yellow step-1"></i>权限、目录检查</span>
-        <span><i class="fa fa-circle-o text-yellow step-2"></i>代码检出</span>
-        <span><i class="fa fa-circle-o text-yellow step-3"></i>部署前置任务</span>
-        <span><i class="fa fa-circle-o text-yellow step-4"></i>部署后置任务</span>
+        <span><i class="fa fa-circle-o text-yellow step-2"></i>pre-deploy任务</span>
+        <span><i class="fa fa-circle-o text-yellow step-3"></i>代码检出</span>
+        <span><i class="fa fa-circle-o text-yellow step-4"></i>post-deploy任务</span>
         <span><i class="fa fa-circle-o text-yellow step-5"></i>同步至服务器</span>
-        <span><i class="fa fa-circle-o text-yellow step-6"></i>同步后置任务</span>
-        <span><i class="fa fa-circle-o text-yellow step-7"></i>更新全量服务器</span>
+        <span style="width: 28%"><i class="fa fa-circle-o text-yellow step-6"></i>全量更新(pre-release、更新版本、post-release)</span>
     </div>
     <div style="clear:both"></div>
     <div class="progress progress-small progress-striped active">

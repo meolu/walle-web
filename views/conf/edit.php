@@ -9,13 +9,25 @@ use yii\widgets\ActiveForm;
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
     <div class="box-body">
-          <?= $form->field($conf, 'name')
-              ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-          <?= $form->field($conf, 'level')->dropDownList([
-              Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
-              Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
-              Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
-          ])->label('项目环境级别<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
+        <?= $form->field($conf, 'name')
+            ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
+
+        <!-- git 配置-->
+        <?= $form->field($conf, 'git_url')
+            ->textInput([
+                'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                'data-placement' => 'top',
+                'data-rel'       => 'tooltip',
+                'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+            ])
+            ->label('git地址<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
+        <!-- git 配置 end-->
+
+        <?= $form->field($conf, 'level')->dropDownList([
+            Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
+            Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
+            Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
+        ])->label('项目环境级别<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
         <!-- 宿主机 配置-->
         <div class="row">
         <div class="col-sm-4">
@@ -141,12 +153,23 @@ use yii\widgets\ActiveForm;
                               'onblur'         => "clearInterval(this.clock);",
                           ])
                           ->label('post_deploy', ['class' => 'control-label bolder']) ?>
+                      <?= $form->field($conf, 'pre_release')
+                          ->textarea([
+                              'placeholder'    => '/var/www/xxx stop',
+                              'data-placement' => 'top',
+                              'data-rel'       => 'tooltip',
+                              'data-title'     => '同步完所有目标机器之后，更改版本软链之前触发任务。java可能要做一些暂停服务的操作(双引号将会被转义为\")',
+                              'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
+                              'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
+                              'onblur'         => "clearInterval(this.clock);",
+                          ])
+                          ->label('pre_release', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'post_release')
                           ->textarea([
                               'placeholder'    => '/usr/local/nginx/sbin/nginx -s reload',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task），一行一条',
+                              'data-title'     => '所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task），一行一条(双引号将会被转义为\")',
                               'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
                               'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                               'onblur'         => "clearInterval(this.clock);",
@@ -159,17 +182,6 @@ use yii\widgets\ActiveForm;
         </div>
         <!-- 目标机器 配置 end-->
         <div class="hr hr-dotted"></div>
-
-        <!-- git 配置-->
-          <?= $form->field($conf, 'git_url')
-              ->textInput([
-                  'placeholder'    => 'git@github.com:meolu/walle-web.git',
-                  'data-placement' => 'top',
-                  'data-rel'       => 'tooltip',
-                  'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
-              ])
-              ->label('git地址<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-        <!-- git 配置 end-->
 
         <div class="form-group">
             <label class="control-label bolder blue">分支/tag上线:</label>

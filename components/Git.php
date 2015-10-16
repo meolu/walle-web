@@ -22,7 +22,6 @@ class Git extends Command {
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $cmd[] = sprintf('/usr/bin/env git fetch --all');
             $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -43,10 +42,10 @@ class Git extends Command {
      * @param string $commit
      * @return bool
      */
-    public function updateToVersion($commit, $version) {
+    public function updateToVersion($branch, $commit, $version) {
         // 先更新
         $destination = Project::getDeployWorkspace($version);
-        $this->updateRepo('master', $destination);
+        $this->updateRepo($branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = sprintf('/usr/bin/env git reset %s', $commit);
         $cmd[] = '/usr/bin/env git checkout .';
@@ -61,19 +60,20 @@ class Git extends Command {
      * @return array
      */
     public function getBranchList() {
-        // 先更新
         $destination = Project::getDeployFromDir();
-        $this->updateRepo('master', $destination);
+        // 先更新，其实没有必要更新
+        ///$this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git pull';
         $cmd[] = '/usr/bin/env git branch -a';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
+        if (!$result) {
+            throw new \Exception('获取分支列表失败：' . $this->getExeLog());
+        }
 
         $history = [];
-        if (!$result) return $history;
-
-        $list = explode("\n", $this->getExeLog());
+        $list = explode(PHP_EOL, $this->getExeLog());
         foreach ($list as &$item) {
             $item = trim($item);
             $remotePrefix = 'remotes/origin/';
@@ -106,18 +106,19 @@ class Git extends Command {
         $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty="%h - %an %s" ';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
+        if (!$result) {
+            throw new \Exception('获取提交历史失败：' . $this->getExeLog());
+        }
 
         $history = [];
-        if (!$result) return $history;
-
         // 总有一些同学没有团队协作意识，不设置好编码：(
         $log = GlobalHelper::convert2Utf8($this->getExeLog());
-        $list = explode("\n", $log);
+        $list = explode(PHP_EOL, $log);
         foreach ($list as $item) {
             $commitId = substr($item, 0, strpos($item, '-') - 1);
             $history[] = [
-                'id' => $commitId,
-                'message'  => $item,
+                'id'      => $commitId,
+                'message' => $item,
             ];
         }
         return $history;
@@ -136,15 +137,16 @@ class Git extends Command {
         $cmd[] = '/usr/bin/env git tag -l ';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
+        if (!$result) {
+            throw new \Exception('获取tag记录失败：' . $this->getExeLog());
+        }
 
         $history = [];
-        if (!$result) return $history;
-
-        $list = explode("\n", $this->getExeLog());
+        $list = explode(PHP_EOL, $this->getExeLog());
         foreach ($list as $item) {
             $history[] = [
-                'id' => $item,
-                'message'  => $item,
+                'id'      => $item,
+                'message' => $item,
             ];
         }
         return $history;

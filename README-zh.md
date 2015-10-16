@@ -1,5 +1,6 @@
 Walle 瓦力 web部署系统
 ==========================
+[![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！除了支持PHP，对于JAVA等需要编译的项目同时支持。
 
