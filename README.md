@@ -49,6 +49,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 高级自定义
 --------
 此时你可能考虑要作为一个公司内部新项目的试用版本，那么你将需要做以下的处理，更适合业务需求。
+
 * 配置允许注册的邮箱后缀
     ```php
     vi config/params.php
@@ -57,7 +58,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
     ]
     ```
 * 配置企业邮箱smtp
-    ```
+    ```php
     vi config/web.php +25
     # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
