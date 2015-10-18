@@ -29,7 +29,7 @@ class Git extends Command {
         else {
             $cmd[] = sprintf('mkdir -p %s ', $gitDir);
             $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->git_url);
+            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->repo_url);
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);

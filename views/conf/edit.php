@@ -10,24 +10,101 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
     <div class="box-body">
         <?= $form->field($conf, 'name')
-            ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-
-        <!-- git 配置-->
-        <?= $form->field($conf, 'git_url')
             ->textInput([
+                'class'          => 'col-xs-11',
                 'placeholder'    => 'git@github.com:meolu/walle-web.git',
                 'data-placement' => 'top',
                 'data-rel'       => 'tooltip',
                 'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
             ])
-            ->label('git地址<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-        <!-- git 配置 end-->
+            ->label('项目名字:', ['class' => 'control-label bolder blue col-xs-1']) ?>
 
+        <div class="clearfix"></div>
         <?= $form->field($conf, 'level')->dropDownList([
             Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
             Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
             Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
-        ])->label('项目环境级别<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
+        ],[
+            'class'          => 'col-xs-11',])
+            ->label('项目环境:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+        <div class="clearfix"></div>
+        <div class="widget-box transparent" id="recent-box" style="margin-top:15px">
+            <div class="tabbable no-border">
+                <h4 class="lighter smaller" style="float:left; margin: 9px 26px -19px 9px">
+                    <i class="icon-map-marker orange"></i>
+                    Repo
+                </h4>
+                <ul class="nav nav-tabs" id="recent-tab">
+                    <li class="active">
+                        <a data-toggle="tab" href="#task-tab">Git</a>
+                    </li>
+
+                    <li class="">
+                        <a data-toggle="tab" href="#member-tab">svn</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main padding-4">
+                    <div class="tab-content padding-8 overflow-visible">
+                        <div id="task-tab" class="tab-pane active">
+
+                            <!-- git 配置-->
+                            <?= $form->field($conf, 'repo_url')
+                                ->textInput([
+                                    'class'          => 'col-xs-11',
+                                    'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                                    'data-placement' => 'top',
+                                    'data-rel'       => 'tooltip',
+                                    'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                                ])
+                                ->label('git地址:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+                            <!-- git 配置 end-->
+                        </div>
+
+                        <div id="member-tab" class="tab-pane">
+
+                            <!-- git 配置-->
+                            <?= $form->field($conf, 'repo_url')
+                                ->textInput([
+                                    'class'          => 'col-xs-11',
+                                    'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                                    'data-placement' => 'top',
+                                    'data-rel'       => 'tooltip',
+                                    'data-title'     => '支持svn。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                                ])
+                                ->label('svn地址:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+                            <!-- git 配置 end-->
+                            <div class="clearfix"></div>
+                            <?= $form->field($conf, 'name')
+                                ->textInput([
+                                    'class'          => 'col-xs-3',
+                                    'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                                    'data-placement' => 'top',
+                                    'data-rel'       => 'tooltip',
+                                    'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                                ])
+                                ->label('用户名:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+                            <?= $form->field($conf, 'name')
+                                ->textInput([
+                                    'class'          => 'col-xs-3',
+                                    'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                                    'data-placement' => 'top',
+                                    'data-rel'       => 'tooltip',
+                                    'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                                ])
+                                ->label('密码:', ['class' => 'control-label bolder blue col-xs-1']);
+//                                ->options = ['style' => 'margin-top:-5px;'] ?>
+
+                        </div><!-- member-tab -->
+
+                    </div>
+                </div><!-- /widget-main -->
+            </div><!-- /widget-body -->
+        </div>
+        <div class="clearfix"></div>
+
         <!-- 宿主机 配置-->
         <div class="row">
         <div class="col-sm-4">
@@ -187,14 +264,14 @@ use yii\widgets\ActiveForm;
             <label class="control-label bolder blue">分支/tag上线:</label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="测试环境推荐选项，可以选择branch和commit" data-placement="right">
                 <label>
-                    <input name="Project[git_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->git_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
+                    <input name="Project[repo_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->repo_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="仿真和生产环境推荐选项" data-placement="right">
                 <label>
-                    <input name="Project[git_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->git_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
+                    <input name="Project[repo_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->repo_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
                 </label>
             </div>

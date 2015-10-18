@@ -206,7 +206,7 @@ class WalleController extends Controller {
         $git = new Git();
         $conf = Project::getConf($projectId);
         $git->setConfig($conf);
-        if ($conf->git_type == Project::GIT_TAG) {
+        if ($conf->repo_type == Project::GIT_TAG) {
             $list = $git->getTagList();
         } else {
             $list = $git->getCommitList($branch);

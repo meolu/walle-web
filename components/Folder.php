@@ -64,7 +64,7 @@ class Folder extends Command {
      */
     public function getLinkCommand($version) {
         $user = $this->getConfig()->release_user;
-        $project = Project::getGitProjectName($this->getConfig()->git_url);
+        $project = Project::getGitProjectName($this->getConfig()->repo_url);
         $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
         // 遇到回滚，则使用回滚的版本version
         $linkFrom = Project::getReleaseVersionDir($version);
