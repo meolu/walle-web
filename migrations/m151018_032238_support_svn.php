@@ -12,7 +12,7 @@ class m151018_032238_support_svn extends Migration
      */
     public function up()
     {
-        $this->renameColumn(Project::tableName(), 'repo_url', 'repo_url');
+        $this->renameColumn(Project::tableName(), 'git_url', 'repo_url');
         $this->renameColumn(Project::tableName(), 'git_type', 'repo_mode');
         $this->alterColumn(Project::tableName(), 'repo_mode', Schema::TYPE_STRING . '(50) DEFAULT "branch" COMMENT "上线方式：branch/tag" AFTER repo_url');
         $this->addColumn(Project::tableName(), 'repo_type', Schema::TYPE_STRING . '(10) DEFAULT "git" COMMENT "上线方式：git/svn" AFTER repo_mode');
@@ -26,7 +26,7 @@ class m151018_032238_support_svn extends Migration
     {
         $this->dropColumn(Project::tableName(), 'repo_username');
         $this->dropColumn(Project::tableName(), 'repo_password');
-        $this->renameColumn(Project::tableName(), 'repo_url', 'repo_url');
+        $this->renameColumn(Project::tableName(), 'repo_url', 'git_url');
         $this->renameColumn(Project::tableName(), 'repo_mode', 'git_type');
         $this->dropColumn(Project::tableName(), 'repo_type');
         $this->dropColumn(Task::tableName(), 'file_list');
