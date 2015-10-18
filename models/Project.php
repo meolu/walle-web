@@ -100,6 +100,7 @@ class Project extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'repo_password'], 'string', 'max' => 100],
             [['version'], 'string', 'max' => 20],
+            ['repo_type', 'default', 'value' => self::REPO_GIT],
             [['deploy_from', 'release_to', 'release_library', 'repo_url'], 'string', 'max' => 200],
             [['release_user', 'repo_mode', 'repo_username'], 'string', 'max' => 50],
             [['repo_type'], 'string', 'max' => 10],

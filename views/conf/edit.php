@@ -76,9 +76,7 @@ use yii\widgets\ActiveForm;
 
         <?php } ?>
         <?= $form->field($conf, 'repo_type')
-            ->hiddenInput([
-                'value' => Project::REPO_GIT,
-            ])
+            ->hiddenInput()
             ->label('') ?>
 
         <!-- 宿主机 配置-->
