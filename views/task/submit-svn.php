@@ -21,7 +21,7 @@ use app\models\Project;
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
               </label>
               <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
-                  <option value="master">master</option>
+                  <option value="truck">trunk</option>
               </select>
           </div>
         <?php } ?>
@@ -78,8 +78,8 @@ use app\models\Project;
                 }
                 var select = '';
                 $.each(data.data, function (key, value) {
-                    // 默认选中 master 分支
-                    var checked = value.id == 'master' ? 'selected' : '';
+                    // 默认选中 trunk 主干
+                    var checked = value.id == 'trunk' ? 'selected' : '';
                     select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
                 })
                 $('#branch').html(select);
@@ -109,7 +109,7 @@ use app\models\Project;
 //            getCommitList();
         })
 
-        // 页面加载完默认拉取master的commit log
+        // 页面加载完默认拉取trunk
         getBranchList();
 
         // 查看所有分支提示
