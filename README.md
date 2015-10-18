@@ -57,6 +57,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
         'huamanshu.com',  // 如：只允许花满树邮箱注册
     ]
     ```
+
 * 配置企业邮箱smtp
     ```php
     vi config/web.php +25
