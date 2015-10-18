@@ -21,6 +21,6 @@ return [
     'log.dir' => '/tmp/walle/',
     // *******指定公司邮箱后缀*******
     'mail-suffix' => [
-        'huamanshu.com', # 支持多个
+        '*', # 支持多个
     ],
 ];

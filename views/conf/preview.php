@@ -127,7 +127,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 上线方式 </div>
 
         <div class="profile-info-value">
-            <span><?= $conf->repo_type ?></span>
+            <span><?= $conf->repo_mode ?></span>
         </div>
     </div>
 

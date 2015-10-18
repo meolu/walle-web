@@ -26,6 +26,7 @@ use yii\db\Expression;
  * @property string $pre_deploy
  * @property string $post_deploy
  * @property string $post_release
+ * @property string $repo_mode
  * @property string $repo_type
  * @property integer $audit
  */
@@ -48,9 +49,13 @@ class Project extends \yii\db\ActiveRecord
 
     const AUDIT_NO = 2;
 
-    const GIT_BRANCH = 'branch';
+    const REPO_BRANCH = 'branch';
 
-    const GIT_TAG = 'tag';
+    const REPO_TAG = 'tag';
+
+    const REPO_GIT = 'git';
+
+    const REPO_SVN = 'svn';
 
     public static $CONF;
 
@@ -96,7 +101,8 @@ class Project extends \yii\db\ActiveRecord
             [['name', 'repo_password'], 'string', 'max' => 100],
             [['version'], 'string', 'max' => 20],
             [['deploy_from', 'release_to', 'release_library', 'repo_url'], 'string', 'max' => 200],
-            [['release_user', 'repo_type', 'repo_username'], 'string', 'max' => 50],
+            [['release_user', 'repo_mode', 'repo_username'], 'string', 'max' => 50],
+            [['repo_type'], 'string', 'max' => 10],
         ];
     }
 
@@ -126,7 +132,7 @@ class Project extends \yii\db\ActiveRecord
             'repo_url'        => 'git/svn地址',
             'repo_username'   => 'svn用户名',
             'repo_password'   => 'svn密码',
-            'repo_type'       => '分支/tag',
+            'repo_mode'       => '分支/tag',
             'audit'           => '任务需要审核？',
         ];
     }
@@ -155,7 +161,7 @@ class Project extends \yii\db\ActiveRecord
             return $match[1];
         }
 
-        return $gitUrl;
+        return basename($gitUrl);;
     }
 
     /**

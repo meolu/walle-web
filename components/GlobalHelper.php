@@ -38,7 +38,12 @@ class GlobalHelper {
      * @return array
      */
     public static function str2arr($string, $delimiter = PHP_EOL) {
-        return array_map('trim', explode($delimiter, $string));
+        $items = explode($delimiter, $string);
+        foreach ($items as $key => &$item) {
+            $item = trim($item);
+            if (empty($item)) unset($items[$key]);
+        }
+        return $items;;
     }
 
     /**

@@ -3,34 +3,31 @@
  * @Author: wushuiyong
  * @Created Time : 日  8/ 2 10:43:15 2015
  *
- * @File Name: command/Git.php
+ * @File Name: command/Svn.php
  * @Description:
  * *****************************************************************/
 namespace app\components;
 
-
+use yii\helpers\StringHelper;
 use app\models\Project;
 
-class Git extends Command {
+class Svn extends Command {
 
-    public function updateRepo($branch = 'master', $gitDir = null) {
-        $gitDir = $gitDir ?: Project::getDeployFromDir();
-        $dotGit = rtrim($gitDir, '/') . '/.git';
+    public function updateRepo($branch = 'trunk', $svnDir = null) {
+        $svnDir = $svnDir ?: Project::getDeployFromDir();
+        $dotSvn = rtrim($svnDir, '/') . '/.svn';
         // 存在git目录，直接pull
-        if (file_exists($dotGit)) {
-            $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git fetch --all');
-            $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
+        if (file_exists($dotSvn)) {
+            $cmd[] = sprintf('cd %s ', $svnDir);
+            $cmd[] = $this->_getSvnCmd('svn up');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
         // 不存在，则先checkout
         else {
-            $cmd[] = sprintf('mkdir -p %s ', $gitDir);
-            $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->repo_url);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
+            $cmd[] = sprintf('mkdir -p %s ', $svnDir);
+            $cmd[] = sprintf('cd %s ', $svnDir);
+            $cmd[] = $this->_getSvnCmd(sprintf('svn checkout %s .', $this->getConfig()->repo_url));
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -43,12 +40,25 @@ class Git extends Command {
      * @return bool
      */
     public function updateToVersion($task) {
+        $copy  = GlobalHelper::str2arr($task->file_list);
+        $fileAndVersion = [];
+        foreach ($copy as $file) {
+            $fileAndVersion[] = StringHelper::explode($file, " ", true, true);
+        }
+        $branch = strcmp($task->branch, 'trunk') === 0 ? $task->branch : 'branches/' . $task->branch;
         // 先更新
-        $destination = Project::getDeployWorkspace($task->link_id);
-        $this->updateRepo($task->branch, $destination);
-        $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = sprintf('/usr/bin/env git reset %s', $task->commit_id);
-        $cmd[] = '/usr/bin/env git checkout .';
+        $versionSvnDir = sprintf('%s-svn', rtrim(Project::getDeployWorkspace($task->link_id), '/'));
+        $cmd[] = sprintf('cd %s ', $versionSvnDir);
+        $cmd[] = $this->_getSvnCmd(sprintf('svn checkout %s/%s .', $this->getConfig()->repo_url, $branch));
+        // 更新指定文件到指定版本，并复制到同步目录
+        foreach ($fileAndVersion as $assign) {
+            $cmd[] = $this->_getSvnCmd(sprintf('svn up %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
+            // 此处有可能会cp -f失败，看shell吧，到时再看要不要做兼容
+            if (strpos(dirname($assign[0]), DIRECTORY_SEPARATOR) !== false) {
+                $cmd[] = sprintf('mkdir -p %s/%s', Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
+            }
+            $cmd[] = sprintf('cp -rf %s %s/%s', $assign[0], Project::getDeployWorkspace($task->link_id), $assign[0]);
+        }
         $command = join(' && ', $cmd);
 
         return $this->runLocalCommand($command);
@@ -59,38 +69,26 @@ class Git extends Command {
      *
      * @return array
      */
-    public function getBranchList() {
-        $destination = Project::getDeployFromDir();
-        // 先更新，其实没有必要更新
-        ///$this->updateRepo('master', $destination);
-        $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = '/usr/bin/env git pull';
-        $cmd[] = '/usr/bin/env git branch -a';
-        $command = join(' && ', $cmd);
-        $result = $this->runLocalCommand($command);
-        if (!$result) {
-            throw new \Exception('获取分支列表失败：' . $this->getExeLog());
+    public function getBranchList($branchDir = 'branches') {
+        $branchesDir = sprintf("%s/%s", rtrim(Project::getDeployFromDir(), '/'), $branchDir);
+        $list[] = [
+            'id' => 'trunk',
+            'message' => 'trunk',
+        ];
+        if (!file_exists($branchesDir) && !$this->updateRepo()) {
+            return $list;
         }
 
-        $history = [];
-        $list = explode(PHP_EOL, $this->getExeLog());
-        foreach ($list as &$item) {
-            $item = trim($item);
-            $remotePrefix = 'remotes/origin/';
-            $remoteHeadPrefix = 'remotes/origin/HEAD';
-
-            // 只取远端的分支，排除当前分支
-            if (strcmp(substr($item, 0, strlen($remotePrefix)), $remotePrefix) === 0
-                && strcmp(substr($item, 0, strlen($remoteHeadPrefix)), $remoteHeadPrefix) !== 0) {
-                $item = substr($item, strlen($remotePrefix));
-                $history[] = [
-                    'id'      => $item,
-                    'message' => $item,
-                ];
-            }
+        $branches = new \DirectoryIterator($branchesDir);
+        foreach ($branches as $branch) {
+            if ($branch->isDot() || $branch->isFile()) continue;
+            $list[] = [
+                'id' => $branch->__toString(),
+                'message' => $branch->__toString(),
+            ];
         }
 
-        return $history;
+        return $list;
     }
 
     /**
@@ -150,6 +148,11 @@ class Git extends Command {
             ];
         }
         return $history;
+    }
+
+    private function _getSvnCmd($cmd) {
+        return sprintf("/usr/bin/env %s  --username %s --password %s",
+            $cmd, $this->config->repo_username, $this->config->repo_password);
     }
 
 }

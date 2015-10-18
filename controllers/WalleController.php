@@ -9,6 +9,7 @@
 
 namespace app\controllers;
 
+use app\components\Repo;
 use yii;
 use yii\data\Pagination;
 use app\components\Command;
@@ -189,10 +190,11 @@ class WalleController extends Controller {
      * @param $projectId
      */
     public function actionGetBranch($projectId) {
-        $git = new Git();
         $conf = Project::getConf($projectId);
-        $git->setConfig($conf);
-        $list = $git->getBranchList();
+
+        $version = Repo::getRevision($conf->repo_type);
+        $version->setConfig($conf);
+        $list = $version->getBranchList();
 
         $this->renderJson($list);
     }
@@ -206,7 +208,7 @@ class WalleController extends Controller {
         $git = new Git();
         $conf = Project::getConf($projectId);
         $git->setConfig($conf);
-        if ($conf->repo_type == Project::GIT_TAG) {
+        if ($conf->repo_mode == Project::REPO_TAG) {
             $list = $git->getTagList();
         } else {
             $list = $git->getCommitList($branch);
@@ -293,13 +295,13 @@ class WalleController extends Controller {
      */
     private function _gitUpdate() {
         // 更新代码文件
-        $git = new Git();
+        $revision = Repo::getRevision($this->conf->repo_type);
         $sTime = Command::getMs();
-        $ret = $git->setConfig($this->conf)
-            ->updateToVersion($this->task->branch, $this->task->commit_id, $this->task->link_id); // 更新到指定版本
+        $ret = $revision->setConfig($this->conf)
+            ->updateToVersion($this->task); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($git, $this->task->id, Record::ACTION_CLONE, $duration);
+        Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration);
 
         if (!$ret) throw new \Exception('更新代码文件出错');
         return true;

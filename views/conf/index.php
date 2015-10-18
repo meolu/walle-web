@@ -40,7 +40,7 @@ $this->title = '项目配置';
                 <tr>
                     <td><?= $item['name'] ?></td>
                     <td><?= \Yii::t('status', 'conf_level_' . $item['level']) ?></td>
-                    <td><?= $item['repo_type'] ?></td>
+                    <td><?= $item['repo_mode'] ?></td>
                     <td><?= $item['audit'] ? '是' : '否' ?></td>
                     <td><?= \Yii::t('status', 'conf_status_' . $item['status']) ?></td>
                     <td class="<?= \Yii::t('status', 'conf_status_' . $item['status'] . '_color') ?>">

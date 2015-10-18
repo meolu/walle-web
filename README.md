@@ -36,33 +36,42 @@ cd walle-web
 vi config/web.php # 设置mysql连接
 composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
 ./yii migrate/up  # 导入数据库
+配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
 快速开始
 -------
-* nginx/apache的webroot配置指向`walle-web/web`
-* 配置邮箱（试用之后需要更改为自己的企业邮箱smtp，可跳过）
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
+* 开发者注册用户(已有`demo/demo`)，提交上线单
+* 管理员审核上线单
+* 开发者发起上线
+
+高级自定义
+--------
+此时你可能考虑要作为一个公司内部新项目的试用版本，那么你将需要做以下的处理，更适合业务需求。
+
+* 配置允许注册的邮箱后缀  
     ```php
     vi config/params.php
-    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
-    'mail-suffix'   => [                        // 允许注册的邮箱后缀
-        'huamanshu.com',                        // 如果想用qq邮箱注册，请更改为qq.com
+    'mail-suffix'   => [  // 允许注册的邮箱后缀，一般为公司邮箱后缀，可多个
+        'huamanshu.com',  // 如：只允许花满树邮箱注册
     ]
+    ```
 
+* 配置企业邮箱smtp
+    ```php
     vi config/web.php +25
     # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
-    'host'       => 'ip or host',            # smtp 发件地址
+    'host'       => 'smtp.huamanshu.com',    # smtp 发件地址
     'username'   => 'service@huamanshu.com', # smtp 发件用户名
     'password'   => 'password',              # smtp 发件人的密码
     'port'       => 25,                      # smtp 端口
     'encryption' => 'tls',                   # smtp 协议
-    ```
-* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
-* 有公司邮箱的开发者注册(已有`demo/demo`)，提交上线任务
-* 管理员审核上线任务
-* 开发者发起上线
 
+    vi config/params.php
+    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    ```
 
 To Do List
 ----------

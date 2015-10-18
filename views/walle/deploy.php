@@ -106,6 +106,14 @@ use \app\models\Task;
             }
             timer = setInterval(getProcess, 600);
         })
+
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?5fc7354aff3dd67a6435818b8ef02b52";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
     })
 
 </script>

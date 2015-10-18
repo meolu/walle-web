@@ -20,6 +20,8 @@ use yii\db\Expression;
  * @property string $commit_id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $branch
+ * @property string $file_list
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -80,9 +82,10 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'project_id', 'status', 'title', 'commit_id'], 'required'],
+            [['user_id', 'project_id', 'status', 'title'], 'required'],
             [['user_id', 'project_id', 'action', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+            [['file_list'], 'string'],
             [['title', 'link_id', 'ex_link_id', 'commit_id', 'branch'], 'string', 'max' => 100],
         ];
     }
