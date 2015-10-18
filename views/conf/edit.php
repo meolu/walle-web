@@ -15,10 +15,6 @@ use yii\widgets\ActiveForm;
         <?= $form->field($conf, 'name')
             ->textInput([
                 'class'          => 'col-xs-11',
-                'placeholder'    => 'git@github.com:meolu/walle-web.git',
-                'data-placement' => 'top',
-                'data-rel'       => 'tooltip',
-                'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
             ])
             ->label('项目名字:', ['class' => 'control-label bolder blue col-xs-1']) ?>
 
@@ -58,7 +54,7 @@ use yii\widgets\ActiveForm;
                 'placeholder'    => 'git@github.com:meolu/walle-web.git',
                 'data-placement' => 'top',
                 'data-rel'       => 'tooltip',
-                'data-title'     => '支持svn。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                'data-title'     => '支持git/svn。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
             ])
             ->label('地址:', ['class' => 'control-label bolder blue col-xs-1']) ?>
         <!-- 地址 配置 end-->
@@ -68,26 +64,18 @@ use yii\widgets\ActiveForm;
         <?= $form->field($conf, 'repo_username')
             ->textInput([
                 'class'          => 'col-xs-3',
-                'placeholder'    => 'git@github.com:meolu/walle-web.git',
-                'data-placement' => 'top',
-                'data-rel'       => 'tooltip',
-                'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
             ])
             ->label('用户名:', ['class' => 'control-label bolder blue col-xs-1']) ?>
         <?= $form->field($conf, 'repo_password')
             ->textInput([
                 'class'          => 'col-xs-3',
-                'placeholder'    => 'git@github.com:meolu/walle-web.git',
-                'data-placement' => 'top',
-                'data-rel'       => 'tooltip',
-                'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
             ])
             ->label('密码:', ['class' => 'control-label bolder blue col-xs-1']); ?>
         </div>
         <div class="clearfix"></div>
 
         <?php } ?>
-        <?= $form->field($conf, 'name')
+        <?= $form->field($conf, 'repo_type')
             ->hiddenInput()
             ->label('') ?>
 
