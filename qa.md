@@ -60,3 +60,27 @@ server {
     }
 }
 ```
+
+
+apache简单配置
+----------------
+
+```
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule php5_module        /usr/lib64/httpd/modules/libphp5.so
+<FilesMatch \.php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
+<VirtualHost *:80>
+ServerName walle.*.com
+DocumentRoot /code/walle-web/web
+ErrorLog logs/dev.-error.log
+CustomLog logs/dev.-accesslog common
+    <Directory "/code/walle-web/web">
+      Options  FollowSymLinks
+        AllowOverride ALL
+        Order allow,deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+```
