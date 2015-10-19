@@ -21,21 +21,37 @@ use app\models\Project;
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
               </label>
               <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
-                  <option value="truck">trunk</option>
+                  <option value="trunk">trunk</option>
               </select>
           </div>
         <?php } ?>
+          <div>
+          <div class="form-group col-xs-3">
+              <label class="control-label bolder blue">前提交历史</label>
+              <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
+              <select name="i_don_not_care_this" id="start" class="form-control select2 col-xs-3 history-list">
+              </select>
+          </div>
+          <div class="form-group col-xs-3">
+              <label class="control-label bolder blue">后提交历史</label>
+              <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
+              <select name="Task[commit_id]" id="end" class="form-control select2 col-xs-3 history-list">
+              </select>
+          </div>
+          </div>
+          <div class="clearfix"></div>
+
         <!-- 分支选取 end -->
 
           <?= $form->field($task, 'file_list')
               ->textarea([
+                  'rows'           => 12,
                   'placeholder'    => 'index.php  1234',
-                  'data-placement' => 'top',
-                  'data-rel'       => 'tooltip',
-                  'data-title'     => '所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task），一行一条(双引号将会被转义为\")',
                   'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
+                  'onchange'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
+                  'onblur'         => "clearInterval(this.clock);",
               ])
-              ->label('文件列表', ['class' => 'control-label bolder blue']) ?>
+              ->label('文件列表<i class="getting-change-files icon-spinner icon-spin orange bigger-125" style="display: none"></i>', ['class' => 'control-label bolder blue']) ?>
       </div><!-- /.box-body -->
 
       <div class="box-footer">
@@ -67,6 +83,7 @@ use app\models\Project;
 
 <script type="text/javascript">
     jQuery(function($) {
+        var projectId =  <?= (int)$_GET['projectId'] ?>;
         function getBranchList() {
             $('.get-branch').show();
             $('.tip').hide();
@@ -88,29 +105,55 @@ use app\models\Project;
             });
         }
 //
-//        function getCommitList() {
-//            $.get("/walle/get-commit-history?projectId=" + <?//= (int)$_GET['projectId'] ?>// +"&branch=" + $('#branch').val(), function (data) {
-//                // 获取commit log失败
-//                if (data.code) {
-//                    showError(data.msg);
-//                }
-//
-//                var select = '';
-//                $.each(data.data, function (key, value) {
-//                    select += '<option value="' + value.id + '">' + value.message + '</option>';
-//                })
-//                $('#task-commit_id').html(select);
-//                $('.get-history').hide()
-//            });
-//        }
+        function getCommitList() {
+            $.get("/walle/get-commit-history?projectId=" + <?= (int)$_GET['projectId'] ?> +"&branch=" + $('#branch').val(), function (data) {
+                // 获取commit log失败
+                if (data.code) {
+                    showError(data.msg);
+                }
+
+                var select = '';
+                $.each(data.data, function (key, value) {
+                    select += '<option value="' + value.id + '">' + value.author + ' - ' + value.message + '</option>';
+                })
+                $('.history-list').html(select);
+                $('.getting-history').hide()
+            });
+        }
+
+        function getChangeFiles(projectId, branch, start, end) {
+            $.get("/walle/get-commit-file?projectId=" + projectId +"&branch=" + branch + "&start=" + start + "&end=" + end, function (data) {
+                // 获取commit log失败
+                if (data.code) {
+                    showError(data.msg);
+                }
+
+                var files = '';
+                $.each(data.data, function (key, value) {
+                    files += value + "\n";
+                })
+                $('#task-file_list').html(files);
+                $('.getting-change-files').hide();
+            });
+        }
 
         $('#branch').change(function() {
-            $('.get-history').show();
-//            getCommitList();
+            $('.getting-history').show();
+            getCommitList();
+        })
+
+        // 选择两个commit_id之间提交的文件
+        $('.history-list').change(function() {
+            var startId = $('#start').val();
+            var endId   = $('#end').val();
+            $('.getting-change-files').show();
+            getChangeFiles(projectId, $('#branch').val(), startId, endId);
         })
 
         // 页面加载完默认拉取trunk
         getBranchList();
+        // 页面加载完默认拉取trunk
+        getCommitList();
 
         // 查看所有分支提示
         $('.show-tip')

@@ -33,6 +33,14 @@ Your requirements could not be resolved to an installable set of packages.
 
 **解决办法**：`composer global require "fxp/composer-asset-plugin:*"`
 
+如何添加用户key到git的ssh-keys列表
+-------------------------------
+```
+su - www                 # 假如www为你的php进程用户
+ssh-keygen -t rsa        # 如果你都没有生成过rsa_key的话
+cat ~/.ssh/id_rsa.pub    # 复制
+打开github/gitlab添加到你的ssh-keys或者deploy-keys里
+```
 
 nginx简单配置
 ----------------

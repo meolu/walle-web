@@ -66,6 +66,7 @@ class Svn extends Command {
 
     /**
      * 获取分支列表
+     * 可能后期要换成 svn ls http://xxx/branches
      *
      * @return array
      */
@@ -81,10 +82,12 @@ class Svn extends Command {
 
         $branches = new \DirectoryIterator($branchesDir);
         foreach ($branches as $branch) {
+            $name = $branch->__toString();
             if ($branch->isDot() || $branch->isFile()) continue;
+            if ('.svn' == $name) continue;
             $list[] = [
-                'id' => $branch->__toString(),
-                'message' => $branch->__toString(),
+                'id' => $name,
+                'message' => $name,
             ];
         }
 
@@ -96,30 +99,44 @@ class Svn extends Command {
      *
      * @return array
      */
-    public function getCommitList($branch = 'master', $count = 20) {
+    public function getCommitList($branch = 'master', $count = 30) {
         // 先更新
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
-        $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty="%h - %an %s" ';
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch));
+        $cmd[] = $this->_getSvnCmd('svn log --xml -l' . $count);
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
             throw new \Exception('获取提交历史失败：' . $this->getExeLog());
         }
 
-        $history = [];
         // 总有一些同学没有团队协作意识，不设置好编码：(
         $log = GlobalHelper::convert2Utf8($this->getExeLog());
-        $list = explode(PHP_EOL, $log);
-        foreach ($list as $item) {
-            $commitId = substr($item, 0, strpos($item, '-') - 1);
-            $history[] = [
-                'id'      => $commitId,
-                'message' => $item,
-            ];
+        return array_values(static::formatXmlLog($log));
+    }
+
+    /**
+     * 获取commit之间的文件
+     *
+     * @return array
+     */
+    public function getFileBetweenCommits($branch, $star, $end) {
+        // 先更新
+        $destination = Project::getDeployFromDir();
+        $this->updateRepo($branch, $destination);
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch));
+        $cmd[] = $this->_getSvnCmd(sprintf('svn diff -r %d:%d --summarize', $star, $end));
+        $command = join(' && ', $cmd);
+        $result = $this->runLocalCommand($command);
+        if (!$result) {
+            throw new \Exception('获取提交历史失败：' . $this->getExeLog());
         }
-        return $history;
+
+        $files = StringHelper::explode($this->getExeLog(), PHP_EOL);
+        return array_map(function($item) {
+            return trim(substr($item, strpos($item, " ")));
+        }, $files);
     }
 
     /**
@@ -150,8 +167,38 @@ class Svn extends Command {
         return $history;
     }
 
+    /**
+     * 格式化svn log xml 2 array
+     *
+     * @param $xmlString
+     * @return array
+     */
+    public static function formatXmlLog($xmlString) {
+        $history = [];
+        $xml = simplexml_load_string($xmlString);
+        foreach ($xml as $item) {
+            $attr = $item->attributes();
+            $id   = $attr->__toString();
+
+            $history[$id] = [
+                'id' => $id,
+                'date' => $item->date->__toString(),
+                'author' => $item->author->__toString(),
+                'message' => $item->msg->__toString(),
+            ];
+        }
+        return $history;
+    }
+
+    public static function getBranchDir($branch, $tag = false) {
+        $svnDir = Project::getDeployFromDir();
+        $branchDir = $branch == 'trunk' && !$tag
+            ? $branch
+            : ($tag ? 'tags/'.$branch : 'branches/'.$branch);
+        return sprintf('%s/%s', $svnDir, $branchDir);
+    }
     private function _getSvnCmd($cmd) {
-        return sprintf("/usr/bin/env %s  --username %s --password %s",
+        return sprintf("/usr/bin/env %s  --username %s --password %s --non-interactive",
             $cmd, $this->config->repo_username, $this->config->repo_password);
     }
 
