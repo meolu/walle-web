@@ -29,7 +29,7 @@ use app\models\Project;
 
           <?= $form->field($task, 'file_list')
               ->textarea([
-                  'placeholder'    => 'index.php -r 1234',
+                  'placeholder'    => 'index.php  1234',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
                   'data-title'     => '所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task），一行一条(双引号将会被转义为\")',
