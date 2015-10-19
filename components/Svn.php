@@ -52,15 +52,14 @@ class Svn extends Command {
         $cmd[] = $this->_getSvnCmd(sprintf('svn checkout %s/%s .', $this->getConfig()->repo_url, $branch));
         // 更新指定文件到指定版本，并复制到同步目录
         foreach ($fileAndVersion as $assign) {
+            if (in_array($assign[0], ['.', '..'])) continue;
             $cmd[] = $this->_getSvnCmd(sprintf('svn up %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
-            // 此处有可能会cp -f失败，看shell吧，到时再看要不要做兼容
+            // 此处有可能会cp -f失败
             $filePath = sprintf('%s/%s', $versionSvnDir, $assign[0]);
-            if (is_dir($filePath)) {
-                $cmd[] = sprintf('mkdir -p %s/%s', Project::getDeployWorkspace($task->link_id), $assign[0]);
-            } elseif (is_dir(dirname($filePath))) {
-                $cmd[] = sprintf('mkdir -p %s/%s', Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
-            }
-            $cmd[] = sprintf('cp -rf %s %s/%s', $assign[0], Project::getDeployWorkspace($task->link_id), $assign[0]);
+            $cmd[] = sprintf('test -d %s && mkdir -p %s/%s || (test -d %s && mkdir -p %s/%s)',
+                $filePath, Project::getDeployWorkspace($task->link_id), $assign[0],
+                dirname($filePath), Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
+            $cmd[] = sprintf('cp -rf %s %s/%s', rtrim($assign[0], '/'), Project::getDeployWorkspace($task->link_id), rtrim($assign[0], '/'));
         }
         $command = join(' && ', $cmd);
 
