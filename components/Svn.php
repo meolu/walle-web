@@ -54,7 +54,10 @@ class Svn extends Command {
         foreach ($fileAndVersion as $assign) {
             $cmd[] = $this->_getSvnCmd(sprintf('svn up %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
             // 此处有可能会cp -f失败，看shell吧，到时再看要不要做兼容
-            if (strpos(dirname($assign[0]), DIRECTORY_SEPARATOR) !== false) {
+            $filePath = sprintf('%s/%s', $versionSvnDir, $assign[0]);
+            if (is_dir($filePath)) {
+                $cmd[] = sprintf('mkdir -p %s/%s', Project::getDeployWorkspace($task->link_id), $assign[0]);
+            } elseif (is_dir(dirname($filePath))) {
                 $cmd[] = sprintf('mkdir -p %s/%s', Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
             }
             $cmd[] = sprintf('cp -rf %s %s/%s', $assign[0], Project::getDeployWorkspace($task->link_id), $assign[0]);
