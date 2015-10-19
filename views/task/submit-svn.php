@@ -15,7 +15,7 @@ use app\models\Project;
         <!-- 分支选取 -->
         <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
           <div class="form-group">
-              <label>选取分支
+              <label class="control-label bolder blue">选取分支
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>
                   <span class="tip">查看所有分支</span>
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
@@ -35,7 +35,7 @@ use app\models\Project;
                   'data-title'     => '所有目标机器都部署完毕之后，做一些清理工作，如删除缓存、重启服务（nginx、php、task），一行一条(双引号将会被转义为\")',
                   'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
               ])
-              ->label('post_release', ['class' => 'control-label bolder']) ?>
+              ->label('文件列表', ['class' => 'control-label bolder blue']) ?>
       </div><!-- /.box-body -->
 
       <div class="box-footer">
