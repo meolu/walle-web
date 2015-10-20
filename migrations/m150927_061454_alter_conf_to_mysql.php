@@ -10,7 +10,7 @@ class m150927_061454_alter_conf_to_mysql extends Migration
     public function up()
     {
         $this->dropColumn('conf', 'conf');
-        $this->addColumn('conf', 'repo_url', Schema::TYPE_STRING . '(200) DEFAULT "" COMMENT "git地址"');
+        $this->addColumn('conf', 'git_url', Schema::TYPE_STRING . '(200) DEFAULT "" COMMENT "git地址"');
         $this->addColumn('conf', 'deploy_from', Schema::TYPE_STRING . '(200) NOT NULL COMMENT "宿主机存放clone出来的文件"');
         $this->addColumn('conf', 'excludes', Schema::TYPE_STRING . '(500) DEFAULT "" COMMENT "要排除的文件"');
         $this->addColumn('conf', 'release_user', Schema::TYPE_STRING . '(50) NOT NULL COMMENT "目标机器用户"');
