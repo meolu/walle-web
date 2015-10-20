@@ -54,12 +54,13 @@ class Svn extends Command {
         foreach ($fileAndVersion as $assign) {
             if (in_array($assign[0], ['.', '..'])) continue;
             $cmd[] = $this->_getSvnCmd(sprintf('svn up %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
-            // 此处有可能会cp -f失败
-            $filePath = sprintf('%s/%s', $versionSvnDir, $assign[0]);
-            $cmd[] = sprintf('test -d %s && mkdir -p %s/%s || (test -d %s && mkdir -p %s/%s)',
-                $filePath, Project::getDeployWorkspace($task->link_id), $assign[0],
-                dirname($filePath), Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
-            $cmd[] = sprintf('cp -rf %s %s/%s', rtrim($assign[0], '/'), Project::getDeployWorkspace($task->link_id), rtrim($assign[0], '/'));
+            // 多层目录需要先新建父目录，否则复制失败
+            if (strpos($assign[0], '/') !== false) {
+                $cmd[] = sprintf('mkdir -p %s/%s',
+                    Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
+            }
+            $cmd[] = sprintf('cp -rf %s %s/%s',
+                rtrim($assign[0], '/'), Project::getDeployWorkspace($task->link_id), dirname($assign[0]));
         }
         $command = join(' && ', $cmd);
 
@@ -135,10 +136,19 @@ class Svn extends Command {
             throw new \Exception('获取提交历史失败：' . $this->getExeLog());
         }
 
+        $list = [];
         $files = StringHelper::explode($this->getExeLog(), PHP_EOL);
-        return array_map(function($item) {
+        $files = array_map(function($item) {
             return trim(substr($item, strpos($item, " ")));
         }, $files);
+        // 排除点文件
+        unset($files[array_search('.', $files)]);
+        foreach ($files as $key => $file) {
+            // 如果是目录，则目录下的文件则可以不带了
+            if (in_array(dirname($file), $files)) continue;
+            $list[] = $file;
+        }
+        return $list;
     }
 
     /**
