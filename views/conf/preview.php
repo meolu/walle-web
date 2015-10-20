@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> git地址 </div>
 
         <div class="profile-info-value">
-            <span><?= $conf->git_url ?></span>
+            <span><?= $conf->repo_url ?></span>
         </div>
     </div>
 
@@ -127,7 +127,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> 上线方式 </div>
 
         <div class="profile-info-value">
-            <span><?= $conf->git_type ?></span>
+            <span><?= $conf->repo_mode ?></span>
         </div>
     </div>
 

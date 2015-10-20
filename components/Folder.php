@@ -19,21 +19,33 @@ class Folder extends Command {
      * @return bool
      */
     public function initLocalWorkspace($version) {
-        $command = 'mkdir -p ' . Project::getDeployWorkspace($version);
+        $cmd[] = 'mkdir -p ' . Project::getDeployWorkspace($version);
+        if ($this->config->repo_type == Project::REPO_SVN) {
+            $cmd[] = sprintf('mkdir -p %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
+        }
+        $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
 
     /**
      * 目标机器的版本库初始化
+     * 这里会有点特殊化：
+     * 1.git只需要生成版本目录即可
+     * 2.svn还需要把线上版本复制到1生成的版本目录中，做增量发布
      *
      * @author wushuiyong
      * @param $log
      * @return bool
      */
     public function initRemoteVersion($version) {
-        $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir($version));
-        return $this->runRemoteCommand($command);
+        $cmd[] = sprintf('mkdir -p %s', Project::getReleaseVersionDir($version));
+        if ($this->config->repo_type == Project::REPO_SVN) {
+            $cmd[] = sprintf('test -d %s && cp -rf %s/* %s/ || echo 1', // 无论如何总得要$?执行成功
+                $this->config->release_to, $this->config->release_to, Project::getReleaseVersionDir($version));
+        }
+        $command = join(' && ', $cmd);
 
+        return $this->runRemoteCommand($command);
     }
 
     /**
@@ -64,7 +76,7 @@ class Folder extends Command {
      */
     public function getLinkCommand($version) {
         $user = $this->getConfig()->release_user;
-        $project = Project::getGitProjectName($this->getConfig()->git_url);
+        $project = Project::getGitProjectName($this->getConfig()->repo_url);
         $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
         // 遇到回滚，则使用回滚的版本version
         $linkFrom = Project::getReleaseVersionDir($version);
@@ -111,8 +123,11 @@ class Folder extends Command {
      * @return bool|int
      */
     public function cleanUp($version) {
-        $command = "rm -rf " . Project::getDeployWorkspace($version);
-
+        $cmd[] = "rm -rf " . Project::getDeployWorkspace($version);
+        if ($this->config->repo_type == Project::REPO_SVN) {
+            $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
+        }
+        $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
 }

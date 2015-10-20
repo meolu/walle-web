@@ -72,12 +72,13 @@ class TaskController extends Controller {
                 $task->project_id = $projectId;
                 $task->status = $status;
                 if ($task->save()) {
-                    $this->redirect('/task/');
+                    return $this->redirect('/task/');
                 }
             }
         }
         if ($projectId) {
-            return $this->render('submit', [
+            $tpl = $conf->repo_type == Project::REPO_GIT ? 'submit-git' : 'submit-svn';
+            return $this->render($tpl, [
                 'task' => $task,
                 'conf' => $conf,
             ]);

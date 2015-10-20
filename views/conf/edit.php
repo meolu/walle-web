@@ -6,28 +6,79 @@ $this->title = '配置项目';
 use app\models\Project;
 use yii\widgets\ActiveForm;
 ?>
+<style>
+    .control-label {text-align: right;}
+</style>
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
     <div class="box-body">
         <?= $form->field($conf, 'name')
-            ->label('项目名字<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-
-        <!-- git 配置-->
-        <?= $form->field($conf, 'git_url')
             ->textInput([
-                'placeholder'    => 'git@github.com:meolu/walle-web.git',
-                'data-placement' => 'top',
-                'data-rel'       => 'tooltip',
-                'data-title'     => '支持gitlab、bitbucket、github。格式 ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+                'class'          => 'col-xs-11',
             ])
-            ->label('git地址<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
-        <!-- git 配置 end-->
+            ->label('项目名字:', ['class' => 'control-label bolder blue col-xs-1']) ?>
 
+        <div class="clearfix"></div>
         <?= $form->field($conf, 'level')->dropDownList([
             Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
             Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
             Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
-        ])->label('项目环境级别<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder blue']) ?>
+        ],[
+            'class'          => 'col-xs-11',])
+            ->label('项目环境:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+        <div class="clearfix"></div>
+        <?php if (empty($_GET['projectId'])) { ?>
+        <div class="widget-box transparent" id="recent-box" style="margin-top:15px">
+            <div class="tabbable no-border">
+                <h4 class="lighter smaller" style="float:left; margin: 9px 26px -19px 9px">
+                    <i class="icon-map-marker orange"></i>
+                    Repo
+                </h4>
+                <ul class="nav nav-tabs" id="recent-tab">
+                    <li class="active">
+                        <a data-toggle="tab" class="show-git" href="#repo-tab">Git</a>
+                    </li>
+
+                    <li class="">
+                        <a data-toggle="tab" class="show-svn" href="#repo-tab">Svn</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <?php } ?>
+
+        <!-- 地址 配置-->
+        <?= $form->field($conf, 'repo_url')
+            ->textInput([
+                'class'          => 'col-xs-11',
+                'placeholder'    => 'git@github.com:meolu/walle-web.git',
+                'data-placement' => 'top',
+                'data-rel'       => 'tooltip',
+                'data-title'     => '支持git/svn。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
+            ])
+            ->label('地址:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+        <!-- 地址 配置 end-->
+        <div class="clearfix"></div>
+        <?php if (empty($_GET['projectId']) || $conf->repo_type == Project::REPO_SVN) { ?>
+        <div class="username-password" style="<?= empty($_GET['projectId']) ? 'display:none' : '' ?>">
+        <?= $form->field($conf, 'repo_username')
+            ->textInput([
+                'class'          => 'col-xs-3',
+            ])
+            ->label('用户名:', ['class' => 'control-label bolder blue col-xs-1']) ?>
+        <?= $form->field($conf, 'repo_password')
+            ->textInput([
+                'class'          => 'col-xs-3',
+            ])
+            ->label('密码:', ['class' => 'control-label bolder blue col-xs-1']); ?>
+        </div>
+        <div class="clearfix"></div>
+
+        <?php } ?>
+        <?= $form->field($conf, 'repo_type')
+            ->hiddenInput()
+            ->label('') ?>
+
         <!-- 宿主机 配置-->
         <div class="row">
         <div class="col-sm-4">
@@ -99,7 +150,7 @@ use yii\widgets\ActiveForm;
                               'placeholder'    => '/var/releases',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本',
+                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本，请勿新建该目录，会自动创建软链',
                           ])
                           ->label('发布版本库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'hosts')
@@ -187,14 +238,14 @@ use yii\widgets\ActiveForm;
             <label class="control-label bolder blue">分支/tag上线:</label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="测试环境推荐选项，可以选择branch和commit" data-placement="right">
                 <label>
-                    <input name="Project[git_type]" value="<?= Project::GIT_BRANCH ?>" <?= $conf->git_type == Project::GIT_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_BRANCH ?>" <?= $conf->repo_mode == Project::REPO_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="仿真和生产环境推荐选项" data-placement="right">
                 <label>
-                    <input name="Project[git_type]" value="<?= Project::GIT_TAG ?>" <?= $conf->git_type == Project::GIT_TAG ? 'checked' : '' ?> type="radio" class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_TAG ?>" <?= $conf->repo_mode == Project::REPO_TAG ? 'checked' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
                 </label>
             </div>
@@ -227,5 +278,13 @@ use yii\widgets\ActiveForm;
     jQuery(function($) {
         $('[data-rel=tooltip]').tooltip({container:'body'});
         $('[data-rel=popover]').popover({container:'body'});
+        $('.show-git').click(function() {
+            $('.username-password').hide();
+            $('#project-repo_type').val('git')
+        })
+        $('.show-svn').click(function() {
+            $('.username-password').show();
+            $('#project-repo_type').val('svn')
+        })
     });
 </script>

@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '发起上线';
+$this->title = '提交上线单';
 use yii\widgets\ActiveForm;
 use app\models\Project;
 
@@ -13,7 +13,7 @@ use app\models\Project;
         <?= $form->field($task, 'title')->label('任务标题', ['class' => 'control-label bolder blue']) ?>
 
         <!-- 分支选取 -->
-        <?php if ($conf->git_type == Project::GIT_BRANCH) { ?>
+        <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
           <div class="form-group">
               <label>选取分支
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>

@@ -38,7 +38,12 @@ class GlobalHelper {
      * @return array
      */
     public static function str2arr($string, $delimiter = PHP_EOL) {
-        return array_map('trim', explode($delimiter, $string));
+        $items = explode($delimiter, $string);
+        foreach ($items as $key => &$item) {
+            $item = trim($item);
+            if (empty($item)) unset($items[$key]);
+        }
+        return $items;;
     }
 
     /**
@@ -74,4 +79,5 @@ class GlobalHelper {
             && \Yii::$app->user->identity->role == \app\models\User::ROLE_ADMIN
             && \Yii::$app->user->identity->status == \app\models\User::STATUS_ACTIVE;
     }
+
 }

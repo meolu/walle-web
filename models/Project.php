@@ -26,7 +26,8 @@ use yii\db\Expression;
  * @property string $pre_deploy
  * @property string $post_deploy
  * @property string $post_release
- * @property string $git_type
+ * @property string $repo_mode
+ * @property string $repo_type
  * @property integer $audit
  */
 class Project extends \yii\db\ActiveRecord
@@ -48,9 +49,13 @@ class Project extends \yii\db\ActiveRecord
 
     const AUDIT_NO = 2;
 
-    const GIT_BRANCH = 'branch';
+    const REPO_BRANCH = 'branch';
 
-    const GIT_TAG = 'tag';
+    const REPO_TAG = 'tag';
+
+    const REPO_GIT = 'git';
+
+    const REPO_SVN = 'svn';
 
     public static $CONF;
 
@@ -89,14 +94,16 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'git_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts'], 'required'],
+            [['user_id', 'repo_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts'], 'required'],
             [['user_id', 'level', 'status', 'audit'], 'integer'],
             [['excludes', 'hosts', 'pre_deploy', 'post_deploy', 'pre_release', 'post_release'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 100],
+            [['name', 'repo_password'], 'string', 'max' => 100],
             [['version'], 'string', 'max' => 20],
-            [['deploy_from', 'release_to', 'release_library', 'git_url'], 'string', 'max' => 200],
-            [['release_user', 'git_type'], 'string', 'max' => 50],
+            ['repo_type', 'default', 'value' => self::REPO_GIT],
+            [['deploy_from', 'release_to', 'release_library', 'repo_url'], 'string', 'max' => 200],
+            [['release_user', 'repo_mode', 'repo_username'], 'string', 'max' => 50],
+            [['repo_type'], 'string', 'max' => 10],
         ];
     }
 
@@ -123,7 +130,10 @@ class Project extends \yii\db\ActiveRecord
             'post_deploy'     => '宿主机同步前置任务',
             'pre_release'     => '目标机更新版本前置任务',
             'post_release'    => '目标机更新版本后置任务',
-            'git_type'        => '分支/tag',
+            'repo_url'        => 'git/svn地址',
+            'repo_username'   => 'svn用户名',
+            'repo_password'   => 'svn密码',
+            'repo_mode'       => '分支/tag',
             'audit'           => '任务需要审核？',
         ];
     }
@@ -152,7 +162,7 @@ class Project extends \yii\db\ActiveRecord
             return $match[1];
         }
 
-        return $gitUrl;
+        return basename($gitUrl);;
     }
 
     /**
@@ -164,7 +174,7 @@ class Project extends \yii\db\ActiveRecord
     public static function getDeployWorkspace($version) {
         $from    = static::$CONF->deploy_from;
         $env     = isset(static::$LEVEL[static::$CONF->level]) ? static::$LEVEL[static::$CONF->level] : 'unknow';
-        $project = static::getGitProjectName(static::$CONF->git_url);
+        $project = static::getGitProjectName(static::$CONF->repo_url);
 
         return sprintf("%s/%s/%s-%s", rtrim($from, '/'), rtrim($env, '/'), $project, $version);
     }
@@ -178,7 +188,7 @@ class Project extends \yii\db\ActiveRecord
     public static function getDeployFromDir() {
         $from    = static::$CONF->deploy_from;
         $env     = isset(static::$LEVEL[static::$CONF->level]) ? static::$LEVEL[static::$CONF->level] : 'unknow';
-        $project = static::getGitProjectName(static::$CONF->git_url);
+        $project = static::getGitProjectName(static::$CONF->repo_url);
 
         return sprintf("%s/%s/%s", rtrim($from, '/'), rtrim($env, '/'), $project);
     }
@@ -194,7 +204,7 @@ class Project extends \yii\db\ActiveRecord
         $version = $version ?: static::$CONF->link_id;
 
         return sprintf('%s/%s/%s', rtrim(static::$CONF->release_library, '/'),
-            static::getGitProjectName(static::$CONF->git_url), $version);
+            static::getGitProjectName(static::$CONF->repo_url), $version);
     }
 
     /**
@@ -228,5 +238,7 @@ class Project extends \yii\db\ActiveRecord
         parent::afterDelete();
         // 删除所有该项目的关系
         Group::deleteAll(['project_id' => $this->attributes['id']]);
+        // 删除本地目录
+
     }
 }

@@ -9,6 +9,7 @@
 
 namespace app\controllers;
 
+use app\components\Repo;
 use yii;
 use yii\data\Pagination;
 use app\components\Command;
@@ -121,17 +122,20 @@ class WalleController extends Controller {
         $code = 0;
 
         // 本地git ssh-key是否加入deploy-keys列表
-        $git = new Git();
+        $revision = Repo::getRevision($project->repo_type);
         try {
-            $ret = $git->setConfig($project)->updateRepo();
+            $ret = $revision->setConfig($project)->updateRepo();
             if (!$ret) {
-                $code = -1;
-                $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库权限，
-                并且把ssh-key加入git的deploy-keys列表。详细错误：%s', Get_Current_User(), $git->getExeLog());
+                $code  = -1;
+                $error = $project->repo_type == Project::REPO_GIT
+                    ? '把ssh-key加入git的deploy-keys列表'
+                    : '用户名密码无误';
+                $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库%s读写权限，
+                并且%s。详细错误：%s<br>', Get_Current_User(), $project->deploy_from, $error, $revision->getExeLog());
             }
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('宿主机检测时发生系统错误：%s', $e->getMessage());
+            $log[] = sprintf('宿主机检测时发生系统错误：%s<br>', $e->getMessage());
         }
 
         // 权限与免密码登录检测
@@ -142,16 +146,16 @@ class WalleController extends Controller {
             $ret = $task->runRemoteTaskCommandPackage([$command]);
             if (!$ret) {
                 $code = -1;
-                $log[] = sprintf('目标机器代码检出检测出错，请确认php进程用户%s用户加入目标机器的%s用户ssh-key信任列表，
-                    且%s有目标机器发布版本库写入权限。详细错误：%s',
-                    Get_Current_User(), $project->release_user, $project->release_user, $task->getExeLog());
+                $log[] = sprintf('目标机器代码检出检测出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
+                    且%s有目标机器发布版本库%s写入权限。详细错误：%s<br>',
+                    Get_Current_User(), $project->release_user, $project->release_user, $project->release_to, $task->getExeLog());
             }
             // 清除
             $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
             $task->runRemoteTaskCommandPackage([$command]);
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('目标机检测时发生系统错误：%s', $e->getMessage());
+            $log[] = sprintf('目标机检测时发生系统错误：%s<br>', $e->getMessage());
         }
 
         // task 检测todo...
@@ -189,10 +193,11 @@ class WalleController extends Controller {
      * @param $projectId
      */
     public function actionGetBranch($projectId) {
-        $git = new Git();
         $conf = Project::getConf($projectId);
-        $git->setConfig($conf);
-        $list = $git->getBranchList();
+
+        $version = Repo::getRevision($conf->repo_type);
+        $version->setConfig($conf);
+        $list = $version->getBranchList();
 
         $this->renderJson($list);
     }
@@ -203,14 +208,28 @@ class WalleController extends Controller {
      * @param $projectId
      */
     public function actionGetCommitHistory($projectId, $branch = 'master') {
-        $git = new Git();
         $conf = Project::getConf($projectId);
-        $git->setConfig($conf);
-        if ($conf->git_type == Project::GIT_TAG) {
-            $list = $git->getTagList();
+        $revision = Repo::getRevision($conf->repo_type);
+        $revision->setConfig($conf);
+        if ($conf->repo_mode == Project::REPO_TAG && $conf->repo_type == Project::REPO_GIT) {
+            $list = $revision->getTagList();
         } else {
-            $list = $git->getCommitList($branch);
+            $list = $revision->getCommitList($branch);
         }
+        $this->renderJson($list);
+    }
+
+    /**
+     * 获取commit之间的文件
+     *
+     * @param $projectId
+     */
+    public function actionGetCommitFile($projectId, $start, $end, $branch = 'trunk') {
+        $conf = Project::getConf($projectId);
+        $revision = Repo::getRevision($conf->repo_type);
+        $revision->setConfig($conf);
+        $list = $revision->getFileBetweenCommits($branch, $start, $end);
+
         $this->renderJson($list);
     }
 
@@ -293,13 +312,13 @@ class WalleController extends Controller {
      */
     private function _gitUpdate() {
         // 更新代码文件
-        $git = new Git();
+        $revision = Repo::getRevision($this->conf->repo_type);
         $sTime = Command::getMs();
-        $ret = $git->setConfig($this->conf)
-            ->updateToVersion($this->task->branch, $this->task->commit_id, $this->task->link_id); // 更新到指定版本
+        $ret = $revision->setConfig($this->conf)
+            ->updateToVersion($this->task); // 更新到指定版本
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
-        Record::saveRecord($git, $this->task->id, Record::ACTION_CLONE, $duration);
+        Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration);
 
         if (!$ret) throw new \Exception('更新代码文件出错');
         return true;

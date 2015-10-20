@@ -29,7 +29,7 @@ class Git extends Command {
         else {
             $cmd[] = sprintf('mkdir -p %s ', $gitDir);
             $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->git_url);
+            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->repo_url);
             $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
@@ -42,12 +42,12 @@ class Git extends Command {
      * @param string $commit
      * @return bool
      */
-    public function updateToVersion($branch, $commit, $version) {
+    public function updateToVersion($task) {
         // 先更新
-        $destination = Project::getDeployWorkspace($version);
-        $this->updateRepo($branch, $destination);
+        $destination = Project::getDeployWorkspace($task->link_id);
+        $this->updateRepo($task->branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = sprintf('/usr/bin/env git reset %s', $commit);
+        $cmd[] = sprintf('/usr/bin/env git reset %s', $task->commit_id);
         $cmd[] = '/usr/bin/env git checkout .';
         $command = join(' && ', $cmd);
 

@@ -33,9 +33,30 @@ Your requirements could not be resolved to an installable set of packages.
 
 **解决办法**：`composer global require "fxp/composer-asset-plugin:*"`
 
+如何添加用户key到git的ssh-keys列表
+-------------------------------
+```
+su - www                 # 假如www为你的php进程用户
+ssh-keygen -t rsa        # 如果你都没有生成过rsa_key的话
+cat ~/.ssh/id_rsa.pub    # 复制
+打开github/gitlab添加到你的ssh-keys或者deploy-keys里
+```
 
-nginx简单配置
-----------------
+数据导入失败
+----------
+缺少pdo扩展，解决办法：添加pdo扩展
+```
+ubuntu
+apt-get install php5 php5-fpm php5-mysql
+
+或者在源码包里编译
+cd php-src/ext/pdo_mysql
+phpize
+./configure --with-php-config=/php/install/dir/bin/php-config
+make && make install
+vi php.ini # 添加pdo_mysql.so
+restart php-fpm
+```
 
 ```
 server {

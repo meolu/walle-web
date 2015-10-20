@@ -9,7 +9,7 @@ $config = [
     'components' => [
         'db' => [
             'class'     => 'yii\db\Connection',
-            'dsn'       => 'mysql:host=127.0.0.1;dbname=test',
+            'dsn'       => 'mysql:host=127.0.0.1;dbname=walle',
             'username'  => 'username',
             'password'  => 'password',
             'charset'   => 'utf8',
@@ -35,7 +35,7 @@ $config = [
             ],
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from'    => ['admin@humanshu.com' => '花满树出品']
+                'from'    => ['service@humanshu.com' => '花满树出品']
             ],
         ],
         'log'  => [
@@ -82,11 +82,6 @@ if (YII_ENV_DEV) {
     ];
     $config['modules']['gii'] = [
         'class'      => 'yii\gii\Module',
-        'generators' => [
-            'mongoDbModel' => [
-                'class' => 'yii\mongodb\gii\model\Generator'
-            ],
-        ],
     ];
 }
 
