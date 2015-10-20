@@ -284,7 +284,7 @@ use yii\widgets\ActiveForm;
         })
         $('.show-svn').click(function() {
             $('.username-password').show();
-            $('#project-repo_type').val('branch')
+            $('#project-repo_type').val('svn')
         })
     });
 </script>
