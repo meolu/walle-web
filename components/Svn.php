@@ -142,12 +142,15 @@ class Svn extends Command {
             return trim(substr($item, strpos($item, " ")));
         }, $files);
         // 排除点文件
-        unset($files[array_search('.', $files)]);
+        if (in_array('.', $files)) {
+            unset($files[array_search('.', $files)]);
+        }
         foreach ($files as $key => $file) {
             // 如果是目录，则目录下的文件则可以不带了
             if (in_array(dirname($file), $files)) continue;
             $list[] = $file;
         }
+
         return $list;
     }
 
