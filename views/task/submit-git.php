@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '发起上线';
+$this->title = '提交上线单';
 use yii\widgets\ActiveForm;
 use app\models\Project;
 

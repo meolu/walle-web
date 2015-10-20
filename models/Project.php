@@ -238,5 +238,7 @@ class Project extends \yii\db\ActiveRecord
         parent::afterDelete();
         // 删除所有该项目的关系
         Group::deleteAll(['project_id' => $this->attributes['id']]);
+        // 删除本地目录
+
     }
 }

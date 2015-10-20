@@ -101,7 +101,7 @@ class Task extends \yii\db\ActiveRecord
             'project_id' => 'Project ID',
             'action' => 'Action',
             'status' => 'Status',
-            'title' => 'Title',
+            'title' => '上线单标题',
             'link_id' => 'Link ID',
             'ex_link_id' => 'Ex Link ID',
             'commit_id' => 'Commit ID',
