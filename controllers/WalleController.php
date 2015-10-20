@@ -131,11 +131,11 @@ class WalleController extends Controller {
                     ? '把ssh-key加入git的deploy-keys列表'
                     : '用户名密码无误';
                 $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库%s读写权限，
-                并且%s。详细错误：%s', Get_Current_User(), $project->deploy_from, $error, $revision->getExeLog());
+                并且%s。详细错误：%s<br>', Get_Current_User(), $project->deploy_from, $error, $revision->getExeLog());
             }
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('宿主机检测时发生系统错误：%s', $e->getMessage());
+            $log[] = sprintf('宿主机检测时发生系统错误：%s<br>', $e->getMessage());
         }
 
         // 权限与免密码登录检测
@@ -147,7 +147,7 @@ class WalleController extends Controller {
             if (!$ret) {
                 $code = -1;
                 $log[] = sprintf('目标机器代码检出检测出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
-                    且%s有目标机器发布版本库%s写入权限。详细错误：%s',
+                    且%s有目标机器发布版本库%s写入权限。详细错误：%s<br>',
                     Get_Current_User(), $project->release_user, $project->release_user, $project->release_to, $task->getExeLog());
             }
             // 清除
@@ -155,7 +155,7 @@ class WalleController extends Controller {
             $task->runRemoteTaskCommandPackage([$command]);
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('目标机检测时发生系统错误：%s', $e->getMessage());
+            $log[] = sprintf('目标机检测时发生系统错误：%s<br>', $e->getMessage());
         }
 
         // task 检测todo...
@@ -211,7 +211,7 @@ class WalleController extends Controller {
         $conf = Project::getConf($projectId);
         $revision = Repo::getRevision($conf->repo_type);
         $revision->setConfig($conf);
-        if ($conf->repo_mode == Project::REPO_TAG) {
+        if ($conf->repo_mode == Project::REPO_TAG && $conf->repo_type == Project::REPO_GIT) {
             $list = $revision->getTagList();
         } else {
             $list = $revision->getCommitList($branch);

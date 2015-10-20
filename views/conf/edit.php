@@ -150,7 +150,7 @@ use yii\widgets\ActiveForm;
                               'placeholder'    => '/var/releases',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本',
+                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本，请勿新建该目录，会自动创建软链',
                           ])
                           ->label('发布版本库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'hosts')

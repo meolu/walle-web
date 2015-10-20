@@ -13,7 +13,6 @@ use app\models\Project;
         <?= $form->field($task, 'title')->label('任务标题', ['class' => 'control-label bolder blue']) ?>
 
         <!-- 分支选取 -->
-        <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
           <div class="form-group">
               <label class="control-label bolder blue">选取分支
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>
@@ -21,10 +20,11 @@ use app\models\Project;
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
               </label>
               <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
+                  <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
                   <option value="trunk">trunk</option>
+                  <?php } ?>
               </select>
           </div>
-        <?php } ?>
           <div>
           <div class="form-group col-xs-3">
               <label class="control-label bolder blue">前提交历史</label>
@@ -102,6 +102,7 @@ use app\models\Project;
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
+                getCommitList();
             });
         }
 //
@@ -114,7 +115,7 @@ use app\models\Project;
 
                 var select = '';
                 $.each(data.data, function (key, value) {
-                    select += '<option value="' + value.id + '">' + value.author + ' - ' + value.message + '</option>';
+                    select += '<option value="' + value.id + '">' + value.message + '</option>';
                 })
                 $('.history-list').html(select);
                 $('.getting-history').hide()
@@ -153,7 +154,10 @@ use app\models\Project;
         // 页面加载完默认拉取trunk
         getBranchList();
         // 页面加载完默认拉取trunk
-        getCommitList();
+        if ($('#branch').val()) {
+            getCommitList();
+        }
+
 
         // 查看所有分支提示
         $('.show-tip')

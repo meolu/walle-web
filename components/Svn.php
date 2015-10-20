@@ -16,7 +16,7 @@ class Svn extends Command {
     public function updateRepo($branch = 'trunk', $svnDir = null) {
         $svnDir = $svnDir ?: Project::getDeployFromDir();
         $dotSvn = rtrim($svnDir, '/') . '/.svn';
-        // 存在git目录，直接pull
+        // 存在svn目录，直接update
         if (file_exists($dotSvn)) {
             $cmd[] = sprintf('cd %s ', $svnDir);
             $cmd[] = $this->_getSvnCmd('svn up');
@@ -45,7 +45,8 @@ class Svn extends Command {
         foreach ($copy as $file) {
             $fileAndVersion[] = StringHelper::explode($file, " ", true, true);
         }
-        $branch = strcmp($task->branch, 'trunk') === 0 ? $task->branch : 'branches/' . $task->branch;
+        $branch = $task->branch == 'trunk' ? $task->branch
+            : ($this->getConfig()->repo_mode == Project::REPO_BRANCH ? 'branches/' : 'tags/') . $task->branch;
         // 先更新
         $versionSvnDir = sprintf('%s-svn', rtrim(Project::getDeployWorkspace($task->link_id), '/'));
         $cmd[] = sprintf('cd %s ', $versionSvnDir);
@@ -68,22 +69,27 @@ class Svn extends Command {
     }
 
     /**
-     * 获取分支列表
+     * 获取分支/tag列表
      * 可能后期要换成 svn ls http://xxx/branches
      *
      * @return array
      */
-    public function getBranchList($branchDir = 'branches') {
-        $branchesDir = sprintf("%s/%s", rtrim(Project::getDeployFromDir(), '/'), $branchDir);
-        $list[] = [
-            'id' => 'trunk',
-            'message' => 'trunk',
-        ];
-        if (!file_exists($branchesDir) && !$this->updateRepo()) {
-            return $list;
+    public function getBranchList() {
+        $list = [];
+        $branchDir = 'tags';
+        if ($this->getConfig()->repo_mode == Project::REPO_BRANCH) {
+            $list[] = [
+                'id' => 'trunk',
+                'message' => 'trunk',
+            ];
+            $branchDir = 'branches';
         }
+        $svnType = sprintf("%s/%s", rtrim(Project::getDeployFromDir(), '/'), $branchDir);
 
-        $branches = new \DirectoryIterator($branchesDir);
+        // 更新
+        $this->updateRepo();
+
+        $branches = new \DirectoryIterator($svnType);
         foreach ($branches as $branch) {
             $name = $branch->__toString();
             if ($branch->isDot() || $branch->isFile()) continue;
@@ -106,7 +112,7 @@ class Svn extends Command {
         // 先更新
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
-        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch));
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()->repo_mode == Project::REPO_TAG ?: false));
         $cmd[] = $this->_getSvnCmd('svn log --xml -l' . $count);
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -120,6 +126,35 @@ class Svn extends Command {
     }
 
     /**
+     * 获取tag记录
+     *
+     * @return array
+     */
+    public function getTagList($count = 20) {
+        $branchesDir = sprintf("%s/tags", rtrim(Project::getDeployFromDir(), '/'));
+        $list[] = [
+            'id'      => 'trunk',
+            'message' => 'trunk',
+        ];
+        if (!file_exists($branchesDir) && !$this->updateRepo()) {
+            return $list;
+        }
+
+        $branches = new \DirectoryIterator($branchesDir);
+        foreach ($branches as $branch) {
+            $name = $branch->__toString();
+            if ($branch->isDot() || $branch->isFile()) continue;
+            if ('.svn' == $name) continue;
+            $list[] = [
+                'id'      => $name,
+                'message' => $name,
+            ];
+        }
+
+        return $list;
+    }
+
+    /**
      * 获取commit之间的文件
      *
      * @return array
@@ -128,7 +163,7 @@ class Svn extends Command {
         // 先更新
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
-        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch));
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()->repo_mode == Project::REPO_TAG ?: false));
         $cmd[] = $this->_getSvnCmd(sprintf('svn diff -r %d:%d --summarize', $star, $end));
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -152,34 +187,6 @@ class Svn extends Command {
         }
 
         return $list;
-    }
-
-    /**
-     * 获取tag记录
-     *
-     * @return array
-     */
-    public function getTagList($count = 20) {
-        // 先更新
-        $this->updateRepo();
-        $destination = Project::getDeployFromDir();
-        $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = '/usr/bin/env git tag -l ';
-        $command = join(' && ', $cmd);
-        $result = $this->runLocalCommand($command);
-        if (!$result) {
-            throw new \Exception('获取tag记录失败：' . $this->getExeLog());
-        }
-
-        $history = [];
-        $list = explode(PHP_EOL, $this->getExeLog());
-        foreach ($list as $item) {
-            $history[] = [
-                'id'      => $item,
-                'message' => $item,
-            ];
-        }
-        return $history;
     }
 
     /**
@@ -212,6 +219,7 @@ class Svn extends Command {
             : ($tag ? 'tags/'.$branch : 'branches/'.$branch);
         return sprintf('%s/%s', $svnDir, $branchDir);
     }
+
     private function _getSvnCmd($cmd) {
         return sprintf("/usr/bin/env %s  --username %s --password %s --non-interactive",
             $cmd, $this->config->repo_username, $this->config->repo_password);
