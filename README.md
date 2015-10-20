@@ -3,7 +3,8 @@ Walle 瓦力 web部署系统
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！
-支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等均支持。
+
+支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。
 
 [官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md)，喜欢请为我标star吧：）
 
@@ -19,6 +20,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * 同步到各目标机器后收尾任务（如重启）
 * 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
+* 支持git、svn版本管理
 
 
 依赖
@@ -79,7 +81,6 @@ To Do List
 - 静态资源管理器
 - 邮件提醒：可配置提醒事件
 - 灰度发布：指定机器发布
-- 支持SVN版本管理
 - 引入websocket
 - 自定义公司logo
 - 自定义变量
