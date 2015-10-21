@@ -221,7 +221,7 @@ class Svn extends Command {
     }
 
     private function _getSvnCmd($cmd) {
-        return sprintf("/usr/bin/env %s  --username %s --password %s --non-interactive",
+        return sprintf("/usr/bin/env %s  --username %s --password %s --non-interactive --trust-server-cert ",
             $cmd, $this->config->repo_username, $this->config->repo_password);
     }
 
