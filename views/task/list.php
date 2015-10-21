@@ -74,8 +74,8 @@ use yii\widgets\LinkPager;
                         <?php } ?>
                         <!-- 回滚的任务不能再回滚-->
                         <?php if ($item['status'] == Task::STATUS_DONE && $item['action'] == Task::ACTION_ONLINE) { ?>
-                            <a href="javascript:;" class="brown">
-                                <i class="icon-reply bigger-130 task-rollback" data-id="<?= $item['id'] ?>"></i>回滚
+                            <a href="javascript:;" class="brown task-rollback">
+                                <i class="icon-reply bigger-130" data-id="<?= $item['id'] ?>"></i>回滚
                             </a>
                         <?php } ?>
                         <?php if ($item['status'] != Task::STATUS_DONE) { ?>
