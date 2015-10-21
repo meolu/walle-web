@@ -98,14 +98,14 @@ git pull
 #### 配置管理
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
 
-#### 注册发普通开发者和管理角色
-![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
-
 #### 提交上线任务
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
 
 #### 上线列表
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
+
+#### 宿主机、目标机群、操作用户关系
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-work.png)
 
 #### 上线流程图
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
