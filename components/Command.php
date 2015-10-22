@@ -58,7 +58,6 @@ abstract class Command {
         $log = implode(PHP_EOL, $log);
         $this->log = trim($log);
 
-        $this->log($command);
         $this->log($log);
         $this->log('---------------------------------');
 
