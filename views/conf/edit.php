@@ -101,7 +101,7 @@ use yii\widgets\ActiveForm;
                                   'data-rel'       => 'tooltip',
                                   'data-title'     => '代码的检出存放路径',
                               ])
-                          ->label('代码存储仓库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
+                          ->label('代码检出仓库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'excludes')
                           ->textarea([
                               'placeholder'    => '.git' . PHP_EOL . 'README.md',

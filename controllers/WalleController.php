@@ -72,7 +72,7 @@ class WalleController extends Controller {
                 $this->_updateRemoteServers($this->task->link_id);
                 $this->_cleanUp($this->task->link_id);
             } else {
-                $this->_link($this->task->ex_link_id);
+                $this->_rollback($this->task->ex_link_id);
             }
 
             /** 至此已经发布版本到线上了，需要做一些记录工作 */
@@ -146,7 +146,7 @@ class WalleController extends Controller {
             $ret = $task->runRemoteTaskCommandPackage([$command]);
             if (!$ret) {
                 $code = -1;
-                $log[] = sprintf('目标机器代码检出检测出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
+                $log[] = sprintf('目标机器部署出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
                     且%s有目标机器发布版本库%s写入权限。详细错误：%s<br>',
                     Get_Current_User(), $project->release_user, $project->release_user, $project->release_to, $task->getExeLog());
             }
@@ -418,6 +418,17 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($taskWorker, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
         if (!$ret) throw new \Exception('全量更新服务器出错');
+    }
+
+
+    /**
+     * 执行远程服务器任务集合回滚，只操作pre-release、link、post-release任务
+     *
+     * @param $version
+     * @throws \Exception
+     */
+    public function _rollback($version) {
+        $this->_updateRemoteServers($version);
     }
 
     /**
