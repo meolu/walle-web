@@ -48,7 +48,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
 快速开始
 -------
-* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目，[svn配置](https://github.com/meolu/walle-web/blob/master/config-svn.md)
 * 开发者注册用户(已有`demo/demo`)，提交上线单
 * 管理员审核上线单
 * 开发者发起上线
@@ -126,4 +126,4 @@ git pull
 -------
 - [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/qa.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
-- QQ（有问必答）: 482939318
+- QQ群: 482939318
