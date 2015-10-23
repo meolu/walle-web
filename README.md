@@ -1,4 +1,4 @@
-![](https://raw.github.com/meolu/walle-web/master/screenshots/logo.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/logo.jpg)
 
 Walle 瓦力 web部署系统
 ==========================
