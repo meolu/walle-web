@@ -3,10 +3,18 @@
 
 以下安装，均在**宿主机**（一台配置了LAMP/LNMP的linux机器，并且安装git/svn）上操作，如有问题，详见[Q&A](https://github.com/meolu/walle-web/blob/master/qa.md)
 
+依赖
+---
+
+* bash(git、ssh)
+* LNMP、LAMP(php5.4+)
+* composer
+
+
 1.代码检出
 ----------
 ```
-mkdir /data/www/walle-web && cd /data/www/walle-web  # 新建目录
+mkdir -p /data/www/walle-web && cd /data/www/walle-web  # 新建目录
 git clone git@github.com:meolu/walle-web.git .       # 代码检出
 ```
 
