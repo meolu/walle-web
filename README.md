@@ -41,6 +41,9 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
+如有需要，移步[最最最详细安装指南](https://github.com/meolu/walle-web/blob/master/install.md)
+
+
 快速开始
 -------
 * 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目
