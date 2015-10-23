@@ -1,3 +1,5 @@
+![](https://raw.github.com/meolu/walle-web/master/screenshots/logo.png)
+
 Walle 瓦力 web部署系统
 ==========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
