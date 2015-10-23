@@ -48,7 +48,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
 快速开始
 -------
-* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目，[svn配置](https://github.com/meolu/walle-web/blob/master/config-svn.md)
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目，[svn配置说明](https://github.com/meolu/walle-web/blob/master/config-svn.md)、[git配置说明](https://github.com/meolu/walle-web/blob/master/config-svn.md)
 * 开发者注册用户(已有`demo/demo`)，提交上线单
 * 管理员审核上线单
 * 开发者发起上线
@@ -60,6 +60,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 * 配置允许注册的邮箱后缀  
     ```php
     vi config/params.php
+
     'mail-suffix'   => [  // 允许注册的邮箱后缀，一般为公司邮箱后缀，可多个
         'huamanshu.com',  // 如：只允许花满树邮箱注册
     ]
@@ -68,6 +69,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 * 配置企业邮箱smtp
     ```php
     vi config/web.php +25
+
     # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
     'host'       => 'smtp.huamanshu.com',    # smtp 发件地址
@@ -76,8 +78,17 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
     'port'       => 25,                      # smtp 端口
     'encryption' => 'tls',                   # smtp 协议
 
+
     vi config/params.php
+
     'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    ```
+
+* 配置日志路径
+    ```php
+    vi config/params.php
+
+    'log.dir'   => '/tmp/walle/', # 注意读写权限
     ```
 
 To Do List
