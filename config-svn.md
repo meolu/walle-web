@@ -13,6 +13,6 @@ svn部署上线与git有点不太一样，svn是属于增量发布，在开发�
 
 配置主要三部分，只介绍前面两个，部分用户可能出错。
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/base-svn.png)
-![](https://github.com/meolu/walle-web/blob/master/screenshots/task.png)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/base-svn.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/task.jpg)
 
