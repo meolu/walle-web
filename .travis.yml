@@ -16,7 +16,7 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
-  - mysql -e 'CREATE DATABASE walle;';
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;';
 
 script: phpunit -c tests/phpunit.xml
 

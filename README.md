@@ -44,12 +44,12 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
-如有需要，移步[最最最详细安装指南](https://github.com/meolu/walle-web/blob/master/example/install.md)
+如有需要，移步[最最最详细安装指南](https://github.com/meolu/walle-web/blob/master/docs/install.md)
 
 
 快速开始
 -------
-* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目，[svn配置说明](https://github.com/meolu/walle-web/blob/master/example/config-svn.md)、[git配置说明](https://github.com/meolu/walle-web/blob/master/example/config-svn.md)
+* 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目，[svn配置说明](https://github.com/meolu/walle-web/blob/master/docs/config-svn.md)、[git配置说明](https://github.com/meolu/walle-web/blob/master/docs/config-svn.md)
 * 开发者注册用户(已有`demo/demo`)，提交上线单
 * 管理员审核上线单
 * 开发者发起上线
@@ -131,11 +131,11 @@ git pull
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 ## CHANGELOG
-瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/example/CHANGELOG.md)
+瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
 
 
 交流讨论
 -------
-- [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/example/qa.md)
+- [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/docs/qa.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - QQ群: 482939318

@@ -103,7 +103,7 @@ screenshot
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
 ## CHANGELOG
-[CHANGELOG](https://github.com/meolu/walle-web/blob/master/example/CHANGELOG.md)
+[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
 
 
 Discussing

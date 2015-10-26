@@ -1,7 +1,7 @@
 最最最详细安装指南
 ===============
 
-以下安装，均在**宿主机**（一台配置了LAMP/LNMP的linux机器，并且安装git/svn）上操作，如有问题，详见[Q&A](https://github.com/meolu/walle-web/blob/master/example/qa.md)
+以下安装，均在**宿主机**（一台配置了LAMP/LNMP的linux机器，并且安装git/svn）上操作，如有问题，详见[Q&A](https://github.com/meolu/walle-web/blob/master/docs/qa.md)
 
 依赖
 ---
