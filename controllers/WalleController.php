@@ -131,7 +131,7 @@ class WalleController extends Controller {
                     ? '把ssh-key加入git的deploy-keys列表'
                     : '用户名密码无误';
                 $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库%s读写权限，
-                并且%s。详细错误：%s<br>', Get_Current_User(), $project->deploy_from, $error, $revision->getExeLog());
+                并且%s。详细错误：%s<br>', getenv("USER"), $project->deploy_from, $error, $revision->getExeLog());
             }
         } catch (\Exception $e) {
             $code = -1;
@@ -148,7 +148,7 @@ class WalleController extends Controller {
                 $code = -1;
                 $log[] = sprintf('目标机器部署出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
                     且%s有目标机器发布版本库%s写入权限。详细错误：%s<br>',
-                    Get_Current_User(), $project->release_user, $project->release_user, $project->release_to, $task->getExeLog());
+                    getenv("USER"), $project->release_user, $project->release_user, $project->release_to, $task->getExeLog());
             }
             // 清除
             $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
