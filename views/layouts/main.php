@@ -169,6 +169,12 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                                 个人资料
                             </a>
                         </li>
+                        <li>
+                            <a href="/user/reset-password">
+                                <i class="icon-key"></i>
+                                修改密码
+                            </a>
+                        </li>
 
                         <li class="divider"></li>
 
