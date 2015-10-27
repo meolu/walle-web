@@ -12,12 +12,12 @@ use \app\models\Project;
 
 class Repo extends Command {
 
-    public static function getRevision($type = Project::REPO_GIT) {
-        switch ($type) {
+    public static function getRevision($conf) {
+        switch ($conf->repo_type) {
             case Project::REPO_GIT:
-                return new Git();
+                return new Git($conf);
             case Project::REPO_SVN:
-                return new Svn();
+                return new Svn($conf);
             default:
                 throw new \Exception('未知的版本管理');
                 break;

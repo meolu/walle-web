@@ -29,6 +29,7 @@ use yii\db\Expression;
  * @property string $repo_mode
  * @property string $repo_type
  * @property integer $audit
+ * @property integer $keep_version_num
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -95,7 +96,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'repo_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts'], 'required'],
-            [['user_id', 'level', 'status', 'audit'], 'integer'],
+            [['user_id', 'level', 'status', 'audit', 'keep_version_num'], 'integer'],
             [['excludes', 'hosts', 'pre_deploy', 'post_deploy', 'pre_release', 'post_release'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'repo_password'], 'string', 'max' => 100],
@@ -135,6 +136,7 @@ class Project extends \yii\db\ActiveRecord
             'repo_password'   => 'svn密码',
             'repo_mode'       => '分支/tag',
             'audit'           => '任务需要审核？',
+            'keep_version_num' => '线上版本保留数',
         ];
     }
 
@@ -200,9 +202,7 @@ class Project extends \yii\db\ActiveRecord
      * @param $version
      * @return string
      */
-    public static function getReleaseVersionDir($version = null) {
-        $version = $version ?: static::$CONF->link_id;
-
+    public static function getReleaseVersionDir($version = '') {
         return sprintf('%s/%s/%s', rtrim(static::$CONF->release_library, '/'),
             static::getGitProjectName(static::$CONF->repo_url), $version);
     }

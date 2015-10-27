@@ -35,6 +35,21 @@ abstract class Command {
     protected $log = null;
 
     /**
+     * 加载配置
+     *
+     * @param $config
+     * @return $this
+     * @throws \Exception
+     */
+    public function __construct($config) {
+        if ($config) {
+            $this->config = $config;
+        } else {
+            throw new \Exception('未知的配置');
+        }
+    }
+
+    /**
      * 执行本地宿主机命令
      *
      * @param $command
