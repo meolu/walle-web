@@ -67,6 +67,17 @@ class Task extends Command {
     }
 
     /**
+     * 设置了版本保留数量，超出了设定值，则删除老版本
+     */
+    public function cleanUpReleasesVersion() {
+        $cmd[] = sprintf('cd %s', Project::getReleaseVersionDir());
+        $cmd[] = 'ls -1|sort -r|awk \'FNR > ' . $this->config->keep_version_num . ' {printf("rm -rf %s\n", $0);}\' | bash ';
+
+        $command = join(' && ', $cmd);
+        return $this->runRemoteCommand($command);
+    }
+
+    /**
      * 获取远程服务器要操作的任务命令
      *
      * @param $task    string
