@@ -14,5 +14,5 @@ git部署是最推荐的方式，它无论对于何种语言都是合适的。
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/task.jpg)
 
 配置完毕之后，先检测下，如无问题则可以发起上线单了：）
-![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
 

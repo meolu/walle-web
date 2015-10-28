@@ -20,4 +20,4 @@ svn部署上线与git有点不太一样，svn是属于增量发布，在开发�
 
 
 配置完毕之后，先检测下，如无问题则可以发起上线单了：）
-![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
