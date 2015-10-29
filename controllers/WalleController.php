@@ -209,8 +209,7 @@ class WalleController extends Controller {
     public function actionGetBranch($projectId) {
         $conf = Project::getConf($projectId);
 
-        $version = Repo::getRevision($conf->repo_type);
-        $version->setConfig($conf);
+        $version = Repo::getRevision($conf);
         $list = $version->getBranchList();
 
         $this->renderJson($list);
