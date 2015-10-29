@@ -21,7 +21,7 @@ use app\models\Project;
             <div class="widget-main padding-6 no-padding-left no-padding-right">
                 <?php foreach ($projects as $project) { ?>
                     <?php if ($project['level'] == Project::LEVEL_TEST) { ?>
-                    <a class="btn btn-inline btn-warning" style="width:150px;margin-left: 40px;" href="/task/submit?projectId=<?= $project['id'] ?>"><?= $project['name'] ?></a>
+                    <a class="btn btn-inline btn-warning" style="width:150px;margin:auto auto 20px 40px;" href="/task/submit?projectId=<?= $project['id'] ?>"><?= $project['name'] ?></a>
                     <?php } ?>
                 <?php } ?>
             </div>
