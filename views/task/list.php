@@ -15,8 +15,7 @@ use yii\widgets\LinkPager;
                 <div class="input-group">
                     <input type="text" name="kw" class="form-control search-query" placeholder="上线标题、commit号">
                     <span class="input-group-btn">
-                        <button type="submit"
-                                class="btn btn-default btn-sm">
+                        <button type="submit" class="btn btn-default btn-sm">
                             Search
                             <i class="icon-search icon-on-right bigger-110"></i>
                         </button>

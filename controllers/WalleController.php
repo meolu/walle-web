@@ -52,7 +52,7 @@ class WalleController extends Controller {
      *
      * @throws \Exception
      */
-    public function actionStartDeploy($taskId) {
+    public function actionStartDeploy() {
         $taskId = \Yii::$app->request->post('taskId');
         if (!$taskId) {
             static::renderJson([], -1, '任务号不能为空：）');
@@ -98,6 +98,9 @@ class WalleController extends Controller {
             $this->task->status = Task::STATUS_DONE;
             $this->task->save();
 
+            // 可回滚的版本设置
+            $this->_enableRollBack();
+            
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
             $this->conf->version = $this->task->link_id;
             $this->conf->save();
@@ -416,6 +419,21 @@ class WalleController extends Controller {
         Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
         if (!$ret) throw new \Exception('全量更新服务器出错');
         return true;
+    }
+
+    /**
+     * 可回滚的版本设置
+     *
+     * @return int
+     */
+    private function _enableRollBack() {
+        $offset = Task::find()
+            ->select(['id'])
+            ->where(['status' => Task::STATUS_DONE, 'project_id' => $this->task->project_id])
+            ->orderBy(['id' => SORT_DESC])
+            ->offset($this->conf->keep_version_num)->limit(1)
+            ->scalar();
+        return Task::updateAll(['enable_rollback' => Task::ROLLBACK_FALSE], ['>=', 'id', $offset]);
     }
 
     /**
