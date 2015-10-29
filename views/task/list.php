@@ -47,7 +47,7 @@ use yii\widgets\LinkPager;
                 <?php if ($audit) { ?>
                 <td><?= $item['user']['realname'] ?></td>
                 <?php } ?>
-                <td><?= $item['project']['name'] ?></td>
+                <td><?= $item['project']['name'] ?> - <?= \Yii::t('status', 'conf_level_' . $item['project']['level']) ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['branch'] ?></td>
