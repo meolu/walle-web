@@ -32,7 +32,7 @@ svn部署上线与git有点不太一样，svn是推荐增量发布（当然也�
 ------------
 svn上线单有全量上线和增量上线两种主要形式，增量上线支持指定文件的版本号。分别看下可以有哪些格式填写上线单：
 
-- 上线全量文件
+- 上线全量文件  
 
     ```
     *
@@ -51,4 +51,3 @@ svn上线单有全量上线和增量上线两种主要形式，增量上线支�
     ```
 
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/walle-svn-submit.jpg)
-
