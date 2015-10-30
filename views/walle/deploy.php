@@ -21,12 +21,18 @@ use \app\models\Task;
     }
 </style>
 <div class="box" style="height: 100%">
-    <h4 class="box-title"><?= $task->title ?> - <?= $task->commit_id ?>
-        <?php if (in_array($task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) { ?>
-            <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>">部署</button>
-        <?php } ?>
-        <a class="btn btn-success btn-return" href="/task/index">返回</a></h4>
-
+    <h4 class="box-title header smaller red">
+            <i class="icon-map-marker"></i><?= \Yii::t('status', 'conf_level_' . $task->project['level']) ?>
+            -
+            <?= $task->project->name ?>
+            ：
+            <?= $task->title ?>
+            （<?= $task->project->repo_mode . ':' . $task->branch ?> 版本号：<?= $task->commit_id ?>）
+            <?php if (in_array($task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) { ?>
+                <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>">部署</button>
+            <?php } ?>
+            <a class="btn btn-success btn-return" href="/task/index">返回</a>
+    </h4>
     <div class="status">
         <span><i class="fa fa-circle-o text-yellow step-1"></i>权限、目录检查</span>
         <span><i class="fa fa-circle-o text-yellow step-2"></i>pre-deploy任务</span>
