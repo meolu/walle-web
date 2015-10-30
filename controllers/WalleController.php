@@ -252,7 +252,10 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     public function actionDeploy($taskId) {
-        $this->task = Task::findOne($taskId);
+        $this->task = Task::find()
+            ->where(['id' => $taskId])
+            ->with(['project'])
+            ->one();
         if (!$this->task) {
             throw new \Exception('任务号不存在：）');
         }
