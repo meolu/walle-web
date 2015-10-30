@@ -71,7 +71,7 @@ class Task extends Command {
      */
     public function cleanUpReleasesVersion() {
         $cmd[] = sprintf('cd %s', Project::getReleaseVersionDir());
-        $cmd[] = 'ls -1|sort -r|awk \'FNR > ' . $this->config->keep_version_num . ' {printf("rm -rf %s\n", $0);}\' | bash ';
+        $cmd[] = 'ls -1|sort -r|awk \'FNR > ' . $this->config->keep_version_num . ' {printf("rm -rf %s\n", \$0);}\' | bash ';
 
         $command = join(' && ', $cmd);
         return $this->runRemoteCommand($command);

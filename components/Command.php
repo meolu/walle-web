@@ -94,8 +94,8 @@ abstract class Command {
                 . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
                 . $this->getConfig()->release_user . '@'
                 . $this->getHostName($remoteHost);
-            $remoteCommand = str_replace('"', '\\\"', trim($command));
-            $localCommand .= ' "sh -c \"' . $remoteCommand . '\"" ';
+            $remoteCommand = str_replace('"', '\\"', trim($command));
+            $localCommand .= ' " ' . $remoteCommand . ' " ';
             static::log('Run remote command ' . $remoteCommand);
 
             $log = $this->log;

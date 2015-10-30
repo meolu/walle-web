@@ -72,7 +72,7 @@ use yii\widgets\LinkPager;
                             </a>
                         <?php } ?>
                         <!-- 回滚的任务不能再回滚-->
-                        <?php if ($item['status'] == Task::STATUS_DONE && $item['action'] == Task::ACTION_ONLINE) { ?>
+                        <?php if ($item['status'] == Task::STATUS_DONE && $item['enable_rollback'] == Task::ROLLBACK_TRUE) { ?>
                             <a href="javascript:;" class="brown task-rollback" data-id="<?= $item['id'] ?>">
                                 <i class="icon-reply bigger-130"></i>回滚
                             </a>
