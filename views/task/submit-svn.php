@@ -25,15 +25,15 @@ use app\models\Project;
                   <?php } ?>
               </select>
           </div>
-          <div>
-          <div class="form-group col-xs-3">
-              <label class="control-label bolder blue">前提交历史</label>
+          <div class="between-history" style="display: none">
+          <div class="form-group col-xs-3" style="padding-left: 0">
+              <label class="control-label bolder blue">commit id start</label>
               <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
               <select name="i_don_not_care_this" id="start" class="form-control select2 col-xs-3 history-list">
               </select>
           </div>
           <div class="form-group col-xs-3">
-              <label class="control-label bolder blue">后提交历史</label>
+              <label class="control-label bolder blue">commit id end</label>
               <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
               <select name="Task[commit_id]" id="end" class="form-control select2 col-xs-3 history-list">
               </select>
@@ -47,11 +47,17 @@ use app\models\Project;
               ->textarea([
                   'rows'           => 12,
                   'placeholder'    => 'index.php  1234',
+                  'data-placement' => 'top',
+                  'data-rel'       => 'tooltip',
+                  'data-title'     => '1.上线全量文件：* 2.增量上线指定文件：file_name 3.增量上线指定文件的指定版本：file_name commit_id',
                   'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
-                  'onchange'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
+                  'onchange'       => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                   'onblur'         => "clearInterval(this.clock);",
               ])
-              ->label('文件列表<i class="getting-change-files icon-spinner icon-spin orange bigger-125" style="display: none"></i>', ['class' => 'control-label bolder blue']) ?>
+              ->label('文件列表'
+                  . '<a class="icon-magic green show-between-history" data-rel="tooltip" data-placement="top" data-title="自动获取该分支/tag下的两提交历史间的文件" href="javascript:;"></a>'
+                  . '<i class="getting-change-files icon-spinner icon-spin orange bigger-125" style="display: none"></i>',
+                  ['class' => 'control-label bolder blue']) ?>
       </div><!-- /.box-body -->
 
       <div class="box-footer">
@@ -83,6 +89,8 @@ use app\models\Project;
 
 <script type="text/javascript">
     jQuery(function($) {
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+
         var projectId =  <?= (int)$_GET['projectId'] ?>;
         function getBranchList() {
             $('.get-branch').show();
@@ -149,6 +157,10 @@ use app\models\Project;
             var endId   = $('#end').val();
             $('.getting-change-files').show();
             getChangeFiles(projectId, $('#branch').val(), startId, endId);
+        })
+
+        $('.show-between-history').click(function() {
+            $('.between-history').show();
         })
 
         // 页面加载完默认拉取trunk
