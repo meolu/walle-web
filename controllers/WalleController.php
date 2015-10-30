@@ -426,13 +426,19 @@ class WalleController extends Controller {
      * @return int
      */
     private function _enableRollBack() {
+        $where = ' status = :status AND project_id = :project_id ';
+        $param = [':status' => Task::STATUS_DONE, ':project_id' => $this->task->project_id];
         $offset = Task::find()
             ->select(['id'])
-            ->where(['status' => Task::STATUS_DONE, 'project_id' => $this->task->project_id])
+            ->where($where, $param)
             ->orderBy(['id' => SORT_DESC])
             ->offset($this->conf->keep_version_num)->limit(1)
             ->scalar();
-        return Task::updateAll(['enable_rollback' => Task::ROLLBACK_FALSE], ['>=', 'id', $offset]);
+        if (!$offset) return true;
+
+        $where .= ' AND id <= :offset ';
+        $param[':offset'] = $offset;
+        return Task::updateAll(['enable_rollback' => Task::ROLLBACK_FALSE], $where, $param);
     }
 
     /**
