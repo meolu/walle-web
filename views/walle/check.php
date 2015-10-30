@@ -15,7 +15,7 @@ $this->title = '线上文件指纹';
             <label>项目</label>
             <select name="project" aria-hidden="true" tabindex="-1" class="form-control select2 select2-hidden-accessible">
                 <?php foreach ($projects as $project) { ?>
-                    <option value="<?= $project['id'] ?>"><?= $project['name'] ?></option>
+                    <option value="<?= $project['id'] ?>"><?= $project['name'] ?> - <?= \Yii::t('status', 'conf_level_' . $project['level']) ?></option>
                 <?php } ?>
             </select>
         </div>

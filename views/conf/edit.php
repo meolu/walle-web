@@ -96,7 +96,7 @@ use yii\widgets\ActiveForm;
                   <div class="widget-main">
                       <?= $form->field($conf, 'deploy_from')
                           ->textInput([
-                                  'placeholder'    => '/var/www/deploy',
+                                  'placeholder'    => '/data/www/deploy',
                                   'data-placement' => 'top',
                                   'data-rel'       => 'tooltip',
                                   'data-title'     => '代码的检出存放路径',
@@ -139,26 +139,34 @@ use yii\widgets\ActiveForm;
                           ->label('用户<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'release_to')
                           ->textInput([
-                              'placeholder'    => '/var/www/walle',
+                              'placeholder'    => '/data/www/walle',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '代码的最终部署路径',
+                              'data-title'     => '代码的最终部署路径，请不要在目标机新建此目录，walle会自动生成此软链，正确设置父目级录即可',
                           ])
                           ->label('webroot<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'release_library')
                           ->textInput([
-                              'placeholder'    => '/var/releases',
+                              'placeholder'    => '/data/releases',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本，请勿新建该目录，会自动创建软链',
+                              'data-title'     => '代码发布的版本库，每次发布更新webroot的软链到当前最新版本',
                           ])
                           ->label('发布版本库<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
-                      <?= $form->field($conf, 'hosts')
-                          ->textarea([
-                              'placeholder'    => '192.168.0.1' . PHP_EOL . '192.168.0.2',
+                      <?= $form->field($conf, 'keep_version_num')
+                          ->textInput([
+                              'placeholder'    => '20',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
-                              'data-title'     => '要发布的机器列表，一行一个',
+                              'data-title'     => '过多的历史版本将被删除，只可回滚保留的版本',
+                          ])
+                          ->label('版本保留数<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
+                      <?= $form->field($conf, 'hosts')
+                          ->textarea([
+                              'placeholder'    => '192.168.0.1' . PHP_EOL . '192.168.0.2:8888',
+                              'data-placement' => 'top',
+                              'data-rel'       => 'tooltip',
+                              'data-title'     => '要发布的机器列表，一行一个，非22端口可 ip:port',
                           ])
                           ->label('机器列表<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
                   </div>
@@ -172,7 +180,7 @@ use yii\widgets\ActiveForm;
           <div class="widget-box transparent">
               <div class="widget-header widget-header-flat">
                   <h4 class="lighter"><i class="icon-tasks orange"></i>高级任务</h4>
-                  <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="right" data-content="{WORKSPACE}：webroot    {VERSION}：发布的版本库的当前版本" title="" data-original-title="辅助变量">?</span>
+                  <span class="help-button" data-rel="popover" data-trigger="hover" data-placement="right" data-content="使用系统变量更方便处理路径问题：{WORKSPACE}：宿主机的独立部署空间或目标机的webroot    {VERSION}：发布的版本库的当前版本" title="" data-original-title="辅助变量">?</span>
                   <div class="widget-toolbar">
                       <a href="javascript:;" data-action="collapse">
                           <i class="icon-chevron-up"></i>
@@ -184,7 +192,7 @@ use yii\widgets\ActiveForm;
                   <div class="widget-main">
                       <?= $form->field($conf, 'pre_deploy')
                           ->textarea([
-                              'placeholder'    => 'cd /var/www/yii2 && composer update',
+                              'placeholder'    => 'cd /data/www/yii2 && composer update',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => '在部署代码之前的准备工作，如git的一些前置检查、vendor的安装（更新），一行一条',
@@ -195,7 +203,7 @@ use yii\widgets\ActiveForm;
                           ->label('pre_deploy', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'post_deploy')
                           ->textarea([
-                              'placeholder'    => 'cp -rf {WORKSPACE}/web/index-prod.php {WORKSPACE}/web/index.php' . PHP_EOL . 'cp -rf /var/www/yii2/vendor {WORKSPACE}/',
+                              'placeholder'    => 'cp -rf {WORKSPACE}/web/index-prod.php {WORKSPACE}/web/index.php' . PHP_EOL . 'cp -rf /data/www/yii2/vendor {WORKSPACE}/',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => 'git代码检出之后，可能做一些调整处理，如vendor拷贝，环境适配（mv config-test.php config.php），一行一条',
@@ -206,7 +214,7 @@ use yii\widgets\ActiveForm;
                           ->label('post_deploy', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'pre_release')
                           ->textarea([
-                              'placeholder'    => '/var/www/xxx stop',
+                              'placeholder'    => '/data/www/xxx stop',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => '同步完所有目标机器之后，更改版本软链之前触发任务。java可能要做一些暂停服务的操作(双引号将会被转义为\")',

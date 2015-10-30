@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use yii;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use app\components\GlobalHelper;
 use app\models\User;
+use app\models\forms\UserResetPasswordForm;
+use yii\base\InvalidParamException;
+
 
 class UserController extends Controller {
 
@@ -91,6 +95,24 @@ class UserController extends Controller {
         $user->status = User::STATUS_ACTIVE;
         if (!$user->update()) throw new \Exception('更新失败');
         $this->renderJson([]);
+    }
+
+
+    /**
+     * 用户重置密码
+     */
+    public function actionResetPassword()
+    {
+        $user = new UserResetPasswordForm($this->uid);
+
+        if ($user->load(Yii::$app->request->post()) && $user->validate() && $user->resetPassword()) {
+            Yii::$app->getSession()->setFlash('success', 'New password was saved.');
+            return $this->goHome();
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $user,
+        ]);
     }
 
     /**

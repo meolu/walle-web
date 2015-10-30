@@ -50,7 +50,7 @@ cat ~/.ssh/id_rsa.pub    # 复制
 ps aux|grep php          # 假如www_php为你的php进程用户
 su - www_php             # 切换用户
 ssh-keygen -t rsa        # 如果你都没有生成过rsa_key的话，如果有则跳过
-ssh-copy-id -u -i ~/.ssh/id_rsa.pub www_remote@remote_host  # 加入目标机群信任，需要输入www_remote密码
+ssh-copy-id -i ~/.ssh/id_rsa.pub www_remote@remote_host  # 加入目标机群信任，需要输入www_remote密码
 ```
 
 数据导入失败
