@@ -21,6 +21,7 @@ before_script:
   - cd tests && ../vendor/bin/codecept build
 
 script:
+  - curl http://localhost/
   - ../vendor/bin/codecept run
 
 matrix:
