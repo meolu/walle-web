@@ -10,8 +10,8 @@ $config = [
         'db' => [
             'class'     => 'yii\db\Connection',
             'dsn'       => 'mysql:host=127.0.0.1;dbname=walle',
-            'username'  => 'username',
-            'password'  => 'password',
+            'username'  => 'root',
+            'password'  => '',
             'charset'   => 'utf8',
         ],
         'session' => [
@@ -65,6 +65,9 @@ $config = [
             'rules'           => [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
+        ],
+        'request' => [
+            'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
         ],
     ],
     'language'   => 'zh-CN',
