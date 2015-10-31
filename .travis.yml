@@ -16,20 +16,11 @@ install:
   - wget http://codeception.com/codecept.phar -O vendor/bin/codecept && chmod +x vendor/bin/codecept
 
 before_script:
-  - sudo apt-get install nginx
-#  - sudo add-apt-repository ppa:ondrej/php5 && sudo apt-get update
-#  - sudo apt-get autoremove && sudo apt-get install php5-fpm
-#  - sudo /etc/init.d/php5-fpm restart
-  - ps aux|grep php
-  - sudo cp tests/nginx.conf /etc/nginx/nginx.conf
-  - sudo /etc/init.d/nginx restart
   - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
   - ./yii migrate/up  --interactive=0
   - cd tests && ../vendor/bin/codecept build
 
 script:
-  - curl http://localhost/
-  - curl http://127.0.0.1/
   - ../vendor/bin/codecept run
 matrix:
   fast_finish: true
