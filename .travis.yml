@@ -21,7 +21,7 @@ before_script:
   - cd tests && ../vendor/bin/codecept build
 
 script:
-  - cd tests && ../vendor/bin/codecept run
+  - ../vendor/bin/codecept run
 
 matrix:
   fast_finish: true
