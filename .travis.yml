@@ -22,6 +22,7 @@ before_script:
 
 script:
   - curl http://localhost/
+  - curl http://127.0.0.1/
   - ../vendor/bin/codecept run
 
 matrix:
