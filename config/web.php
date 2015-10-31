@@ -66,6 +66,9 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
+        'request' => [
+            'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
+        ],
     ],
     'language'   => 'zh-CN',
     'bootstrap'  => [
