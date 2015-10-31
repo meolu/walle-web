@@ -3,6 +3,8 @@
 瓦力 - 部署系统
 ==========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+[![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
+[![Packagist](https://img.shields.io/packagist/dt/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！
 
