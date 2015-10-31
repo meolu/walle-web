@@ -13,12 +13,17 @@ install:
   - travis_retry composer self-update && composer --version
   - travis_retry composer global require "fxp/composer-asset-plugin:~1.0.3"
   - composer install --prefer-source --no-interaction --dev
+  - wget http://codeception.com/codecept.phar -O $HOME/.composer/vendor/bin/codecept
+  - chmod +x $HOME/.composer/vendor/bin/codecept
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
 before_script:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;';
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
+  - ./yii migrate/up  --interactive=0
+  - codecept build
 
-script: phpunit -c tests/phpunit.xml
+script:
+  - cd tests && codecept run
 
 matrix:
   fast_finish: true
