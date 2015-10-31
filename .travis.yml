@@ -17,6 +17,7 @@ install:
 
 before_script:
   - sudo apt-get install nginx
+  - sudo add-apt-repository ppa:ondrej/php5 && sudo apt-get update
   - sudo apt-get autoremove && sudo apt-get install php5-fpm
   - sudo /etc/init.d/php5-fpm restart
   - sudo cp tests/nginx.conf /etc/nginx/nginx.conf
