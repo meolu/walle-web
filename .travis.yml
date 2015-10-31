@@ -18,7 +18,7 @@ install:
 before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
   - ./yii migrate/up  --interactive=0
-  - cd tests && vendor/bin/codecept build
+  - cd tests && ../vendor/bin/codecept build
 
 script:
   - cd tests && ../vendor/bin/codecept run
