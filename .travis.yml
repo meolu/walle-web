@@ -17,8 +17,8 @@ install:
 
 before_script:
   - sudo apt-get install nginx
-  - sudo apt-get install php5-fpm
-  - sudo /etc/init.d/php5-fpm restart 
+  - sudo apt-get autoremove && apt-get install php5-fpm php5-common
+  - sudo /etc/init.d/php5-fpm restart
   - sudo cp tests/nginx.conf /etc/nginx/nginx.conf
   - sudo /etc/init.d/nginx restart
   - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
