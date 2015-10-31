@@ -95,12 +95,15 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 To Do List
 ----------
 - Travis CI 集成
-- 静态资源管理器
 - 邮件提醒：可配置提醒事件
 - 灰度发布：指定机器发布
 - 引入websocket
+- 静态资源管理器
 - 自定义公司logo
 - 自定义变量
+- 支持国际化：增加英文语言
+- 支持Docker
+- 开放接口
 
 持续更新开启更多功能
 -----------------
