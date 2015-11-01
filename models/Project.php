@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Folder;
 use app\components\GlobalHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -223,6 +224,14 @@ class Project extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
+        // 修改了项目repo_url，本地检出代码将被清空
+        if (isset($changedAttributes['repo_url'])) {
+            $projectDir = static::getDeployFromDir();
+            if (file_exists($projectDir)) {
+                $folder = new Folder($this);
+                $folder->removeLocalProjectWorkspace($projectDir);
+            }
+        }
         // 插入一条管理员关系
         if ($insert) {
             Group::addGroupUser($this->attributes['id'], [$this->attributes['user_id']], Group::TYPE_ADMIN);

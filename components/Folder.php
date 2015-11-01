@@ -130,5 +130,17 @@ class Folder extends Command {
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
+
+    /**
+     * 删除本地项目空间
+     *
+     * @param $projectDir
+     * @return bool|int
+     */
+    public function removeLocalProjectWorkspace($projectDir) {
+        $cmd[] = "rm -rf " . $projectDir;
+        $command = join(' && ', $cmd);
+        return $this->runLocalCommand($command);
+    }
 }
 

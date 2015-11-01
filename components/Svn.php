@@ -89,6 +89,11 @@ class Svn extends Command {
         // 更新
         $this->updateRepo();
 
+        // 如果不存在branches目录，则跳过查找其它分支
+        if (!file_exists($svnType)) {
+            return $list;
+        }
+
         $branches = new \DirectoryIterator($svnType);
         foreach ($branches as $branch) {
             $name = $branch->__toString();
