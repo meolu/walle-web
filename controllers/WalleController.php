@@ -55,7 +55,7 @@ class WalleController extends Controller {
     public function actionStartDeploy() {
         $taskId = \Yii::$app->request->post('taskId');
         if (!$taskId) {
-            static::renderJson([], -1, '任务号不能为空：）');
+            $this->renderJson([], -1, '任务号不能为空：）');
         }
         $this->task = Task::findOne($taskId);
         if (!$this->task) {
@@ -138,9 +138,9 @@ class WalleController extends Controller {
         $code = 0;
 
         // 本地git ssh-key是否加入deploy-keys列表
-        $revision = Repo::getRevision($project->repo_type);
+        $revision = Repo::getRevision($project);
         try {
-            $ret = $revision->setConfig($project)->updateRepo();
+            $ret = $revision->updateRepo();
             if (!$ret) {
                 $code  = -1;
                 $error = $project->repo_type == Project::REPO_GIT
@@ -282,7 +282,7 @@ class WalleController extends Controller {
         $record['memo'] = stripslashes($record['memo']);
         $record['command'] = stripslashes($record['command']);
 
-        static::renderJson($record);
+        $this->renderJson($record);
     }
 
     /**

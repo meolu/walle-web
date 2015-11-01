@@ -31,25 +31,25 @@ class LoginFormTest extends TestCase
         });
     }
 
-//    public function testLoginWrongPassword()
-//    {
-//        $model = new LoginForm([
-//            'username' => 'demo',
-//            'password' => 'wrong_password',
-//        ]);
-//
-//        $this->specify('user should not be able to login with wrong password', function () use ($model) {
-//            expect('model should not login user', $model->login())->false();
-//            expect('error message should be set', $model->errors)->hasKey('password');
-//            expect('user should not be logged in', Yii::$app->user->isGuest)->true();
-//        });
-//    }
+    public function testLoginWrongPassword()
+    {
+        $model = new LoginForm([
+            'username' => 'demo',
+            'password' => 'wrong_password',
+        ]);
+
+        $this->specify('user should not be able to login with wrong password', function () use ($model) {
+            expect('model should not login user', $model->login())->false();
+            expect('error message should be set', $model->errors)->hasKey('password');
+            expect('user should not be logged in', Yii::$app->user->isGuest)->true();
+        });
+    }
 
     public function testLoginCorrect()
     {
         $model = new LoginForm([
-            'username' => 'demo',
-            'password' => 'demo',
+            'username' => 'admin',
+            'password' => 'admin',
         ]);
 
         $this->specify('user should be able to login with correct credentials', function () use ($model) {
