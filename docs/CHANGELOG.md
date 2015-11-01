@@ -1,5 +1,15 @@
 ## Change Log
 
+### v0.8.0 (2015/11/01 09:50 +00:00)
+- 增加保留最多版本数
+- 回滚数量限制
+- 增加用户修改密码
+- 任务列表、文件指纹增加项目环境级别
+- 部署页面优化
+- 优化svn上线流程和文案提示
+- 优化修改项目repo地址、svn无branches目录兼容问题
+- 引入codeception、集成travis
+
 ### v0.7.5 (2015/10/25 22:16 +00:00)
 - composer minimum-stability改为stable
 - 增加 git、svn 配置指南
