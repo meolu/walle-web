@@ -95,6 +95,10 @@ class WalleController extends Controller {
             if ($this->task->action == Task::ACTION_ONLINE) {
                 $this->task->ex_link_id = $this->conf->version;
             }
+            // 第一次上线的任务不能回滚、回滚的任务不能再回滚
+            if ($this->task->action == Task::ACTION_ROLLBACK || $this->task->id == 1) {
+                $this->task->enable_rollback = Task::ROLLBACK_FALSE;
+            }
             $this->task->status = Task::STATUS_DONE;
             $this->task->save();
 
