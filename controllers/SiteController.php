@@ -15,10 +15,20 @@ use yii\base\Exception;
 use yii\base\UserException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-
 class SiteController extends Controller
 {
     public $layout = 'site';
+
+    public function actions()
+    {
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'maxLength' => 5,
+                'minLength' => 5
+            ],
+        ];
+    }
 
     /**
      * Render the homepage

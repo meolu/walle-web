@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
-
+use yii\captcha\Captcha;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
@@ -29,6 +29,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     User::ROLE_DEV => \Yii::t('status', 'user_role_' . User::ROLE_DEV),
                     User::ROLE_ADMIN => \Yii::t('status', 'user_role_' . User::ROLE_ADMIN),
                 ]) ?>
+                <?= $form->field($model, 'verifyCode')->label('验证码')->widget(Captcha::className(),[
+                    'template' => "{input}{image}",
+                    'imageOptions' => ['alt' => '验证码'],
+                    'captchaAction' => 'site/captcha',
+                ]); ?>
                 <div class="form-group">
                     <?= Html::submitButton('提交', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>

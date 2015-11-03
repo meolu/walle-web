@@ -54,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @var string|null the current password value from form input
      */
     protected $_password;
+    public $verifyCode;
 
     /**
      * @return UserQuery custom query class with user scopes
@@ -69,7 +70,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            'signup' => ['username','email','password','role'],
+            'signup' => ['username','email','password','role', 'verifyCode'],
         ]);
     }
 
@@ -108,6 +109,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'validateEmail', 'on'=>'signup'],
             ['email', 'email', 'on'=>'signup'],
             ['email', 'unique', 'on'=>'signup'],
+            ['verifyCode', 'required', 'on'=>'signup'],
+            ['verifyCode', 'captcha',  'on'=>'signup'],
         ];
     }
 

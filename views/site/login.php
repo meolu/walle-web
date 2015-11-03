@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\User;
-
+use yii\captcha\Captcha;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
@@ -24,8 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
             <?= $form->field($model, 'username')->label('用户名') ?>
             <?= $form->field($model, 'password')->label('密码')->passwordInput() ?>
+            <?= $form->field($model, 'verifyCode')->label('验证码')->widget(Captcha::className(),[
+                'template' => "{input}{image}",
+                'imageOptions' => ['alt' => '验证码'],
+                'captchaAction' => 'site/captcha',
+            ]); ?>
             <?= $form->field($model, 'rememberMe')->label('记住我')->checkbox() ?>
-
             <div class="form-group">
                 <?= Html::submitButton('登录', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
