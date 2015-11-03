@@ -84,6 +84,7 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => '邮箱',
             'password' => '密码',
             'role' => '角色',
+            'verifyCode' => '验证码',
         ];
     }
 
