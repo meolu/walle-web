@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> git地址 </div>
+        <div class="profile-info-name"> 地址 </div>
 
         <div class="profile-info-value">
             <span><?= $conf->repo_url ?></span>

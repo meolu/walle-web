@@ -15,8 +15,7 @@ use yii\widgets\LinkPager;
                 <div class="input-group">
                     <input type="text" name="kw" class="form-control search-query" placeholder="上线标题、commit号">
                     <span class="input-group-btn">
-                        <button type="submit"
-                                class="btn btn-default btn-sm">
+                        <button type="submit" class="btn btn-default btn-sm">
                             Search
                             <i class="icon-search icon-on-right bigger-110"></i>
                         </button>
@@ -48,7 +47,7 @@ use yii\widgets\LinkPager;
                 <?php if ($audit) { ?>
                 <td><?= $item['user']['realname'] ?></td>
                 <?php } ?>
-                <td><?= $item['project']['name'] ?></td>
+                <td><?= $item['project']['name'] ?> - <?= \Yii::t('status', 'conf_level_' . $item['project']['level']) ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['branch'] ?></td>
@@ -73,9 +72,9 @@ use yii\widgets\LinkPager;
                             </a>
                         <?php } ?>
                         <!-- 回滚的任务不能再回滚-->
-                        <?php if ($item['status'] == Task::STATUS_DONE && $item['action'] == Task::ACTION_ONLINE) { ?>
-                            <a href="javascript:;" class="brown task-rollback">
-                                <i class="icon-reply bigger-130" data-id="<?= $item['id'] ?>"></i>回滚
+                        <?php if ($item['status'] == Task::STATUS_DONE && $item['enable_rollback'] == Task::ROLLBACK_TRUE) { ?>
+                            <a href="javascript:;" class="brown task-rollback" data-id="<?= $item['id'] ?>">
+                                <i class="icon-reply bigger-130"></i>回滚
                             </a>
                         <?php } ?>
                         <?php if ($item['status'] != Task::STATUS_DONE) { ?>

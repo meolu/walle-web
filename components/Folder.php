@@ -75,7 +75,7 @@ class Folder extends Command {
      * @return bool
      */
     public function getLinkCommand($version) {
-        $user = $this->getConfig()->release_user;
+        $user = $this->config->release_user;
         $project = Project::getGitProjectName($this->getConfig()->repo_url);
         $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
         // 遇到回滚，则使用回滚的版本version
@@ -109,7 +109,7 @@ class Folder extends Command {
     protected function excludes($excludes) {
         $excludesRsync = '';
         foreach ($excludes as $exclude) {
-            $excludesRsync .= sprintf(" --exclude=%s", escapeshellarg(trim($exclude)));
+            $excludesRsync .= sprintf(" --exclude=%s ", escapeshellarg(trim($exclude)));
         }
 
 
@@ -122,11 +122,23 @@ class Folder extends Command {
      * @param $version
      * @return bool|int
      */
-    public function cleanUp($version) {
+    public function cleanUpLocal($version) {
         $cmd[] = "rm -rf " . Project::getDeployWorkspace($version);
         if ($this->config->repo_type == Project::REPO_SVN) {
             $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
         }
+        $command = join(' && ', $cmd);
+        return $this->runLocalCommand($command);
+    }
+
+    /**
+     * 删除本地项目空间
+     *
+     * @param $projectDir
+     * @return bool|int
+     */
+    public function removeLocalProjectWorkspace($projectDir) {
+        $cmd[] = "rm -rf " . $projectDir;
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }

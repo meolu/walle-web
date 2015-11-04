@@ -9,8 +9,5 @@ setlocale(LC_CTYPE, 'ru_RU.UTF-8');
 
 return [
     'components' => [
-        'request' => [
-            'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
-        ],
     ],
 ];

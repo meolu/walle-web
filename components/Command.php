@@ -35,6 +35,21 @@ abstract class Command {
     protected $log = null;
 
     /**
+     * 加载配置
+     *
+     * @param $config
+     * @return $this
+     * @throws \Exception
+     */
+    public function __construct($config) {
+        if ($config) {
+            $this->config = $config;
+        } else {
+            throw new \Exception('未知的配置');
+        }
+    }
+
+    /**
      * 执行本地宿主机命令
      *
      * @param $command
@@ -58,7 +73,6 @@ abstract class Command {
         $log = implode(PHP_EOL, $log);
         $this->log = trim($log);
 
-        $this->log($command);
         $this->log($log);
         $this->log('---------------------------------');
 
@@ -80,8 +94,8 @@ abstract class Command {
                 . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
                 . $this->getConfig()->release_user . '@'
                 . $this->getHostName($remoteHost);
-            $remoteCommand = str_replace('"', '\\\"', trim($command));
-            $localCommand .= ' "sh -c \"' . $remoteCommand . '\"" ';
+            $remoteCommand = str_replace('"', '\\"', trim($command));
+            $localCommand .= ' " ' . $remoteCommand . ' " ';
             static::log('Run remote command ' . $remoteCommand);
 
             $log = $this->log;

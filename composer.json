@@ -5,7 +5,7 @@
     "homepage": "http://www.huamanshu.com/",
     "type": "project",
     "license": "BSD-3-Clause",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": ">=2.0.4",
@@ -13,6 +13,9 @@
         "yiisoft/yii2-swiftmailer": "*"
     },
     "require-dev": {
+        "codeception/codeception": "2.1.2",
+        "codeception/specify": "0.4.1",
+        "codeception/verify": "0.2.7",
         "yiisoft/yii2-codeception": "*",
         "yiisoft/yii2-debug": "*",
         "yiisoft/yii2-gii": "*",

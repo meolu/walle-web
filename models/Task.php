@@ -54,6 +54,14 @@ class Task extends \yii\db\ActiveRecord
      */
     const STATUS_FAILED = 4;
     /**
+     * 可回滚
+     */
+    const ROLLBACK_TRUE  = 1;
+    /**
+     * 不可回滚
+     */
+    const ROLLBACK_FALSE = 0;
+    /**
      * @inheritdoc
      */
     public static function tableName()
