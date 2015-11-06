@@ -19,7 +19,7 @@ class Svn extends Command {
         // 存在svn目录，直接update
         if (file_exists($dotSvn)) {
             $cmd[] = sprintf('cd %s ', $svnDir);
-            $cmd[] = $this->_getSvnCmd('svn up');
+            $cmd[] = $this->_getSvnCmd('svn up -q');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -27,7 +27,7 @@ class Svn extends Command {
         else {
             $cmd[] = sprintf('mkdir -p %s ', $svnDir);
             $cmd[] = sprintf('cd %s ', $svnDir);
-            $cmd[] = $this->_getSvnCmd(sprintf('svn checkout %s .', $this->getConfig()->repo_url));
+            $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s .', $this->getConfig()->repo_url));
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -50,11 +50,11 @@ class Svn extends Command {
         // 先更新
         $versionSvnDir = sprintf('%s-svn', rtrim(Project::getDeployWorkspace($task->link_id), '/'));
         $cmd[] = sprintf('cd %s ', $versionSvnDir);
-        $cmd[] = $this->_getSvnCmd(sprintf('svn checkout %s/%s .', $this->getConfig()->repo_url, $branch));
+        $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s/%s .', $this->getConfig()->repo_url, $branch));
         // 更新指定文件到指定版本，并复制到同步目录
         foreach ($fileAndVersion as $assign) {
             if (in_array($assign[0], ['.', '..'])) continue;
-            $cmd[] = $this->_getSvnCmd(sprintf('svn up %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
+            $cmd[] = $this->_getSvnCmd(sprintf('svn up -q %s %s', $assign[0], empty($assign[1]) ? '' : ' -r ' . $assign[1]));
             // 多层目录需要先新建父目录，否则复制失败
             if (strpos($assign[0], '/') !== false) {
                 $cmd[] = sprintf('mkdir -p %s/%s',
