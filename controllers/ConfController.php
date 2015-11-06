@@ -117,7 +117,12 @@ class ConfController extends Controller
      * @throws \Exception
      */
     public function actionEdit($projectId = null) {
-        $project = $projectId ? $this->findModel($projectId) : new Project();
+        if($projectId){
+            $project = $this->findModel($projectId);
+        }else{
+            $project = new Project();
+            $project->loadDefaultValues();
+        }
 
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
