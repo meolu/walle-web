@@ -26,17 +26,34 @@ class RunController extends Controller {
      * @throws yii\console\Exception
      */
     public function actionSetup() {
+        $this->runAction('create-dir', ['interactive' => $this->interactive]);
         $this->runAction('set-writable', ['interactive' => $this->interactive]);
         $this->runAction('set-executable', ['interactive' => $this->interactive]);
         \Yii::$app->runAction('migrate/up', ['interactive' => $this->interactive]);
     }
 
+    public function actionCreateDir() {
+        $mkdirPaths = [
+            yii::$app->params['log.dir']
+        ];
+        $this->mkdir($mkdirPaths);
+    }
+
     public function actionSetWritable() {
+        $this->writablePaths[] = yii::$app->params['log.dir'];
         $this->setWritable($this->writablePaths);
     }
 
     public function actionSetExecutable() {
         $this->setExecutable($this->executablePaths);
+    }
+
+    public function mkdir($paths) {
+        foreach ($paths as $path) {
+            $path = Yii::getAlias($path);
+            Console::output("mkdiring dir: {$path}");
+            @mkdir($path, 0755);
+        }
     }
 
     public function setWritable($paths) {
@@ -54,5 +71,6 @@ class RunController extends Controller {
             @chmod($executable, 0755);
         }
     }
+
 
 }
