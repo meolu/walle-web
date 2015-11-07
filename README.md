@@ -7,7 +7,7 @@
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。
 
-[官网主页](http://www.huamanshu.com/walle.html)了解更多。[English Readme](https://github.com/meolu/walle-web/blob/master/example/README-en.md)，喜欢请为我标star吧：）
+[官网主页](http://www.huamanshu.com/walle.html)了解更多。walle-瓦力的强大和推广需要您的star，喜欢请为我标star吧：）
 
 * 用户分身份注册、登录
 * 开发者发起上线任务申请、部署
@@ -39,7 +39,7 @@ git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
 composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
-./yii migrate/up  # 导入数据库
+./yii run/setup   # 初始化项目
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
@@ -134,7 +134,7 @@ git pull
 #### 演示
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
 
-## CHANGELOG
+## CHANGE LOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
 
 
