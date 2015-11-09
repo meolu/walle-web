@@ -14,7 +14,7 @@ $user = User::findOne(\Yii::$app->user->id);
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title><?= Html::encode($this->title) ?> - Walle 瓦力平台</title>
+    <title><?= Html::encode($this->title) ?> - <?= yii::t('w', 'walle') ?></title>
     <link href="/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/dist/css/font-awesome.min.css" rel="stylesheet" />
 

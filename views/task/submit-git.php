@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '提交上线单';
+$this->title = yii::t('task', 'submit task title');
 use yii\widgets\ActiveForm;
 use app\models\Project;
 
@@ -10,14 +10,14 @@ use app\models\Project;
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
       <div class="box-body">
-        <?= $form->field($task, 'title')->label('任务标题', ['class' => 'control-label bolder blue']) ?>
+        <?= $form->field($task, 'title')->label(yii::t('task', 'submit title'), ['class' => 'control-label bolder blue']) ?>
 
         <!-- 分支选取 -->
         <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
           <div class="form-group">
-              <label>选取分支
+              <label><?= yii::t('task', 'select branches') ?>
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>
-                  <span class="tip">查看所有分支</span>
+                  <span class="tip"><?= yii::t('task', 'all branches') ?></span>
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
               </label>
               <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
@@ -27,12 +27,12 @@ use app\models\Project;
         <?php } ?>
         <!-- 分支选取 end -->
         <?= $form->field($task, 'commit_id')->dropDownList([])
-          ->label('版本选取<i class="get-history icon-spinner icon-spin orange bigger-125"></i>', ['class' => 'control-label bolder blue']) ?>
+          ->label(yii::t('task', 'select branch').'<i class="get-history icon-spinner icon-spin orange bigger-125"></i>', ['class' => 'control-label bolder blue']) ?>
 
       </div><!-- /.box-body -->
 
       <div class="box-footer">
-        <input type="submit" class="btn btn-primary" value="提交">
+        <input type="submit" class="btn btn-primary" value="<?= yii::t('w', 'submit') ?>">
       </div>
 
     <!-- 错误提示-->
@@ -45,7 +45,7 @@ use app\models\Project;
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        发生了错误
+                        <?= yii::t('w', 'modal error title') ?>
                     </h4>
                 </div>
                 <div class="modal-body"></div>

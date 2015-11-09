@@ -16,7 +16,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title><?= Html::encode($this->title) ?> - Walle 瓦力平台</title>
+    <title><?= Html::encode($this->title) ?> - <?= yii::t('w', 'walle') ?></title>
     <link href="/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/dist/css/font-awesome.min.css" rel="stylesheet" />
 
@@ -85,14 +85,14 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
                         <li class="dropdown-header">
                             <i class="icon-envelope"></i>
-                            消息通知
+                            <?= yii::t('w', 'dropdown message') ?>
                         </li>
                         <li>
                             <a href="/user/audit/">
                                 <div class="clearfix">
                                     <span class="pull-left">
                                         <i class="btn btn-xs btn-primary icon-user"></i>
-                                        项目管理员申请
+                                        <?= yii::t('w', 'dropdown project apply') ?>
                                     </span>
                                     <span class="pull-right badge badge-info"><?= $count ?></span>
                                 </div>
@@ -166,13 +166,13 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                         <li>
                             <a href="/user/">
                                 <i class="icon-user"></i>
-                                个人资料
+                                <?= yii::t('w', 'dropdown profile') ?>
                             </a>
                         </li>
                         <li>
                             <a href="/user/reset-password">
                                 <i class="icon-key"></i>
-                                修改密码
+                                <?= yii::t('w', 'dropdown reset password') ?>
                             </a>
                         </li>
 
@@ -181,7 +181,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                         <li>
                             <a href="/site/logout">
                                 <i class="icon-off"></i>
-                                退出
+                                <?= yii::t('w', 'dropdown logout') ?>
                             </a>
                         </li>
                     </ul>
@@ -211,7 +211,9 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                 <li class="<?= \Yii::$app->controller->id == 'conf' ? 'active' : '' ?>">
                     <a href="/conf/">
                         <i class="icon-cogs"></i>
-                        <span class="menu-text"> 项目配置 </span>
+                        <span class="menu-text">
+                            <?= yii::t('w', 'menu config project') ?>
+                        </span>
                     </a>
                 </li>
                 <?php } ?>
@@ -219,21 +221,27 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                     ? 'active' : '' ?>">
                     <a href="/task/">
                         <i class="icon-list-alt"></i>
-                        <span class="menu-text"> 我的上线任务 </span>
+                        <span class="menu-text">
+                            <?= yii::t('w', 'menu task list') ?>
+                        </span>
                     </a>
                 </li>
                 <li class="<?= \Yii::$app->controller->id == 'task' && \Yii::$app->controller->action->id == 'submit'
                     ? 'active' : '' ?>">
                     <a href="/task/submit/">
                         <i class="icon-cloud-upload"></i>
-                        <span class="menu-text"> 提交上线任务 </span>
+                        <span class="menu-text">
+                            <?= yii::t('w', 'menu submit task') ?>
+                        </span>
                     </a>
                 </li>
 
                 <li class="<?= \Yii::$app->controller->action->id == 'check' ? 'active' : '' ?>">
                     <a href="/walle/check/">
                         <i class=" icon-eye-open"></i>
-                        <span class="menu-text"> 线上检查 </span>
+                        <span class="menu-text">
+                            <?= yii::t('w', 'menu file md5') ?>
+</span>
                     </a>
                 </li>
             </ul><!-- /.nav-list -->
@@ -244,7 +252,9 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home home-icon"></i>
-                        <a href="/">首页</a>
+                        <a href="/">
+                            <?= yii::t('w', 'breadcrumb index') ?>
+                        </a>
                     </li>
                     <li class="active"><?= $this->title ?></li>
                 </ul><!-- .breadcrumb -->

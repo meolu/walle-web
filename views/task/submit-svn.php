@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '提交上线单';
+$this->title = yii::t('task', 'submit task title');
 use yii\widgets\ActiveForm;
 use app\models\Project;
 
@@ -10,13 +10,14 @@ use app\models\Project;
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
       <div class="box-body">
-        <?= $form->field($task, 'title')->label('任务标题', ['class' => 'control-label bolder blue']) ?>
+        <?= $form->field($task, 'title')->label(yii::t('task', 'submit title'), ['class' => 'control-label bolder blue']) ?>
 
         <!-- 分支选取 -->
           <div class="form-group">
-              <label class="control-label bolder blue">选取分支
+              <label class="control-label bolder blue">
+                  <?= yii::t('task', 'select branches') ?>
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>
-                  <span class="tip">查看所有分支</span>
+                  <span class="tip"><?= yii::t('task', 'all branches') ?></span>
                   <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
               </label>
               <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
@@ -49,19 +50,21 @@ use app\models\Project;
                   'placeholder'    => 'index.php  1234',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
-                  'data-title'     => '1.上线全量文件：* 2.增量上线指定文件：file_name 3.增量上线指定文件的指定版本：file_name commit_id',
+                  'data-title'     => yii::t('task', 'file list placeholder'),
                   'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
                   'onchange'       => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                   'onblur'         => "clearInterval(this.clock);",
               ])
-              ->label('文件列表'
-                  . '<a class="icon-magic green show-between-history" data-rel="tooltip" data-placement="top" data-title="自动获取该分支/tag下的两提交历史间的文件" href="javascript:;"></a>'
+              ->label(yii::t('task', 'file list')
+                  . '<a class="icon-magic green show-between-history" data-rel="tooltip" data-placement="top" data-title="'
+                  . yii::t('task', 'diff tip')
+                  . '" href="javascript:;"></a>'
                   . '<i class="getting-change-files icon-spinner icon-spin orange bigger-125" style="display: none"></i>',
                   ['class' => 'control-label bolder blue']) ?>
       </div><!-- /.box-body -->
 
       <div class="box-footer">
-        <input type="submit" class="btn btn-primary" value="提交">
+        <input type="submit" class="btn btn-primary" value="<?= yii::t('w', 'submit') ?>">
       </div>
 
     <!-- 错误提示-->
@@ -74,7 +77,7 @@ use app\models\Project;
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        发生了错误
+                        <?= yii::t('w', 'modal error title') ?>
                     </h4>
                 </div>
                 <div class="modal-body"></div>

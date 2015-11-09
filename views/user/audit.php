@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '审核管理员';
+$this->title = yii::t('user', 'audit title');
 use app\models\User;
 
 ?>
@@ -10,7 +10,7 @@ use app\models\User;
     <div class="row col-sm-4">
         <h4 class="pink">
             <i class="icon-hand-right green"></i>
-            <a href="javascript:;" role="button" class="blue" data-toggle="modal"> <span class="green"> 项目管理员审核 </a>
+            <a href="javascript:;" role="button" class="blue" data-toggle="modal"> <span class="green"> <?= yii::t('user', 'projecter audit') ?> </a>
         </h4>
     </div>
 </div>
@@ -22,7 +22,7 @@ use app\models\User;
             <div class="inline position-relative">
                 <div class="user">
                     <a href="javascript:;">
-                        <img src="<?= User::AVATAR_ROOT . ($user['avatar'] ?: 'default.jpg') ?>" alt="Bob Doe's avatar">
+                        <img src="<?= User::AVATAR_ROOT . ($user['avatar'] ?: 'default.jpg') ?>">
                     </a>
                 </div>
 
@@ -43,9 +43,9 @@ use app\models\User;
                         <div class="hr dotted hr-8"></div>
 
                         <div class="tools action-buttons">
-                            <a href="javascript:;" class="active-admin" data-id="<?= $user['id'] ?>" title="项目管理员可创建项目">
+                            <a href="javascript:;" class="active-admin" data-id="<?= $user['id'] ?>" title="<?= yii::t('user', 'projecter audit tip') ?>">
                                 <i class="icon-user-md light-orange bigger-110"></i>
-                                同意设置为项目管理员
+                                <?= yii::t('user', 'pass projecter audit') ?>
                             </a>
                         </div>
                     </div>
@@ -61,12 +61,12 @@ use app\models\User;
         // 组关系删除
         $('.remove-relation').click(function(e) {
             $this = $(this);
-            if (confirm('确定要删除该记录？')) {
+            if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
                 $.get('/user/delete-admin?id=' + $this.data('id'), function(o) {
                     if (!o.code) {
                         $this.closest(".memberdiv").remove();
                     } else {
-                        alert('删除失败: ' + o.msg);
+                        alert('<?= yii::t('w', 'js delete failed') ?>' + o.msg);
                     }
                 })
             }
@@ -78,10 +78,10 @@ use app\models\User;
                 + '?id=' + $this.data('id');
             $.get(url , function(o) {
                 if (!o.code) {
-                    alert('审核通过：）')
+                    alert('<?= yii::t('user', 'js pass') ?>')
                     location.reload()
                 } else {
-                    alert('通过失败: ' + o.msg);
+                    alert('<?= yii::t('user', 'js pass failed') ?> ' + o.msg);
                 }
             })
         })
