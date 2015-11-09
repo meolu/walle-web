@@ -117,9 +117,9 @@ class ConfController extends Controller
      * @throws \Exception
      */
     public function actionEdit($projectId = null) {
-        if($projectId){
+        if ($projectId) {
             $project = $this->findModel($projectId);
-        }else{
+        } else {
             $project = new Project();
             $project->loadDefaultValues();
         }
