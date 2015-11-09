@@ -47,15 +47,18 @@ cd walle-web
 composer install --prefer-dist --no-dev --optimize-autoloader -vvvv
 ```
 
-5.导入数据库
+5.初始化项目
 ----------
 ```
 cd walle-web
-./yii migrate/up
+./yii run/setup # 需要你的yes
 ```
+
 
 6.配置nginx/apache
 -----------------
+**凡是在第7步刷新页面看到50x均是前5步安装不安逗，自行检查**
+
 **凡是在第7步刷新页面看到404均是nginx/apache配置不当，自行检查**
 
 **nginx**简单配置

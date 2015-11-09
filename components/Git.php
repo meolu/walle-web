@@ -19,9 +19,9 @@ class Git extends Command {
         // 存在git目录，直接pull
         if (file_exists($dotGit)) {
             $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git fetch --all');
-            $cmd[] = sprintf('/usr/bin/env git reset --hard origin/%s', $branch);
+            $cmd[] = sprintf('/usr/bin/env git checkout -q %s', $branch);
+            $cmd[] = sprintf('/usr/bin/env git fetch -q --all');
+            $cmd[] = sprintf('/usr/bin/env git reset -q --hard origin/%s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -29,8 +29,8 @@ class Git extends Command {
         else {
             $cmd[] = sprintf('mkdir -p %s ', $gitDir);
             $cmd[] = sprintf('cd %s ', $gitDir);
-            $cmd[] = sprintf('/usr/bin/env git clone %s .', $this->getConfig()->repo_url);
-            $cmd[] = sprintf('/usr/bin/env git checkout %s', $branch);
+            $cmd[] = sprintf('/usr/bin/env git clone -q %s .', $this->getConfig()->repo_url);
+            $cmd[] = sprintf('/usr/bin/env git checkout -q %s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -47,8 +47,8 @@ class Git extends Command {
         $destination = Project::getDeployWorkspace($task->link_id);
         $this->updateRepo($task->branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = sprintf('/usr/bin/env git reset %s', $task->commit_id);
-        $cmd[] = '/usr/bin/env git checkout .';
+        $cmd[] = sprintf('/usr/bin/env git reset -q %s', $task->commit_id);
+        $cmd[] = '/usr/bin/env git checkout -q .';
         $command = join(' && ', $cmd);
 
         return $this->runLocalCommand($command);
@@ -64,7 +64,7 @@ class Git extends Command {
         // 先更新，其实没有必要更新
         ///$this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = '/usr/bin/env git pull';
+        $cmd[] = '/usr/bin/env git pull -a';
         $cmd[] = '/usr/bin/env git branch -a';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
