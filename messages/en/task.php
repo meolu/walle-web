@@ -20,7 +20,7 @@ return [
     'select branches' => 'Select Branches',
     'all branches' => 'View All branches',
     'select branch' => 'Select Branch',
-    'submit title' => 'Deployment Bill Title',
+    'submit title' => 'Title',
     'file list placeholder' => '1.Distribute all files of project：* 2.Distribute specified file：file_name 3.Distribute specified file of specified version：file_name commit_id',
     'file list' => 'File list',
     'diff tip' => 'Auto get the diff files between two commit id of branch/tag',

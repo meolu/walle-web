@@ -21,8 +21,8 @@ return [
     'task_status_3_color' => 'text-success',
     'task_status_4_color' => 'text-danger',
 
-    'conf_level_1' => 'test',
-    'conf_level_2' => 'Pre-release',
+    'conf_level_1' => 'Test',
+    'conf_level_2' => 'Pre-Release',
     'conf_level_3' => 'Production',
 
     'conf_status_0' => 'Invalid',

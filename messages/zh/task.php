@@ -3,7 +3,7 @@
 return [
     'list title' => '上线单列表',
     'list placeholder' => '上线标题、commit号',
-    'create task' => '创建上线任务',
+    'create task' => '创建上线单',
     'l_user' => '开发者',
     'l_project' => '项目',
     'l_title' => '上线单标题',
