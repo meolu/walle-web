@@ -8,7 +8,7 @@ return [
     'l_project' => 'Project',
     'l_title' => 'Title',
     'l_time' => 'Time',
-    'l_branche' => 'Branche',
+    'l_branch' => 'Branch',
     'l_commit' => 'Commit id',
     'l_status' => 'Status',
     'l_opera' => 'operate',
