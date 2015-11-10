@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'list title' => 'Deployment Bill List',
+    'list placeholder' => 'title、commit id',
+    'create task' => 'Create Deployment Bill',
+    'l_user' => 'User',
+    'l_project' => 'Project',
+    'l_title' => 'Title',
+    'l_time' => 'Time',
+    'l_branche' => 'Branche',
+    'l_commit' => 'Commit id',
+    'l_status' => 'Status',
+    'l_opera' => 'operate',
+    'deploy' => 'deploy',
+    'rollback' => 'rollback',
+    'delete' => 'delete',
+    'select project title' => 'Select Project',
+    'submit task title' => 'Submit Deployment Bill',
+    'select branches' => 'Select Branches',
+    'all branches' => 'View All branches',
+    'select branch' => 'Select Branch',
+    'submit title' => 'Deployment Bill Title',
+    'file list placeholder' => '1.Distribute all files of project：* 2.Distribute specified file：file_name 3.Distribute specified file of specified version：file_name commit_id',
+    'file list' => 'File list',
+    'diff tip' => 'Auto get the diff files between two commit id of branch/tag',
+];

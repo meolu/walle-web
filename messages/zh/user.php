@@ -10,7 +10,7 @@ return [
     'inactive' => '（未激活）',
     'register time' => '注册时间',
     'js pass' => '审核通过：）',
-    'js pass failed' => '审核通过：）',
+    'js pass failed' => '审核操作失败：）',
     'reset passwd title' => '重置密码',
     'password' => '新密码',
 ];

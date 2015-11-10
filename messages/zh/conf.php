@@ -50,8 +50,6 @@ return [
     'audit manager tip' => '审核管理员可审核上线单',
     'add audit manager' => '设为审核管理员',
     'cancel audit manager' => '取消审核管理员',
-    'js delete confirm' => '确定要删除该记录？',
-    'js delete failed' => '删除失败: ',
     'js set audit manager failed' => '设置失败: ',
 
     'index' => '项目配置',
