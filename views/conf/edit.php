@@ -20,9 +20,9 @@ use yii\widgets\ActiveForm;
 
         <div class="clearfix"></div>
         <?= $form->field($conf, 'level')->dropDownList([
-            Project::LEVEL_TEST => \Yii::t('status', 'conf_level_' . Project::LEVEL_TEST),
-            Project::LEVEL_SIMU => \Yii::t('status', 'conf_level_' . Project::LEVEL_SIMU),
-            Project::LEVEL_PROD => \Yii::t('status', 'conf_level_' . Project::LEVEL_PROD),
+            Project::LEVEL_TEST => \Yii::t('w', 'conf_level_' . Project::LEVEL_TEST),
+            Project::LEVEL_SIMU => \Yii::t('w', 'conf_level_' . Project::LEVEL_SIMU),
+            Project::LEVEL_PROD => \Yii::t('w', 'conf_level_' . Project::LEVEL_PROD),
         ],[
             'class'          => 'col-xs-11',])
             ->label(yii::t('conf', 'env'), ['class' => 'control-label bolder blue col-xs-1']) ?>

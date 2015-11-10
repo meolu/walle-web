@@ -39,11 +39,11 @@ $this->title = yii::t('conf', 'index');
             <?php foreach ($list as $item) { ?>
                 <tr>
                     <td><?= $item['name'] ?></td>
-                    <td><?= \Yii::t('status', 'conf_level_' . $item['level']) ?></td>
+                    <td><?= \Yii::t('w', 'conf_level_' . $item['level']) ?></td>
                     <td><?= $item['repo_mode'] ?></td>
-                    <td><?= \Yii::t('status', 'conf_audit_' . $item['audit']) ?></td>
-                    <td><?= \Yii::t('status', 'conf_status_' . $item['status']) ?></td>
-                    <td class="<?= \Yii::t('status', 'conf_status_' . $item['status'] . '_color') ?>">
+                    <td><?= \Yii::t('w', 'conf_audit_' . $item['audit']) ?></td>
+                    <td><?= \Yii::t('w', 'conf_status_' . $item['status']) ?></td>
+                    <td class="<?= \Yii::t('w', 'conf_status_' . $item['status'] . '_color') ?>">
                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
                             <a href="/conf/preview/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="icon-zoom-in bigger-130"></i>

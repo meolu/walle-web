@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
         <div class="profile-info-value">
             <i class="icon-map-marker light-orange bigger-110"></i>
-            <span><?= \Yii::t('status', 'conf_level_' . $conf->level) ?></span>
+            <span><?= \Yii::t('w', 'conf_level_' . $conf->level) ?></span>
         </div>
     </div>
 
@@ -135,7 +135,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> <?= yii::t('conf', 'enable audit') ?> </div>
 
         <div class="profile-info-value">
-            <span><?= \Yii::t('status', 'bool_' . $conf->audit) ?></span>
+            <span><?= \Yii::t('w', 'bool_' . $conf->audit) ?></span>
         </div>
     </div>
 
@@ -143,7 +143,7 @@ use yii\widgets\ActiveForm;
         <div class="profile-info-name"> <?= yii::t('conf', 'enable open') ?> </div>
 
         <div class="profile-info-value">
-            <span><?= \Yii::t('status', 'bool_' . $conf->status) ?></span>
+            <span><?= \Yii::t('w', 'bool_' . $conf->status) ?></span>
         </div>
     </div>
 </div>

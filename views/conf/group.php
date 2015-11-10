@@ -88,7 +88,7 @@ use app\models\Group;
         // 组关系删除
         $('.remove-relation').click(function(e) {
             $this = $(this);
-            if (confirm('<?= yii::t('conf', 'js delete confirm') ?>')) {
+            if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
                 $.get('/conf/delete-relation?id=' + $this.data('id'), function(o) {
                     if (!o.code) {
                         $this.closest(".memberdiv").remove();

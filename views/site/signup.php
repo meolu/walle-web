@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'username')->label('名字') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>
                 <?= $form->field($model, 'role')->dropDownList([
-                    User::ROLE_DEV => \Yii::t('status', 'user_role_' . User::ROLE_DEV),
-                    User::ROLE_ADMIN => \Yii::t('status', 'user_role_' . User::ROLE_ADMIN),
+                    User::ROLE_DEV => \Yii::t('w', 'user_role_' . User::ROLE_DEV),
+                    User::ROLE_ADMIN => \Yii::t('w', 'user_role_' . User::ROLE_ADMIN),
                 ]) ?>
                 <div class="form-group">
                     <?= Html::submitButton('提交', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

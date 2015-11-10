@@ -47,13 +47,13 @@ use yii\widgets\LinkPager;
                 <?php if ($audit) { ?>
                 <td><?= $item['user']['realname'] ?></td>
                 <?php } ?>
-                <td><?= $item['project']['name'] ?> - <?= \Yii::t('status', 'conf_level_' . $item['project']['level']) ?></td>
+                <td><?= $item['project']['name'] ?> - <?= \Yii::t('w', 'conf_level_' . $item['project']['level']) ?></td>
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['branch'] ?></td>
                 <td><?= $item['commit_id'] ?></td>
-                <td class="<?= \Yii::t('status', 'task_status_' . $item['status'] . '_color') ?>">
-                    <?= \Yii::t('status', 'task_status_' . $item['status']) ?></td>
+                <td class="<?= \Yii::t('w', 'task_status_' . $item['status'] . '_color') ?>">
+                    <?= \Yii::t('w', 'task_status_' . $item['status']) ?></td>
                 <td>
                     <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
                     <?php if ($audit && !in_array($item['status'],[Task::STATUS_DONE, Task::STATUS_FAILED])) { ?>
@@ -126,7 +126,7 @@ use yii\widgets\LinkPager;
         // 垃圾任务删除
         $('.btn-delete').click(function(e) {
             $this = $(this);
-            if (confirm('<?= yii::t('task', 'js delete confirm') ?>')) {
+            if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
                 $.get('/task/delete', {taskId: $this.data('id')}, function(o) {
                     if (!o.code) {
                         $this.closest("tr").remove();

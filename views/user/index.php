@@ -68,7 +68,7 @@ use \app\components\GlobalHelper;
 
                     <div class="profile-info-value">
                         <span>
-                            <?= \Yii::t('status', 'user_role_' . $user->role) ?>
+                            <?= \Yii::t('w', 'user_role_' . $user->role) ?>
                             <?= $user->status == \app\models\User::STATUS_INACTIVE ? yii::t('user', 'inactive') : '' ?>
                         </span>
                     </div>
