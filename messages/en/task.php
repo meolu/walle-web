@@ -11,7 +11,7 @@ return [
     'l_branch' => 'Branch',
     'l_commit' => 'Commit id',
     'l_status' => 'Status',
-    'l_opera' => 'operate',
+    'l_opera' => 'Operation',
     'deploy' => 'deploy',
     'rollback' => 'rollback',
     'delete' => 'delete',

@@ -53,7 +53,7 @@ return [
     'js set audit manager failed' => '设置失败: ',
 
     'index' => '项目配置',
-    'index search placeholder' => '上线标题、commit号',
+    'index search placeholder' => '项目名称',
     'create project' => '新建项目',
     'p_name' => '项目名称',
     'p_env' => '环境',

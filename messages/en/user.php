@@ -8,7 +8,7 @@ return [
     'profile title' => 'Profile',
     'level' => 'Level',
     'inactive' => '（inactive）',
-    'register time' => 'register time',
+    'register time' => 'Register Time',
     'js pass' => 'pass：）',
     'js pass failed' => 'failed',
     'reset passwd title' => 'Reset Password',

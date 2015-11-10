@@ -53,7 +53,7 @@ return [
     'js set audit manager failed' => 'Set Failed: ',
 
     'index' => 'Project Configuration',
-    'index search placeholder' => 'title、commit id',
+    'index search placeholder' => 'project name',
     'create project' => 'Create A Project',
     'p_name' => 'Name',
     'p_env' => 'Env',

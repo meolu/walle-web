@@ -5,7 +5,7 @@ return [
     'file' => 'File',
     'file placeholder' => "Project's Relative Path：backend/web/index.php",
     'project' => 'Project',
-    'file md5' => 'view file md5',
+    'file md5' => 'View file md5',
     'error todo' => 'Please contact SA or redeployment',
     'error title' => 'deploy error:（',
     'done' => 'Deployment done: )',
