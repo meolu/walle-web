@@ -55,18 +55,18 @@ class WalleController extends Controller {
     public function actionStartDeploy() {
         $taskId = \Yii::$app->request->post('taskId');
         if (!$taskId) {
-            $this->renderJson([], -1, '任务号不能为空：）');
+            $this->renderJson([], -1, yii::t('walle', 'deployment id is empty'));
         }
         $this->task = Task::findOne($taskId);
         if (!$this->task) {
-            throw new \Exception('任务号不存在：）');
+            throw new \Exception(yii::t('walle', 'deployment id not exists'));
         }
         if ($this->task->user_id != $this->uid) {
-            throw new \Exception('不可以操作其它人的任务：）');
+            throw new \Exception(yii::t('w', 'you are not master of project'));
         }
         // 任务失败或者审核通过时可发起上线
         if (!in_array($this->task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) {
-            throw new \Exception('任务不能被重复执行：）');
+            throw new \Exception(yii::t('walle', 'deployment only done for once'));
         }
 
         // 项目配置
@@ -148,14 +148,20 @@ class WalleController extends Controller {
             if (!$ret) {
                 $code  = -1;
                 $error = $project->repo_type == Project::REPO_GIT
-                    ? '把ssh-key加入git的deploy-keys列表'
-                    : '用户名密码无误';
-                $log[] = sprintf('宿主机代码检出检测出错，请确认php进程用户%s有代码存储仓库%s读写权限，
-                并且%s。详细错误：%s<br>', getenv("USER"), $project->deploy_from, $error, $revision->getExeLog());
+                    ? yii::t('walle', 'ssh-key to git')
+                    : yii::t('walle', 'correct username passwd');
+                $log[] = yii::t('walle', 'hosted server error', [
+                    'user'       => getenv("USER"),
+                    'path'       => $project->deploy_from,
+                    'ssh_passwd' => $error,
+                    'error'      => $revision->getExeLog(),
+                ]);
             }
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('宿主机检测时发生系统错误：%s<br>', $e->getMessage());
+            $log[] = yii::t('walle', 'hosted server sys error', [
+                'error' => $e->getMessage()
+            ]);
         }
 
         // 权限与免密码登录检测
@@ -165,22 +171,27 @@ class WalleController extends Controller {
             $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
             if (!$ret) {
                 $code = -1;
-                $log[] = sprintf('目标机器部署出错，请确认php进程用户%s用户ssh-key加入目标机器的%s用户ssh-key信任列表，
-                    且%s有目标机器发布版本库%s写入权限。详细错误：%s<br>',
-                    getenv("USER"), $project->release_user, $project->release_user, $project->release_to, $this->walleTask->getExeLog());
+                $log[] = yii::t('walle', 'target server error', [
+                    'local_user'  => getenv("USER"),
+                    'remote_user' => $project->release_user,
+                    'path'        => $project->release_to,
+                    'error'       => $this->walleTask->getExeLog(),
+                ]);
             }
             // 清除
             $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
             $this->walleTask->runRemoteTaskCommandPackage([$command]);
         } catch (\Exception $e) {
             $code = -1;
-            $log[] = sprintf('目标机检测时发生系统错误：%s<br>', $e->getMessage());
+            $log[] = yii::t('walle', 'target server sys error', [
+                'error' => $e->getMessage()
+            ]);
         }
 
         // task 检测todo...
 
         if ($code === 0) {
-            $log[] = '配置检测通过，恭喜：）';
+            $log[] = yii::t('walle', 'project configuration works');
         }
         $this->renderJson(join("<br>", $log), $code);
     }
@@ -261,10 +272,10 @@ class WalleController extends Controller {
             ->with(['project'])
             ->one();
         if (!$this->task) {
-            throw new \Exception('任务号不存在：）');
+            throw new \Exception(yii::t('walle', 'deployment id not exists'));
         }
         if ($this->task->user_id != $this->uid) {
-            throw new \Exception('不可以操作其它人的任务：）');
+            throw new \Exception(yii::t('w', 'you are not master of project'));
         }
 
         return $this->render('deploy', [
@@ -316,7 +327,7 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_PERMSSION, $duration);
 
-        if (!$ret) throw new \Exception('初始化部署隔离空间出错');
+        if (!$ret) throw new \Exception(yii::t('walle', 'init deployment workspace error'));
         return true;
     }
 
@@ -335,7 +346,7 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration);
 
-        if (!$ret) throw new \Exception('更新代码文件出错');
+        if (!$ret) throw new \Exception(yii::t('walle', 'update code error'));
         return true;
     }
 
@@ -353,7 +364,7 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration);
 
-        if (!$ret) throw new \Exception('前置任务操作失败');
+        if (!$ret) throw new \Exception(yii::t('walle', 'pre deploy task error'));
         return true;
     }
 
@@ -372,7 +383,7 @@ class WalleController extends Controller {
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_POST_DEPLOY, $duration);
 
-        if (!$ret) throw new \Exception('后置任务操作失败');
+        if (!$ret) throw new \Exception(yii::t('walle', 'post deploy task error'));
         return true;
     }
 
@@ -390,7 +401,7 @@ class WalleController extends Controller {
             // 记录执行时间
             $duration = Command::getMs() - $sTime;
             Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-            if (!$ret) throw new \Exception('同步文件到服务器出错');
+            if (!$ret) throw new \Exception(yii::t('walle', 'rsync error'));
         }
         return true;
     }
@@ -423,7 +434,7 @@ class WalleController extends Controller {
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
-        if (!$ret) throw new \Exception('全量更新服务器出错');
+        if (!$ret) throw new \Exception(yii::t('walle', 'update servers error'));
         return true;
     }
 
