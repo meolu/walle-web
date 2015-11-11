@@ -13,4 +13,11 @@ return [
     'js pass failed' => 'failed',
     'reset passwd title' => 'Reset Password',
     'password' => 'New Password',
+    'upload failed' => 'upload attached failed',
+    'attached\'s size too large' => 'attached\'s size is too large',
+    'type not allow' => 'type allow：{types}',
+    'update avatar failed' => 'update avatar failed',
+    'cant\'t remove active manager' => 'cant\'t remove active manager：(',
+    'only pass inactive manager' => 'the user is active：(',
+    'user not exists' => 'user is not exists：）',
 ];

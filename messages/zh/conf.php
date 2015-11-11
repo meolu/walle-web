@@ -5,6 +5,12 @@ return [
     'detection' => '项目配置检测',
     'detecting' => '正在检测...',
 
+    'you are not active' => '项目管理员尚未通过其它项目管理员的审核，无操作项目权限：）',
+    'copy failed' => '复制项目失败',
+    'relation not exists' => '关系不存在：(',
+    'unknown relation type' => '未知的关系类型：(',
+    'project not exists' => '该项目不存在：(',
+
     'edit' => '配置项目',
     'name' => '项目名字:',
     'env' => '项目环境:',

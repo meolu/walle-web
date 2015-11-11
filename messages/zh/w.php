@@ -38,6 +38,11 @@ return [
     'js delete confirm' => '确定要删除该记录？',
     'js delete failed' => '删除失败：',
 
+    'you are not master of project' => '不可以操作其它人的项目：(',
+    'delete failed' => '删除失败',
+    'update failed' => '更新失败',
+
+
     'dropdown message' => '消息通知',
     'dropdown project apply' => '项目管理员申请',
     'dropdown profile' => '个人资料',

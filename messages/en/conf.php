@@ -5,6 +5,12 @@ return [
     'detection' => 'Project Configuration Detection',
     'detecting' => 'detecting ...',
 
+    'you are not active' => 'you ara not allowed to do this until you are passed by other manger ：）',
+    'copy failed' => 'copy failed',
+    'relation not exists' => 'the relation is not exists：(',
+    'unknown relation type' => 'unknown relation type：(',
+    'project not exists' => 'project not exists：(',
+
     'edit' => 'Project Configuration',
     'name' => 'Name:',
     'env' => 'Env:',

@@ -38,6 +38,10 @@ return [
     'js delete confirm' => 'Sure you want to delete the record?',
     'js delete failed' => 'Delete failed: ',
 
+    'you are not master of project' => 'you are not master of project：(',
+    'delete failed' => 'delete failed',
+    'update failed' => 'update failed',
+
     'dropdown message' => 'Message notification',
     'dropdown project apply' => 'Project Manager Aplly',
     'dropdown profile' => 'Profile',

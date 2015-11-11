@@ -4,6 +4,15 @@ return [
     'list title' => '上线单列表',
     'list placeholder' => '上线标题、commit号',
     'create task' => '创建上线单',
+
+    'unknown project' => '未知的项目，请确认：）',
+    'you are not the member of project' => '非该项目成员，无权限',
+    'unknown deployment bill' => '上线单号不存在：）',
+    'can\'t delele the job which is done' => '不可以删除已上线成功的任务：）',
+    'no rollback twice' => '已回滚的任务不能再次回滚：（',
+    'can\'t rollback the closed project\'s job' => '此项目已关闭，不能再回滚：(',
+    'create a rollback job failed' => '生成回滚任务失败',
+
     'l_user' => '开发者',
     'l_project' => '项目',
     'l_title' => '上线单标题',
