@@ -143,3 +143,4 @@ git pull
 - [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/docs/qa.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - QQ群: 482939318
+- 企业[试用]用户建议直接邮件(wushuiyong@huamanshu.com)联系，优先响应
