@@ -48,7 +48,7 @@ return [
     'dropdown reset password' => 'Reset Password',
     'dropdown logout' => 'Logout',
     'menu config project' => 'Project Configure',
-    'menu task list' => 'Deployment Bill List',
+    'menu task list' => 'Deployment List',
     'menu submit task' => 'Submit Deployment Bill',
     'menu file md5' => 'File Fingerprint',
     'breadcrumb index' => 'Index',

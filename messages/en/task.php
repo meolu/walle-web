@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'list title' => 'Deployment Bill List',
+    'list title' => 'Deployment List',
     'list placeholder' => 'title、commit id',
     'create task' => 'Create Deployment Bill',
 
