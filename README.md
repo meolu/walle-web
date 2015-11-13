@@ -4,6 +4,7 @@
 ==========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 [![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
+[![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。[官网主页](http://www.huamanshu.com/walle.html)了解更多。
 
@@ -23,14 +24,14 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * 线上文件指纹确认
 * 支持git、svn版本管理
 
-walle-瓦力的强大和推广需要您的star，喜欢请为我标star吧：）
+目前，已经有超过十家企业生产环境部署使用，walle-瓦力的强大和推广需要您的star，喜欢请为我标star吧：）
 
 依赖
 ---
 
-* bash(git、ssh)
-* LNMP、LAMP(php5.4+)
-* composer
+* Bash(git、ssh)
+* LNMP/LAMP(php5.4+)
+* Composer
 
 安装
 ----
@@ -91,6 +92,13 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
     vi config/params.php
 
     'log.dir'   => '/tmp/walle/', # 注意读写权限
+    ```
+
+* 指定语言
+    ```php
+    vi config/web.php +73
+
+    'language'   => 'zh',  # zh => 中文,  en => english
     ```
 
 To Do List
