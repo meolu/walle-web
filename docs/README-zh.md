@@ -134,6 +134,7 @@ git pull
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
 
 #### 宿主机、目标机群、操作用户关系
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-relation.png)
 
 #### 上线流程图
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)

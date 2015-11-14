@@ -59,6 +59,51 @@ Quick Start
 * Developer deploy the deployment.
 
 
+Custom
+--------
+you would like to adjust some params to make walle suited for your company.
+
+* Set suffix of email while signing in
+    ```php
+    vi config/params.php
+
+    'mail-suffix'   => [  // specify the suffix of email, multiple suffixes are allow.
+        'huamanshu.com',  // e.g: allow xxx@huamanshu.com only
+    ]
+    ```
+
+* Configure email smtp
+    ```php
+    vi config/web.php +25
+
+    # 配置mail smtp模块
+    'class'      => 'Swift_SmtpTransport',
+    'host'       => 'smtp.huamanshu.com',    # smtp host
+    'username'   => 'service@huamanshu.com', # smtp username
+    'password'   => 'password',              # smtp password
+    'port'       => 25,                      # smtp port
+    'encryption' => 'tls',                   # smtp protocol
+
+
+    vi config/params.php
+
+    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    ```
+
+* Configure the path for log
+    ```php
+    vi config/params.php
+
+    'log.dir'   => '/tmp/walle/',
+    ```
+
+* Configure language
+    ```php
+    vi config/web.php +73
+
+    'language'   => 'en',  # zh => 中文,  en => english
+    ```
+
 
 To Do List
 ----------
@@ -84,7 +129,7 @@ git pull
 Architecture
 ------------
 #### git/svn, user, host, servers
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-work-en.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-relation-en.png)
 
 #### deployment flow
 ![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-en.png)
