@@ -5,7 +5,8 @@ Walle's svn configuration guide
 1.Requirements：
 -----------
 
-1.1 Svn's directory like flowing, or you can create a svn project in [riouxsvn](https://riouxsvn.com) for test
+1.1 Svn's directory like flowing, or you can create a svn project in [riouxsvn](https://riouxsvn.com) for test.
+
     - branches
     - tags
     - trunk
