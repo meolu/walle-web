@@ -84,25 +84,25 @@ git pull
 Architecture
 ------------
 #### git/svn, user, host, servers
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-work.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-work-en.png)
 
 #### deployment flow
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-en.png)
 
 Screenshots
 -----------
 
 #### project config
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit-en.jpg)
 
 #### sumbit a task
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit-en.jpg)
 
 #### list of task
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list-en.jpg)
 
 #### demo show
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-en.gif)
 
 ## CHANGELOG
 [CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
