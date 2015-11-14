@@ -22,7 +22,7 @@ class ConfController extends Controller
     public function beforeAction($action) {
         parent::beforeAction($action);
         if (!GlobalHelper::isValidAdmin()) {
-            throw new \Exception('项目管理员尚未通过其它项目管理员的审核，无操作项目权限：）');
+            throw new \Exception(yii::t('conf', 'you are not active'));
         }
         return true;
     }
@@ -149,7 +149,7 @@ class ConfController extends Controller
         $copy = new Project();
         $copy->load($project->getAttributes(), '');
 
-        if (!$copy->save()) throw new \Exception('复制项目失败');
+        if (!$copy->save()) throw new \Exception(yii::t('conf', 'copy failed'));
         $this->renderJson([]);
     }
 
@@ -161,7 +161,7 @@ class ConfController extends Controller
      */
     public function actionDelete($projectId) {
         $project = $this->findModel($projectId);
-        if (!$project->delete()) throw new \Exception('删除失败');
+        if (!$project->delete()) throw new \Exception(yii::t('w', 'delete failed'));
         $this->renderJson([]);
     }
 
@@ -174,14 +174,14 @@ class ConfController extends Controller
     public function actionDeleteRelation($id) {
         $group = Group::findOne($id);
         if (!$group) {
-            throw new \Exception('关系不存在：）');
+            throw new \Exception(yii::t('conf', 'relation not exists'));
         }
         $project = Project::findOne($group->project_id);
         if ($project->user_id != $this->uid) {
-            throw new \Exception('不可以操作其它人的项目：）');
+            throw new \Exception(yii::t('conf', 'you are not master of project'));
         }
 
-        if (!$group->delete()) throw new \Exception('删除失败');
+        if (!$group->delete()) throw new \Exception(yii::t('w', 'delete failed'));
         $this->renderJson([]);
     }
 
@@ -194,17 +194,17 @@ class ConfController extends Controller
     public function actionEditRelation($id, $type = 0) {
         $group = Group::findOne($id);
         if (!$group) {
-            throw new \Exception('关系不存在：）');
+            throw new \Exception(yii::t('conf', 'relation not exists'));
         }
         $project = Project::findOne($group->project_id);
         if ($project->user_id != $this->uid) {
-            throw new \Exception('不可以操作其它人的项目：）');
+            throw new \Exception(yii::t('w', 'you are not master of project'));
         }
         if (!in_array($type, [Group::TYPE_ADMIN, Group::TYPE_USER])) {
-            throw new \Exception('未知的关系类型：）');
+            throw new \Exception(yii::t('conf', 'unknown relation type'));
         }
         $group->type = (int)$type;
-        if (!$group->save()) throw new \Exception('更新失败');
+        if (!$group->save()) throw new \Exception(yii::t('w', 'update failed'));
         $this->renderJson([]);
     }
 
@@ -218,11 +218,11 @@ class ConfController extends Controller
     protected function findModel($id) {
         if (($model = Project::getConf($id)) !== null) {
             if ($model->user_id != $this->uid) {
-                throw new \Exception('不可以操作其它人的项目：）');
+                throw new \Exception(yii::t('w', 'you are not master of project'));
             }
             return $model;
         } else {
-            throw new NotFoundHttpException('该项目不存在：）');
+            throw new NotFoundHttpException(yii::t('conf', 'project not exists'));
         }
     }
 }

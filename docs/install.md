@@ -1,7 +1,7 @@
 最最最详细安装指南
 ===============
 
-以下安装，均在**宿主机**（一台配置了LAMP/LNMP的linux机器，并且安装git/svn）上操作，如有问题，详见[Q&A](https://github.com/meolu/walle-web/blob/master/docs/qa.md)
+以下安装，均在**宿主机**（一台配置了LAMP/LNMP的linux机器，并且安装git/svn）上操作，如有问题，详见[Q&A](https://github.com/meolu/walle-web/blob/master/docs/faq.md)
 
 依赖
 ---
@@ -57,7 +57,7 @@ cd walle-web
 
 6.配置nginx/apache
 -----------------
-**凡是在第7步刷新页面看到50x均是前5步安装不安逗，自行检查**
+**凡是在第7步刷新页面看到50x均是前5步安装不完整，自行检查**
 
 **凡是在第7步刷新页面看到404均是nginx/apache配置不当，自行检查**
 

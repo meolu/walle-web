@@ -2,14 +2,14 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = $conf->name . '配置项目';
+$this->title = $conf->name . yii::t('conf', 'edit');
 
 use yii\widgets\ActiveForm;
 ?>
 
 <div class="profile-user-info">
     <div class="profile-info-row">
-        <div class="profile-info-name"> 项目名字 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'name') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->name ?></span>
@@ -17,16 +17,16 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 项目环境 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'env') ?> </div>
 
         <div class="profile-info-value">
             <i class="icon-map-marker light-orange bigger-110"></i>
-            <span><?= \Yii::t('status', 'conf_level_' . $conf->level) ?></span>
+            <span><?= \Yii::t('w', 'conf_level_' . $conf->level) ?></span>
         </div>
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 地址 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'url') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->repo_url ?></span>
@@ -34,9 +34,9 @@ use yii\widgets\ActiveForm;
     </div>
 
     <!-- 宿主机 配置-->
-    <h4 class="lighter"><i class="icon-dashboard orange"></i>宿主机</h4>
+    <h4 class="lighter"><i class="icon-dashboard orange"></i><?= yii::t('conf', 'host') ?></h4>
     <div class="profile-info-row">
-        <div class="profile-info-name"> 代码存储仓库 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'deploy from') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->deploy_from ?></span>
@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 排除文件 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'excludes') ?> </div>
 
         <div class="profile-info-value">
             <span><?= str_replace(PHP_EOL, "<br>", $conf->excludes) ?></span>
@@ -53,9 +53,9 @@ use yii\widgets\ActiveForm;
     <!-- 宿主机 配置 end-->
 
     <!-- 目标机器 配置-->
-    <h4 class="lighter"><i class="icon-cloud-upload orange"></i>目标机器</h4>
+    <h4 class="lighter"><i class="icon-cloud-upload orange"></i><?= yii::t('conf', 'servers') ?></h4>
     <div class="profile-info-row">
-        <div class="profile-info-name"> 用户 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'target user') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->release_user ?></span>
@@ -71,7 +71,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 发布版本库 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'releases') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->release_library ?></span>
@@ -79,7 +79,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 机器列表 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'servers') ?> </div>
 
         <div class="profile-info-value">
             <span><?= str_replace(PHP_EOL, "<br>", $conf->hosts) ?></span>
@@ -89,7 +89,7 @@ use yii\widgets\ActiveForm;
 
     <!-- 任务配置-->
 
-    <h4 class="lighter"><i class="icon-tasks orange"></i>高级任务</h4>
+    <h4 class="lighter"><i class="icon-tasks orange"></i><?= yii::t('conf', 'tasks') ?></h4>
     <div class="profile-info-row">
         <div class="profile-info-name"> pre_deploy </div>
 
@@ -124,7 +124,7 @@ use yii\widgets\ActiveForm;
     <!-- 目标机器 配置 end-->
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 上线方式 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'branch/tag') ?> </div>
 
         <div class="profile-info-value">
             <span><?= $conf->repo_mode ?></span>
@@ -132,18 +132,18 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 是否需要审核 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'enable audit') ?> </div>
 
         <div class="profile-info-value">
-            <span><?= \Yii::t('status', 'bool_' . $conf->audit) ?></span>
+            <span><?= \Yii::t('w', 'bool_' . $conf->audit) ?></span>
         </div>
     </div>
 
     <div class="profile-info-row">
-        <div class="profile-info-name"> 是否有效 </div>
+        <div class="profile-info-name"> <?= yii::t('conf', 'enable open') ?> </div>
 
         <div class="profile-info-value">
-            <span><?= \Yii::t('status', 'bool_' . $conf->status) ?></span>
+            <span><?= \Yii::t('w', 'bool_' . $conf->status) ?></span>
         </div>
     </div>
 </div>

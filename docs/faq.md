@@ -1,13 +1,14 @@
 常见问题以及解决办法
 =================
-composer安装速度慢
+
+1.composer安装速度慢
 ----------------
 好吧，我已经猜到会有人问有没有现成的，有！ 
 
 下载[百度网盘](http://pan.baidu.com/s/1c0wiuyc)，解压vendor放到walle-web根目录即可。
 
 
-第一次使用composer可能会出现的问题：1 没有添加git的token
+2.第一次使用composer可能会出现的问题：1 没有添加git的token
 -------------------------------------------------
 
 >Could not fetch https://api.github.com/repos/jquery/jquery, please create a GitHub OAuth token to go over the API rate limit
@@ -20,7 +21,7 @@ Token (hidden):
 * 复制提示里的地址到浏览器，点击生成git token，如上面的：https://github.com/settings/tokens/new?scopes=repo&description=Composer+on+localhost+2015-10-08+1123
 * 复制token到命令行，认证，继续
 
-第一次使用composer可能会出现的问题：2 composer install 可能会出现的错误
+3.第一次使用composer可能会出现的问题：2 composer install 可能会出现的错误
 -----------------------------------------------------------------
 
 >Loading composer repositories with package information
@@ -33,7 +34,7 @@ Your requirements could not be resolved to an installable set of packages.
 
 **解决办法**：`composer global require "fxp/composer-asset-plugin:*"`
 
-如何添加用户key到git的ssh-keys列表
+4.如何添加用户key到git的ssh-keys列表
 -------------------------------
 ```
 su - www                 # 假如www为你的php进程用户
@@ -43,7 +44,7 @@ cat ~/.ssh/id_rsa.pub    # 复制
 ```
 
 
-如何添加用户ssh-key到目标机群部署用户ssh-key信任
+5.如何添加用户ssh-key到目标机群部署用户ssh-key信任
 -------------------------------------------
 **宿主机操作**
 ```
@@ -53,7 +54,7 @@ ssh-keygen -t rsa        # 如果你都没有生成过rsa_key的话，如果有�
 ssh-copy-id -i ~/.ssh/id_rsa.pub www_remote@remote_host  # 加入目标机群信任，需要输入www_remote密码
 ```
 
-数据导入失败
+6.数据导入失败
 ----------
 缺少pdo扩展，解决办法：添加pdo扩展
 ```
@@ -69,6 +70,8 @@ vi php.ini # 添加pdo_mysql.so
 restart php-fpm
 ```
 
+7.nginx简单配置
+----------------
 ```
 server {
     listen       80;
@@ -94,7 +97,7 @@ server {
 ```
 
 
-apache简单配置
+8.apache简单配置
 ----------------
 
 ```

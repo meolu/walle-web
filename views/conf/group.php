@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '项目成员管理';
+$this->title = yii::t('conf', 'group');
 
 use yii\widgets\ActiveForm;
 use app\models\User;
@@ -13,7 +13,7 @@ use app\models\Group;
     <div class="row col-sm-4">
         <h4 class="pink">
             <i class="icon-hand-right green"></i>
-            <a href="#modal-form" role="button" class="blue" data-toggle="modal"> <span class="green"><?= $conf->name ?></span>组关系 </a>
+            <a href="#modal-form" role="button" class="blue" data-toggle="modal"> <span class="green"><?= $conf->name ?></span> <?= yii::t('conf', 'relation') ?> </a>
         </h4>
     </div>
 
@@ -21,7 +21,7 @@ use app\models\Group;
     <div class="row col-sm-4" style="margin-top: 5px;float:right;">
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
             <div class="input-group">
-                <select multiple="" name="user[]" class="width-80 chosen-select" id="form-field-select-4" data-placeholder="通过邮箱查找用户">
+                <select multiple="" name="user[]" class="width-80 chosen-select" id="form-field-select-4" data-placeholder="<?= yii::t('conf', 'search') ?>">
                     <option value="">&nbsp;</option>
                     <?php foreach ($users as $info) { ?>
                         <option value="<?= $info['id'] ?>"><?=  $info['email'] ?> - <?= $info['realname'] ?></option>
@@ -29,7 +29,7 @@ use app\models\Group;
                 </select>
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-purple btn-sm" style="height: 29px;padding-top: 1px;">
-                        添加
+                        <?= yii::t('conf', 'add') ?>
                         <i class="icon-search icon-on-right bigger-110"></i>
                     </button>
                 </span>
@@ -46,14 +46,14 @@ use app\models\Group;
         <div class="inline position-relative">
             <div class="user">
                 <a href="javascript:;">
-                    <img src="<?= User::AVATAR_ROOT . ($relation['user']['avatar'] ?: 'default.jpg') ?>" alt="Bob Doe's avatar">
+                    <img src="<?= User::AVATAR_ROOT . ($relation['user']['avatar'] ?: 'default.jpg') ?>">
                 </a>
             </div>
 
             <div class="body">
                 <div class="name">
                     <?php if ($relation['type'] == Group::TYPE_ADMIN) { ?>
-                        <i class="icon-user-md light-orange bigger-110" title="审核管理员可审核上线任务"></i>
+                        <i class="icon-user-md light-orange bigger-110" title="<?= yii::t('conf', 'audit manager') ?>"></i>
                     <?php } ?>
                     <?= $relation['user']['realname'] ?>
                     <a href="javascript:void(0)" class="pink remove-relation" data-id="<?= $relation['id'] ?>">
@@ -70,9 +70,9 @@ use app\models\Group;
                     <div class="hr dotted hr-8"></div>
 
                     <div class="tools action-buttons">
-                        <a href="javascript:;" class="bind-admin" data-id="<?= $relation['id'] ?>" data-type="<?= (int)!$relation['type'] ?>" title="审核管理员可审核上线任务">
+                        <a href="javascript:;" class="bind-admin" data-id="<?= $relation['id'] ?>" data-type="<?= (int)!$relation['type'] ?>" title="<?= yii::t('conf', 'audit manager tip') ?>">
                             <i class="icon-user-md light-orange bigger-110"></i>
-                            <?= $relation['type'] == Group::TYPE_USER ? '设为审核管理员' : '取消审核管理员' ?>
+                            <?= $relation['type'] == Group::TYPE_USER ? yii::t('conf', 'add audit manager') : yii::t('conf', 'cancel audit manager') ?>
                         </a>
                     </div>
                 </div>
@@ -88,12 +88,12 @@ use app\models\Group;
         // 组关系删除
         $('.remove-relation').click(function(e) {
             $this = $(this);
-            if (confirm('确定要删除该记录？')) {
+            if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
                 $.get('/conf/delete-relation?id=' + $this.data('id'), function(o) {
                     if (!o.code) {
                         $this.closest(".memberdiv").remove();
                     } else {
-                        alert('删除失败: ' + o.msg);
+                        alert('<?= yii::t('w', 'js delete failed') ?>' + o.msg);
                     }
                 })
             }
@@ -108,7 +108,7 @@ use app\models\Group;
                 if (!o.code) {
                     location.reload()
                 } else {
-                    alert('设置失败: ' + o.msg);
+                    alert('<?= yii::t('conf', 'js set audit manager failed') ?>' + o.msg);
                 }
             })
         })

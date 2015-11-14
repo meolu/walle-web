@@ -27,7 +27,7 @@ $config = [
             'useFileTransport' => false,
             'transport' => [
                 'class'      => 'Swift_SmtpTransport',
-                'host'       => 'smtp.exmail.qq.com',     # smtp 发件地址
+                'host'       => 'smtp.huamanshu.com',     # smtp 发件地址
                 'username'   => 'service@huamanshu.com',  # smtp 发件用户名
                 'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
                 'port'       => 25,                       # smtp 端口
@@ -70,7 +70,7 @@ $config = [
             'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
         ],
     ],
-    'language'   => 'zh-CN',
+    'language'   => 'en', // zh => 中文,  en => english
     'bootstrap'  => [
         'app\components\EventBootstrap',
     ],

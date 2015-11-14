@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '部署上线';
+$this->title = yii::t('walle', 'deploying');
 use \app\models\Task;
 ?>
 <style>
@@ -22,24 +22,24 @@ use \app\models\Task;
 </style>
 <div class="box" style="height: 100%">
     <h4 class="box-title header smaller red">
-            <i class="icon-map-marker"></i><?= \Yii::t('status', 'conf_level_' . $task->project['level']) ?>
+            <i class="icon-map-marker"></i><?= \Yii::t('w', 'conf_level_' . $task->project['level']) ?>
             -
             <?= $task->project->name ?>
             ：
             <?= $task->title ?>
-            （<?= $task->project->repo_mode . ':' . $task->branch ?> 版本号：<?= $task->commit_id ?>）
+            （<?= $task->project->repo_mode . ':' . $task->branch ?> <?= yii::t('walle', 'version') ?><?= $task->commit_id ?>）
             <?php if (in_array($task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) { ?>
-                <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>">部署</button>
+                <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>"><?= yii::t('walle', 'deploy') ?></button>
             <?php } ?>
-            <a class="btn btn-success btn-return" href="/task/index">返回</a>
+            <a class="btn btn-success btn-return" href="/task/index"><?= yii::t('walle', 'return') ?></a>
     </h4>
     <div class="status">
-        <span><i class="fa fa-circle-o text-yellow step-1"></i>权限、目录检查</span>
-        <span><i class="fa fa-circle-o text-yellow step-2"></i>pre-deploy任务</span>
-        <span><i class="fa fa-circle-o text-yellow step-3"></i>代码检出</span>
-        <span><i class="fa fa-circle-o text-yellow step-4"></i>post-deploy任务</span>
-        <span><i class="fa fa-circle-o text-yellow step-5"></i>同步至服务器</span>
-        <span style="width: 28%"><i class="fa fa-circle-o text-yellow step-6"></i>全量更新(pre-release、更新版本、post-release)</span>
+        <span><i class="fa fa-circle-o text-yellow step-1"></i><?= yii::t('walle', 'process_detect') ?></span>
+        <span><i class="fa fa-circle-o text-yellow step-2"></i><?= yii::t('walle', 'process_pre-deploy') ?></span>
+        <span><i class="fa fa-circle-o text-yellow step-3"></i><?= yii::t('walle', 'process_checkout') ?></span>
+        <span><i class="fa fa-circle-o text-yellow step-4"></i><?= yii::t('walle', 'process_post-deploy') ?></span>
+        <span><i class="fa fa-circle-o text-yellow step-5"></i><?= yii::t('walle', 'process_rsync') ?></span>
+        <span style="width: 28%"><i class="fa fa-circle-o text-yellow step-6"></i><?= yii::t('walle', 'process_update') ?></span>
     </div>
     <div style="clear:both"></div>
     <div class="progress progress-small progress-striped active">
@@ -47,17 +47,17 @@ use \app\models\Task;
     </div>
 
     <div class="alert alert-block alert-success result-success" style="<?= $task->status != Task::STATUS_DONE ? 'display: none' : '' ?>">
-        <h4><i class="icon-thumbs-up"></i>上线成功!</h4>
-        <p>辛苦了，小主：）</p>
+        <h4><i class="icon-thumbs-up"></i><?= yii::t('walle', 'done') ?></h4>
+        <p><?= yii::t('walle', 'done praise') ?></p>
 
     </div>
 
     <div class="alert alert-block alert-danger result-failed" style="display: none">
-        <h4><i class="icon-bell-alt"></i>上线出错:（</h4>
+        <h4><i class="icon-bell-alt"></i><?= yii::t('walle', 'error title') ?></h4>
         <span class="error-msg">
         </span>
         <br><br>
-        <i class="icon-bullhorn"></i><span>请联系SA或者重新部署</span>
+        <i class="icon-bullhorn"></i><span><?= yii::t('walle', 'error todo') ?></span>
     </div>
 
 </div>

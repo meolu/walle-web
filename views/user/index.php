@@ -2,7 +2,7 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '个人信息';
+$this->title = yii::t('user', 'profile title');
 use \app\components\GlobalHelper;
 
 ?>
@@ -11,7 +11,7 @@ use \app\components\GlobalHelper;
         <div class="col-xs-12 col-sm-3 center">
             <div>
                 <span class="profile-picture">
-                    <img src="<?= GlobalHelper::formatAvatar($user->avatar) ?>" id="avatar" class="editable img-responsive editable-click editable-empty" alt="Alex's Avatar" />
+                    <img src="<?= GlobalHelper::formatAvatar($user->avatar) ?>" id="avatar" class="editable img-responsive editable-click editable-empty"/>
                     <input type="hidden" name="_csrf" value="<?= \Yii::$app->request->getCsrfToken(); ?>">
                 </span>
 
@@ -64,18 +64,18 @@ use \app\components\GlobalHelper;
 
 
                 <div class="profile-info-row">
-                    <div class="profile-info-name"> 级别 </div>
+                    <div class="profile-info-name"> <?= yii::t('user', 'level') ?> </div>
 
                     <div class="profile-info-value">
                         <span>
-                            <?= \Yii::t('status', 'user_role_' . $user->role) ?>
-                            <?= $user->status == \app\models\User::STATUS_INACTIVE ? '（未激活）' : '' ?>
+                            <?= \Yii::t('w', 'user_role_' . $user->role) ?>
+                            <?= $user->status == \app\models\User::STATUS_INACTIVE ? yii::t('user', 'inactive') : '' ?>
                         </span>
                     </div>
                 </div>
 
                 <div class="profile-info-row">
-                    <div class="profile-info-name"> 注册时间 </div>
+                    <div class="profile-info-name"> <?= yii::t('user', 'register time') ?> </div>
 
                     <div class="profile-info-value">
                         <span> <?= $user->created_at ?> </span>

@@ -1,32 +1,40 @@
+![](https://raw.github.com/meolu/walle-web/master/screenshots/logo.jpg)
+
 Walle - A Deployment Tool
 =========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+[![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
+[![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
 
-Walle is a deployment tool written in PHP with yii2 out of the box.
+A web deployment tool, Easy for configuration, Fully functional, Smooth interface, Out of the box.
+support git/svn Version control system, no matter what language you are, php/java/ruby/python, just as jenkins. you can deploy the code or output to multiple servers easily on walle, just
+See [home page](http://www.huamanshu.com/walle-en.html) for more information, [中文说明](https://github.com/meolu/walle-web/blob/master/README-zh.md).
 
-See [walle website](http://www.huamanshu.com/walle.html) for more information and documentation. [查看中文说明](https://github.com/meolu/walle-web/blob/master/README.md), star me if like : )
+Now, there are more then ten companies hosted walle for deployment, star walle if you like : )
 
-* User signup by admin/develop identity
-* Developer submit a task, deploy task
-* Admin audit task
-* Multiple project
-* Multiple Task Parallel
-* Quick rollback
-* Group relation of project
-* Task of pre-deploy（e.g: test ENV var）
-* Task of post-deploy（e.g: vendor, java's mvn ant）
-* Task of post-release（e.g: restart service）
-* Checkout file md5
+* Support git/svn Version control system.
+* User signup by admin/develop identity.
+* Developer submit a task, deploy task.
+* Admin audit task.
+* Multiple project.
+* Multiple Task Parallel.
+* Quick rollback.
+* Group relation of project.
+* Task of pre-deploy（e.g: test ENV var）.
+* Task of post-deploy（e.g: mvn/ant, composer install for vendor）.
+* Task of pre-release（e.g: stop service）.
+* Task of post-release（e.g: restart service）.
+* Check up file md5.
 
 
 Requirements
 ------------
 
-* bash(git、ssh)
-* LNMP、LAMP(php5.4+)
-* composer
+* Bash(git、ssh)
+* LNMP/LAMP(php5.4+)
+* Composer
 
-That's all! It's base package of PHP envirament!
+That's all. It's base package of PHP environment!
 
 
 Installation
@@ -36,71 +44,65 @@ git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # set up module db mysql connection info
 composer install  # error cause by bower-asset, install：composer global require "fxp/composer-asset-plugin:*"
-./yii migrate/up  # migrate database
+./yii run/setup   # init walle
 ```
-
+Or [The Most Detailed Installation Guide](https://github.com/meolu/walle-web/blob/master/docs/install-en.md), any questions refer to [FAQ](https://github.com/meolu/walle-web/blob/master/docs/faq-en.md)
 
 Quick Start
 -------------
 
-* set up nginx/apache webroot `walle-web/web`
-* config email smtp（config your company's email smtp after trying in case leakaging Information）
-    ```php
-    vi config/params.php
-    'support.email' => 'service@huamanshu.com', // the same with `username` of the module of `config/web.php`
-    'mail-suffix'   => [
-        'huamanshu.com',
-    ]
-
-    vi config/web.php +25
-    # config module of mail smtp
-    'class'      => 'Swift_SmtpTransport',
-    'host'       => 'ip or host',            # smtp host
-    'username'   => 'service@huamanshu.com', # smtp send user
-    'password'   => 'password',              # smtp password
-    'port'       => 25,                      # smtp port
-    'encryption' => 'tls',                   # smtp agreement
-    ```
-* signup a admin user(`admin/admin` exists),then config a project
-* signup a develop user(`demo/demo` exists),submit a task
-* admin audit task
-* deveop deploy the audited task
+* Signup a admin user(`admin/admin` exists), then configure a project, add member to the project, detect it.
+    * [git demo](https://github.com/meolu/walle-web/blob/master/docs/config-git-en.md)
+    * [svn demo](https://github.com/meolu/walle-web/blob/master/docs/config-svn-en.md)
+* Signup a develop user(`demo/demo` exists), submit a deployment.
+* Project admin audit the deployment.
+* Developer deploy the deployment.
 
 
 
 To Do List
 ----------
 
-* a manager of static source
+- Travis CI integration
+- Mail events：specify kinds of events
+- Gray released：specify servers
+- Websocket instead of poll
+- A manager of static source
+- Configure variables;
+- Support Docker
+- Open api
+- Command line
 
 Update
 -----------------
 ```
 git pull
-./yii migrate
+./yii migrate # update db
 ```
 
 
-screenshot
-----------
+Architecture
+------------
+#### git/svn, user, host, servers
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-work-en.png)
+
+#### deployment flow
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-en.png)
+
+Screenshots
+-----------
 
 #### project config
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
-
-#### signup a admin/developer
-![](https://raw.github.com/meolu/walle-web/master/screenshots/login.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit-en.jpg)
 
 #### sumbit a task
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit-en.jpg)
 
 #### list of task
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
-
-#### deploy flow
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list-en.jpg)
 
 #### demo show
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
+![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-en.gif)
 
 ## CHANGELOG
 [CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
@@ -109,4 +111,5 @@ screenshot
 Discussing
 ----------
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
-- QQ: 482939318
+- email: wushuiyong@huamanshu.com
+- QQ Group: 482939318

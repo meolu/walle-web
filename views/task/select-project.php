@@ -2,14 +2,14 @@
 /**
  * @var yii\web\View $this
  */
-$this->title = '选择项目';
+$this->title = yii::t('task', 'select project title');
 use app\models\Project;
 ?>
 <div class="box">
     <!-- 测试环境 -->
     <div class="widget-box transparent">
         <div class="widget-header">
-            <h4 class="lighter">测试环境</h4>
+            <h4 class="lighter"><?= yii::t('w', 'conf_level_1') ?></h4>
 
             <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
@@ -32,7 +32,7 @@ use app\models\Project;
     <!-- 仿真环境 -->
     <div class="widget-box transparent">
         <div class="widget-header">
-            <h4 class="lighter">仿真环境</h4>
+            <h4 class="lighter"><?= yii::t('w', 'conf_level_2') ?></h4>
 
             <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
@@ -55,7 +55,7 @@ use app\models\Project;
     <!-- 线上环境 -->
     <div class="widget-box transparent">
         <div class="widget-header">
-            <h4 class="lighter">线上环境</h4>
+            <h4 class="lighter"><?= yii::t('w', 'conf_level_3') ?></h4>
 
             <div class="widget-toolbar no-border"><a href="javascript:;" data-action="collapse">
                     <i class="icon-chevron-up"></i>
