@@ -33,7 +33,7 @@ vi config/web.php +12
 ],
 ```
 
-3.Install Composer(Skip If You Have Composer)
+3.Install Composer(skip if uou have composer)
 ---------------------------
 ```
 curl -sS https://getcomposer.org/installer | php
@@ -47,8 +47,8 @@ cd walle-web
 composer install --prefer-dist --no-dev --optimize-autoloader -vvvv
 ```
 
-5.Init
-----------
+5.Init Walle
+------------
 ```
 cd walle-web
 ./yii run/setup # yes
@@ -58,6 +58,7 @@ cd walle-web
 6.Configure Nginx/Apache
 -----------------
 **50x maybe caused by the incomplete of step 1-5, check up yourself: )**
+
 **if nginx/apache's configuration is not corect, you may see 40x page on step 7, check up yourself: )**
 
 **nginx example**

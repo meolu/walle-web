@@ -40,6 +40,30 @@ if project's configuration works after detection, have a try to deploy : )
 
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
 
+Errors and solutions list:
+- hosted server error: please make sure the user {user} of php process have the access permission of {path}. error：{error}
+
+    ```
+    ll {path}
+    chown {user} -R {path}
+    chmod 755 -R {path}
+    ```
+- target server error: please make sure the ssh-key of user {local_user} of php process is added to target servers\'s user {remote_user}\'s authorized_keys, and {remote_user} have the access permission of {path} on target servers. error：{error}
+    - please make sure the ssh-key of user {local_user} of php process is added to target servers\'s user {remote_user}\'s authorized_keys
+
+        ```
+        su {local_user} && ssh-copy-id -i ~/.ssh/id_rsa.pub remote_user@remote_server
+        # need remote_user's password
+        ```
+    - {remote_user} have the access permission of {path} on target servers
+
+        ```
+        su remote_user
+        ll {path}
+        chown {remote_user} -R {path}
+        chmod 755 -R {path}
+        ````
+
 4.Deployment
 ------------
 In svn mode, you can deploy all code, or deploy specified files incrementally.

@@ -37,7 +37,7 @@ open github/gitlab's website, add your key to ssh-keys or deploy-keys
 ```
 
 
-4.How to add user's ssh-key to linux
+4.How to add user's ssh-key to server
 -------------------------------------------
 **on host**
 ```
