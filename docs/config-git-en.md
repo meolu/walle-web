@@ -9,7 +9,7 @@ Walle's configuration guide
         ```
         ps aux|grep php
         ```
-    * how to find out the ssh-key of user:
+    * how to find out the ssh-key of user:  
         ```
         su user-name && cat ~/.ssh/id_rsa.pub
         ```
