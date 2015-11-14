@@ -24,10 +24,10 @@ Walle's svn configuration guide
         ```
     - how to add a ssh-key to remote server:
 
-          ```
-          su user-name && ssh-copy-id -i ~/.ssh/id_rsa.pub remote_user@remote_server
-          # need remote_user's password
-          ```
+        ```
+        su user-name && ssh-copy-id -i ~/.ssh/id_rsa.pub remote_user@remote_server
+        # need remote_user's password
+        ```
 2.Configuration
 ---------------
 
