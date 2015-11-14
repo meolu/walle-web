@@ -26,15 +26,14 @@ Walle's configuration guide
 2.Configuration
 ---------------
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/base-git.jpg)
-![](https://github.com/meolu/walle-web/blob/master/screenshots/task.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/tasken.jpg)
 
 3.Detection
 -----------
 
 if project's configuration works after detection, have a try to deploy : )
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/detection-en.png)
 
 4.Detection errors and solutions
 -------------------------------

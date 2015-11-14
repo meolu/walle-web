@@ -28,18 +28,18 @@ Walle's svn configuration guide
         su user-name && ssh-copy-id -i ~/.ssh/id_rsa.pub remote_user@remote_server
         # need remote_user's password
         ```
+
 2.Configuration
 ---------------
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/base-svn.jpg)
-![](https://github.com/meolu/walle-web/blob/master/screenshots/task.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/task-en.jpg)
 
 3.Detection
 -----------
 
 if project's configuration works after detection, have a try to deploy : )
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/detection-en.png)
 
 4. Detection errors and solutions
 --------------------------------

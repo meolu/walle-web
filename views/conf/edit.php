@@ -67,7 +67,7 @@ use yii\widgets\ActiveForm;
             ])
             ->label(yii::t('conf', 'username'), ['class' => 'control-label bolder blue col-xs-1']) ?>
         <?= $form->field($conf, 'repo_password')
-            ->textInput([
+            ->passwordInput([
                 'class'          => 'col-xs-3',
             ])
             ->label(yii::t('conf', 'password'), ['class' => 'control-label bolder blue col-xs-1']); ?>
@@ -87,7 +87,6 @@ use yii\widgets\ActiveForm;
                   <h4 class="lighter">
                       <i class="icon-dashboard orange"></i>
                       <?= yii::t('conf', 'host') ?>
-
                   </h4>
                   <div class="widget-toolbar">
                       <a href="javascript:;" data-action="collapse">
