@@ -40,7 +40,9 @@ if project's configuration works after detection, have a try to deploy : )
 
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
 
-Errors and solutions list:
+4. Detection errors and solutions
+--------------------------------
+
 - hosted server error: please make sure the user {user} of php process have the access permission of {path}. error：{error}
 
     ```
@@ -64,7 +66,7 @@ Errors and solutions list:
         chmod 755 -R {path}
         ````
 
-4.Deployment
+5.Deployment
 ------------
 In svn mode, you can deploy all code, or deploy specified files incrementally.
 

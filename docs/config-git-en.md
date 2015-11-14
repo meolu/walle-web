@@ -36,7 +36,9 @@ if project's configuration works after detection, have a try to deploy : )
 
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/detection.png)
 
-Errors and solutions list:
+4.Detection errors and solutions
+-------------------------------
+
 - hosted server error: please make sure the user {user} of php process have the access permission of {path}，and add the ssh-key to github/gitlab\'s deploy-keys。error：{error}
     - make sure the user {user} have access permission of {path}
 
