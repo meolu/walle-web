@@ -60,7 +60,7 @@ return [
 
     'index' => 'Project Configuration',
     'index search placeholder' => 'project name',
-    'create project' => 'Create A Project',
+    'create project' => 'Configure A Project',
     'p_name' => 'Name',
     'p_env' => 'Env',
     'p_mode' => 'Mode',

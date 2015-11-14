@@ -22,7 +22,7 @@ return [
     'task_status_4_color' => 'text-danger',
 
     'conf_level_1' => '测试环境',
-    'conf_level_2' => '仿真环境',
+    'conf_level_2' => '预发布环境',
     'conf_level_3' => '线上环境',
 
     'conf_status_0' => '无效',
