@@ -63,7 +63,8 @@ compile in php source
 restart php-fpm
 ```
 
-6.**nginx example**
+6.Nginx configuration example
+-----------------------------
 ```
 server {
     listen       80;
@@ -88,8 +89,8 @@ server {
 }
 ```
 
-7.**apache example**
------------------
+7.apache configuration example
+------------------------------
 
 ```
 LoadModule rewrite_module modules/mod_rewrite.so

@@ -12,15 +12,15 @@ Walle's svn configuration guide
 
 1.2 The ssh-key of the user of php process in host should be added to target servers authorized_keys
     - how to find out the user of php process:
-        ```shell
+        ```
         ps aux|grep php
         ```
     - how to find out the ssh-key of user:
-        ```shell
+        ```
         su user-name && cat ~/.ssh/id_rsa.pub
         ```
     - how to add a ssh-key to remote server:
-          ```shell
+          ```
           su user-name && ssh-copy-id -i ~/.ssh/id_rsa.pub remote_user@remote_server
           # need remote_user's password
           ```
