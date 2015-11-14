@@ -32,6 +32,7 @@ Walle's svn configuration guide
 2.Configuration
 ---------------
 
+![](https://github.com/meolu/walle-web/blob/master/screenshots/base-svn-en.jpg)
 ![](https://github.com/meolu/walle-web/blob/master/screenshots/task-en.jpg)
 
 3.Detection

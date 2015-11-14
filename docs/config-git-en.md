@@ -26,7 +26,7 @@ Walle's configuration guide
 2.Configuration
 ---------------
 
-![](https://github.com/meolu/walle-web/blob/master/screenshots/tasken.jpg)
+![](https://github.com/meolu/walle-web/blob/master/screenshots/task-en.jpg)
 
 3.Detection
 -----------
