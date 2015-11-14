@@ -5,13 +5,13 @@ Walle's svn configuration guide
 1.Requirements：
 -----------
 
-1.1 Svn's directory like flowing, or you can create a svn project in [riouxsvn](https://riouxsvn.com) for test.
+- Svn's directory like flowing, or you can create a svn project in [riouxsvn](https://riouxsvn.com) for test.
 
     - branches
     - tags
     - trunk
 
-1.2 The ssh-key of the user of php process in host should be added to target servers authorized_keys
+- The ssh-key of the user of php process in host should be added to target servers authorized_keys
     - how to find out the user of php process:
 
         ```
