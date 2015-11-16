@@ -54,4 +54,5 @@ return [
     'menu file md5' => '线上文件指纹',
     'breadcrumb index' => '首页',
 
+    'need login' => '请先登录，再操作：）',
 ];

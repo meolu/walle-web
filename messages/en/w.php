@@ -53,4 +53,5 @@ return [
     'menu file md5' => 'File Fingerprint',
     'breadcrumb index' => 'Index',
 
+    'need login' => 'login first ：）',
 ];

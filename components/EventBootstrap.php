@@ -33,7 +33,7 @@ class EventBootstrap implements BootstrapInterface
                 Yii::$app->end();
             }
             $event->isValid = false;
-            throw new \Exception('请先登录，再操作：）');
+            throw new \Exception(yii::t('w', 'need login'));
         });
     }
 
