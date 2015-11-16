@@ -28,7 +28,7 @@ git部署是最推荐的方式，它无论对于何种语言都是合适的。
 - 宿主机代码检出检测出错，请确认php进程用户{user}有代码存储仓库{path}读写权限，且把ssh-key加入git的deploy-keys列表。详细错误：{error}
 
     - 问题：**请确认php进程用户{user}有代码存储仓库{path}读写权限**
-    
+
         ```
         没有权限，是因为用户{user}对目录{path}没有读写权限，给权限即可
         ll {path}
@@ -39,7 +39,7 @@ git部署是最推荐的方式，它无论对于何种语言都是合适的。
 
         ```
         su {user} && cat ~/.ssh/id_rsa.pub
-        open github/gitlab/bitbucket, add the ssh-key
+        打开 github/gitlab/bitbucket 网站, 添加 ssh-key 到ssh-keys列表
         ```
 
 - 目标机器部署出错，请确认php进程{local_user}用户ssh-key加入目标机器的{remote_user}用户ssh-key信任列表，且{remote_user}有目标机器发布版本库{path}写入权限。详细错误：{error}
