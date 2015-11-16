@@ -21,7 +21,7 @@ class RunController extends Controller {
     ];
 
     /**
-     * 初始化项目
+     * init walle 初始化项目
      *
      * @throws yii\console\Exception
      */
