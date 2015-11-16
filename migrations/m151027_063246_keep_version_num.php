@@ -10,7 +10,7 @@ class m151027_063246_keep_version_num extends Migration
     public function up()
     {
         $this->addColumn(Project::tableName(), 'keep_version_num', Schema::TYPE_INTEGER . '(3) NOT NULL DEFAULT 20 COMMENT "线上版本保留数" AFTER audit');
-        $this->addColumn(Task::tableName(), 'enable_rollback', Schema::TYPE_INTEGER . '(1) NOT NULL DEFAULT 1 COMMENT "能否回滚此版本0no 1yes"');
+        $this->addColumn(Task::tableName(), 'enable_rollback', Schema::TYPE_INTEGER . '(1) NOT NULL DEFAULT 1 COMMENT "能否回滚此版本:0no 1yes"');
 
     }
 
