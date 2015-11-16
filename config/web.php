@@ -70,7 +70,7 @@ $config = [
             'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
         ],
     ],
-    'language'   => 'en', // zh => 中文,  en => english
+    'language'   => 'en', // zh => 中文,  en => English
     'bootstrap'  => [
         'app\components\EventBootstrap',
     ],
