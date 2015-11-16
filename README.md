@@ -11,7 +11,7 @@ support git/svn Version control system, no matter what language you are, php/jav
 
 [Home Page](http://www.huamanshu.com/walle-en.html) | [中文说明](https://github.com/meolu/walle-web/blob/master/docs/README-zh.md).
 
-Now, there are more then ten companies hosted walle for deployment, star walle if you like : )
+Now, there are more than ten companies hosted walle for deployment, star walle if you like : )
 
 * Support git/svn Version control system.
 * User signup by admin/develop identity.
