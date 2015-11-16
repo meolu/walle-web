@@ -1,8 +1,8 @@
 {
     "name": "meolu/walle-web",
-    "description": "walle web ui",
+    "description": "A web deployment tool",
     "keywords": ["walle", "php deploy", "deploy web", "deploy ui"],
-    "homepage": "http://www.huamanshu.com/",
+    "homepage": "http://www.huamanshu.com/walle-en.html",
     "type": "project",
     "license": "BSD-3-Clause",
     "minimum-stability": "stable",
