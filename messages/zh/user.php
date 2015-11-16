@@ -20,4 +20,9 @@ return [
     'cant\'t remove active manager' => '只能删除未审核的项目管理员：(',
     'only pass inactive manager' => '只能通过未审核的项目管理员：(',
     'user not exists' => '该用户不存在：）',
+    'confirm email by click url' => '点击以下链接完成注册，如不是本人操作，请忽略，谢谢！',
+    'dear' => '亲爱的',
+    'active' => '确认激活',
+    'reset password by click url' => '点击以下链接完成重置密码，如不是本人操作，请忽略，谢谢！',
+    'reset password' => 'reset password',
 ];

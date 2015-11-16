@@ -20,4 +20,9 @@ return [
     'cant\'t remove active manager' => 'cant\'t remove active manager：(',
     'only pass inactive manager' => 'the user is active：(',
     'user not exists' => 'user is not exists：）',
+    'confirm email by click url' => 'visit this link to verify your email address:',
+    'dear' => 'dear ',
+    'active' => 'active',
+    'reset password by click url' => 'visit this link to reset password:',
+    'reset password' => 'reset password',
 ];
