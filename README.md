@@ -77,7 +77,6 @@ you would like to adjust some params to make walle suited for your company.
     ```php
     vi config/web.php +25
 
-    # 配置mail smtp模块
     'class'      => 'Swift_SmtpTransport',
     'host'       => 'smtp.huamanshu.com',    # smtp host
     'username'   => 'service@huamanshu.com', # smtp username
@@ -88,7 +87,7 @@ you would like to adjust some params to make walle suited for your company.
 
     vi config/params.php
 
-    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
+    'support.email' => 'service@huamanshu.com', // the same with username of mail module in config/web.php
     ```
 
 * Configure the path for log
