@@ -47,8 +47,7 @@ class Git extends Command {
         $destination = Project::getDeployWorkspace($task->link_id);
         $this->updateRepo($task->branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = sprintf('/usr/bin/env git reset -q %s', $task->commit_id);
-        $cmd[] = '/usr/bin/env git checkout -q .';
+        $cmd[] = sprintf('/usr/bin/env git reset -q --hard %s', $task->commit_id);
         $command = join(' && ', $cmd);
 
         return $this->runLocalCommand($command);
