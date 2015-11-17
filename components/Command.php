@@ -45,7 +45,7 @@ abstract class Command {
         if ($config) {
             $this->config = $config;
         } else {
-            throw new \Exception('未知的配置');
+            throw new \Exception(\yii::t('walle', 'unknown config'));
         }
     }
 
@@ -118,7 +118,7 @@ abstract class Command {
         if ($config) {
             $this->config = $config;
         } else {
-            throw new \Exception('未知的配置');
+            throw new \Exception(\yii::t('walle', 'unknown config'));
         }
         return $this;
     }

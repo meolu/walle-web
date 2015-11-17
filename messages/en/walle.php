@@ -37,4 +37,10 @@ return [
     'hosted server sys error' => 'error happens when detecting on hosted server：{error}<br>',
     'target server error' => 'target server error: please make sure the ssh-key of user {local_user} of php process is added to target servers\'s user {remote_user}\'s authorized_keys, and {remote_user} have the access permission of {path} on target servers. error：{error}<br>',
     'target server sys error' => 'error happens when detecting on target servers：{error}<br>',
+    'unknown config' => 'unknown configuration',
+    'you are not the manager' => 'you are not the manager',
+    'get branches failed' => 'get branches failed：',
+    'get commit log failed' => 'get commit log failed：',
+    'get tags failed' => 'get tags failed：',
+    'unknown scm' => 'unknown scm',
 ];

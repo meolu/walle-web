@@ -122,7 +122,7 @@ class Svn extends Command {
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
-            throw new \Exception('获取提交历史失败：' . $this->getExeLog());
+            throw new \Exception(\yii::t('walle', 'get commit log failed') . $this->getExeLog());
         }
 
         // 总有一些同学没有团队协作意识，不设置好编码：(
@@ -173,7 +173,7 @@ class Svn extends Command {
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
-            throw new \Exception('获取提交历史失败：' . $this->getExeLog());
+            throw new \Exception(\yii::t('walle', 'get commit log failed') . $this->getExeLog());
         }
 
         $list = [];

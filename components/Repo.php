@@ -19,7 +19,7 @@ class Repo extends Command {
             case Project::REPO_SVN:
                 return new Svn($conf);
             default:
-                throw new \Exception('未知的版本管理');
+                throw new \Exception(\yii::t('walle', 'unknown scm'));
                 break;
         }
     }

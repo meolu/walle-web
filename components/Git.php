@@ -69,7 +69,7 @@ class Git extends Command {
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
-            throw new \Exception('获取分支列表失败：' . $this->getExeLog());
+            throw new \Exception(\yii::t('walle', 'get branches failed') . $this->getExeLog());
         }
 
         $history = [];
@@ -107,7 +107,7 @@ class Git extends Command {
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
-            throw new \Exception('获取提交历史失败：' . $this->getExeLog());
+            throw new \Exception(\yii::t('walle', 'get commit log failed') . $this->getExeLog());
         }
 
         $history = [];
@@ -138,7 +138,7 @@ class Git extends Command {
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
-            throw new \Exception('获取tag记录失败：' . $this->getExeLog());
+            throw new \Exception(\yii::t('walle', 'get tags failed') . $this->getExeLog());
         }
 
         $history = [];

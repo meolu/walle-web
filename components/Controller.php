@@ -67,7 +67,7 @@ class Controller extends yii\web\Controller {
      */
     protected function validateAdmin() {
         if (!GlobalHelper::isValidAdmin()) {
-            throw new \Exception('非管理员不能操作：（');
+            throw new \Exception(\yii::t('walle', 'you are not the manager'));
         }
     }
 }
