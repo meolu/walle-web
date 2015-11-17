@@ -101,7 +101,7 @@ you would like to adjust some params to make walle suited for your company.
     ```php
     vi config/web.php +73
 
-    'language'   => 'en',  # zh => 中文,  en => english
+    'language'   => 'en',  # zh => 中文,  en => English
     ```
 
 
