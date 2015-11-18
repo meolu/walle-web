@@ -55,4 +55,5 @@ return [
     'breadcrumb index' => '首页',
 
     'need login' => '请先登录，再操作：）',
+    'something went wrong' => '出错',
 ];

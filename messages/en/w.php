@@ -54,4 +54,5 @@ return [
     'breadcrumb index' => 'Index',
 
     'need login' => 'login first ：）',
+    'something went wrong' => 'Something Wrong',
 ];

@@ -16,8 +16,7 @@ $this->title = $name;
     <h1 class="grey lighter smaller">
         <span class="blue bigger-125">
             <i class="icon-random"></i>
-Something Went Wrong
-
+            <?= \yii::t('w', 'something went wrong') ?>
         </span>
     </h1>
 
