@@ -1,5 +1,11 @@
 ## Change Log
 
+### v0.9.0 (2015/11/18 10:07 +00:00)
+- reset && checkout => reset --hard
+- walle的国际化版本
+- 修正支持svn密码特殊字符
+- 项目配置：修复了sql_mode在严格模式下提示key_version_num not null (@Liv1020)
+
 ### v0.8.5 (2015/11/07 13:06 +00:00)
 - 优化项目初始化方式
 - 添加最大版本保留数前端验证提示
