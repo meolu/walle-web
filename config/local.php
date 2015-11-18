@@ -5,7 +5,8 @@ define('YII_DEBUG', false);
 // Uncomment to enable dev environment. Recommended for development
 define('YII_ENV', 'prod');
 
-setlocale(LC_CTYPE, 'ru_RU.UTF-8');
+// zh_CN.UTF-8 => 中文,  en_US.UTF-8 => English
+setlocale(LC_ALL, 'zh_CN.UTF-8');
 
 return [
     'components' => [
