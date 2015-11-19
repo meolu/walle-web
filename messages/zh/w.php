@@ -25,6 +25,7 @@ return [
     'conf_level_2' => '预发布环境',
     'conf_level_3' => '线上环境',
 
+    'default trunk' => '默认无trunk',
     'conf_status_0' => '无效',
     'conf_status_1' => '有效',
     'conf_audit_0' => '是',
