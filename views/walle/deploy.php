@@ -70,9 +70,16 @@ use \app\models\Task;
             var task_id = $(this).data('id');
             var action = '';
             var detail = '';
+            var timer;
             $.post("/walle/start-deploy", {taskId: task_id}, function(o) {
                 action = o.code ? o.msg + ':' : '';
-                $('.error-msg').text(action + detail);
+                if (o.code != 0) {
+                    clearInterval(timer);
+                    $('.progress-status').removeClass('progress-bar-success').addClass('progress-bar-danger');
+                    $('.error-msg').text(action + detail);
+                    $('.result-failed').show();
+                    $this.removeClass('disabled');
+                }
             });
             $('.progress-status').attr('aria-valuenow', 10).width('5%');
             $('.result-failed').hide();
@@ -84,8 +91,7 @@ use \app\models\Task;
                         clearInterval(timer);
                         $('.step-' + data.step).removeClass('text-yellow').addClass('text-red');
                         $('.progress-status').removeClass('progress-bar-success').addClass('progress-bar-danger');
-                        $('.error-msg').text(o.msg + ':' + data.memo);
-                        detail = data.memo + '<br>' + data.command;
+                        detail = o.msg + ':' + data.memo + '<br>' + data.command;
                         $('.error-msg').html(action + detail);
                         $('.result-failed').show();
                         $this.removeClass('disabled');

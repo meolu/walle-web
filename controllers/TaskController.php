@@ -185,7 +185,7 @@ class TaskController extends Controller {
 
         $task->status = $operation ? Task::STATUS_PASS : Task::STATUS_REFUSE;
         $task->save();
-        static::renderJson(['status' => \Yii::t('status', 'task_status_' . $task->status)]);
+        static::renderJson(['status' => \Yii::t('w', 'task_status_' . $task->status)]);
     }
 
 }

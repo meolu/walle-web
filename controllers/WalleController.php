@@ -68,6 +68,8 @@ class WalleController extends Controller {
         if (!in_array($this->task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) {
             throw new \Exception(yii::t('walle', 'deployment only done for once'));
         }
+        // 清除历史记录
+        Record::deleteAll(['task_id' => $this->task->id]);
 
         // 项目配置
         $this->conf = Project::getConf($this->task->project_id);
@@ -116,6 +118,7 @@ class WalleController extends Controller {
 
             throw $e;
         }
+        $this->renderJson([]);
     }
 
 

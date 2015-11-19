@@ -89,7 +89,7 @@ class Task extends Command {
         if (empty($tasks)) return '';
 
         $cmd = [];
-        $workspace = rtrim(Project::getDeployWorkspace($version), '/');
+        $workspace = Project::getTargetWorkspace();
         $version   = Project::getReleaseVersionDir($version);
         $pattern = [
             '#{WORKSPACE}#',
