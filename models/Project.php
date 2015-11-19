@@ -196,6 +196,18 @@ class Project extends \yii\db\ActiveRecord
         return sprintf("%s/%s/%s", rtrim($from, '/'), rtrim($env, '/'), $project);
     }
 
+
+    /**
+     * 获取目标机要发布的目录
+     * {webroot}
+     *
+     * @param $version
+     * @return string
+     */
+    public static function getTargetWorkspace() {
+        return rtrim(static::$CONF->release_to, '/');
+    }
+
     /**
      * 拼接目标机要发布的目录
      * {release_library}/{project}/{version}
