@@ -17,7 +17,7 @@ return [
     'l_project' => '项目',
     'l_title' => '上线单标题',
     'l_time' => '上线时间',
-    'l_branche' => '分支',
+    'l_branch' => '分支',
     'l_commit' => '上线commit号',
     'l_status' => '当前状态',
     'l_opera' => '操作',
