@@ -8,7 +8,7 @@ svn部署上线与git有点不太一样，svn是推荐增量发布（当然也�
 一、基本要求：
 -----------
 
-1. svn目录符合以下规范，详细可以注册[riouxsvn](https://riouxsvn.com)，作为svn测试地址。
+1. svn目录推荐以下规范，详细可以注册[riouxsvn](https://riouxsvn.com)，作为svn测试地址。当然三无（无trunk、无branches、无tags）也是支持：）
 
     - branches
     - tags
