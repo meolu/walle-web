@@ -170,7 +170,7 @@ use app\models\Project;
         getBranchList();
         // 页面加载完默认拉取trunk
         if ($('#branch').val()) {
-            getCommitList();
+           // getCommitList();
         }
 
 
