@@ -25,6 +25,7 @@ return [
     'conf_level_2' => 'Pre-Release',
     'conf_level_3' => 'Production',
 
+    'default trunk' => 'default no trunk',
     'conf_status_0' => 'Invalid',
     'conf_status_1' => 'Valid',
     'conf_audit_0' => 'Yes',
