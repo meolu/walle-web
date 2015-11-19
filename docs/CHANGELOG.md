@@ -1,5 +1,9 @@
 ## Change Log
 
+### v0.9.2 (2015/11/19 14:59 +00:00)
+- 兼容 svn 无 trunk/tags/branches
+- 修正目标机pre-release、post-release任务中{WORKSPACE}变量
+
 ### v0.9.0 (2015/11/18 10:07 +00:00)
 - reset && checkout => reset --hard
 - walle的国际化版本
