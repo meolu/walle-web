@@ -69,7 +69,7 @@ you would like to adjust some params to make walle suited for your company.
     vi config/params.php
 
     'mail-suffix'   => [  // specify the suffix of email, multiple suffixes are allow.
-        'huamanshu.com',  // e.g: allow xxx@huamanshu.com only
+        'huamanshu.com',  // e.g: allow xyz@huamanshu.com only
     ]
     ```
 
