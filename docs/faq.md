@@ -119,3 +119,16 @@ CustomLog logs/dev.-accesslog common
     </Directory>
 </VirtualHost>
 ```
+
+9.切换用户（www）时：this account is currently not available
+----------------------------------------------------------
+
+```
+cat /etc/passwd | grep www # 查看是否为 /sbin/nolgin
+```
+
+解决办法：
+```
+vipw /etc/passwd
+修改/sbin/nolgin为/bin/bash
+```
