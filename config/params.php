@@ -5,7 +5,7 @@
  */
 return [
     // ******必须要与config/web.php 中mail模块的username一致*****
-    'support.email' => 'service@huamanshu.com',
+    'support.email' => 'rh@smsguru.no',
     // 显示发件人的名字，可以随意
     'support.name' => 'service',
 
