@@ -56,4 +56,17 @@ return [
 
     'need login' => 'login first ：）',
     'something went wrong' => 'Something Wrong',
+
+    'log-platform' => 'Login',
+    'login username' => 'Username',
+    'login password' => 'Password',
+    'login forgot password' => 'Forgot password',
+    'login register user' => 'Signup',
+
+    'register-platform' => 'Register',
+    'register email' => 'Email',
+    'register firstname' => 'First name',
+    'register password' => 'Password',
+    'register role' => 'Role',
+    'back' => 'Back',
 ];
