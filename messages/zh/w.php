@@ -2,6 +2,7 @@
 
 return [
     'w' => 'Walle 瓦力平台',
+    'w platform' => '平台',
 
     'bool_0' => 'No',
     'bool_1' => 'Yes',
@@ -62,6 +63,8 @@ return [
     'login password' => '密码',
     'login forgot password' => '忘记密码',
     'login register user' => '注册账号',
+
+    'login resend email' => '请确认你的邮箱',
 
     'register-platform' => '注册平台',
     'register email' => '邮箱',
