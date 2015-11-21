@@ -9,7 +9,7 @@ Walle - A Deployment Tool
 A web deployment tool, Easy for configuration, Fully functional, Smooth interface, Out of the box.
 support git/svn Version control system, no matter what language you are, php/java/ruby/python, just as jenkins. you can deploy the code or output to multiple servers easily by walle.
 
-[Home Page](http://www.huamanshu.com/walle-en.html) | [中文说明](https://github.com/meolu/walle-web/blob/master/docs/README-zh.md) | [说明文档](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B).
+[Home Page](http://www.huamanshu.com/walle-en.html) | [中文说明](https://github.com/meolu/walle-web/blob/master/docs/README-zh.md) | [文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B).
 
 Now, there are more than ten companies hosted walle for deployment, star walle if you like : )
 
