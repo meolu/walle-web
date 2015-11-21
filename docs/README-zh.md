@@ -8,7 +8,7 @@
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。
 
-[官网主页](http://www.huamanshu.com/walle.html) | [English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md).
+[官网主页](http://www.huamanshu.com/walle.html) | [说明文档](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B) | [English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md).
 
 目前，超过十家企业生产环境部署使用，欢迎star、fork、试用 ：）
 
