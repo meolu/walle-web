@@ -19,21 +19,21 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="widget-main">
                 <h4 class="header red lighter bigger">
                     <i class="icon-key"></i>
-                    忘记密码
+                    <?= yii::t("w","login forgot password")?>
                 </h4>
 
                 <div class="space-6"></div>
                 <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
-                <?= $form->field($model, 'email')->label('请确认你的邮箱') ?>
+                <?= $form->field($model, 'email')->label(yii::t("w",'login resend email')) ?>
                 <div class="form-group">
-                    <?= Html::submitButton('发送', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton(yii::t("w","submit"), ['class' => 'btn btn-primary']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div><!-- /widget-main -->
 
             <div class="toolbar center">
                 <a href="/site/login" class="back-to-login-link">
-                    返回登录<i class="icon-arrow-right"></i>
+                    <?= yii::t("w","back")?><i class="icon-arrow-right"></i>
                 </a>
             </div>
         </div><!-- /widget-body -->
