@@ -2,6 +2,7 @@
 
 return [
     'w' => 'Walle 瓦力平台',
+    'w platform' => '平台',
 
     'bool_0' => 'No',
     'bool_1' => 'Yes',
@@ -43,7 +44,6 @@ return [
     'delete failed' => '删除失败',
     'update failed' => '更新失败',
 
-
     'dropdown message' => '消息通知',
     'dropdown project apply' => '项目管理员申请',
     'dropdown profile' => '个人资料',
@@ -57,4 +57,19 @@ return [
 
     'need login' => '请先登录，再操作：）',
     'something went wrong' => '出错',
+
+    'log-platform' => '登录平台',
+    'login username' => '用户名' ,
+    'login password' => '密码',
+    'login forgot password' => '忘记密码',
+    'login register user' => '注册账号',
+
+    'login resend email' => '请确认你的邮箱',
+
+    'register-platform' => '注册平台',
+    'register email' => '邮箱',
+    'register firstname' => '名字',
+    'register password' => '密码',
+    'register role' => '角色',
+    'back' => '返回登录',
 ];

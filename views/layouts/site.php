@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>登录 - 瓦力平台</title>
+    <title><?= yii::t("w","log-platform")?> - <?= yii::t("w","w")?></title>
     <!-- basic styles -->
 
     <link href="/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h1>
                             <i class="icon-leaf green"></i>
                             <span class="red">Walle</span>
-                            <span class="white">瓦力平台</span>
+                            <span class="white"><?= yii::t("w","w platform") ?></span>
                         </h1>
                     </div>
 
