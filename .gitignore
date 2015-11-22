@@ -11,3 +11,6 @@ tests/_output/*
 tests/_output/*
 tests/_output/*
 tests/_output/*
+
+web/assets
+config/local.php

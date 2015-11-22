@@ -2,6 +2,7 @@
 
 return [
     'w' => 'Walle Platform',
+    'w platform' => 'Platform',
 
     'bool_0' => 'No',
     'bool_1' => 'Yes',
@@ -56,4 +57,19 @@ return [
 
     'need login' => 'login first ：）',
     'something went wrong' => 'Something Wrong',
+
+    'log-platform' => 'Login',
+    'login username' => 'Username',
+    'login password' => 'Password',
+    'login forgot password' => 'Forgot password',
+    'login register user' => 'Signup',
+
+    'login resend email' => 'Please confirm your email',
+
+    'register-platform' => 'Register',
+    'register email' => 'Email',
+    'register firstname' => 'First name',
+    'register password' => 'Password',
+    'register role' => 'Role',
+    'back' => 'Back',
 ];

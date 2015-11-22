@@ -17,17 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="widget-main">
             <h4 class="header blue lighter bigger">
                 <i class="icon-coffee green"></i>
-                登录平台
+                <?= yii::t('w','log-platform')?>
             </h4>
 
             <div class="space-6"></div>
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-            <?= $form->field($model, 'username')->label('用户名') ?>
-            <?= $form->field($model, 'password')->label('密码')->passwordInput() ?>
+            <?= $form->field($model, 'username')->label(yii::t('w','login username')) ?>
+            <?= $form->field($model, 'password')->label(yii::t('w','login password'))->passwordInput() ?>
             <?= $form->field($model, 'rememberMe')->label('记住我')->checkbox() ?>
 
             <div class="form-group">
-                <?= Html::submitButton('登录', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::submitButton(yii::t('w','submit'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
             <?php ActiveForm::end(); ?>
 
@@ -37,13 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <div>
                 <a href="/site/request-password-reset" class="forgot-password-link">
                     <i class="icon-arrow-left"></i>
-                    忘记密码
+                    <?= yii::t('w','login forgot password')?>
                 </a>
             </div>
 
             <div>
                 <a href="/site/signup" class="user-signup-link">
-                    注册账号
+                    <?= yii::t('w','login register user')?>
                     <i class="icon-arrow-right"></i>
                 </a>
             </div>
