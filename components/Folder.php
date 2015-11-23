@@ -39,10 +39,8 @@ class Folder extends Command {
      */
     public function initRemoteVersion($version) {
         $cmd[] = sprintf('mkdir -p %s', Project::getReleaseVersionDir($version));
-        if ($this->config->repo_type == Project::REPO_SVN) {
-            $cmd[] = sprintf('test -d %s && cp -rf %s/* %s/ || echo 1', // 无论如何总得要$?执行成功
-                $this->config->release_to, $this->config->release_to, Project::getReleaseVersionDir($version));
-        }
+        $cmd[] = sprintf('test -d %s && cp -rf %s/* %s/ || echo 1', // 无论如何总得要$?执行成功
+            $this->config->release_to, $this->config->release_to, Project::getReleaseVersionDir($version));
         $command = join(' && ', $cmd);
 
         return $this->runRemoteCommand($command);
