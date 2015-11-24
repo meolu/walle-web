@@ -10,7 +10,7 @@ mysql:
   encoding: utf8
 
 install:
-  - travis_retry composer self-update && composer --version
+  - travis_retry composer self-update && composer update nothing && composer --version
   - travis_retry composer global require "fxp/composer-asset-plugin:~1.0.3"
   - composer install --prefer-source --no-interaction --dev
   - wget http://codeception.com/codecept.phar -O vendor/bin/codecept && chmod +x vendor/bin/codecept
