@@ -73,6 +73,7 @@ $config = [
     'language'   => 'zh', // zh => 中文,  en => English
     'bootstrap'  => [
         'app\components\EventBootstrap',
+        'log',
     ],
     'params'     => require(__DIR__ . '/params.php'),
 ];

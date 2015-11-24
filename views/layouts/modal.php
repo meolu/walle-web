@@ -35,7 +35,7 @@ $user = User::findOne(\Yii::$app->user->id);
 
     <!--[if !IE]> -->
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='/dist/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+        window.jQuery || document.write("<script src='/dist/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
     </script>
     <!-- <![endif]-->
 
@@ -79,7 +79,7 @@ $user = User::findOne(\Yii::$app->user->id);
 <!-- basic scripts -->
 
 <script type="text/javascript">
-    if("ontouchend" in document) document.write("<script src='/dist/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+    if("ontouchend" in document) document.write("<script src='/dist/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 </script>
 <script src="/dist/js/typeahead-bs2.min.js"></script>
 
