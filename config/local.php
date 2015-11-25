@@ -18,8 +18,11 @@ return [
         ],
         'mail' => [
             'transport' => [
+                'host'       => 'smtp.huamanshu.com',     # smtp 发件地址
                 'username'   => 'service@huamanshu.com',  # smtp 发件用户名
                 'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
+                'port'       => 25,                       # smtp 端口
+                'encryption' => 'tls',                    # smtp 协议
             ],
         ],
         'request' => [
