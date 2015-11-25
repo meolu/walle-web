@@ -7,6 +7,7 @@ $_SERVER['SCRIPT_NAME'] = YII_TEST_ENTRY_URL;
  */
 return yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../../config/web.php'),
+    require(__DIR__ . '/../../../config/local.php'),
     require(__DIR__ . '/config.php'),
     [
         'components' => [
