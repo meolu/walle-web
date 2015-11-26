@@ -60,6 +60,15 @@ use app\models\Project;
 
 <script type="text/javascript">
     jQuery(function($) {
+        // 用户上次选择的分支作为转为分支
+        var project_id = <?= (int)$_GET['projectId'] ?>;
+        var branch_name= 'pre_branch_' + project_id;
+        var pre_branch = ace.cookie.get(branch_name);
+        if (pre_branch) {
+            var option = '<option value="' + pre_branch + '" selected>' + pre_branch + '</option>';
+            $('#branch').html(option)
+        }
+
         function getBranchList() {
             $('.get-branch').show();
             $('.tip').hide();
@@ -99,6 +108,8 @@ use app\models\Project;
 
         $('#branch').change(function() {
             $('.get-history').show();
+            // 添加cookie记住最近使用的分支名字
+            ace.cookie.set(branch_name, $(this).val(), 86400*30)
             getCommitList();
         })
 
@@ -132,6 +143,7 @@ use app\models\Project;
         $("#myModal").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
+
     })
 
 </script>
