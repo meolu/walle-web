@@ -59,7 +59,7 @@ return [
     'something went wrong' => 'Something Wrong',
 
     'log-platform' => 'Login',
-    'login username' => 'Username',
+    'login username' => 'Email',
     'login password' => 'Password',
     'login forgot password' => 'Forgot password',
     'login register user' => 'Signup',

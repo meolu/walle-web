@@ -59,7 +59,7 @@ return [
     'something went wrong' => '出错',
 
     'log-platform' => '登录平台',
-    'login username' => '用户名' ,
+    'login username' => '邮箱' ,
     'login password' => '密码',
     'login forgot password' => '忘记密码',
     'login register user' => '注册账号',
