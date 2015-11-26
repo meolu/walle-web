@@ -75,9 +75,8 @@ you would like to adjust some params to make walle suited for your company.
 
 * Configure email smtp
     ```php
-    vi config/web.php +25
+    vi config/local.php
 
-    'class'      => 'Swift_SmtpTransport',
     'host'       => 'smtp.huamanshu.com',    # smtp host
     'username'   => 'service@huamanshu.com', # smtp username
     'password'   => 'password',              # smtp password
