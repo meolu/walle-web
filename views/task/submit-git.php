@@ -91,6 +91,7 @@ use app\models\Project;
         }
 
         function getCommitList() {
+            $('.get-history').show();
             $.get("/walle/get-commit-history?projectId=" + <?= (int)$_GET['projectId'] ?> +"&branch=" + $('#branch').val(), function (data) {
                 // 获取commit log失败
                 if (data.code) {
@@ -107,7 +108,6 @@ use app\models\Project;
         }
 
         $('#branch').change(function() {
-            $('.get-history').show();
             // 添加cookie记住最近使用的分支名字
             ace.cookie.set(branch_name, $(this).val(), 86400*30)
             getCommitList();

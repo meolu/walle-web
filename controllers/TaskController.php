@@ -9,6 +9,7 @@ use app\models\Task;
 use app\models\Project;
 use app\models\User;
 use app\models\Group;
+use app\components\Repo;
 
 class TaskController extends Controller {
     
@@ -54,9 +55,23 @@ class TaskController extends Controller {
     public function actionSubmit($projectId = null) {
         $task = new Task();
         if ($projectId) {
+            // svn下无trunk
+            $nonTrunk = false;
             $conf = Project::find()
                 ->where(['id' => $projectId, 'status' => Project::STATUS_VALID])
                 ->one();
+            $conf = Project::getConf($projectId);
+            // 第一次可能会因为更新而耗时，但一般不会，第一次初始化会是在检测里
+            if ($conf->repo_type == Project::REPO_SVN && !file_exists(Project::getDeployFromDir())) {
+                $version = Repo::getRevision($conf);
+                $version->updateRepo();
+            }
+            // 为了简化svn无trunk, branches时，不需要做查看分支，直接就是主干
+            $svnTrunk = sprintf('%s/trunk', Project::getDeployFromDir());
+            // svn下无trunk目录
+            if (!file_exists($svnTrunk)) {
+                $nonTrunk = true;
+            }
         }
         if (\Yii::$app->request->getIsPost()) {
             if (!$conf) throw new \Exception(yii::t('task', 'unknown project'));
@@ -81,6 +96,7 @@ class TaskController extends Controller {
             return $this->render($tpl, [
                 'task' => $task,
                 'conf' => $conf,
+                'nonTrunk' => $nonTrunk,
             ]);
         }
         // 成员所属项目

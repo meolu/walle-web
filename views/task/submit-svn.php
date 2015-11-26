@@ -11,21 +11,25 @@ use app\models\Project;
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
       <div class="box-body">
         <?= $form->field($task, 'title')->label(yii::t('task', 'submit title'), ['class' => 'control-label bolder blue']) ?>
-
-        <!-- 分支选取 -->
-          <div class="form-group">
-              <label class="control-label bolder blue">
-                  <?= yii::t('task', 'select branches') ?>
-                  <a class="show-tip icon-refresh green" href="javascript:;"></a>
-                  <span class="tip"><?= yii::t('task', 'all branches') ?></span>
-                  <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
-              </label>
-              <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
-                  <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
-                  <option value="trunk">trunk</option>
-                  <?php } ?>
-              </select>
-          </div>
+          <!-- 无trunk时，不需要查看所有分支-->
+          <?php if ($nonTrunk) { ?>
+              <input type="hidden" id="branch" class="form-control" name="Task[branch]" value="">
+          <?php } else { ?>
+              <!-- 分支选取 -->
+              <div class="form-group">
+                  <label class="control-label bolder blue">
+                      <?= yii::t('task', 'select branches') ?>
+                      <a class="show-tip icon-refresh green" href="javascript:;"></a>
+                      <span class="tip"><?= yii::t('task', 'all branches') ?></span>
+                      <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
+                  </label>
+                  <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
+                      <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
+                          <option value="trunk">trunk</option>
+                      <?php } ?>
+                  </select>
+              </div>
+          <?php } ?>
           <div class="between-history" style="display: none">
           <div class="form-group col-xs-3" style="padding-left: 0">
               <label class="control-label bolder blue">commit id start</label>
@@ -95,30 +99,51 @@ use app\models\Project;
         $('[data-rel=tooltip]').tooltip({container:'body'});
 
         var projectId =  <?= (int)$_GET['projectId'] ?>;
+        // 用户上次选择的分支作为转为分支
+        var branch_name= 'pre_branch_' + projectId;
+        var pre_branch = ace.cookie.get(branch_name);
+        if (pre_branch) {
+            var option = '<option value="' + pre_branch + '" selected>' + (pre_branch ? pre_branch : 'non-trunk') + '</option>';
+            $('#branch').html(option)
+            getCommitList();
+        }
+        // 无trunk时，直接获取commit log
+        if (!$('#branch').val()) {
+            getCommitList();
+        }
+
         function getBranchList() {
             $('.get-branch').show();
             $('.tip').hide();
             $('.show-tip').hide();
-            $.get("/walle/get-branch?projectId=" + <?= (int)$_GET['projectId'] ?>, function (data) {
+            $.get("/walle/get-branch?projectId=" + projectId, function (data) {
                 // 获取分支失败
                 if (data.code) {
                     showError(data.msg);
                 }
                 var select = '';
+                var nonTrunk = false;
+                var count = 0;
                 $.each(data.data, function (key, value) {
                     // 默认选中 trunk 主干
                     var checked = value.id == 'trunk' ? 'selected' : '';
                     select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
+                    nonTrunk = ++count == 1 && value.id == '';
                 })
+                if (nonTrunk) {
+                    // 添加cookie记住最近使用的分支名字
+                    ace.cookie.set(branch_name, '', 86400*30)
+                }
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
                 getCommitList();
             });
         }
-//
+        // 获取commit log
         function getCommitList() {
-            $.get("/walle/get-commit-history?projectId=" + <?= (int)$_GET['projectId'] ?> +"&branch=" + $('#branch').val(), function (data) {
+            $('.getting-history').show();
+            $.get("/walle/get-commit-history?projectId=" + projectId +"&branch=" + $('#branch').val(), function (data) {
                 // 获取commit log失败
                 if (data.code) {
                     showError(data.msg);
@@ -150,7 +175,8 @@ use app\models\Project;
         }
 
         $('#branch').change(function() {
-            $('.getting-history').show();
+            // 添加cookie记住最近使用的分支名字
+            ace.cookie.set(branch_name, $(this).val(), 86400*30)
             getCommitList();
         })
 
@@ -167,7 +193,7 @@ use app\models\Project;
         })
 
         // 页面加载完默认拉取trunk
-        getBranchList();
+        // getBranchList();
         // 页面加载完默认拉取trunk
         if ($('#branch').val()) {
            // getCommitList();

@@ -81,6 +81,7 @@ class Svn extends Command {
         $this->updateRepo();
         $list = [];
         $branchDir = 'tags';
+        // 分支模式
         if ($this->getConfig()->repo_mode == Project::REPO_BRANCH) {
             $branchDir = 'branches';
             $trunkDir  = sprintf("%s/trunk", rtrim(Project::getDeployFromDir(), '/'));
