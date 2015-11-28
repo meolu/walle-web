@@ -2,6 +2,8 @@
 
 Walle - A Deployment Tool
 =========================
+
+[![Join the chat at https://gitter.im/meolu/walle-web](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/meolu/walle-web?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 [![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
 [![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
