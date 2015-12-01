@@ -87,7 +87,7 @@ abstract class Command {
      */
     final protected function runRemoteCommand($command) {
         $this->log = '';
-        $needTTY = ' -t ';
+        $needTTY = ' -T ';
 
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
             $localCommand = 'ssh ' . $needTTY . ' -p ' . $this->getHostPort($remoteHost)
