@@ -208,7 +208,6 @@ use yii\widgets\ActiveForm;
                   <div class="widget-main">
                       <?= $form->field($conf, 'pre_deploy')
                           ->textarea([
-                              'placeholder'    => 'cd /data/www/yii2 && composer update',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'pre_deploy tip'),
@@ -219,7 +218,6 @@ use yii\widgets\ActiveForm;
                           ->label('pre_deploy', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'post_deploy')
                           ->textarea([
-                              'placeholder'    => 'cp -rf {WORKSPACE}/web/index-prod.php {WORKSPACE}/web/index.php' . PHP_EOL . 'cp -rf /data/www/yii2/vendor {WORKSPACE}/',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'post_deploy tip'),
@@ -230,7 +228,6 @@ use yii\widgets\ActiveForm;
                           ->label('post_deploy', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'pre_release')
                           ->textarea([
-                              'placeholder'    => '/data/www/xxx stop',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'pre_release tip'),
@@ -241,7 +238,6 @@ use yii\widgets\ActiveForm;
                           ->label('pre_release', ['class' => 'control-label bolder']) ?>
                       <?= $form->field($conf, 'post_release')
                           ->textarea([
-                              'placeholder'    => '/usr/local/nginx/sbin/nginx -s reload',
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'post_release tip'),

@@ -81,7 +81,7 @@ use \app\models\Task;
                     $this.removeClass('disabled');
                 }
             });
-            $('.progress-status').attr('aria-valuenow', 10).width('5%');
+            $('.progress-status').attr('aria-valuenow', 10).width('10%');
             $('.result-failed').hide();
             function getProcess() {
                 $.get("/walle/get-process?taskId=" + task_id, function (o) {
