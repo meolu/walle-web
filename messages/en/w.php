@@ -29,8 +29,8 @@ return [
     'default trunk' => 'default no trunk',
     'conf_status_0' => 'Invalid',
     'conf_status_1' => 'Valid',
-    'conf_audit_0' => 'Yes',
-    'conf_audit_1' => 'No',
+    'conf_audit_0' => 'No',
+    'conf_audit_1' => 'Yes',
     'conf_status_0_color' => 'text-danger',
     'conf_status_1_color' => 'text-success',
 

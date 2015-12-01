@@ -29,8 +29,8 @@ return [
     'default trunk' => '默认无trunk',
     'conf_status_0' => '无效',
     'conf_status_1' => '有效',
-    'conf_audit_0' => '是',
-    'conf_audit_1' => '否',
+    'conf_audit_0' => '否',
+    'conf_audit_1' => '是',
     'conf_status_0_color' => 'text-danger',
     'conf_status_1_color' => 'text-success',
 
