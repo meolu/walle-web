@@ -23,7 +23,8 @@ class Task extends Command {
         $tasks = GlobalHelper::str2arr($this->getConfig()->pre_deploy);
         if (empty($tasks)) return true;
 
-        $cmd = [];
+        // 本地可能要做一些依赖环境变量的命令操作
+        $cmd = ['source /etc/profile'];
         $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
@@ -50,7 +51,8 @@ class Task extends Command {
         $tasks = GlobalHelper::str2arr($this->getConfig()->post_deploy);
         if (empty($tasks)) return true;
 
-        $cmd = [];
+        // 本地可能要做一些依赖环境变量的命令操作
+        $cmd = ['source /etc/profile'];
         $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
@@ -88,7 +90,8 @@ class Task extends Command {
         $tasks = GlobalHelper::str2arr($task);
         if (empty($tasks)) return '';
 
-        $cmd = [];
+        // 可能要做一些依赖环境变量的命令操作
+        $cmd = ['source /etc/profile'];
         $workspace = Project::getTargetWorkspace();
         $version   = Project::getReleaseVersionDir($version);
         $pattern = [

@@ -57,7 +57,6 @@ abstract class Command {
      */
     final protected function runLocalCommand($command) {
         $command = trim($command);
-        // file_put_contents('/tmp/cmd', $command.PHP_EOL.PHP_EOL, 8);
         $this->log('---------------------------------');
         $this->log('---- Executing: $ ' . $command);
 
