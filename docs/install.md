@@ -32,6 +32,14 @@ vi config/web.php +12
     'charset'   => 'utf8',
 ],
 ```
+```
+vi config/local.php +17
+'db' => [
+    'dsn'       => 'mysql:host=127.0.0.1;dbname=walle',
+    'username'  => 'root',
+    'password'  => '123456',#此处需要设置连接mysql密码,默认为空
+],
+```
 
 3.安装composer，如果已安装跳过
 ---------------------------
