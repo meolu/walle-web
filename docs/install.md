@@ -111,7 +111,7 @@ CustomLog logs/dev.-accesslog common
 
 7.恭喜：）
 --------
-访问地址：localhost
+访问地址：localhost  使用默认用户名：admin 密码：admin 登录后台;
 
 当然，可能你配置nginx时的server_name是walle.compony.com时，配置本地hosts之后，直接访问：walle.compony.com亦可。
 
