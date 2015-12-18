@@ -156,4 +156,3 @@ Discussing
 ----------
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - email: wushuiyong@huamanshu.com
-- QQ Group: 482939318
