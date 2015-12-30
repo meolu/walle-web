@@ -105,7 +105,7 @@ class Record extends \yii\db\ActiveRecord
             'action'     => $action,
             'created_at' => time(),
             'command'    => var_export($commandObj->getExeCommand(), true),
-            'memo'       => var_export($commandObj->getExeLog(), true),
+            'memo'       => substr(var_export($commandObj->getExeLog(), true), 0, 65530),
             'duration'   => $duration,
         ];
         return $record->save();

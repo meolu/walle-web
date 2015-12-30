@@ -160,16 +160,11 @@ class TaskController extends Controller {
         $status = $conf->audit == Project::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
 
         $rollbackTask = new Task();
-        $rollbackTask->attributes = [
-            'user_id' => $this->uid,
-            'project_id' => $this->task->project_id,
-            'status' => $status,
-            'action' => Task::ACTION_ROLLBACK,
-            'link_id' => $this->task->ex_link_id,
-            'ex_link_id' => $this->task->ex_link_id,
-            'title' => $this->task->title . ' - ' . yii::t('task', 'rollback'),
-            'commit_id' => $this->task->commit_id,
-        ];
+        $rollbackTask->attributes = $this->task->attributes;
+        $rollbackTask->status = $status;
+        $rollbackTask->action = Task::ACTION_ROLLBACK;
+        $rollbackTask->link_id = $this->task->ex_link_id;
+        $rollbackTask->title = $this->task->title . ' - ' . yii::t('task', 'rollback');
         if ($rollbackTask->save()) {
             $url = $conf->audit == Project::AUDIT_YES
                 ? '/task/'

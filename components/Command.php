@@ -138,7 +138,7 @@ abstract class Command {
 
         $logFile = realpath($logDir) . '/walle-' . date('Ymd') . '.log';
         if (self::$logFile === null) {
-            self::$logFile = fopen($logFile, 'w');
+            self::$logFile = fopen($logFile, 'a');
         }
 
         $message = date('Y-m-d H:i:s -- ') . $message;
