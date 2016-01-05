@@ -2,6 +2,8 @@
 /**
  * @var yii\web\View $this
  */
+use yii\helpers\Url;
+
 $this->title = $project->name . yii::t('conf', 'detection');
 
 ?>
@@ -14,7 +16,7 @@ $this->title = $project->name . yii::t('conf', 'detection');
 
 <script>
     jQuery(function($) {
-        $.get('/walle/detection?projectId=<?= $project->id ?>', function(o) {
+        $.get('<?= Url::to("@web/walle/detection?projectId={$project->id}") ?>', function(o) {
             // 检测失败
             if (o.code) {
                 $('.alert').addClass('alert-danger').html(o.data)

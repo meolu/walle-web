@@ -4,6 +4,7 @@
  */
 $this->title = yii::t('walle', 'deploying');
 use \app\models\Task;
+use yii\helpers\Url;
 ?>
 <style>
     .status > span {
@@ -31,7 +32,7 @@ use \app\models\Task;
             <?php if (in_array($task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) { ?>
                 <button type="submit" class="btn btn-primary btn-deploy" data-id="<?= $task->id ?>"><?= yii::t('walle', 'deploy') ?></button>
             <?php } ?>
-            <a class="btn btn-success btn-return" href="/task/index"><?= yii::t('walle', 'return') ?></a>
+            <a class="btn btn-success btn-return" href="<?= Url::to('@web/task/index') ?>"><?= yii::t('walle', 'return') ?></a>
     </h4>
     <div class="status">
         <span><i class="fa fa-circle-o text-yellow step-1"></i><?= yii::t('walle', 'process_detect') ?></span>
@@ -84,7 +85,7 @@ use \app\models\Task;
             $('.progress-status').attr('aria-valuenow', 10).width('10%');
             $('.result-failed').hide();
             function getProcess() {
-                $.get("/walle/get-process?taskId=" + task_id, function (o) {
+                $.get("<?= Url::to('@web/walle/get-process?taskId=') ?>" + task_id, function (o) {
                     data = o.data;
                     // 执行失败
                     if (0 == data.status) {

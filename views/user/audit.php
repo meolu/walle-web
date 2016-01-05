@@ -4,6 +4,7 @@
  */
 $this->title = yii::t('user', 'audit title');
 use app\models\User;
+use yii\helpers\Url;
 
 ?>
 <div class="row">
@@ -22,7 +23,7 @@ use app\models\User;
             <div class="inline position-relative">
                 <div class="user">
                     <a href="javascript:;">
-                        <img src="<?= User::AVATAR_ROOT . ($user['avatar'] ?: 'default.jpg') ?>">
+                        <img src="<?= Url::to('@web' . User::AVATAR_ROOT) .($user['avatar'] ?: 'default.jpg') ?>">
                     </a>
                 </div>
 
@@ -62,7 +63,7 @@ use app\models\User;
         $('.remove-relation').click(function(e) {
             $this = $(this);
             if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
-                $.get('/user/delete-admin?id=' + $this.data('id'), function(o) {
+                $.get(' <?= Url::to('@web/user/delete-admin?id=') ?>' + $this.data('id'), function(o) {
                     if (!o.code) {
                         $this.closest(".memberdiv").remove();
                     } else {
@@ -74,7 +75,7 @@ use app\models\User;
         // 组关系成员设为管理员
         $('.active-admin').click(function(e) {
             $this = $(this);
-            var url = '/user/active-admin'
+            var url = '<?= Url::to('@web/user/active-admin') ?>'
                 + '?id=' + $this.data('id');
             $.get(url , function(o) {
                 if (!o.code) {

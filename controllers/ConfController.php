@@ -127,7 +127,7 @@ class ConfController extends Controller
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
             if ($project->save()) {
-                $this->redirect('/conf/');
+                $this->redirect('@web/conf/');
             }
         }
 

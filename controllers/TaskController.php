@@ -87,7 +87,7 @@ class TaskController extends Controller {
                 $task->project_id = $projectId;
                 $task->status = $status;
                 if ($task->save()) {
-                    return $this->redirect('/task/');
+                    return $this->redirect('@web/task/');
                 }
             }
         }

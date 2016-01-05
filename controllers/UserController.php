@@ -38,7 +38,8 @@ class UserController extends Controller {
         }
         $tempFile   = $_FILES['avatar']['tmp_name'];
         $baseName   = sprintf('%s-%d.%s', date("YmdHis", time()), rand(10, 99), $fileParts['extension']);
-        $newFile    = GlobalHelper::formatAvatar($baseName);
+        $newFile    = User::AVATAR_ROOT . $baseName;
+        $urlFile    = GlobalHelper::formatAvatar($baseName);
         $targetFile = sprintf("%s/web/%s", rtrim(\Yii::$app->basePath, '/'),  ltrim($newFile, '/'));
         $ret = move_uploaded_file($tempFile, $targetFile);
         if ($ret) {
@@ -47,7 +48,7 @@ class UserController extends Controller {
             $ret = $user->save();
         }
 
-        $this->renderJson(['url' => $newFile], !$ret, $ret ?: yii::t('user', 'update avatar failed'));
+        $this->renderJson(['url' => $urlFile], !$ret, $ret ?: yii::t('user', 'update avatar failed'));
     }
 
     public function actionAudit() {

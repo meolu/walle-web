@@ -4,6 +4,7 @@
  */
 $this->title = yii::t('conf', 'group');
 
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\User;
 use app\models\Group;
@@ -46,7 +47,7 @@ use app\models\Group;
         <div class="inline position-relative">
             <div class="user">
                 <a href="javascript:;">
-                    <img src="<?= User::AVATAR_ROOT . ($relation['user']['avatar'] ?: 'default.jpg') ?>">
+                    <img src="<?= Url::to('@web' . User::AVATAR_ROOT) . ($relation['user']['avatar'] ?: 'default.jpg') ?>">
                 </a>
             </div>
 
@@ -89,7 +90,7 @@ use app\models\Group;
         $('.remove-relation').click(function(e) {
             $this = $(this);
             if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
-                $.get('/conf/delete-relation?id=' + $this.data('id'), function(o) {
+                $.get('<?= Url::to('@web/conf/delete-relation?id=') ?>' + $this.data('id'), function(o) {
                     if (!o.code) {
                         $this.closest(".memberdiv").remove();
                     } else {
@@ -101,7 +102,7 @@ use app\models\Group;
         // 组关系成员设为管理员
         $('.bind-admin').click(function(e) {
             $this = $(this);
-            var url = '/conf/edit-relation'
+            var url = '<?= Url::to('@web/conf/edit-relation') ?>'
                     + '?id=' + $this.data('id')
                     + '&type=' + $this.data('type');
             $.get(url , function(o) {

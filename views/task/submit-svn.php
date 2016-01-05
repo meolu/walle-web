@@ -3,6 +3,7 @@
  * @var yii\web\View $this
  */
 $this->title = yii::t('task', 'submit task title');
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\Project;
 
@@ -116,7 +117,7 @@ use app\models\Project;
             $('.get-branch').show();
             $('.tip').hide();
             $('.show-tip').hide();
-            $.get("/walle/get-branch?projectId=" + projectId, function (data) {
+            $.get("<?= Url::to('@web/walle/get-branch?projectId=') ?>" + projectId, function (data) {
                 // 获取分支失败
                 if (data.code) {
                     showError(data.msg);
@@ -143,7 +144,7 @@ use app\models\Project;
         // 获取commit log
         function getCommitList() {
             $('.getting-history').show();
-            $.get("/walle/get-commit-history?projectId=" + projectId +"&branch=" + $('#branch').val(), function (data) {
+            $.get("<?= Url::to('@web/walle/get-commit-history?projectId=') ?>" + projectId +"&branch=" + $('#branch').val(), function (data) {
                 // 获取commit log失败
                 if (data.code) {
                     showError(data.msg);
@@ -159,7 +160,7 @@ use app\models\Project;
         }
 
         function getChangeFiles(projectId, branch, start, end) {
-            $.get("/walle/get-commit-file?projectId=" + projectId +"&branch=" + branch + "&start=" + start + "&end=" + end, function (data) {
+            $.get("<?= Url::to('@web/walle/get-commit-file?projectId=') ?>" + projectId +"&branch=" + branch + "&start=" + start + "&end=" + end, function (data) {
                 // 获取commit log失败
                 if (data.code) {
                     showError(data.msg);

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * @var yii\web\View $this
@@ -37,7 +38,7 @@ $this->title = $name;
             Go Back
         </a>
 
-        <a href="/" class="btn btn-primary">
+        <a href="<?= Url::to('@web/') ?>" class="btn btn-primary">
             <i class="icon-dashboard"></i>
             Dashboard
         </a>

@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /**
@@ -17,21 +18,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <title><?= yii::t("w","log-platform")?> - <?= yii::t("w","w")?></title>
     <!-- basic styles -->
 
-    <link href="/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/dist/css/font-awesome.min.css" />
+    <link href="<?= Url::to('@web/dist/css/bootstrap.min.css') ?>" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= Url::to('@web/dist/css/font-awesome.min.css') ?>" />
 
     <!--[if IE 7]>
-    <link rel="stylesheet" href="/dist/css/font-awesome-ie7.min.css" />
+    <link rel="stylesheet" href="<?= Url::to('@web/dist/css/font-awesome-ie7.min.css') ?>" />
     <![endif]-->
 
     <!-- page specific plugin styles -->
     <!-- ace styles -->
 
-    <link rel="stylesheet" href="/dist/css/ace.min.css" />
-    <link rel="stylesheet" href="/dist/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="<?= Url::to('@web/dist/css/ace.min.css') ?>" />
+    <link rel="stylesheet" href="<?= Url::to('@web/dist/css/ace-rtl.min.css') ?>" />
 
     <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/dist/css/ace-ie.min.css" />
+    <link rel="stylesheet" href="<?= Url::to('@web/dist/css/ace-ie.min.css') ?>" />
     <![endif]-->
 
     <!-- inline styles related to this page -->
