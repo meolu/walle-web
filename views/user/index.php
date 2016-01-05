@@ -4,6 +4,7 @@
  */
 $this->title = yii::t('user', 'profile title');
 use \app\components\GlobalHelper;
+use yii\helpers\Url;
 
 ?>
 <div class="tab-content no-border padding-24">
@@ -89,9 +90,9 @@ use \app\components\GlobalHelper;
 
     <div class="space-20"></div>
 </div>
-<script src="/dist/js/x-editable/bootstrap-editable.min.js"></script>
-<script src="/dist/js/x-editable/ace-editable.min.js"></script>
-<script src="/dist/js/jquery.gritter.min.js"></script>
+<script src="<?= Url::to('@web/dist/js/x-editable/bootstrap-editable.min.js') ?>"></script>
+<script src="<?= Url::to('@web/dist/js/x-editable/ace-editable.min.js') ?>"></script>
+<script src="<?= Url::to('@web/dist/js/jquery.gritter.min.js') ?>"></script>
 <script>
     jQuery(function($) {
 
@@ -218,7 +219,7 @@ use \app\components\GlobalHelper;
                         fd.append('_csrf', '<?= \Yii::$app->request->getCsrfToken(); ?>');
 
                         deferred = $.ajax({
-                            url: '/user/avatar/',
+                            url: '<?= Url::to('@web/user/avatar/') ?>',
                             type: 'POST',
                             processData: false,
                             contentType: false,

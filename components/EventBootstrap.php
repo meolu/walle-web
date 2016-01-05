@@ -29,7 +29,7 @@ class EventBootstrap implements BootstrapInterface
                 return true;
             }
             if (!Yii::$app->request->getIsAjax()) {
-                Yii::$app->response->redirect('/site/login');
+                Yii::$app->response->redirect('site/login');
                 Yii::$app->end();
             }
             $event->isValid = false;

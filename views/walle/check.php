@@ -2,6 +2,8 @@
 /**
  * @var yii\web\View $this
  */
+use yii\helpers\Url;
+
 $this->title = yii::t('walle', 'md5 title');
 ?>
 
@@ -35,7 +37,7 @@ $this->title = yii::t('walle', 'md5 title');
     $(function() {
         $('.get-md5').click(function() {
             $('.getting').show()
-            $.get("/walle/file-md5?projectId=" + $("select[name=project]").val() + "&file=" + $('input[name=file]').val(), function(o) {
+            $.get("<?= Url::to('@web/walle/file-md5?projectId=') ?>" + $("select[name=project]").val() + "&file=" + $('input[name=file]').val(), function(o) {
                 $('.md5-msg').text(o.data).show()
                 $('.getting').hide()
             });
