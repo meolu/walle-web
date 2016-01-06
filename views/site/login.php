@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div>
-                <a href="<?= Url::to('@web/site/signup') ?>'" class="user-signup-link">
+                <a href="<?= Url::to('@web/site/signup') ?>" class="user-signup-link">
                     <?= yii::t('w','login register user')?>
                     <i class="icon-arrow-right"></i>
                 </a>
