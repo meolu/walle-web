@@ -53,6 +53,7 @@ use app\models\Project;
               ->textarea([
                   'rows'           => 12,
                   'placeholder'    => 'index.php  1234',
+                  'data-html'      => 'true',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
                   'data-title'     => yii::t('task', 'file list placeholder'),
