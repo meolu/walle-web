@@ -42,9 +42,10 @@ class GlobalHelper {
         $items = explode($delimiter, $string);
         foreach ($items as $key => &$item) {
             $item = trim($item);
-            if (empty($item)) unset($items[$key]);
+            //空行或者 #符号 开头的备注信息,过滤
+            if (empty($item) || $item{0} == '#') unset($items[$key]);
         }
-        return $items;;
+        return $items;
     }
 
     /**
