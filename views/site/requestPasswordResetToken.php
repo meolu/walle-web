@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /**
@@ -32,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div><!-- /widget-main -->
 
             <div class="toolbar center">
-                <a href="/site/login" class="back-to-login-link">
+                <a href="<?= Url::to('@web/site/login') ?>" class="back-to-login-link">
                     <?= yii::t("w","back")?><i class="icon-arrow-right"></i>
                 </a>
             </div>

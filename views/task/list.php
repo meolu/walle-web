@@ -5,6 +5,7 @@
 $this->title = yii::t('task', 'list title');
 use \app\models\Task;
 use yii\widgets\LinkPager;
+use yii\helpers\Url;
 
 ?>
 <div class="box">
@@ -23,7 +24,7 @@ use yii\widgets\LinkPager;
                 </div>
             </div>
         </form>
-        <a class="btn btn-default btn-sm" href="/task/submit/">
+        <a class="btn btn-default btn-sm" href="<?= Url::to('@web/task/submit/') ?>">
             <i class="icon-pencil align-top bigger-125"></i>
             <?= yii::t('task', 'create task') ?>
         </a>
@@ -67,7 +68,7 @@ use yii\widgets\LinkPager;
                     <?php if ($item['user_id'] == \Yii::$app->user->id) { ?>
                         <!-- 通过审核可以上线的任务-->
                         <?php if (Task::canDeploy($item['status'])) { ?>
-                            <a href="/walle/deploy?taskId=<?= $item['id'] ?>" class="green">
+                            <a href="<?= Url::to("@web/walle/deploy?taskId={$item['id']}") ?>" class="green">
                                 <i class="icon-cloud-upload text-success bigger-130" data-id="<?= $item['id'] ?>"></i>
                                 <?= yii::t('task', 'deploy') ?>
                             </a>
@@ -102,7 +103,7 @@ use yii\widgets\LinkPager;
         // 发起上线
         $('.task-operation').click(function() {
             $this = $(this);
-            $.get("/task/task-operation", {id: $this.data('id'), operation: $this.is(':checked') ? 1 : 0},
+            $.get("<?= Url::to('@web/task/task-operation') ?>", {id: $this.data('id'), operation: $this.is(':checked') ? 1 : 0},
                 function(data) {
                     if (data.code == 0) {
                         $this.closest('td').prev().text(data.data.status);
@@ -115,7 +116,7 @@ use yii\widgets\LinkPager;
         // 回滚任务
         $('.task-rollback').click(function(e) {
             $this = $(this);
-            $.get('/task/rollback?taskId=' + $this.data('id'), function(o) {
+            $.get('<?= Url::to('@web/task/rollback?taskId=') ?>' + $this.data('id'), function(o) {
                 if (!o.code) {
                     window.location.href=o.data.url;
                 } else {
@@ -127,7 +128,7 @@ use yii\widgets\LinkPager;
         $('.btn-delete').click(function(e) {
             $this = $(this);
             if (confirm('<?= yii::t('w', 'js delete confirm') ?>')) {
-                $.get('/task/delete', {taskId: $this.data('id')}, function(o) {
+                $.get('<?= Url::to('@web/task/delete') ?>', {taskId: $this.data('id')}, function(o) {
                     if (!o.code) {
                         $this.closest("tr").remove();
                     } else {

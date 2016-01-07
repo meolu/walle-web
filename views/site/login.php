@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\User;
 
@@ -35,14 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="toolbar clearfix">
             <div>
-                <a href="/site/request-password-reset" class="forgot-password-link">
+                <a href="<?= Url::to('@web/site/request-password-reset') ?>" class="forgot-password-link">
                     <i class="icon-arrow-left"></i>
                     <?= yii::t('w','login forgot password')?>
                 </a>
             </div>
 
             <div>
-                <a href="/site/signup" class="user-signup-link">
+                <a href="<?= Url::to('@web/site/signup') ?>" class="user-signup-link">
                     <?= yii::t('w','login register user')?>
                     <i class="icon-arrow-right"></i>
                 </a>

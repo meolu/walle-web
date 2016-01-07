@@ -11,6 +11,7 @@ namespace app\components;
 
 use app\models\User;
 use yii;
+use yii\helpers\Url;
 
 class GlobalHelper {
 
@@ -66,7 +67,7 @@ class GlobalHelper {
      * @return string
      */
     public static function formatAvatar($pic) {
-        return rtrim(User::AVATAR_ROOT, '/') . '/' . $pic;
+        return rtrim(Url::to('@web' . User::AVATAR_ROOT), '/') . '/' . $pic;
     }
 
     /**

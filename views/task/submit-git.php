@@ -3,6 +3,7 @@
  * @var yii\web\View $this
  */
 $this->title = yii::t('task', 'submit task title');
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\Project;
 
@@ -73,7 +74,7 @@ use app\models\Project;
             $('.get-branch').show();
             $('.tip').hide();
             $('.show-tip').hide();
-            $.get("/walle/get-branch?projectId=" + <?= (int)$_GET['projectId'] ?>, function (data) {
+            $.get("<?= Url::to('@web/walle/get-branch?projectId=') ?>" + <?= (int)$_GET['projectId'] ?>, function (data) {
                 // 获取分支失败
                 if (data.code) {
                     showError(data.msg);
@@ -92,7 +93,7 @@ use app\models\Project;
 
         function getCommitList() {
             $('.get-history').show();
-            $.get("/walle/get-commit-history?projectId=" + <?= (int)$_GET['projectId'] ?> +"&branch=" + $('#branch').val(), function (data) {
+            $.get("<?= Url::to('@web/walle/get-commit-history?projectId=') ?>" + <?= (int)$_GET['projectId'] ?> +"&branch=" + $('#branch').val(), function (data) {
                 // 获取commit log失败
                 if (data.code) {
                     showError(data.msg);

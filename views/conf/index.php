@@ -3,6 +3,7 @@
  * @var yii\web\View $this
  */
 $this->title = yii::t('conf', 'index');
+use yii\helpers\Url;
 ?>
 <div class="box">
     <div class="box-header">
@@ -21,7 +22,7 @@ $this->title = yii::t('conf', 'index');
                 </div>
             </div>
         </form>
-        <a class="btn btn-default btn-sm" href="/conf/edit">
+        <a class="btn btn-default btn-sm" href="<?= Url::to('@web/conf/edit') ?>">
             <i class="icon-pencil align-top bigger-125"></i>
             <?= yii::t('conf', 'create project') ?>
         </a>
@@ -45,11 +46,11 @@ $this->title = yii::t('conf', 'index');
                     <td><?= \Yii::t('w', 'conf_status_' . $item['status']) ?></td>
                     <td class="<?= \Yii::t('w', 'conf_status_' . $item['status'] . '_color') ?>">
                         <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
-                            <a href="/conf/preview/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
+                            <a href="<?= Url::to("@web/conf/preview/?projectId={$item['id']}") ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="icon-zoom-in bigger-130"></i>
                                 <?= yii::t('conf', 'p_preview') ?>
                             </a>
-                            <a href="/conf/detection/?projectId=<?= $item['id'] ?>" data-toggle="modal" data-target="#myModal">
+                            <a href="<?= Url::to("@web/conf/detection/?projectId={$item['id']}") ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="icon-screenshot bigger-130"></i>
                                 <?= yii::t('conf', 'p_detection') ?>
                             </a>
@@ -57,11 +58,11 @@ $this->title = yii::t('conf', 'index');
                                 <i class="icon-copy bigger-130"></i>
                                 <?= yii::t('conf', 'p_copy') ?>
                             </a>
-                            <a href="/conf/group/?projectId=<?= $item['id'] ?>">
+                            <a href="<?= Url::to("@web/conf/group/?projectId={$item['id']}") ?>">
                                 <i class="icon-group bigger-130"></i>
                                 <?= yii::t('conf', 'p_member') ?>
                             </a>
-                            <a href="/conf/edit?projectId=<?= $item['id'] ?>">
+                            <a href="<?= Url::to("@web/conf/edit?projectId={$item['id']}") ?>">
                                 <i class="icon-pencil bigger-130"></i>
                                 <?= yii::t('conf', 'p_edit') ?>
                             </a>
@@ -88,7 +89,7 @@ $this->title = yii::t('conf', 'index');
         $('.btn-delete').click(function(e) {
             $this = $(this);
             if (confirm('<?= yii::t('conf', 'js delete project') ?>')) {
-                $.get('/conf/delete', {projectId: $this.data('id')}, function(o) {
+                $.get('<?= Url::to('@web/conf/delete') ?>', {projectId: $this.data('id')}, function(o) {
                     if (!o.code) {
                         $this.closest("tr").remove();
                     } else {
@@ -100,7 +101,7 @@ $this->title = yii::t('conf', 'index');
         $('.btn-copy').click(function(e) {
             $this = $(this);
             if (confirm('<?= yii::t('conf', 'js copy project confirm') ?>')) {
-                $.get('/conf/copy', {projectId: $this.data('id')}, function(o) {
+                $.get('<?= Url::to('@web/conf/copy') ?>', {projectId: $this.data('id')}, function(o) {
                     if (!o.code) {
                         location.reload();
                     } else {
