@@ -8,6 +8,13 @@ use yii\widgets\ActiveForm;
 use app\models\Project;
 
 ?>
+<style>
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+    text-align:left;
+}
+</style>
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
       <div class="box-body">
