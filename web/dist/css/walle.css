@@ -14,8 +14,3 @@ body {
 .show {
     display: block;
 }
-.tooltip-inner {
-    max-width: none;
-    white-space: nowrap;
-    text-align:left;
-}
