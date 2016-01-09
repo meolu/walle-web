@@ -8,6 +8,13 @@ use yii\widgets\ActiveForm;
 use app\models\Project;
 
 ?>
+<style>
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+    text-align:left;
+}
+</style>
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
       <div class="box-body">
@@ -53,6 +60,7 @@ use app\models\Project;
               ->textarea([
                   'rows'           => 12,
                   'placeholder'    => 'index.php  1234',
+                  'data-html'      => 'true',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
                   'data-title'     => yii::t('task', 'file list placeholder'),
