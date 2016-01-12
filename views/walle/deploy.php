@@ -72,7 +72,7 @@ use yii\helpers\Url;
             var action = '';
             var detail = '';
             var timer;
-            $.post("/walle/start-deploy", {taskId: task_id}, function(o) {
+            $.post("<?= Url::to('@web/walle/start-deploy') ?>", {taskId: task_id}, function(o) {
                 action = o.code ? o.msg + ':' : '';
                 if (o.code != 0) {
                     clearInterval(timer);
