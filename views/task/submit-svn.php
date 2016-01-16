@@ -160,7 +160,7 @@ use app\models\Project;
 
                 var select = '';
                 $.each(data.data, function (key, value) {
-                    select += '<option value="' + value.id + '">' + value.message + '</option>';
+                    select += '<option value="' + value.id + '">' + value.id + ' - ' + value.message + '</option>';
                 })
                 $('.history-list').html(select);
                 $('.getting-history').hide()
