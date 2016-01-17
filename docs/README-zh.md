@@ -1,4 +1,4 @@
-![](https://raw.github.com/meolu/doc/master/upload/logo.jpg)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/logo.jpg)
 
 瓦力 - 部署系统
 ==========================
@@ -128,22 +128,22 @@ git pull
 ---
 
 #### 配置管理
-![](https://raw.github.com/meolu/doc/master/upload/walle-config-edit.jpg)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle-config-edit.jpg)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/doc/master/upload/walle-submit.jpg)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle-submit.jpg)
 
 #### 上线列表
-![](https://raw.github.com/meolu/doc/master/upload/walle-dev-list.jpg)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle-dev-list.jpg)
 
 #### 宿主机、目标机群、操作用户关系
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow-relation.jpg)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle-flow-relation.jpg)
 
 #### 上线流程图
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow.png)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle-flow.png)
 
 #### 演示
-![](https://raw.github.com/meolu/doc/master/upload/walle.gif)
+![](https://raw.github.com/meolu/doc/master/markdown/upload/walle.gif)
 
 ## CHANGE LOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
