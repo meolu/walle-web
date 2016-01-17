@@ -88,7 +88,6 @@ you would like to adjust some params to make walle suited for your company.
             'charset' => 'UTF-8',
             'from'    => ['service@huamanshu.com' => '花满树出品'],  // the same with username of mail module in config/web.php
         ],
-
     ```
 
 * Configure the path for log

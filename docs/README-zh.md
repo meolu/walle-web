@@ -1,4 +1,4 @@
-![](https://raw.github.com/meolu/doc/master/upload/logo.jpg)
+![](https://raw.github.com/meolu/walle-web/master/docs/logo.jpg)
 
 瓦力 - 部署系统
 ==========================
@@ -88,7 +88,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
         'charset' => 'UTF-8',
         'from'    => ['service@huamanshu.com' => '花满树出品'],  # smtp 发件用户名(须与mail.transport.username一致)
     ],
-
+    ```
 
 * 配置日志路径
     ```php
@@ -103,6 +103,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
     'language'   => 'zh',  # zh => 中文,  en => english
     ```
+
 
 To Do List
 ----------
