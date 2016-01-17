@@ -1,4 +1,4 @@
-<p text-align=center><img src="https://raw.github.com/meolu/walle-web/master/docs/logo.jpg"></p>
+![](https://raw.github.com/meolu/walle-web/master/docs/logo.jpg)
 
 Walle - A Deployment Tool
 =========================
