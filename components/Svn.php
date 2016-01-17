@@ -115,7 +115,9 @@ class Svn extends Command {
                 'message' => $name,
             ];
         }
-
+        // 降序排列分支列表
+        rsort($list);
+        
         return $list;
     }
 
@@ -166,6 +168,8 @@ class Svn extends Command {
                 'message' => $name,
             ];
         }
+        // 降序排列分支列表
+        rsort($list);
 
         return $list;
     }
