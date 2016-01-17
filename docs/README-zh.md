@@ -1,4 +1,4 @@
-![](https://raw.github.com/meolu/walle-web/master/screenshots/logo.jpg)
+![](https://raw.github.com/meolu/doc/master/upload/logo.jpg)
 
 瓦力 - 部署系统
 ==========================
@@ -8,7 +8,7 @@
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。
 
-[官网主页](http://www.huamanshu.com/walle.html) | [文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B) | [English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md).
+[官网主页](http://www.walle-web.io) | [文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B) | [English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md).
 
 目前，超过十家企业生产环境部署使用，欢迎star、fork、试用 ：）
 
@@ -43,7 +43,7 @@ git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
 composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
-./yii walle/setup   # 初始化项目
+./yii walle/setup # 初始化项目
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
@@ -128,22 +128,22 @@ git pull
 ---
 
 #### 配置管理
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-config-edit.jpg)
+![](https://raw.github.com/meolu/doc/master/upload/walle-config-edit.jpg)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-submit.jpg)
+![](https://raw.github.com/meolu/doc/master/upload/walle-submit.jpg)
 
 #### 上线列表
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-dev-list.jpg)
+![](https://raw.github.com/meolu/doc/master/upload/walle-dev-list.jpg)
 
 #### 宿主机、目标机群、操作用户关系
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow-relation.jpg)
+![](https://raw.github.com/meolu/doc/master/upload/walle-flow-relation.jpg)
 
 #### 上线流程图
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle-flow.png)
+![](https://raw.github.com/meolu/doc/master/upload/walle-flow.png)
 
 #### 演示
-![](https://raw.github.com/meolu/walle-web/master/screenshots/walle.gif)
+![](https://raw.github.com/meolu/doc/master/upload/walle.gif)
 
 ## CHANGE LOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
