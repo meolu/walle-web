@@ -9,13 +9,13 @@ use yii\widgets\ActiveForm;
  */
 $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
-$params = Yii::$app->params;
+$mail = Yii::$app->mail->messageConfig['from'];
 ?>
 <div class="site-signup alert alert-danger">
     <h1>Could not complete registration</h1>
 
     <p>You either supplied an invalid confirmation link or the link has meanwhile expired.
-    Please contact our support under <?= Html::mailTo($params['support.name'], $params['support.email']) ?>.
+    Please contact our support under <?= Html::mailTo(key($mail), current($mail)) ?>.
     </p>
 
 </div>

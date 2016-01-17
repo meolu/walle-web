@@ -25,10 +25,6 @@ $config = [
             'transport' => [
                 'class'      => 'Swift_SmtpTransport',
             ],
-            'messageConfig' => [
-                'charset' => 'UTF-8',
-                'from'    => ['service@humanshu.com' => '花满树出品']
-            ],
         ],
         'log'  => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

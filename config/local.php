@@ -24,6 +24,10 @@ return [
                 'port'       => 25,                       # smtp 端口
                 'encryption' => 'tls',                    # smtp 协议
             ],
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from'    => ['service@huamanshu.com' => '花满树出品'],  # smtp 发件用户名(须与mail.transport.username一致)
+            ],
         ],
         'request' => [
             'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
@@ -31,3 +35,4 @@ return [
     ],
     'language'   => 'zh', // zh => 中文,  en => English
 ];
+

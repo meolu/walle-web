@@ -4,11 +4,6 @@
  * 此配置为测试配置，如果你不想消息泄露，请尽快修改为自己的邮箱smtp
  */
 return [
-    // ******必须要与config/web.php 中mail模块的username一致*****
-    'support.email' => 'service@huamanshu.com',
-    // 显示发件人的名字，可以随意
-    'support.name' => 'service',
-
     'user.passwordResetTokenExpire' => 3600,
     'user.emailConfirmationTokenExpire' => 43200, // 5 days有效
 

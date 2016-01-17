@@ -67,9 +67,8 @@ class SiteController extends Controller
                 $user->status = User::STATUS_INACTIVE;
             }
             if ($user->save()) {
-                $params = Yii::$app->params;
                 Yii::$app->mail->compose('confirmEmail', ['user' => $user])
-                    ->setFrom([$params['support.email'] => $params['support.name']])
+                    ->setFrom(Yii::$app->mail->messageConfig['from'])
                     ->setTo($user->email)
                     ->setSubject('瓦力平台 - ' . $user->realname)
                     ->send();
@@ -110,7 +109,6 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
-
                 return $this->goHome();
             } else {
                 Yii::$app->getSession()->setFlash('error', 'Sorry, we are unable to reset password for email provided.');

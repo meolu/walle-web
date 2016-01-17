@@ -25,7 +25,7 @@ class GlobalHelper {
     public static function sendMail($user, $default = null) {
         $params = Yii::$app->params;
         return Yii::$app->mail->compose()
-            ->setFrom([$params['support.email'] => $params['support.name']])
+            ->setFrom(Yii::$app->mail->messageConfig['from'])
             ->setTo($user->email)
             ->setSubject('Complete registration with ' . Yii::$app->name)
             ->send();

@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
  */
 $this->title = 'Request password reset';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 
