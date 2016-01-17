@@ -1,15 +1,19 @@
 <?php
- 
+/* *****************************************************************
+* @Author: wushuiyong
+* @Created Time : 日  1/17 09:22:10 2016
+*
+* @File Name: WalleController.php
+* @Description: walle脚手架
+* *****************************************************************/
+
 namespace app\console;
  
 use yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 
-/**
- * run controller
- */
-class RunController extends Controller {
+class WalleController extends Controller {
 
     public $writablePaths = [
         '@app/runtime',
@@ -20,6 +24,10 @@ class RunController extends Controller {
         '@app/yii',
     ];
 
+    public function actionIndex() {
+        echo sprintf("walle-web %s (built: %s)\nCopyright (c) 2015-2016 The walle-web Group.\nGet Help from wushuiyong@huamanshu.com. Enjoy It.\n",
+            Yii::$app->params['version'], Yii::$app->params['buildTime']);
+    }
     /**
      * init walle 初始化项目
      *

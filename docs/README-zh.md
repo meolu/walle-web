@@ -43,7 +43,7 @@ git clone git@github.com:meolu/walle-web.git
 cd walle-web
 vi config/web.php # 设置mysql连接
 composer install  # 如果缺少bower-asset的话， 先安装：composer global require "fxp/composer-asset-plugin:*"
-./yii run/setup   # 初始化项目
+./yii walle/setup   # 初始化项目
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
@@ -74,21 +74,21 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
 * 配置企业邮箱smtp
     ```php
-    vi config/web.php +25
+    vi config/local.php +20
 
     # 配置mail smtp模块
-    'class'      => 'Swift_SmtpTransport',
-    'host'       => 'smtp.huamanshu.com',    # smtp 发件地址
-    'username'   => 'service@huamanshu.com', # smtp 发件用户名
-    'password'   => 'password',              # smtp 发件人的密码
-    'port'       => 25,                      # smtp 端口
-    'encryption' => 'tls',                   # smtp 协议
+    'transport' => [
+        'host'       => 'smtp.huamanshu.com',     # smtp 发件地址
+        'username'   => 'service@huamanshu.com',  # smtp 发件用户名
+        'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
+        'port'       => 25,                       # smtp 端口
+        'encryption' => 'tls',                    # smtp 协议
+    ],
+    'messageConfig' => [
+        'charset' => 'UTF-8',
+        'from'    => ['service@huamanshu.com' => '花满树出品'],  # smtp 发件用户名(须与mail.transport.username一致)
+    ],
 
-
-    vi config/params.php
-
-    'support.email' => 'service@huamanshu.com', // 与config/web.php 中mail模块的username一致
-    ```
 
 * 配置日志路径
     ```php
@@ -99,7 +99,7 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 
 * 指定语言
     ```php
-    vi config/web.php +73
+    vi config/local.php +36
 
     'language'   => 'zh',  # zh => 中文,  en => english
     ```

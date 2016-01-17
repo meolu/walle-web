@@ -5,16 +5,14 @@
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
-// Include local configuration first so we can set the YII_* constants there
-$local = require(__DIR__.'/config/local.php');
-
 require(__DIR__ . '/vendor/autoload.php');
 require(__DIR__ . '/vendor/yiisoft/yii2/Yii.php');
 
+$web = yii\helpers\ArrayHelper::merge(
+    require(__DIR__.'/config/web.php'),
+    require(__DIR__.'/config/local.php')
+);
 // Build web configuration
-$web = require(__DIR__.'/config/web.php');
-$web = yii\helpers\ArrayHelper::merge($web, $local);
-
 $config = require(__DIR__.'/config/console.php');
 
 if(file_exists(__DIR__.'/config/console-local.php')) {
