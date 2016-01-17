@@ -10,7 +10,6 @@ return [
     'bootstrap'           => ['log'],
     'controllerNamespace' => 'app\console',
     'extensions'          => $web['extensions'],
-    'defaultRoute'        => 'walle/index',
     'components'          => [
         'db'      => $web['components']['db'],
         'log'     => [

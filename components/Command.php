@@ -9,7 +9,7 @@
 namespace app\components;
 
 
-abstract class Command {
+class Command {
 
     protected static $LOGDIR = '';
     /**
@@ -55,7 +55,7 @@ abstract class Command {
      * @param $command
      * @return bool|int true 成功，false 失败
      */
-    final protected function runLocalCommand($command) {
+    final public function runLocalCommand($command) {
         $command = trim($command);
         $this->log('---------------------------------');
         $this->log('---- Executing: $ ' . $command);
@@ -84,7 +84,7 @@ abstract class Command {
      * @param $command
      * @return bool
      */
-    final protected function runRemoteCommand($command) {
+    final public function runRemoteCommand($command) {
         $this->log = '';
         $needTTY = ' -T ';
 
