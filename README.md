@@ -1,4 +1,4 @@
-![](https://raw.github.com/meolu/walle-web/master/docs/logo.jpg)
+<p text-align=center>![](https://raw.github.com/meolu/walle-web/master/docs/logo.jpg)</p>
 
 Walle - A Deployment Tool
 =========================
