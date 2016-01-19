@@ -19,9 +19,14 @@ class Folder extends Command {
      * @return bool
      */
     public function initLocalWorkspace($version) {
-        $cmd[] = 'mkdir -p ' . Project::getDeployWorkspace($version);
+        // svn
         if ($this->config->repo_type == Project::REPO_SVN) {
+            $cmd[] = 'mkdir -p ' . Project::getDeployWorkspace($version);
             $cmd[] = sprintf('mkdir -p %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
+        }
+        // git 直接把项目代码拷贝过来，然后更新，取代之前原项目检出，提速
+        else {
+            $cmd[] = sprintf('cp -rf %s %s ', Project::getDeployFromDir(), Project::getDeployWorkspace($version));
         }
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
