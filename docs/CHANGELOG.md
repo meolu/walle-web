@@ -1,5 +1,19 @@
 ## Change Log
 
+### v1.0.0 (2016/01/19 05:53 +00:00)
+- clone project => cp project & update，进一步提高部署速度
+- 转移文档出项目
+- 添加walle脚手架功能：查看版本、初始化、升级
+- 邮件配置简化
+- svn提交上线单时，展现形式修改为：commit id - commit message
+- 降序排列分支/tag列表 (@ikaychen)
+- tooltip自适应宽度、SVN文件列表tooltip可以换行(@lanrenwo)
+- 高级命令支持#注释(@drogjh)
+- 修正回滚任务中的commit id展示
+- 高级命令增加`cd {WORKSPACE}`简化用户切换目录
+- 高级命令增加`source /etc/profile`初始化环境变量
+- 增加支持sudo命令
+
 ### v0.9.5 (2015/11/26 15:19 +00:00)
 - 简化svn无trunk/branches提交上线单流程（去掉选择分支）
 - cookie 记住上次选择的分支，优化提交上线流程
