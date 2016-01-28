@@ -31,6 +31,7 @@ use yii\db\Expression;
  * @property string $repo_type
  * @property integer $audit
  * @property integer $keep_version_num
+ * @property string $web_root_domain
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -102,6 +103,7 @@ class Project extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'repo_password'], 'string', 'max' => 100],
             [['version'], 'string', 'max' => 20],
+            [['web_root_domain'], 'string', 'max' => 200],
             ['repo_type', 'default', 'value' => self::REPO_GIT],
             [['deploy_from', 'release_to', 'release_library', 'repo_url'], 'string', 'max' => 200],
             [['release_user', 'repo_mode', 'repo_username'], 'string', 'max' => 50],
@@ -138,6 +140,7 @@ class Project extends \yii\db\ActiveRecord
             'repo_mode'       => '分支/tag',
             'audit'           => '任务需要审核？',
             'keep_version_num' => '线上版本保留数',
+            'web_root_domain' => '前台预览根域名'
         ];
     }
 
