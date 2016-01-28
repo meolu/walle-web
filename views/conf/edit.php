@@ -27,6 +27,15 @@ use yii\widgets\ActiveForm;
             'class'          => 'col-xs-11',])
             ->label(yii::t('conf', 'env'), ['class' => 'control-label bolder blue col-xs-1']) ?>
         <div class="clearfix"></div>
+        <?= $form->field($conf, 'web_root_domain')
+            ->textInput([
+                'class'          => 'col-xs-11',
+                'placeholder'    => 'test.abc.com',
+                'data-rel'       => 'tooltip',
+                'data-title'     => yii::t('conf', 'web_root_domain_tip'),
+            ])
+            ->label(yii::t('conf', 'web_root_domain'), ['class' => 'control-label bolder blue col-xs-1']) ?>
+        <div class="clearfix"></div>
         <?php if (empty($_GET['projectId'])) { ?>
         <div class="widget-box transparent" id="recent-box" style="margin-top:15px">
             <div class="tabbable no-border">

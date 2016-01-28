@@ -52,7 +52,9 @@ use yii\helpers\Url;
                 <td><?= $item['title'] ?></td>
                 <td><?= $item['updated_at'] ?></td>
                 <td><?= $item['branch'] ?></td>
-                <td><?= $item['commit_id'] ?></td>
+                <td><?= $item['commit_id'] ?>(<a href="http://<?= $item['commit_id'] ?>.<?= $item['project']['web_root_domain'] ?>" target='_blank' title="<?= yii::t('conf', 'web_preview') ?>">
+                                <i class="icon-zoom-in bigger-130"></i>
+                            </a>)</td>
                 <td class="<?= \Yii::t('w', 'task_status_' . $item['status'] . '_color') ?>">
                     <?= \Yii::t('w', 'task_status_' . $item['status']) ?></td>
                 <td>
