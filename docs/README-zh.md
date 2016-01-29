@@ -154,4 +154,5 @@ git pull
 -------
 - [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/docs/faq.md)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
+- [官方文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B)
 - qq群：482939318
