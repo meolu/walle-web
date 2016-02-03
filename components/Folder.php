@@ -62,7 +62,7 @@ class Folder extends Command {
     public function syncFiles($remoteHost, $version) {
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
 
-        $command = sprintf('rsync -avzq --rsh="ssh -p %s" %s %s %s%s:%s',
+        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p %s" %s %s %s%s:%s',
             $this->getHostPort($remoteHost),
             $this->excludes($excludes),
             rtrim(Project::getDeployWorkspace($version), '/') . '/',
