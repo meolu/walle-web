@@ -18,7 +18,7 @@ return [
         ],
         'mail' => [
             'transport' => [
-                'host'       => 'smtp.huamanshu.com',     # smtp 发件地址
+                'host'       => 'smtp.exmail.qq.com',     # smtp 发件地址
                 'username'   => 'service@huamanshu.com',  # smtp 发件用户名
                 'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
                 'port'       => 25,                       # smtp 端口
