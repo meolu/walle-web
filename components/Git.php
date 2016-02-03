@@ -111,7 +111,7 @@ class Git extends Command {
 
         $history = [];
         // 总有一些同学没有团队协作意识，不设置好编码：(
-        $log = GlobalHelper::convert2Utf8($this->getExeLog());
+        $log = htmlspecialchars(GlobalHelper::convert2Utf8($this->getExeLog()));
         $list = explode(PHP_EOL, $log);
         foreach ($list as $item) {
             $commitId = substr($item, 0, strpos($item, '-') - 1);

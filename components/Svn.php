@@ -226,7 +226,7 @@ class Svn extends Command {
                 'id' => $id,
                 'date' => $item->date->__toString(),
                 'author' => $item->author->__toString(),
-                'message' => $item->msg->__toString(),
+                'message' => htmlspecialchars($item->msg->__toString()),
             ];
         }
         return $history;
