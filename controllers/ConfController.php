@@ -32,8 +32,12 @@ class ConfController extends Controller
      *
      */
     public function actionIndex() {
-        $project = Project::find()
-            ->where(['user_id' => $this->uid]);
+        $projectID = Group::select('project_id')
+            ->where(['user_id' => $this->uid])
+            ->andWhere(['type' => 1]);
+        $projectID = $projectID->asArray()->all();
+
+        $project = Project::findAll($projectID);
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
             $project->andWhere(['like', "name", $kw]);
