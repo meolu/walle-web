@@ -59,7 +59,7 @@ composer install --prefer-dist --no-dev --optimize-autoloader -vvvv
 ----------
 ```
 cd walle-web
-./yii run/setup # 需要你的yes
+./yii walle/setup # 需要你的yes
 ```
 
 
