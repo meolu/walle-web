@@ -28,6 +28,7 @@ return [
     'tasks' => '高级任务',
     'branch/tag' => '分支/tag上线:',
     'enable audit' => '是否开启审核:',
+    'enable ansible' => '是否开启Ansible:',
     'enable open' => '是否启用:',
     'repo url tip' => '支持git/svn。git格式:ssh-url，需要把宿主机php进程用户的ssh-key加入git信任',
     'deploy from tip' => '代码的检出存放路径',
@@ -46,6 +47,7 @@ return [
     'branch tip' => '测试环境推荐选项，可以选择branch+commit',
     'tag tip' => '生产环境推荐选项',
     'audit tip' => '开启时，用户提交上线任务需要审核方可上线',
+    'ansible tip' => '开启时，通过Ansible并发传输文件，加快多机器时的代码发布速度。需安装 ansible，详见文档',
     'open tip' => '关闭时，用户不能对此项目发起上线',
 
     'group' => '项目成员管理',
