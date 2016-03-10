@@ -106,7 +106,7 @@ class WalleController extends Controller {
 
             // 可回滚的版本设置
             $this->_enableRollBack();
-            
+
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
             $this->conf->version = $this->task->link_id;
             $this->conf->save();
@@ -187,6 +187,23 @@ class WalleController extends Controller {
         } catch (\Exception $e) {
             $code = -1;
             $log[] = yii::t('walle', 'target server sys error', [
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        // 检测 ansible 是否安装
+        try {
+            if ($project->ansible) {
+                $command = 'ansible --version';
+                $ret = $this->walleTask->runLocalCommand($command);
+                if (!$ret) {
+                    $code = -1;
+                    $log[] = yii::t('walle', 'hosted server ansible error');
+                }
+            }
+        } catch (\Exception $e) {
+            $code = -1;
+            $log[] = yii::t('walle', 'hosted server sys error', [
                 'error' => $e->getMessage()
             ]);
         }

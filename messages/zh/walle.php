@@ -35,6 +35,7 @@ return [
     'correct username passwd' => '用户名密码无误',
     'hosted server error' => '宿主机代码检出检测出错，请确认php进程用户{user}有代码存储仓库{path}读写权限，并且{ssh_passwd}。详细错误：{error}<br>',
     'hosted server sys error' => '宿主机检测时发生系统错误：{error}<br>',
+    'hosted server ansible error' => '宿主机未安装 ansible，请安装 ansible 或 在项目配置中关闭 ansible',
     'target server error' => '目标机器部署出错，请确认php进程{local_user}用户ssh-key加入目标机器的{remote_user}用户ssh-key信任列表，且{remote_user}有目标机器发布版本库{path}写入权限。详细错误：{error}<br>',
     'target server sys error' => '目标机检测时发生系统错误：{error}<br>',
     'unknown config' => '未知的配置',

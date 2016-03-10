@@ -35,6 +35,7 @@ return [
     'correct username passwd' => 'username and password is correct',
     'hosted server error' => 'hosted server error: please make sure the user {user} of php process have the access permission of {path}, and {ssh_passwd}. error：{error}<br>',
     'hosted server sys error' => 'error happens when detecting on hosted server：{error}<br>',
+    'hosted server ansible error' => 'hosted server error: please install ansible or disable ansible.',
     'target server error' => 'target server error: please make sure the ssh-key of user {local_user} of php process is added to target servers\'s user {remote_user}\'s authorized_keys, and {remote_user} have the access permission of {path} on target servers. error：{error}<br>',
     'target server sys error' => 'error happens when detecting on target servers：{error}<br>',
     'unknown config' => 'unknown configuration',
