@@ -48,6 +48,7 @@ return [
     'tag tip' => 'Recommended options of production',
     'audit tip' => 'development bill should be audited before deploying',
     'ansible tip' => '',
+    'ansible hosts save error' => '{path}',
     'open tip' => "developer can't see this project while it is close",
 
     'group' => "Project's users",

@@ -14,6 +14,8 @@ return [
 
     // *******操作日志目录*******
     'log.dir' => '/tmp/walle/',
+    // *******Ansible Hosts 主机列表目录*******
+    'ansible_hosts.dir' => '/tmp/walle/',
     // *******指定公司邮箱后缀*******
     'mail-suffix' => [
         '*', # 支持多个

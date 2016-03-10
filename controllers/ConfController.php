@@ -127,6 +127,8 @@ class ConfController extends Controller
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
             if ($project->save()) {
+                // 保存ansible需要的hosts文件
+                $this->_saveAnsibleHosts($project);
                 $this->redirect('@web/conf/');
             }
         }
@@ -224,5 +226,26 @@ class ConfController extends Controller
         } else {
             throw new NotFoundHttpException(yii::t('conf', 'project not exists'));
         }
+    }
+
+    /**
+     * @param Project $project
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _saveAnsibleHosts(Project $project) {
+
+        if (!$project->ansible) {
+            // 未开启ansible, 不用保存
+            return true;
+        }
+
+        $filePath = Project::getAnsibleHostsFile();
+        $ret = @file_put_contents($filePath, $project->hosts);
+        if (!$ret) {
+            throw new \Exception(yii::t('conf', 'ansible hosts save error', ['path' => $filePath]));
+        }
+
+        return true;
     }
 }

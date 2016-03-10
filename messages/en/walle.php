@@ -38,6 +38,7 @@ return [
     'hosted server ansible error' => 'hosted server error: please install ansible or disable ansible.',
     'target server error' => 'target server error: please make sure the ssh-key of user {local_user} of php process is added to target servers\'s user {remote_user}\'s authorized_keys, and {remote_user} have the access permission of {path} on target servers. error：{error}<br>',
     'target server sys error' => 'error happens when detecting on target servers：{error}<br>',
+    'target server ansible ping error' => 'ansible ping error',
     'unknown config' => 'unknown configuration',
     'you are not the manager' => 'you are not the manager',
     'get branches failed' => 'get branches failed：',

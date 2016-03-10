@@ -16,6 +16,7 @@ use app\components\Command;
 use app\components\Folder;
 use app\components\Git;
 use app\components\Task as WalleTask;
+use app\components\Ansible;
 use app\components\Controller;
 use app\models\Task;
 use app\models\Record;
@@ -38,6 +39,11 @@ class WalleController extends Controller {
      * Walle的高级任务
      */
     protected $walleTask;
+
+    /**
+     * Ansible 任务
+     */
+    protected $ansible;
 
     /**
      * Walle的文件目录操作
@@ -191,14 +197,23 @@ class WalleController extends Controller {
             ]);
         }
 
-        // 检测 ansible 是否安装
+
         try {
             if ($project->ansible) {
-                $command = 'ansible --version';
-                $ret = $this->walleTask->runLocalCommand($command);
+                $this->ansible = new Ansible($project);
+
+                // 检测 ansible 是否安装
+                $ret = $this->ansible->test();
                 if (!$ret) {
                     $code = -1;
                     $log[] = yii::t('walle', 'hosted server ansible error');
+                }
+
+                // 检测 ansible 连接目标机是否正常
+                $ret = $this->ansible->ping();
+                if (!$ret) {
+                    $code = -1;
+                    $log[] = yii::t('walle', 'target server ansible ping error');
                 }
             }
         } catch (\Exception $e) {

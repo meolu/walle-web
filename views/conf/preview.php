@@ -140,6 +140,14 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="profile-info-row">
+        <div class="profile-info-name"> <?= yii::t('conf', 'enable ansible') ?> </div>
+
+        <div class="profile-info-value">
+            <span><?= \Yii::t('w', 'bool_' . $conf->ansible) ?></span>
+        </div>
+    </div>
+
+    <div class="profile-info-row">
         <div class="profile-info-name"> <?= yii::t('conf', 'enable open') ?> </div>
 
         <div class="profile-info-value">

@@ -8,7 +8,6 @@
  * *****************************************************************/
 namespace app\components;
 
-
 use app\models\Project;
 
 class Task extends Command {
@@ -41,7 +40,6 @@ class Task extends Command {
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
-
 
     /**
      * post-deploy部署代码后置触发任务

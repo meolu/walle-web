@@ -49,6 +49,7 @@ return [
     'audit tip' => '开启时，用户提交上线任务需要审核方可上线',
     'ansible tip' => '开启时，通过Ansible并发传输文件，加快多机器时的代码发布速度。需安装 ansible，详见文档',
     'open tip' => '关闭时，用户不能对此项目发起上线',
+    'ansible hosts save error' => '无法保存 ansible hosts 文件，请确认 {path} 路径可写',
 
     'group' => '项目成员管理',
     'relation' => '用户组关系',
