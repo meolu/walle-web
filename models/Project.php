@@ -230,6 +230,15 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * 获取当前进程配置的ansible状态
+     *
+     * @return boolean
+     */
+    public static function getAnsibleStatus() {
+        return boolval(static::$CONF->ansible);
+    }
+
+    /**
      * 获取当前进程配置的ansible hosts文件路径
      *
      * @return string

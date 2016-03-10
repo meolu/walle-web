@@ -248,7 +248,7 @@ class WalleController extends Controller {
         $this->walleFolder->getFileMd5($file);
         $log = $this->walleFolder->getExeLog();
 
-        $this->renderJson(join("<br>", explode(PHP_EOL, $log)));
+        $this->renderJson(nl2br($log));
     }
 
     /**

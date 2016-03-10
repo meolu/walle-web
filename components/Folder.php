@@ -10,7 +10,7 @@ namespace app\components;
 
 use app\models\Project;
 
-class Folder extends Command {
+class Folder extends Ansible {
 
 
     /**
@@ -50,7 +50,14 @@ class Folder extends Command {
         }
         $command = join(' && ', $cmd);
 
-        return $this->runRemoteCommand($command);
+        if (Project::getAnsibleStatus()) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($command);
+        } else {
+            // ssh 循环执行远程命令
+            return $this->runRemoteCommand($command);
+        }
+
     }
 
     /**
@@ -102,7 +109,12 @@ class Folder extends Command {
         $cmd[] = "test -f /usr/bin/md5sum && md5sum {$file}";
         $command = join(' && ', $cmd);
 
-        return $this->runRemoteCommand($command);
+        if (Project::getAnsibleStatus()) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($command);
+        } else {
+            return $this->runRemoteCommand($command);
+        }
     }
 
     /**
@@ -147,5 +159,6 @@ class Folder extends Command {
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
+
 }
 
