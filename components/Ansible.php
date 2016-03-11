@@ -27,6 +27,13 @@ class Ansible extends Command
     public $ansibleTimeout = 600;
 
     /**
+     * Ansible 调用SSH的附加参数
+     *
+     * @var string
+     */
+    public $ansibleSshArgs = 'ANSIBLE_SSH_ARGS=\'-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false\'';
+
+    /**
      * 测试 ansible 命令是否可用
      *
      * @return bool|int
@@ -49,7 +56,8 @@ class Ansible extends Command
 
         $ansibleHosts = $this->_getAnsibleHosts($hosts);
 
-        $command = sprintf('ansible %s -u %s -m ping -i %s -f %d -T %d',
+        $command = sprintf('%s ansible %s -u %s -m ping -i %s -f %d -T %d -vvv',
+            $this->ansibleSshArgs,
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg(Project::getAnsibleHostsFile()),
@@ -90,7 +98,8 @@ class Ansible extends Command
 
         $ansibleHosts = $this->_getAnsibleHosts($hosts);
 
-        $localCommand = sprintf('ansible %s -u %s -m raw -a %s -i %s -f %d -T %d',
+        $localCommand = sprintf('%s ansible %s -u %s -m raw -a %s -i %s -f %d -T %d',
+            $this->ansibleSshArgs,
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
@@ -114,7 +123,8 @@ class Ansible extends Command
 
         $ansibleHosts = $this->_getAnsibleHosts($hosts);
 
-        $localCommand = sprintf('ansible %s -u %s -m command -a %s -i %s -f %d -T %d',
+        $localCommand = sprintf('%s ansible %s -u %s -m command -a %s -i %s -f %d -T %d',
+            $this->ansibleSshArgs,
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
@@ -138,7 +148,8 @@ class Ansible extends Command
 
         $ansibleHosts = $this->_getAnsibleHosts($hosts);
 
-        $localCommand = sprintf('ansible %s -u %s -m shell -a %s -i %s -f %d -T %d',
+        $localCommand = sprintf('%s ansible %s -u %s -m shell -a %s -i %s -f %d -T %d',
+            $this->ansibleSshArgs,
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
@@ -162,7 +173,8 @@ class Ansible extends Command
 
         $ansibleHosts = $this->_getAnsibleHosts($hosts);
 
-        $localCommand = sprintf('ansible %s -u %s -m script -a %s -i %s -f %d -T %d',
+        $localCommand = sprintf('%s ansible %s -u %s -m script -a %s -i %s -f %d -T %d',
+            $this->ansibleSshArgs,
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($shellFile),

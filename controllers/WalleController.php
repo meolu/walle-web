@@ -173,31 +173,6 @@ class WalleController extends Controller {
             ]);
         }
 
-        // 权限与免密码登录检测
-        $this->walleTask = new WalleTask($project);
-        try {
-            $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir('detection'));
-            $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
-            if (!$ret) {
-                $code = -1;
-                $log[] = yii::t('walle', 'target server error', [
-                    'local_user'  => getenv("USER"),
-                    'remote_user' => $project->release_user,
-                    'path'        => $project->release_to,
-                    'error'       => $this->walleTask->getExeLog(),
-                ]);
-            }
-            // 清除
-            $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
-            $this->walleTask->runRemoteTaskCommandPackage([$command]);
-        } catch (\Exception $e) {
-            $code = -1;
-            $log[] = yii::t('walle', 'target server sys error', [
-                'error' => $e->getMessage()
-            ]);
-        }
-
-
         try {
             if ($project->ansible) {
                 $this->ansible = new Ansible($project);
@@ -223,6 +198,30 @@ class WalleController extends Controller {
             ]);
         }
 
+        // 权限与免密码登录检测
+        $this->walleTask = new WalleTask($project);
+        try {
+            $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir('detection'));
+            $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
+            if (!$ret) {
+                $code = -1;
+                $log[] = yii::t('walle', 'target server error', [
+                    'local_user'  => getenv("USER"),
+                    'remote_user' => $project->release_user,
+                    'path'        => $project->release_to,
+                    'error'       => $this->walleTask->getExeLog(),
+                ]);
+            }
+            // 清除
+            $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
+            $this->walleTask->runRemoteTaskCommandPackage([$command]);
+        } catch (\Exception $e) {
+            $code = -1;
+            $log[] = yii::t('walle', 'target server sys error', [
+                'error' => $e->getMessage()
+            ]);
+        }
+
         // task 检测todo...
 
         if ($code === 0) {
@@ -230,7 +229,6 @@ class WalleController extends Controller {
         }
         $this->renderJson(join("<br>", $log), $code);
     }
-
 
     /**
      * 获取线上文件md5
