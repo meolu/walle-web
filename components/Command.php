@@ -86,16 +86,19 @@ class Command {
      */
     final public function runRemoteCommand($command) {
         $this->log = '';
-        $needTTY = ' -T ';
+        $needTTY = '-T';
 
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
-            $localCommand = 'ssh ' . $needTTY . ' -p ' . $this->getHostPort($remoteHost)
-                . ' -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
-                . $this->getConfig()->release_user . '@'
-                . $this->getHostName($remoteHost);
-            $remoteCommand = str_replace('"', '\\"', trim($command));
-            $localCommand .= ' " ' . $remoteCommand . ' " ';
-            static::log('Run remote command ' . $remoteCommand);
+
+            $localCommand = sprintf('ssh %s -p %d -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false %s@%s %s',
+                $needTTY,
+                $this->getHostPort($remoteHost),
+                escapeshellarg($this->getConfig()->release_user),
+                escapeshellarg($this->getHostName($remoteHost)),
+                escapeshellarg($command)
+            );
+
+            static::log('Run remote command ' . $command);
 
             $log = $this->log;
             $this->status = $this->runLocalCommand($localCommand);

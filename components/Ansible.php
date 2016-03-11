@@ -51,7 +51,7 @@ class Ansible extends Command
 
         $command = sprintf('ansible %s -u %s -m ping -i %s -f %d -T %d',
             escapeshellarg($ansibleHosts),
-            escapeshellarg($this->config->release_user),
+            escapeshellarg($this->getConfig()->release_user),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,
             $this->ansibleTimeout);
@@ -92,7 +92,7 @@ class Ansible extends Command
 
         $localCommand = sprintf('ansible %s -u %s -m raw -a %s -i %s -f %d -T %d',
             escapeshellarg($ansibleHosts),
-            escapeshellarg($this->config->release_user),
+            escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,
@@ -116,7 +116,7 @@ class Ansible extends Command
 
         $localCommand = sprintf('ansible %s -u %s -m command -a %s -i %s -f %d -T %d',
             escapeshellarg($ansibleHosts),
-            escapeshellarg($this->config->release_user),
+            escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,
@@ -140,7 +140,7 @@ class Ansible extends Command
 
         $localCommand = sprintf('ansible %s -u %s -m shell -a %s -i %s -f %d -T %d',
             escapeshellarg($ansibleHosts),
-            escapeshellarg($this->config->release_user),
+            escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($remoteCommand),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,
@@ -164,7 +164,7 @@ class Ansible extends Command
 
         $localCommand = sprintf('ansible %s -u %s -m script -a %s -i %s -f %d -T %d',
             escapeshellarg($ansibleHosts),
-            escapeshellarg($this->config->release_user),
+            escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($shellFile),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,

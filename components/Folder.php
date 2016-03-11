@@ -69,13 +69,13 @@ class Folder extends Ansible {
     public function syncFiles($remoteHost, $version) {
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
 
-        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p %s" %s %s %s%s:%s',
+        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false -p %d" %s %s %s@%s:%s',
             $this->getHostPort($remoteHost),
             $this->excludes($excludes),
-            rtrim(Project::getDeployWorkspace($version), '/') . '/',
-            $this->getConfig()->release_user . '@',
-            $this->getHostName($remoteHost),
-            Project::getReleaseVersionDir($version));
+            escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
+            escapeshellarg($this->getConfig()->release_user),
+            escapeshellarg($this->getHostName($remoteHost)),
+            escapeshellarg(Project::getReleaseVersionDir($version)));
 
         return $this->runLocalCommand($command);
     }
