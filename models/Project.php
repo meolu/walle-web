@@ -268,10 +268,14 @@ class Project extends \yii\db\ActiveRecord
      *
      * {ansible_hosts.dir}/project_{projectId}
      *
+     * @param integer $projectId 可以传入指定的id
      * @return string
      */
-    public static function getAnsibleHostsFile() {
-        return sprintf('%s/project_%d', rtrim(yii::$app->params['ansible_hosts.dir'], '/'), static::$CONF->id);
+    public static function getAnsibleHostsFile($projectId = 0) {
+        if (!$projectId) {
+            $projectId = static::$CONF->id;
+        }
+        return sprintf('%s/project_%d', rtrim(yii::$app->params['ansible_hosts.dir'], '/'), $projectId);
     }
 
     /**

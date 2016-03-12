@@ -152,6 +152,12 @@ class ConfController extends Controller
         $copy->load($project->getAttributes(), '');
 
         if (!$copy->save()) throw new \Exception(yii::t('conf', 'copy failed'));
+
+        // 删除ansible配置文件
+        if ($project->ansible) {
+            copy(Project::getAnsibleHostsFile($project->id), Project::getAnsibleHostsFile($copy->id));
+        }
+
         $this->renderJson([]);
     }
 
@@ -163,7 +169,14 @@ class ConfController extends Controller
      */
     public function actionDelete($projectId) {
         $project = $this->findModel($projectId);
+
         if (!$project->delete()) throw new \Exception(yii::t('w', 'delete failed'));
+
+        // 删除ansible配置文件
+        if ($project->ansible) {
+            unlink(Project::getAnsibleHostsFile($project->id));
+        }
+
         $this->renderJson([]);
     }
 
@@ -240,7 +253,7 @@ class ConfController extends Controller
             return true;
         }
 
-        $filePath = Project::getAnsibleHostsFile();
+        $filePath = Project::getAnsibleHostsFile($project->id);
         $ret = @file_put_contents($filePath, $project->hosts);
         if (!$ret) {
             throw new \Exception(yii::t('conf', 'ansible hosts save error', ['path' => $filePath]));
@@ -248,4 +261,5 @@ class ConfController extends Controller
 
         return true;
     }
+
 }

@@ -86,13 +86,13 @@ class Folder extends Ansible {
      * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
      *
      * @param $version
+     * @param string $files 相对仓库文件/目录路径, 空格分割
      * @param array $remoteHosts
      */
-    public function copyFilesByAnsible($version, $remoteHosts = []) {
+    public function copyFiles($version, $files = '*', $remoteHosts = []) {
 
         // 1. 打包
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
-        $files = '*';
         $packagePath = Project::getDeployPackagePath($version);
         $packageCommand = sprintf('cd %s && tar %s --preserve-permissions -czf %s %s',
             escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
