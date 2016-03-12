@@ -68,16 +68,17 @@ class Ansible extends Command
     }
 
     /**
-     * 根据传入的 hosts 数组 生成 ansible 命令需要的 hosts 参数
+     * 根据传入的 remote hosts 数组 生成 ansible 命令需要的 hosts 参数
      *
-     * @param array $hosts
+     * @param array $remoteHosts 不能在remoteHosts中传入 :端口
      * @return string
      */
-    protected function _getAnsibleHosts($hosts = [])
+    protected function _getAnsibleHosts($remoteHosts = [])
     {
 
-        if ($hosts) {
-            $ansibleHosts = implode(':', $hosts);
+        if ($remoteHosts) {
+            // ansible 多个主机通过 : 间隔
+            $ansibleHosts = implode(':', $remoteHosts);
         } else {
             $ansibleHosts = 'all';
         }
@@ -178,6 +179,30 @@ class Ansible extends Command
             escapeshellarg($ansibleHosts),
             escapeshellarg($this->getConfig()->release_user),
             escapeshellarg($shellFile),
+            escapeshellarg(Project::getAnsibleHostsFile()),
+            $this->ansibleFork,
+            $this->ansibleTimeout);
+
+        return $this->runLocalCommand($localCommand);
+    }
+
+    /**
+     * 通过 ansible 复制文件模块, 并发传输文件
+     *
+     * @param string $src 宿主机文件路径
+     * @param string $dest 目标机文件路径
+     * @param array $hosts 可选的主机列表
+     * @return bool|int
+     */
+    public function copyFilesByAnsibleCopy($src, $dest, $hosts = []) {
+
+        $ansibleHosts = $this->_getAnsibleHosts($hosts);
+
+        $localCommand = sprintf('%s ansible %s -u %s -m copy -a %s -i %s -f %d -T %d',
+            $this->ansibleSshArgs,
+            escapeshellarg($ansibleHosts),
+            escapeshellarg($this->getConfig()->release_user),
+            escapeshellarg('src=' . $src . ' dest=' . $dest),
             escapeshellarg(Project::getAnsibleHostsFile()),
             $this->ansibleFork,
             $this->ansibleTimeout);

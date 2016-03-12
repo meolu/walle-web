@@ -81,6 +81,48 @@ class Folder extends Ansible {
     }
 
     /**
+     * 将多个文件/目录通过ansible传输到指定的多个目标机
+     *
+     * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
+     *
+     * @param $version
+     * @param array $remoteHosts
+     */
+    public function copyFilesByAnsible($version, $remoteHosts = []) {
+
+        // 1. 打包
+        $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
+        $files = '*';
+        $packagePath = Project::getDeployPackagePath($version);
+        $packageCommand = sprintf('cd %s && tar %s --preserve-permissions -czf %s %s',
+            escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
+            $this->excludes($excludes),
+            $packagePath,
+            $files
+        );
+        $ret = $this->runLocalCommand($packageCommand);
+        if (!$ret) {
+            return false;
+        }
+
+        // 2. 传输文件
+        $releasePackage = Project::getReleaseVersionPackage($version);
+        $ret = $this->copyFilesByAnsibleCopy($packagePath, $releasePackage);
+        if (!$ret) {
+            return false;
+        }
+
+        // 3. 解压
+        $releasePath = Project::getReleaseVersionDir($version);
+        $unpackageCommand = sprintf('tar --preserve-permissions --touch --no-same-owner -xzf %s -C %s',
+            $releasePackage,
+            $releasePath);
+        $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
+
+        return $ret;
+    }
+
+    /**
      * 打软链
      *
      * @param null $version
@@ -140,7 +182,10 @@ class Folder extends Ansible {
      * @return bool|int
      */
     public function cleanUpLocal($version) {
-        $cmd[] = "rm -rf " . Project::getDeployWorkspace($version);
+        $cmd[] = 'rm -rf ' . Project::getDeployWorkspace($version);
+        if (Project::getAnsibleStatus()) {
+            $cmd[] = 'rm -f ' . Project::getDeployPackagePath($version);
+        }
         if ($this->config->repo_type == Project::REPO_SVN) {
             $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
         }

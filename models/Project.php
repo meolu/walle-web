@@ -185,6 +185,19 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * 获取 ansible 宿主机tar文件路径
+     *
+     * {deploy_from}/{env}/{project}-YYmmdd-HHiiss.tar.gz
+     *
+     * @param $version
+     * @return string
+     */
+    public static function getDeployPackagePath($version) {
+
+        return sprintf('%s.tar.gz', static::getDeployWorkspace($version));
+    }
+
+    /**
      * 拼接宿主机的仓库目录
      * {deploy_from}/{env}/{project}
      *
@@ -223,6 +236,18 @@ class Project extends \yii\db\ActiveRecord
     }
 
     /**
+     * 拼接目标机要发布的打包文件路径
+     * {release_library}/{project}/{version}.tar.gz
+     *
+     * @param string $version
+     * @return string
+     */
+    public static function getReleaseVersionPackage($version = '') {
+
+        return sprintf('%s.tar.gz', static::getReleaseVersionDir($version));
+    }
+
+    /**
      * 获取当前进程配置的目标机器host列表
      */
     public static function getHosts() {
@@ -240,6 +265,8 @@ class Project extends \yii\db\ActiveRecord
 
     /**
      * 获取当前进程配置的ansible hosts文件路径
+     *
+     * {ansible_hosts.dir}/ansible_hosts_project_{projectId}
      *
      * @return string
      */

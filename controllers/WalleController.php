@@ -9,19 +9,17 @@
 
 namespace app\controllers;
 
+use app\components\Ansible;
+use app\components\Command;
+use app\components\Controller;
+use app\components\Folder;
 use app\components\Repo;
+use app\components\Task as WalleTask;
+use app\models\Project;
+use app\models\Record;
+use app\models\Task;
 use yii;
 use yii\data\Pagination;
-use app\components\Command;
-use app\components\Folder;
-use app\components\Git;
-use app\components\Task as WalleTask;
-use app\components\Ansible;
-use app\components\Controller;
-use app\models\Task;
-use app\models\Record;
-use app\models\Project;
-use app\models\User;
 
 class WalleController extends Controller {
 
@@ -427,15 +425,30 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _rsync() {
-        // 同步文件
-        foreach (Project::getHosts() as $remoteHost) {
+
+        if (Project::getAnsibleStatus()) {
+            // 开启 ansible并发传输
             $sTime = Command::getMs();
-            $ret = $this->walleFolder->syncFiles($remoteHost, $this->task->link_id);
-            // 记录执行时间
+            $ret = $this->walleFolder->copyFilesByAnsible($this->task->link_id);
             $duration = Command::getMs() - $sTime;
             Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-            if (!$ret) throw new \Exception(yii::t('walle', 'rsync error'));
+            if (!$ret) {
+                throw new \Exception(yii::t('walle', 'rsync error'));
+            }
+        } else {
+            // 循环rsync传输
+            foreach (Project::getHosts() as $remoteHost) {
+                $sTime = Command::getMs();
+                $ret = $this->walleFolder->syncFiles($remoteHost, $this->task->link_id);
+                // 记录执行时间
+                $duration = Command::getMs() - $sTime;
+                Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
+                if (!$ret) {
+                    throw new \Exception(yii::t('walle', 'rsync error'));
+                }
+            }
         }
+
         return true;
     }
 
