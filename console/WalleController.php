@@ -8,7 +8,7 @@
 * *****************************************************************/
 
 namespace app\console;
- 
+
 use yii;
 use yii\console\Controller;
 use yii\helpers\Console;
@@ -82,12 +82,13 @@ class WalleController extends Controller {
      */
     protected function createDir() {
         $mkdirPaths = [
-            yii::$app->params['log.dir']
+            yii::$app->params['log.dir'],
+            yii::$app->params['ansible_hosts.dir']
         ];
         foreach ($mkdirPaths as $path) {
             $path = Yii::getAlias($path);
             Console::output("mkdiring dir: {$path}");
-            @mkdir($path, 0755);
+            @mkdir($path, 0755, true);
         }
     }
 
@@ -96,6 +97,7 @@ class WalleController extends Controller {
      */
     protected function setWritable() {
         $this->writablePaths[] = yii::$app->params['log.dir'];
+        $this->writablePaths[] = yii::$app->params['ansible_hosts.dir'];
         foreach ($this->writablePaths as $writable) {
             $writable = Yii::getAlias($writable);
             Console::output("Setting writable: {$writable}");
@@ -113,6 +115,5 @@ class WalleController extends Controller {
             @chmod($executable, 0755);
         }
     }
-
 
 }

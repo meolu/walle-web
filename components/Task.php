@@ -8,10 +8,9 @@
  * *****************************************************************/
 namespace app\components;
 
-
 use app\models\Project;
 
-class Task extends Command {
+class Task extends Ansible {
 
     /**
      * pre-deploy部署代码前置触发任务
@@ -41,7 +40,6 @@ class Task extends Command {
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
-
 
     /**
      * post-deploy部署代码后置触发任务
@@ -76,11 +74,23 @@ class Task extends Command {
      * 设置了版本保留数量，超出了设定值，则删除老版本
      */
     public function cleanUpReleasesVersion() {
+
+        $ansibleStatus = Project::getAnsibleStatus();
+
         $cmd[] = sprintf('cd %s', Project::getReleaseVersionDir());
-        $cmd[] = 'ls -1|sort -r|awk \'FNR > ' . $this->config->keep_version_num . ' {printf("rm -rf %s\n", \$0);}\' | bash ';
+        if ($ansibleStatus) {
+            $cmd[] = sprintf('rm -f %s/*.tar.gz', rtrim(Project::getReleaseVersionDir(), '/'));
+        }
+        $cmd[] = sprintf('ls -1 | sort -r | awk \'FNR > %d  {printf("rm -rf %%s\n", $0);}\' | bash', $this->config->keep_version_num);
 
         $command = join(' && ', $cmd);
-        return $this->runRemoteCommand($command);
+
+        if ($ansibleStatus) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($command);
+        } else {
+            return $this->runRemoteCommand($command);
+        }
     }
 
     /**
@@ -123,8 +133,16 @@ class Task extends Command {
      * @return mixed
      */
     public function runRemoteTaskCommandPackage($tasks) {
+
         $task = join(' && ', $tasks);
-        return $this->runRemoteCommand($task);
+
+        if (Project::getAnsibleStatus()) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($task);
+        } else {
+            return $this->runRemoteCommand($task);
+        }
+
     }
 
 }

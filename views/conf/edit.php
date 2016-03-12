@@ -283,6 +283,16 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="form-group">
+            <label class="control-label bolder blue" for="form-field-2">
+                <?= yii::t('conf', 'enable ansible') ?>
+                <input name="Project[ansible]" value="0" type="hidden">
+                <input name="Project[ansible]" value="1" type="checkbox" <?= $conf->ansible ? 'checked' : '' ?>
+                       class="ace ace-switch ace-switch-5"  data-rel="tooltip" data-title="<?= yii::t('conf', 'ansible tip') ?>" data-placement="right">
+                <span class="lbl"></span>
+            </label>
+        </div>
+
+        <div class="form-group">
             <label class="control-label bolder blue">
                 <?= yii::t('conf', 'enable open') ?>
                 <input name="Project[status]" value="0" type="hidden">
@@ -291,6 +301,7 @@ use yii\widgets\ActiveForm;
                 <span class="lbl"></span>
             </label>
         </div>
+
       </div>
       <div class="box-footer">
         <input type="submit" class="btn btn-primary" value="<?= yii::t('w', 'submit') ?>">

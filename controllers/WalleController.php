@@ -9,18 +9,17 @@
 
 namespace app\controllers;
 
+use app\components\Ansible;
+use app\components\Command;
+use app\components\Controller;
+use app\components\Folder;
 use app\components\Repo;
+use app\components\Task as WalleTask;
+use app\models\Project;
+use app\models\Record;
+use app\models\Task;
 use yii;
 use yii\data\Pagination;
-use app\components\Command;
-use app\components\Folder;
-use app\components\Git;
-use app\components\Task as WalleTask;
-use app\components\Controller;
-use app\models\Task;
-use app\models\Record;
-use app\models\Project;
-use app\models\User;
 
 class WalleController extends Controller {
 
@@ -38,6 +37,11 @@ class WalleController extends Controller {
      * Walle的高级任务
      */
     protected $walleTask;
+
+    /**
+     * Ansible 任务
+     */
+    protected $ansible;
 
     /**
      * Walle的文件目录操作
@@ -82,7 +86,13 @@ class WalleController extends Controller {
                 $this->_preDeploy();
                 $this->_gitUpdate();
                 $this->_postDeploy();
-                $this->_rsync();
+                if (Project::getAnsibleStatus()) {
+                    // ansible copy
+                    $this->_copy('*');
+                } else {
+                    // 循环 rsync
+                    $this->_rsync();
+                }
                 $this->_updateRemoteServers($this->task->link_id);
                 $this->_cleanRemoteReleaseVersion();
                 $this->_cleanUpLocal($this->task->link_id);
@@ -106,7 +116,7 @@ class WalleController extends Controller {
 
             // 可回滚的版本设置
             $this->_enableRollBack();
-            
+
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
             $this->conf->version = $this->task->link_id;
             $this->conf->save();
@@ -167,6 +177,31 @@ class WalleController extends Controller {
             ]);
         }
 
+        try {
+            if ($project->ansible) {
+                $this->ansible = new Ansible($project);
+
+                // 检测 ansible 是否安装
+                $ret = $this->ansible->test();
+                if (!$ret) {
+                    $code = -1;
+                    $log[] = yii::t('walle', 'hosted server ansible error');
+                }
+
+                // 检测 ansible 连接目标机是否正常
+                $ret = $this->ansible->ping();
+                if (!$ret) {
+                    $code = -1;
+                    $log[] = yii::t('walle', 'target server ansible ping error');
+                }
+            }
+        } catch (\Exception $e) {
+            $code = -1;
+            $log[] = yii::t('walle', 'hosted server sys error', [
+                'error' => $e->getMessage()
+            ]);
+        }
+
         // 权限与免密码登录检测
         $this->walleTask = new WalleTask($project);
         try {
@@ -199,7 +234,6 @@ class WalleController extends Controller {
         $this->renderJson(join("<br>", $log), $code);
     }
 
-
     /**
      * 获取线上文件md5
      *
@@ -216,7 +250,7 @@ class WalleController extends Controller {
         $this->walleFolder->getFileMd5($file);
         $log = $this->walleFolder->getExeLog();
 
-        $this->renderJson(join("<br>", explode(PHP_EOL, $log)));
+        $this->renderJson(nl2br($log));
     }
 
     /**
@@ -391,21 +425,45 @@ class WalleController extends Controller {
     }
 
     /**
+     * ansible copy
+     *
+     * @param string $files
+     * @return bool
+     * @throws \Exception
+     */
+    private function _copy($files = '*') {
+
+        $sTime = Command::getMs();
+        $ret = $this->walleFolder->copyFiles($this->task->link_id, $files);
+        $duration = Command::getMs() - $sTime;
+        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
+        if (!$ret) {
+            throw new \Exception(yii::t('walle', 'rsync error'));
+        }
+
+        return true;
+    }
+
+    /**
      * 同步文件到服务器
      *
      * @return bool
      * @throws \Exception
      */
     private function _rsync() {
-        // 同步文件
+
+        // 循环rsync传输
         foreach (Project::getHosts() as $remoteHost) {
             $sTime = Command::getMs();
             $ret = $this->walleFolder->syncFiles($remoteHost, $this->task->link_id);
             // 记录执行时间
             $duration = Command::getMs() - $sTime;
             Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-            if (!$ret) throw new \Exception(yii::t('walle', 'rsync error'));
+            if (!$ret) {
+                throw new \Exception(yii::t('walle', 'rsync error'));
+            }
         }
+
         return true;
     }
 

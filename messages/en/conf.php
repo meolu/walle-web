@@ -28,6 +28,7 @@ return [
     'tasks' => 'Advanced Tasks',
     'branch/tag' => 'Branch/Tag:',
     'enable audit' => 'Audit:',
+    'enable ansible' => 'Ansible: ',
     'enable open' => 'Enable:',
     'repo url tip' => 'git/svn. git url format:ssh-url, the ssh-key of the user of hosted server\'s php process should be add to git',
     'deploy from tip' => 'path for code in hosted server',
@@ -46,6 +47,8 @@ return [
     'branch tip' => 'Recommended options of test，maybe you would chose branch+commit',
     'tag tip' => 'Recommended options of production',
     'audit tip' => 'development bill should be audited before deploying',
+    'ansible tip' => '',
+    'ansible hosts save error' => '{path}',
     'open tip' => "developer can't see this project while it is close",
 
     'group' => "Project's users",

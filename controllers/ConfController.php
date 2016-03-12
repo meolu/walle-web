@@ -127,6 +127,8 @@ class ConfController extends Controller
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
             if ($project->save()) {
+                // 保存ansible需要的hosts文件
+                $this->_saveAnsibleHosts($project);
                 $this->redirect('@web/conf/');
             }
         }
@@ -150,6 +152,12 @@ class ConfController extends Controller
         $copy->load($project->getAttributes(), '');
 
         if (!$copy->save()) throw new \Exception(yii::t('conf', 'copy failed'));
+
+        // 删除ansible配置文件
+        if ($project->ansible) {
+            copy(Project::getAnsibleHostsFile($project->id), Project::getAnsibleHostsFile($copy->id));
+        }
+
         $this->renderJson([]);
     }
 
@@ -161,7 +169,14 @@ class ConfController extends Controller
      */
     public function actionDelete($projectId) {
         $project = $this->findModel($projectId);
+
         if (!$project->delete()) throw new \Exception(yii::t('w', 'delete failed'));
+
+        // 删除ansible配置文件
+        if ($project->ansible) {
+            unlink(Project::getAnsibleHostsFile($project->id));
+        }
+
         $this->renderJson([]);
     }
 
@@ -225,4 +240,26 @@ class ConfController extends Controller
             throw new NotFoundHttpException(yii::t('conf', 'project not exists'));
         }
     }
+
+    /**
+     * @param Project $project
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _saveAnsibleHosts(Project $project) {
+
+        if (!$project->ansible) {
+            // 未开启ansible, 不用保存
+            return true;
+        }
+
+        $filePath = Project::getAnsibleHostsFile($project->id);
+        $ret = @file_put_contents($filePath, $project->hosts);
+        if (!$ret) {
+            throw new \Exception(yii::t('conf', 'ansible hosts save error', ['path' => $filePath]));
+        }
+
+        return true;
+    }
+
 }

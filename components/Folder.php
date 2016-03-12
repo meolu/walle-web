@@ -10,7 +10,7 @@ namespace app\components;
 
 use app\models\Project;
 
-class Folder extends Command {
+class Folder extends Ansible {
 
 
     /**
@@ -50,7 +50,14 @@ class Folder extends Command {
         }
         $command = join(' && ', $cmd);
 
-        return $this->runRemoteCommand($command);
+        if (Project::getAnsibleStatus()) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($command);
+        } else {
+            // ssh 循环执行远程命令
+            return $this->runRemoteCommand($command);
+        }
+
     }
 
     /**
@@ -62,15 +69,57 @@ class Folder extends Command {
     public function syncFiles($remoteHost, $version) {
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
 
-        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p %s" %s %s %s%s:%s',
+        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false -p %d" %s %s %s@%s:%s',
             $this->getHostPort($remoteHost),
             $this->excludes($excludes),
-            rtrim(Project::getDeployWorkspace($version), '/') . '/',
-            $this->getConfig()->release_user . '@',
-            $this->getHostName($remoteHost),
-            Project::getReleaseVersionDir($version));
+            escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
+            escapeshellarg($this->getConfig()->release_user),
+            escapeshellarg($this->getHostName($remoteHost)),
+            escapeshellarg(Project::getReleaseVersionDir($version)));
 
         return $this->runLocalCommand($command);
+    }
+
+    /**
+     * 将多个文件/目录通过ansible传输到指定的多个目标机
+     *
+     * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
+     *
+     * @param $version
+     * @param string $files 相对仓库文件/目录路径, 空格分割
+     * @param array $remoteHosts
+     */
+    public function copyFiles($version, $files = '*', $remoteHosts = []) {
+
+        // 1. 打包
+        $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
+        $packagePath = Project::getDeployPackagePath($version);
+        $packageCommand = sprintf('cd %s && tar %s --preserve-permissions -czf %s %s',
+            escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
+            $this->excludes($excludes),
+            $packagePath,
+            $files
+        );
+        $ret = $this->runLocalCommand($packageCommand);
+        if (!$ret) {
+            return false;
+        }
+
+        // 2. 传输文件
+        $releasePackage = Project::getReleaseVersionPackage($version);
+        $ret = $this->copyFilesByAnsibleCopy($packagePath, $releasePackage);
+        if (!$ret) {
+            return false;
+        }
+
+        // 3. 解压
+        $releasePath = Project::getReleaseVersionDir($version);
+        $unpackageCommand = sprintf('tar --preserve-permissions --touch --no-same-owner -xzf %s -C %s',
+            $releasePackage,
+            $releasePath);
+        $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
+
+        return $ret;
     }
 
     /**
@@ -102,7 +151,12 @@ class Folder extends Command {
         $cmd[] = "test -f /usr/bin/md5sum && md5sum {$file}";
         $command = join(' && ', $cmd);
 
-        return $this->runRemoteCommand($command);
+        if (Project::getAnsibleStatus()) {
+            // ansible 并发执行远程命令
+            return $this->runRemoteCommandByAnsibleShell($command);
+        } else {
+            return $this->runRemoteCommand($command);
+        }
     }
 
     /**
@@ -128,7 +182,10 @@ class Folder extends Command {
      * @return bool|int
      */
     public function cleanUpLocal($version) {
-        $cmd[] = "rm -rf " . Project::getDeployWorkspace($version);
+        $cmd[] = 'rm -rf ' . Project::getDeployWorkspace($version);
+        if (Project::getAnsibleStatus()) {
+            $cmd[] = 'rm -f ' . Project::getDeployPackagePath($version);
+        }
         if ($this->config->repo_type == Project::REPO_SVN) {
             $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
         }
@@ -147,5 +204,6 @@ class Folder extends Command {
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }
+
 }
 
