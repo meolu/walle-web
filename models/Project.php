@@ -266,12 +266,12 @@ class Project extends \yii\db\ActiveRecord
     /**
      * 获取当前进程配置的ansible hosts文件路径
      *
-     * {ansible_hosts.dir}/ansible_hosts_project_{projectId}
+     * {ansible_hosts.dir}/project_{projectId}
      *
      * @return string
      */
     public static function getAnsibleHostsFile() {
-        return sprintf('%s/ansible_hosts_project_%d', rtrim(yii::$app->params['ansible_hosts.dir'], '/'), static::$CONF->id);
+        return sprintf('%s/project_%d', rtrim(yii::$app->params['ansible_hosts.dir'], '/'), static::$CONF->id);
     }
 
     /**
