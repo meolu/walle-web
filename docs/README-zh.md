@@ -8,7 +8,7 @@
 
 Walle 一个web部署系统工具，可能也是个持续发布工具，配置简单、功能完善、界面流畅、开箱即用！支持git、svn版本管理，支持各种web代码发布，静态的HTML，动态PHP，需要编译的JAVA等。
 
-[官网主页](https://www.walle-web.io) | [文档手册](https://www.walle-web.io/docs) | [English Readme](https://github.com/meolu/walle-web/blob/master/README-en.md).
+[官网主页](https://www.walle-web.io) | [文档手册](https://www.walle-web.io/docs) | [English Readme](https://github.com/meolu/walle-web/blob/master/README.md).
 
 目前，超过十家企业生产环境部署使用，欢迎star、fork、试用 ：）
 
@@ -47,14 +47,14 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 配置nginx/apache的webroot指向walle-web/web，简单范例详见页面底部常见问题和解决办法。
 ```
 
-如有需要，移步[最最最详细安装指南](https://github.com/meolu/walle-web/blob/master/docs/install.md)
+如有需要，移步[最最最详细安装指南](https://walle-web.io/docs/installation.html)
 
 
 快速开始
 -------
 * 注册一个管理员身份用户(已有`admin/admin`)，配置一个项目。
-    * [git配置范例](https://github.com/meolu/walle-web/blob/master/docs/config-git.md)
-    * [svn配置范例](https://github.com/meolu/walle-web/blob/master/docs/config-svn.md)
+    * [git配置范例](https://walle-web.io/docs/git-configuration.html)
+    * [svn配置范例](https://walle-web.io/docs/svn-configuration.html)
 * 开发者注册用户(已有`demo/demo`)，提交上线单
 * 管理员审核上线单
 * 开发者发起上线
@@ -129,30 +129,30 @@ git pull
 ---
 
 #### 配置管理
-![](https://raw.github.com/meolu/doc/master/upload/walle-config-edit.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-config-edit.jpg)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/doc/master/upload/walle-submit.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-submit.jpg)
 
 #### 上线列表
-![](https://raw.github.com/meolu/doc/master/upload/walle-dev-list.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-dev-list.jpg)
 
 #### 宿主机、目标机群、操作用户关系
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow-relation.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-flow-relation.jpg)
 
 #### 上线流程图
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow.png)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-flow.png)
 
 #### 演示
-![](https://raw.github.com/meolu/doc/master/upload/walle.gif)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle.gif)
 
 ## CHANGE LOG
-瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
+瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/releases)
 
 
 交流讨论
 -------
-- [常见问题及解决办法手册](https://github.com/meolu/walle-web/blob/master/docs/faq.md)
+- [常见问题及解决办法手册](https://walle-web.io/docs/troubleshooting.html)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - [官方文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B)
 - qq群：482939318
