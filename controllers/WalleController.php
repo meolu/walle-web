@@ -246,6 +246,7 @@ class WalleController extends Controller {
             ]);
         }
 
+        // 7.路径必须为绝对路径
         $needAbsoluteDir = [
             Yii::t('conf', 'deploy from') => Project::getConf()->deploy_from,
             Yii::t('conf', 'webroot')     => Project::getConf()->release_to,
