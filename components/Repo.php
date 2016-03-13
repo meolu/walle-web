@@ -12,6 +12,13 @@ use \app\models\Project;
 
 class Repo extends Command {
 
+    /**
+     * 获取版本管理句柄
+     *
+     * @param $conf
+     * @return Git|Svn
+     * @throws \Exception
+     */
     public static function getRevision($conf) {
         switch ($conf->repo_type) {
             case Project::REPO_GIT:

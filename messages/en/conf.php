@@ -22,6 +22,7 @@ return [
     'host' => 'Host',
     'targets' => 'Target Servers',
     'target user' => 'Executive User',
+    'webroot' => 'webroot',
     'releases' => 'Release Path',
     'keep version' => 'Max Version',
     'servers' => 'Servers',

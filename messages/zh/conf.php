@@ -22,6 +22,7 @@ return [
     'host' => '宿主机',
     'targets' => '目标机器',
     'target user' => '用户',
+    'webroot' => 'webroot',
     'releases' => '发布版本库',
     'keep version' => '版本保留数',
     'servers' => '机器列表',

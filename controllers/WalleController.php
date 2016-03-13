@@ -157,17 +157,25 @@ class WalleController extends Controller {
         // 本地git ssh-key是否加入deploy-keys列表
         $revision = Repo::getRevision($project);
         try {
+            // 1.检测宿主机检出目录是否可读写
+            $codeBaseDir = Project::getDeployFromDir();
+            $isWritable  = is_dir($codeBaseDir) ? is_writable($codeBaseDir) : @mkdir($codeBaseDir, 0755, true);
+            if (!$isWritable) {
+                $code  = -1;
+                $log[] = yii::t('walle', 'hosted server is not writable error', [
+                    'user' => getenv("USER"),
+                    'path' => $project->deploy_from,
+                ]);
+            }
+            // 2.检测宿主机ssh是否加入git信任
             $ret = $revision->updateRepo();
             if (!$ret) {
                 $code  = -1;
                 $error = $project->repo_type == Project::REPO_GIT
-                    ? yii::t('walle', 'ssh-key to git')
+                    ? yii::t('walle', 'ssh-key to git', ['user' => getenv("USER")])
                     : yii::t('walle', 'correct username passwd');
-                $log[] = yii::t('walle', 'hosted server error', [
-                    'user'       => getenv("USER"),
-                    'path'       => $project->deploy_from,
-                    'ssh_passwd' => $error,
-                    'error'      => $revision->getExeLog(),
+                $log[] = yii::t('walle', 'hosted server ssh error', [
+                    'error' => $error,
                 ]);
             }
         } catch (\Exception $e) {
@@ -181,14 +189,14 @@ class WalleController extends Controller {
             if ($project->ansible) {
                 $this->ansible = new Ansible($project);
 
-                // 检测 ansible 是否安装
+                // 3.检测 ansible 是否安装
                 $ret = $this->ansible->test();
                 if (!$ret) {
                     $code = -1;
                     $log[] = yii::t('walle', 'hosted server ansible error');
                 }
 
-                // 检测 ansible 连接目标机是否正常
+                // 4.检测 ansible 连接目标机是否正常
                 $ret = $this->ansible->ping();
                 if (!$ret) {
                     $code = -1;
@@ -205,25 +213,51 @@ class WalleController extends Controller {
         // 权限与免密码登录检测
         $this->walleTask = new WalleTask($project);
         try {
-            $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir('detection'));
+            // 5.检测php用户是否加入目标机ssh信任
+            $command = 'id';
             $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
             if (!$ret) {
                 $code = -1;
-                $log[] = yii::t('walle', 'target server error', [
+                $log[] = yii::t('walle', 'target server ssh error', [
                     'local_user'  => getenv("USER"),
                     'remote_user' => $project->release_user,
                     'path'        => $project->release_to,
-                    'error'       => $this->walleTask->getExeLog(),
+                ]);
+            }
+
+            // 6.检测php用户是否具有目标机release目录读写权限
+            $tmpDir = 'detection' . time();
+            $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir($tmpDir));
+            $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
+            if (!$ret) {
+                $code = -1;
+                $log[] = yii::t('walle', 'target server is not writable error', [
+                    'remote_user' => $project->release_user,
+                    'path'        => $project->release_to,
                 ]);
             }
             // 清除
-            $command = sprintf('rm -rf %s', Project::getReleaseVersionDir('detection'));
+            $command = sprintf('rm -rf %s', Project::getReleaseVersionDir($tmpDir));
             $this->walleTask->runRemoteTaskCommandPackage([$command]);
         } catch (\Exception $e) {
             $code = -1;
             $log[] = yii::t('walle', 'target server sys error', [
                 'error' => $e->getMessage()
             ]);
+        }
+
+        $needAbsoluteDir = [
+            Yii::t('conf', 'deploy from') => Project::getConf()->deploy_from,
+            Yii::t('conf', 'webroot')     => Project::getConf()->release_to,
+            Yii::t('conf', 'releases')    => Project::getConf()->release_library,
+        ];
+        foreach ($needAbsoluteDir as $tips => $dir) {
+            if (0 !== strpos($dir, '/')) {
+                $code = -1;
+                $log[] = yii::t('walle', 'config dir must absolute', [
+                    'path' => sprintf('%s:%s', $tips, $dir),
+                ]);
+            }
         }
 
         // task 检测todo...
