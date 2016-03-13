@@ -23,7 +23,7 @@ class Task extends Ansible {
         if (empty($tasks)) return true;
 
         // 本地可能要做一些依赖环境变量的命令操作
-        $cmd = ['source /etc/profile'];
+        $cmd = ['. /etc/profile'];
         $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
@@ -52,7 +52,7 @@ class Task extends Ansible {
         if (empty($tasks)) return true;
 
         // 本地可能要做一些依赖环境变量的命令操作
-        $cmd = ['source /etc/profile'];
+        $cmd = ['. /etc/profile'];
         $workspace = rtrim(Project::getDeployWorkspace($version), '/');
         $pattern = [
             '#{WORKSPACE}#',
@@ -105,7 +105,7 @@ class Task extends Ansible {
         if (empty($tasks)) return '';
 
         // 可能要做一些依赖环境变量的命令操作
-        $cmd = ['source /etc/profile'];
+        $cmd = ['. /etc/profile'];
         $workspace = Project::getTargetWorkspace();
         $version   = Project::getReleaseVersionDir($version);
         $pattern = [
