@@ -129,28 +129,28 @@ git pull
 Architecture
 ------------
 #### git/svn, user, host, servers
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow-relation-en.png)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-flow-relation-en.png)
 
 #### deployment flow
-![](https://raw.github.com/meolu/doc/master/upload/walle-flow-en.png)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-flow-en.png)
 
 Screenshots
 -----------
 
 #### project config
-![](https://raw.github.com/meolu/doc/master/upload/walle-config-edit-en.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-config-edit-en.jpg)
 
 #### sumbit a task
-![](https://raw.github.com/meolu/doc/master/upload/walle-submit-en.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-submit-en.jpg)
 
 #### list of task
-![](https://raw.github.com/meolu/doc/master/upload/walle-dev-list-en.jpg)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-dev-list-en.jpg)
 
 #### demo show
-![](https://raw.github.com/meolu/doc/master/upload/walle-en.gif)
+![](https://raw.github.com/meolu/docs/walle-web.io/docs/en/static/walle-en.gif)
 
 ## CHANGELOG
-[CHANGELOG](https://github.com/meolu/walle-web/blob/master/docs/CHANGELOG.md)
+[CHANGELOG](https://github.com/meolu/walle-web/releases)
 
 
 Discussing
