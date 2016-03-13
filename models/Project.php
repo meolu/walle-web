@@ -260,7 +260,7 @@ class Project extends \yii\db\ActiveRecord
      * @return boolean
      */
     public static function getAnsibleStatus() {
-        return boolval(static::$CONF->ansible);
+        return (bool) static::$CONF->ansible;
     }
 
     /**
