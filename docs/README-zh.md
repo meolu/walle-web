@@ -129,22 +129,22 @@ git pull
 ---
 
 #### 配置管理
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-config-edit.jpg)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle-config-edit.jpg)
 
 #### 提交上线任务
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-submit.jpg)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle-submit.jpg)
 
 #### 上线列表
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-dev-list.jpg)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle-dev-list.jpg)
 
 #### 宿主机、目标机群、操作用户关系
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-flow-relation.jpg)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle-flow-relation.jpg)
 
 #### 上线流程图
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle-flow.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle-flow.png)
 
 #### 演示
-![](https://raw.github.com/meolu/docs/walle-web.io/docs/zh-cn/static/walle.gif)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/zh-cn/static/walle.gif)
 
 ## CHANGE LOG
 瓦力的版本记录：[CHANGELOG](https://github.com/meolu/walle-web/releases)
