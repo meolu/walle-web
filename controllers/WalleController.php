@@ -157,6 +157,7 @@ class WalleController extends Controller {
         // 本地git ssh-key是否加入deploy-keys列表
         $revision = Repo::getRevision($project);
         try {
+
             // 1.检测宿主机检出目录是否可读写
             $codeBaseDir = Project::getDeployFromDir();
             $isWritable  = is_dir($codeBaseDir) ? is_writable($codeBaseDir) : @mkdir($codeBaseDir, 0755, true);
@@ -167,6 +168,7 @@ class WalleController extends Controller {
                     'path' => $project->deploy_from,
                 ]);
             }
+
             // 2.检测宿主机ssh是否加入git信任
             $ret = $revision->updateRepo();
             if (!$ret) {
@@ -178,14 +180,7 @@ class WalleController extends Controller {
                     'error' => $error,
                 ]);
             }
-        } catch (\Exception $e) {
-            $code = -1;
-            $log[] = yii::t('walle', 'hosted server sys error', [
-                'error' => $e->getMessage()
-            ]);
-        }
 
-        try {
             if ($project->ansible) {
                 $this->ansible = new Ansible($project);
 
@@ -196,13 +191,8 @@ class WalleController extends Controller {
                     $log[] = yii::t('walle', 'hosted server ansible error');
                 }
 
-                // 4.检测 ansible 连接目标机是否正常
-                $ret = $this->ansible->ping();
-                if (!$ret) {
-                    $code = -1;
-                    $log[] = yii::t('walle', 'target server ansible ping error');
-                }
             }
+
         } catch (\Exception $e) {
             $code = -1;
             $log[] = yii::t('walle', 'hosted server sys error', [
@@ -213,7 +203,7 @@ class WalleController extends Controller {
         // 权限与免密码登录检测
         $this->walleTask = new WalleTask($project);
         try {
-            // 5.检测php用户是否加入目标机ssh信任
+            // 4.检测php用户是否加入目标机ssh信任
             $command = 'id';
             $ret = $this->walleTask->runRemoteTaskCommandPackage([$command]);
             if (!$ret) {
@@ -223,6 +213,15 @@ class WalleController extends Controller {
                     'remote_user' => $project->release_user,
                     'path'        => $project->release_to,
                 ]);
+            }
+
+            if ($project->ansible) {
+                // 5.检测 ansible 连接目标机是否正常
+                $ret = $this->ansible->ping();
+                if (!$ret) {
+                    $code = -1;
+                    $log[] = yii::t('walle', 'target server ansible ping error');
+                }
             }
 
             // 6.检测php用户是否具有目标机release目录读写权限
@@ -236,6 +235,7 @@ class WalleController extends Controller {
                     'path'        => $project->release_to,
                 ]);
             }
+
             // 清除
             $command = sprintf('rm -rf %s', Project::getReleaseVersionDir($tmpDir));
             $this->walleTask->runRemoteTaskCommandPackage([$command]);
