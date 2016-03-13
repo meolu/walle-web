@@ -84,15 +84,9 @@ class WalleController extends Controller {
                 $this->_makeVersion();
                 $this->_initWorkspace();
                 $this->_preDeploy();
-                $this->_gitUpdate();
+                $this->_revisionUpdate();
                 $this->_postDeploy();
-                if (Project::getAnsibleStatus()) {
-                    // ansible copy
-                    $this->_copy('*');
-                } else {
-                    // 循环 rsync
-                    $this->_rsync();
-                }
+                $this->_transmission();
                 $this->_updateRemoteServers($this->task->link_id);
                 $this->_cleanRemoteReleaseVersion();
                 $this->_cleanUpLocal($this->task->link_id);
@@ -409,7 +403,7 @@ class WalleController extends Controller {
      * @return bool
      * @throws \Exception
      */
-    private function _gitUpdate() {
+    private function _revisionUpdate() {
         // 更新代码文件
         $revision = Repo::getRevision($this->conf);
         $sTime = Command::getMs();
@@ -460,13 +454,31 @@ class WalleController extends Controller {
     }
 
     /**
-     * ansible copy
+     * 传输文件/目录到指定目标机器
      *
-     * @param string $files
      * @return bool
      * @throws \Exception
      */
-    private function _copy($files = '*') {
+    private function _transmission() {
+        if (Project::getAnsibleStatus()) {
+            // ansible copy
+            return $this->_ansibleCopy();
+        } else {
+            // 循环 rsync
+            return $this->_rsync();
+        }
+    }
+
+    /**
+     * ansible copy
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    private function _ansibleCopy() {
+
+        $revision = Repo::getRevision($this->conf);
+        $files = $revision->getCommandFiles($this->task); // 更新到指定版本
 
         $sTime = Command::getMs();
         $ret = $this->walleFolder->copyFiles($this->task->link_id, $files);

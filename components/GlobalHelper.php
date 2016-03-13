@@ -39,12 +39,33 @@ class GlobalHelper {
      * @return array
      */
     public static function str2arr($string, $delimiter = PHP_EOL) {
+
         $items = explode($delimiter, $string);
+
         foreach ($items as $key => &$item) {
+
+            // 查找 # 的位置
+            $pos = strpos($item, '#');
+
+            if ($pos === 0) {
+                // # 开头, 整行注释
+                unset($items[$key]);
+                // 直接到下一个
+                continue;
+            }
+
+            if ($pos > 0) {
+                // # 在中间, 后面一段注释
+                $item = substr($item, 0, $pos);
+            }
+
             $item = trim($item);
-            //空行或者 #符号 开头的备注信息,过滤
-            if (empty($item) || $item{0} == '#') unset($items[$key]);
+            if (empty($item)) {
+                unset($items[$key]);
+            }
+
         }
+
         return $items;
     }
 

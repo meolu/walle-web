@@ -8,11 +8,18 @@
  * *****************************************************************/
 namespace app\components;
 
-
 use app\models\Project;
+use app\models\Task as TaskModel;
 
 class Git extends Command {
 
+    /**
+     * 更新仓库
+     *
+     * @param string $branch
+     * @param string $gitDir
+     * @return bool|int
+     */
     public function updateRepo($branch = 'master', $gitDir = null) {
         $gitDir = $gitDir ?: Project::getDeployFromDir();
         $dotGit = rtrim($gitDir, '/') . '/.git';
@@ -39,10 +46,10 @@ class Git extends Command {
     /**
      * 更新到指定commit版本
      *
-     * @param string $commit
+     * @param TaskModel $task
      * @return bool
      */
-    public function updateToVersion($task) {
+    public function updateToVersion(TaskModel $task) {
         // 先更新
         $destination = Project::getDeployWorkspace($task->link_id);
         $this->updateRepo($task->branch, $destination);
@@ -95,7 +102,10 @@ class Git extends Command {
     /**
      * 获取提交历史
      *
+     * @param string $branch
+     * @param int $count
      * @return array
+     * @throws \Exception
      */
     public function getCommitList($branch = 'master', $count = 20) {
         // 先更新
@@ -149,6 +159,19 @@ class Git extends Command {
             ];
         }
         return $history;
+    }
+
+    /**
+     * 根据任务里提交的带版本号的文件列表, 过滤生成 tar/rysnc 等命令需要的文件列表参数
+     *
+     * git 仓库总是返回 * 所有文件
+     *
+     * @param TaskModel $task
+     * @return string
+     */
+    public function getCommandFiles(TaskModel $task) {
+
+        return '*';
     }
 
 }
