@@ -271,7 +271,7 @@ class Svn extends Command {
         $fileList = GlobalHelper::str2arr($task->file_list);
         $files = '';
         foreach ($fileList as $file) {
-            list($file, $version) = StringHelper::explode($file, ' ', true, true);
+            list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
             $files .= trim($file) . ' ';
         }
 
@@ -288,8 +288,8 @@ class Svn extends Command {
         $fileList = GlobalHelper::str2arr($task->file_list);
         $fileAndVersion = [];
         foreach ($fileList as $file) {
-            list($file, $version) = StringHelper::explode($file, ' ', true, true);
-            $fileAndVersion[] = ['file' => trim($file), 'version' => $version];
+            list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
+            $fileAndVersion[] = ['file' => $file, 'version' => $version];
         }
 
         return $fileAndVersion;
