@@ -67,6 +67,7 @@ use app\models\Project;
                   'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
                   'onchange'       => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                   'onblur'         => "clearInterval(this.clock);",
+                  'value'          => '*',
               ])
               ->label(yii::t('task', 'file list')
                   . '<a class="icon-magic green show-between-history" data-rel="tooltip" data-placement="top" data-title="'
