@@ -232,6 +232,10 @@ class Svn extends Command {
      */
     public static function formatXmlLog($xmlString) {
         $history = [];
+        $pos = strpos($xmlString, '<?xml');
+        if ($pos > 0) {
+            $xmlString = substr($xmlString, $pos);
+        }
         $xml = simplexml_load_string($xmlString);
         foreach ($xml as $item) {
             $attr = $item->attributes();
@@ -300,7 +304,7 @@ class Svn extends Command {
      * @return string
      */
     private function _getSvnCmd($cmd) {
-        return sprintf('/usr/bin/env %s --username=%s --password=%s --non-interactive --trust-server-cert',
+        return sprintf('/usr/bin/env LC_ALL=C %s --username=%s --password=%s --non-interactive --trust-server-cert',
             $cmd, escapeshellarg($this->config->repo_username), escapeshellarg($this->config->repo_password));
     }
 
