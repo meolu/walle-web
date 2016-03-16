@@ -48,8 +48,8 @@ return [
     'branch tip' => 'Recommended options of test，maybe you would chose branch+commit',
     'tag tip' => 'Recommended options of production',
     'audit tip' => 'development bill should be audited before deploying',
-    'ansible tip' => '',
-    'ansible hosts save error' => '{path}',
+    'ansible tip' => 'use ansible to accelerate the speed of deploying, you need to have installed ansible on "Hosted Server"',
+    'ansible hosts save error' => 'Unable to save ansible hosts file: "{path}"',
     'open tip' => "developer can't see this project while it is close",
 
     'group' => "Project's users",

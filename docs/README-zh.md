@@ -10,8 +10,9 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 
 [官网主页](https://www.walle-web.io) | [文档手册](https://www.walle-web.io/docs) | [English Readme](https://github.com/meolu/walle-web/blob/master/README.md).
 
-目前，超过十家企业生产环境部署使用，欢迎star、fork、试用 ：）
+目前，超过百家企业生产环境部署使用，欢迎star、fork、试用 ：）
 
+* 支持git、svn版本管理
 * 用户分身份注册、登录
 * 开发者发起上线任务申请、部署
 * 管理者审核上线任务
@@ -25,7 +26,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * 发布完毕后收尾任务post-release（如重启）
 * 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
-* 支持git、svn版本管理
+* 多机器并发传输文件(Ansible)
 
 
 
@@ -35,6 +36,7 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * Bash(git、ssh)
 * LNMP/LAMP(php5.4+)
 * Composer
+* Ansible(可选)
 
 安装
 ----
@@ -121,8 +123,7 @@ To Do List
 持续更新开启更多功能
 -----------------
 ```
-git pull
-./yii migrate    # 更新数据库
+./yii walle/upgrade    # 升级walle
 ```
 
 截图

@@ -11,7 +11,7 @@ support git/svn Version control system, no matter what language you are, php/jav
 
 [Home Page](https://www.walle-web.io) | [官方主页](https://www.walle-web.io) | [中文说明](https://github.com/meolu/walle-web/blob/master/docs/README-zh.md) | [文档手册](https://www.walle-web.io/docs/).
 
-Now, there are more than ten companies hosted walle for deployment, star walle if you like : )
+Now, there are more than hundreds of companies hosted walle for deployment, star walle if you like : )
 
 * Support git/svn Version control system.
 * User signup by admin/develop identity.
@@ -26,6 +26,7 @@ Now, there are more than ten companies hosted walle for deployment, star walle i
 * Task of pre-release（e.g: stop service）.
 * Task of post-release（e.g: restart service）.
 * Check up file md5.
+* Multi-process multi-server file transfer (Ansible).
 
 
 Requirements
@@ -34,6 +35,7 @@ Requirements
 * Bash(git、ssh)
 * LNMP/LAMP(php5.4+)
 * Composer
+* Ansible(Optional)
 
 That's all. It's base package of PHP environment!
 
@@ -121,8 +123,7 @@ To Do List
 Update
 -----------------
 ```
-git pull
-./yii migrate # update db
+./yii walle/upgrade    # upgrade walle
 ```
 
 
