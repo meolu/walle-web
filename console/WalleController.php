@@ -83,7 +83,8 @@ class WalleController extends Controller {
     protected function createDir() {
         $mkdirPaths = [
             yii::$app->params['log.dir'],
-            yii::$app->params['ansible_hosts.dir']
+            yii::$app->params['ansible_hosts.dir'],
+            '@app/vendor/bower/jquery/dist',
         ];
         foreach ($mkdirPaths as $path) {
             $path = Yii::getAlias($path);
