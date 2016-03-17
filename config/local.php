@@ -33,6 +33,6 @@ return [
             'cookieValidationKey' => 'PdXWDAfV5-gPJJWRar5sEN71DN0JcDRV',
         ],
     ],
-    'language'   => 'zh', // zh => 中文,  en => English
+    'language'   => 'zh-CN', // zh-CN => 中文,  en => English
 ];
 
