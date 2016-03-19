@@ -22,7 +22,7 @@ use yii\helpers\Url;
             <div class="widget-main padding-6 no-padding-left no-padding-right">
                 <?php foreach ($projects as $project) { ?>
                     <?php if ($project['level'] == Project::LEVEL_TEST) { ?>
-                    <a class="btn btn-inline btn-warning" style="width:150px;margin:auto auto 20px 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
+                    <a class="btn btn-inline btn-warning" style="min-width:120px;margin:auto auto 20px 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
                     <?php } ?>
                 <?php } ?>
             </div>
@@ -45,7 +45,7 @@ use yii\helpers\Url;
             <div class="widget-main padding-6 no-padding-left no-padding-right">
                 <?php foreach ($projects as $project) { ?>
                     <?php if ($project['level'] == Project::LEVEL_SIMU) { ?>
-                        <a class="btn btn-inline btn-warning" style="width:150px;margin-left: 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
+                        <a class="btn btn-inline btn-warning" style="min-width:120px;margin-left: 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
                     <?php } ?>
                 <?php } ?>
             </div>
@@ -68,7 +68,7 @@ use yii\helpers\Url;
             <div class="widget-main padding-6 no-padding-left no-padding-right">
                 <?php foreach ($projects as $project) { ?>
                     <?php if ($project['level'] == Project::LEVEL_PROD) { ?>
-                        <a class="btn btn-inline btn-warning" style="width:150px;margin-left: 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
+                        <a class="btn btn-inline btn-warning" style="min-width:120px;margin-left: 40px;" href="<?= Url::to("@web/task/submit?projectId={$project['id']}") ?>"><?= $project['name'] ?></a>
                     <?php } ?>
                 <?php } ?>
             </div>
