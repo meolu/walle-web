@@ -593,4 +593,8 @@ class WalleController extends Controller {
         return true;
     }
 
+    public function actionWs() {
+        return $this->render('ws', []);
+    }
+
 }
