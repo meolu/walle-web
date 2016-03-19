@@ -11,14 +11,14 @@
  * @link      http://www.workerman.net/
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Workerman\Protocols;
+namespace  app\components\workerman\protocols;
 
 use  app\components\workerman\connection\ConnectionInterface;
 
 /**
  * WebSocket protocol.
  */
-class Websocket implements \Workerman\Protocols\ProtocolInterface
+class Websocket implements \app\components\workerman\protocols\ProtocolInterface
 {
     /**
      * Minimum head length of websocket protocol.

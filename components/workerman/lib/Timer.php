@@ -54,7 +54,7 @@ class Timer
         if ($event) {
             self::$_event = $event;
         } else {
-            pcntl_signal(SIGALRM, array('\Workerman\Lib\Timer', 'signalHandle'), false);
+            pcntl_signal(SIGALRM, array('\app\components\workerman\lib\Timer', 'signalHandle'), false);
         }
     }
 

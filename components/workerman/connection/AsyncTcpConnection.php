@@ -48,11 +48,11 @@ class AsyncTcpConnection extends TcpConnection
         if ($scheme != 'tcp') {
             // Get application layer protocol.
             $scheme         = ucfirst($scheme);
-            $this->protocol = '\\Protocols\\' . $scheme;
+            $this->protocol = '\\app\\components\\workerman\\protocols\\' . $scheme;
             if (!class_exists($this->protocol)) {
-                $this->protocol = '\\Workerman\\Protocols\\' . $scheme;
+                $this->protocol = '\\app\\components\\workerman\\Protocols\\' . $scheme;
                 if (!class_exists($this->protocol)) {
-                    throw new Exception("class \\Protocols\\$scheme not exist");
+                    throw new Exception("class \\app\\components\\workerman\\protocols\\$scheme not exist");
                 }
             }
         }

@@ -698,11 +698,11 @@ class Worker
     protected static function installSignal()
     {
         // stop
-        pcntl_signal(SIGINT, ['\Workerman\Worker', 'signalHandler'], false);
+        pcntl_signal(SIGINT, ['\app\components\workerman\Worker', 'signalHandler'], false);
         // reload
-        pcntl_signal(SIGUSR1, ['\Workerman\Worker', 'signalHandler'], false);
+        pcntl_signal(SIGUSR1, ['\app\components\workerman\Worker', 'signalHandler'], false);
         // status
-        pcntl_signal(SIGUSR2, ['\Workerman\Worker', 'signalHandler'], false);
+        pcntl_signal(SIGUSR2, ['\app\components\workerman\Worker', 'signalHandler'], false);
         // ignore
         pcntl_signal(SIGPIPE, SIG_IGN, false);
     }
@@ -721,11 +721,11 @@ class Worker
         // uninstall  status signal handler
         pcntl_signal(SIGUSR2, SIG_IGN, false);
         // reinstall stop signal handler
-        self::$globalEvent->add(SIGINT, EventInterface::EV_SIGNAL, ['\Workerman\Worker', 'signalHandler']);
+        self::$globalEvent->add(SIGINT, EventInterface::EV_SIGNAL, ['\app\components\workerman\Worker', 'signalHandler']);
         //  uninstall  reload signal handler
-        self::$globalEvent->add(SIGUSR1, EventInterface::EV_SIGNAL, ['\Workerman\Worker', 'signalHandler']);
+        self::$globalEvent->add(SIGUSR1, EventInterface::EV_SIGNAL, ['\app\components\workerman\Worker', 'signalHandler']);
         // uninstall  status signal handler
-        self::$globalEvent->add(SIGUSR2, EventInterface::EV_SIGNAL, ['\Workerman\Worker', 'signalHandler']);
+        self::$globalEvent->add(SIGUSR2, EventInterface::EV_SIGNAL, ['\app\components\workerman\Worker', 'signalHandler']);
     }
 
     /**
@@ -1353,11 +1353,11 @@ class Worker
         // Check application layer protocol class.
         if (!isset(self::$_builtinTransports[$scheme])) {
             $scheme         = ucfirst($scheme);
-            $this->protocol = '\\Protocols\\' . $scheme;
+            $this->protocol = '\\app\\components\\workerman\\protocols\\' . $scheme;
             if (!class_exists($this->protocol)) {
-                $this->protocol = "\\Workerman\\Protocols\\$scheme";
+                $this->protocol = "\\app\\components\\workerman\\protocols\\$scheme";
                 if (!class_exists($this->protocol)) {
-                    throw new Exception("class \\Protocols\\$scheme not exist");
+                    throw new Exception("class \\app\\components\\workerman\\protocols\\$scheme not exist");
                 }
             }
             $local_socket = $this->transport . ":" . $address;
@@ -1430,14 +1430,14 @@ class Worker
         self::$_status = self::STATUS_RUNNING;
 
         // Eegister shutdown function for checking errors.
-        register_shutdown_function(["\\Workerman\\Worker", 'checkErrors']);
+        register_shutdown_function(["\\app\\components\\workerman\\Worker", 'checkErrors']);
 
         // Set autoload root path.
 //        Autoloader::setRootPath($this->_autoloadRootPath);
 
         // Create a global event loop.
         if (!self::$globalEvent) {
-            $eventLoopClass    = "\\Workerman\\Events\\" . ucfirst(self::getEventLoopName());
+            $eventLoopClass    = "\\app\\components\\workerman\\Events\\" . ucfirst(self::getEventLoopName());
             self::$globalEvent = new $eventLoopClass;
             // Register a listener to be notified when server socket is ready to read.
             if ($this->_socketName) {
