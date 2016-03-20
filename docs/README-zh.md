@@ -24,7 +24,6 @@ Walle 一个web部署系统工具，可能也是个持续发布工具，配置�
 * 代码检出后处理任务post-deploy（如vendor）
 * 同步后更新软链前置任务pre-release
 * 发布完毕后收尾任务post-release（如重启）
-* 执行sql构建（不要担心忘记测试环境sql同步）
 * 线上文件指纹确认
 * 多机器并发传输文件(Ansible)
 
@@ -60,51 +59,6 @@ composer install  # 如果缺少bower-asset的话， 先安装：composer global
 * 开发者注册用户(已有`demo/demo`)，提交上线单
 * 管理员审核上线单
 * 开发者发起上线
-
-高级自定义
---------
-此时你可能考虑要作为一个公司内部新项目的试用版本，那么你将需要做以下的处理，更适合业务需求。
-
-* 配置允许注册的邮箱后缀
-    ```php
-    vi config/params.php
-
-    'mail-suffix'   => [  // 允许注册的邮箱后缀，一般为公司邮箱后缀，可多个
-        'huamanshu.com',  // 如：只允许花满树邮箱注册
-    ]
-    ```
-
-* 配置企业邮箱smtp
-    ```php
-    vi config/local.php +20
-
-    # 配置mail smtp模块
-    'transport' => [
-        'host'       => 'smtp.huamanshu.com',     # smtp 发件地址
-        'username'   => 'service@huamanshu.com',  # smtp 发件用户名
-        'password'   => 'K84erUuxg1bHqrfD',       # smtp 发件人的密码
-        'port'       => 25,                       # smtp 端口
-        'encryption' => 'tls',                    # smtp 协议
-    ],
-    'messageConfig' => [
-        'charset' => 'UTF-8',
-        'from'    => ['service@huamanshu.com' => '花满树出品'],  # smtp 发件用户名(须与mail.transport.username一致)
-    ],
-    ```
-
-* 配置日志路径
-    ```php
-    vi config/params.php
-
-    'log.dir'   => '/tmp/walle/', # 注意读写权限
-    ```
-
-* 指定语言
-    ```php
-    vi config/local.php +36
-
-    'language'   => 'zh',  # zh => 中文,  en => english
-    ```
 
 
 To Do List
@@ -155,5 +109,5 @@ To Do List
 -------
 - [常见问题及解决办法手册](https://walle-web.io/docs/troubleshooting.html)
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
-- [官方文档手册](http://doc.huamanshu.com/%E7%93%A6%E5%8A%9B)
+- [官方文档手册](https://walle-web.io/docs)
 - qq群：482939318
