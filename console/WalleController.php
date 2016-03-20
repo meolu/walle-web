@@ -29,7 +29,7 @@ class WalleController extends Controller {
      * checkout the current version 查看版本
      */
     public function actionIndex() {
-        echo sprintf("\n\033[32mwalle-web %s (built: %s)\033[0m\nCopyright (c) 2015-2016 The walle-web Group.\nGet Help from wushuiyong@huamanshu.com. Enjoy It.\n\n",
+        printf("\n\033[32mwalle-web %s (built: %s)\033[0m\nCopyright (c) 2015-2016 The walle-web Group.\nGet Help from team@walle-web.io. Enjoy It.\n\n",
             Yii::$app->params['version'], Yii::$app->params['buildTime']);
     }
 
@@ -45,7 +45,7 @@ class WalleController extends Controller {
         $commander->runLocalCommand('/usr/bin/env git stash save');
         // pull code 更新代码
         echo 'pull code 更新代码: git pull ...', PHP_EOL;
-        $commander->runLocalCommand('/usr/bin/env git pull');
+        $commander->runLocalCommand('/usr/bin/env git pull --rebase');
         // stash pop local change 弹出暂存本地修改
         echo 'stash pop local change 弹出暂存本地修改: git stash pop ...', PHP_EOL;
         $commander->runLocalCommand('/usr/bin/env git stash pop');
