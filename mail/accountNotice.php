@@ -10,4 +10,4 @@ use yii\helpers\Html;
 <?= yii::t('user-management', 'dear') ?><strong><?= $user->realname ?></strong>:
 
 <br><br>
-<span style="text-indent: 2em"><?= yii::t('user', 'notice account has been opened') ?></span>
+<span style="text-indent: 2em"><?= yii::t('user-mangement', 'notice account has been opened') ?></span>
