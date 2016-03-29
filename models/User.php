@@ -139,7 +139,9 @@ class User extends ActiveRecord implements IdentityInterface
             $this->generateAuthKey();
             $this->generateEmailConfirmationToken();
             // 名字与邮箱
-            $this->realname = $this->username;
+             if (!$this->realname) {
+                $this->realname = $this->username;
+            }
             $this->username = $this->email;
         }
         return parent::beforeSave($insert);
