@@ -94,10 +94,10 @@ class Folder extends Ansible {
         // 1. 打包
         $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
         $packagePath = Project::getDeployPackagePath($version);
-        $packageCommand = sprintf('cd %s && tar %s --preserve-permissions -czf %s %s',
+        $packageCommand = sprintf('cd %s && tar -p %s -cz -f %s %s',
             escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
             $this->excludes($excludes),
-            $packagePath,
+            escapeshellarg($packagePath),
             $files
         );
         $ret = $this->runLocalCommand($packageCommand);
@@ -114,9 +114,10 @@ class Folder extends Ansible {
 
         // 3. 解压
         $releasePath = Project::getReleaseVersionDir($version);
-        $unpackageCommand = sprintf('tar --preserve-permissions --touch --no-same-owner -xzf %s -C %s',
-            $releasePackage,
-            $releasePath);
+        $unpackageCommand = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
+            $releasePath,
+            $releasePackage
+            );
         $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
 
         return $ret;
@@ -166,9 +167,10 @@ class Folder extends Ansible {
      * @return string
      */
     protected function excludes($excludes) {
+
         $excludesRsync = '';
         foreach ($excludes as $exclude) {
-            $excludesRsync .= sprintf(" --exclude=%s ", escapeshellarg(trim($exclude)));
+            $excludesRsync .= sprintf("--exclude=%s ", escapeshellarg(trim($exclude)));
         }
 
 
