@@ -246,6 +246,14 @@ use yii\widgets\ActiveForm;
                               'onblur'         => "clearInterval(this.clock);",
                           ])
                           ->label('post_release', ['class' => 'control-label bolder']) ?>
+                      <?= $form->field($conf, 'post_release_delay')
+                          ->textInput([
+                              'placeholder'    => '0',
+                              'data-placement' => 'top',
+                              'data-rel'       => 'tooltip',
+                              'data-title'     => yii::t('conf', 'post_release_delay tip'),
+                          ])
+                          ->label(yii::t('conf', 'post_release_delay'), ['class' => 'control-label bolder']) ?>
                   </div>
               </div>
           </div>
