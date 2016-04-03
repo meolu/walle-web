@@ -81,10 +81,11 @@ class Command {
     /**
      * 执行远程目标机器命令
      *
-     * @param $command
+     * @param string  $command
+     * @param integer $delay 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
      * @return bool
      */
-    final public function runRemoteCommand($command) {
+    final public function runRemoteCommand($command, $delay = 0) {
         $this->log = '';
         $needTTY = '-T';
 
@@ -98,14 +99,24 @@ class Command {
                 escapeshellarg($command)
             );
 
+            if ($delay > 0) {
+                // 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
+                static::log(sprintf('Sleep: %d s', $delay));
+                sleep($delay);
+            }
+
             static::log('Run remote command ' . $command);
 
             $log = $this->log;
             $this->status = $this->runLocalCommand($localCommand);
 
             $this->log = $log . (($log ? PHP_EOL : '') . $remoteHost . ' : ' . $this->log);
-            if (!$this->status) return false;
+            if (!$this->status) {
+                return false;
+            }
+
         }
+
         return true;
     }
 

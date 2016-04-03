@@ -129,18 +129,19 @@ class Task extends Ansible {
      * 执行远程服务器任务集合
      * 对于目标机器更多的时候是一台机器完成一组命令，而不是每条命令逐台机器执行
      *
-     * @param $tasks
+     * @param array   $tasks
+     * @param integer $delay 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
      * @return mixed
      */
-    public function runRemoteTaskCommandPackage($tasks) {
+    public function runRemoteTaskCommandPackage($tasks, $delay = 0) {
 
         $task = join(' && ', $tasks);
 
-        if (Project::getAnsibleStatus()) {
+        if (Project::getAnsibleStatus() && !$delay) {
             // ansible 并发执行远程命令
             return $this->runRemoteCommandByAnsibleShell($task);
         } else {
-            return $this->runRemoteCommand($task);
+            return $this->runRemoteCommand($task, $delay);
         }
 
     }
