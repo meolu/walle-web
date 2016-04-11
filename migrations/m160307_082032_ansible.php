@@ -15,7 +15,7 @@ class m160307_082032_ansible extends Migration
     public function down()
     {
         $this->dropColumn(Project::tableName(), 'ansible');
-        echo "m160307_082032_ansible cannot be reverted.\n";
+        echo "m160307_082032_ansible was reverted.\n";
 
         return true;
     }

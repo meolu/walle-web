@@ -87,7 +87,7 @@ class WalleController extends Controller {
                 $this->_revisionUpdate();
                 $this->_postDeploy();
                 $this->_transmission();
-                $this->_updateRemoteServers($this->task->link_id);
+                $this->_updateRemoteServers($this->task->link_id, $this->conf->post_release_delay);
                 $this->_cleanRemoteReleaseVersion();
                 $this->_cleanUpLocal($this->task->link_id);
             } else {
@@ -518,10 +518,11 @@ class WalleController extends Controller {
      * 执行远程服务器任务集合
      * 对于目标机器更多的时候是一台机器完成一组命令，而不是每条命令逐台机器执行
      *
-     * @param $version
+     * @param string $version
+     * @param integer $delay 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
      * @throws \Exception
      */
-    private function _updateRemoteServers($version) {
+    private function _updateRemoteServers($version, $delay = 0) {
         $cmd = [];
         // pre-release task
         if (($preRelease = WalleTask::getRemoteTaskCommand($this->conf->pre_release, $version))) {
@@ -538,7 +539,7 @@ class WalleController extends Controller {
 
         $sTime = Command::getMs();
         // run the task package
-        $ret = $this->walleTask->runRemoteTaskCommandPackage($cmd);
+        $ret = $this->walleTask->runRemoteTaskCommandPackage($cmd, $delay);
         // 记录执行时间
         $duration = Command::getMs() - $sTime;
         Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);

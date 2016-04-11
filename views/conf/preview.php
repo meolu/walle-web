@@ -121,6 +121,14 @@ use yii\widgets\ActiveForm;
             <span><?= str_replace(PHP_EOL, "<br>", $conf->post_release) ?></span>
         </div>
     </div>
+
+    <div class="profile-info-row">
+        <div class="profile-info-name"> <?= yii::t('conf', 'post_release_delay') ?> </div>
+
+        <div class="profile-info-value">
+            <span><?= str_replace(PHP_EOL, "<br>", $conf->post_release_delay) ?></span>
+        </div>
+    </div>
     <!-- 目标机器 配置 end-->
 
     <div class="profile-info-row">

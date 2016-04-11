@@ -17,7 +17,11 @@ use yii\db\Expression;
  * @property integer $level
  * @property integer $status
  * @property string $version
- * @property integer $created_at
+ * @property string $repo_url
+ * @property string $repo_username
+ * @property string $repo_password
+ * @property string $repo_mode
+ * @property string $repo_type
  * @property string $deploy_from
  * @property string $excludes
  * @property string $release_user
@@ -26,12 +30,14 @@ use yii\db\Expression;
  * @property string $hosts
  * @property string $pre_deploy
  * @property string $post_deploy
+ * @property string $pre_release
  * @property string $post_release
- * @property string $repo_mode
- * @property string $repo_type
+ * @property string $post_release_delay
  * @property integer $audit
  * @property integer $ansible
  * @property integer $keep_version_num
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
  */
 class Project extends \yii\db\ActiveRecord
 {
@@ -98,7 +104,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'repo_url', 'name', 'level', 'deploy_from', 'release_user', 'release_to', 'release_library', 'hosts', 'keep_version_num'], 'required'],
-            [['user_id', 'level', 'status', 'audit', 'ansible', 'keep_version_num'], 'integer'],
+            [['user_id', 'level', 'status', 'post_release_delay', 'audit', 'ansible', 'keep_version_num'], 'integer'],
             [['excludes', 'hosts', 'pre_deploy', 'post_deploy', 'pre_release', 'post_release'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'repo_password'], 'string', 'max' => 100],
@@ -116,30 +122,31 @@ class Project extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'               => 'ID',
-            'user_id'          => 'User ID',
-            'name'             => '项目名字',
-            'level'            => '环境级别',
-            'status'           => 'Status',
-            'version'          => 'Version',
-            'created_at'       => 'Created At',
-            'deploy_from'      => '检出仓库',
-            'excludes'         => '排除文件列表',
-            'release_user'     => '目标机器部署代码用户',
-            'release_to'       => '代码的webroot',
-            'release_library'  => '发布版本库',
-            'hosts'            => '目标机器',
-            'pre_deploy'       => '宿主机代码检出前置任务',
-            'post_deploy'      => '宿主机同步前置任务',
-            'pre_release'      => '目标机更新版本前置任务',
-            'post_release'     => '目标机更新版本后置任务',
-            'repo_url'         => 'git/svn地址',
-            'repo_username'    => 'svn用户名',
-            'repo_password'    => 'svn密码',
-            'repo_mode'        => '分支/tag',
-            'audit'            => '任务需要审核？',
-            'ansible'          => '开启Ansible？',
-            'keep_version_num' => '线上版本保留数',
+            'id'                 => 'ID',
+            'user_id'            => 'User ID',
+            'name'               => '项目名字',
+            'level'              => '环境级别',
+            'status'             => 'Status',
+            'version'            => 'Version',
+            'created_at'         => 'Created At',
+            'deploy_from'        => '检出仓库',
+            'excludes'           => '排除文件列表',
+            'release_user'       => '目标机器部署代码用户',
+            'release_to'         => '代码的webroot',
+            'release_library'    => '发布版本库',
+            'hosts'              => '目标机器',
+            'pre_deploy'         => '宿主机代码检出前置任务',
+            'post_deploy'        => '宿主机同步前置任务',
+            'pre_release'        => '目标机更新版本前置任务',
+            'post_release'       => '目标机更新版本后置任务',
+            'post_release_delay' => '后置任务时间间隔/延迟',
+            'repo_url'           => 'git/svn地址',
+            'repo_username'      => 'svn用户名',
+            'repo_password'      => 'svn密码',
+            'repo_mode'          => '分支/tag',
+            'audit'              => '任务需要审核？',
+            'ansible'            => '开启Ansible？',
+            'keep_version_num'   => '线上版本保留数',
         ];
     }
 
