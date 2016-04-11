@@ -12,7 +12,7 @@ use app\models\Group;
 use app\components\Repo;
 
 class TaskController extends Controller {
-    
+
     protected $task;
 
     public function actionIndex($page = 1, $size = 10) {
@@ -27,8 +27,7 @@ class TaskController extends Controller {
         if ($auditProjects) {
             $list->orWhere(['project_id' => $auditProjects]);
         }
-
-
+        
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
@@ -44,7 +43,6 @@ class TaskController extends Controller {
             'audit' => $auditProjects,
         ]);
     }
-
 
     /**
      * 提交任务
@@ -108,8 +106,7 @@ class TaskController extends Controller {
             'projects' => $projects,
         ]);
     }
-
-
+    
     /**
      * 任务删除
      *
