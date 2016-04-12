@@ -67,8 +67,8 @@ class Git extends Command {
      */
     public function getBranchList() {
         $destination = Project::getDeployFromDir();
-        // 先更新，其实没有必要更新
-        ///$this->updateRepo('master', $destination);
+        // 应该先更新，不然在remote git删除当前选中的分支后，获取分支列表会失败
+        $this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
         $cmd[] = '/usr/bin/env git pull -a';
         $cmd[] = '/usr/bin/env git branch -a';

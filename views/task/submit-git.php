@@ -88,6 +88,10 @@ use app\models\Project;
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
+                if(data.data.length == 1){                     
+                    $('#branch').change();
+                }
+
             });
         }
 
