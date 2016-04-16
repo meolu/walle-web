@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'users' => '用户管理',
+    'u_username' => '帐号',
+    'u_realname' => '姓名',
+    'u_is_admin' => '是否管理员',
+    'u_status' => '帐号状态',
+    'u_oprea' => '操作',
+    'u_update_admin' => '设为管理员',
+    'u_update_user' => '设为普通用户',
+    'u_delete_user' => '删除用户',
+    'u_blocked_account' => '冻结帐号',
+    'u_un_blocked_account' => '帐号解冻',
+    'u_update_real_name' => '修改姓名',
+    'js update to admin' => '确定将NAME设置为管理员?',
+    'js update to user' => '确定将NAME设置为普通用户?',
+    'js blocked account' => '确认将NAME的帐号冻结吗？',
+    'js unblocked account' => '确认将NAME的帐号解除冻结吗？',
+    'js delete user' => '确认将NAME的帐号永久删除吗？（不可恢复）',
+    'u_title_update_real_name' => '修改<span>NAME</span>帐号的姓名',
+    'u_notice_label_real_name' => '请输入姓名',
+    'u_btn_submit' => '确认',
+    'u_btn_cancel' => '取消',
+    'u_real_name_illegal' => '姓名不能为空，且不能包含特殊符号',
+    'u_add_user' => '新增用户',
+
+    'add_user_title' => '新增用户',
+    'adduser email' => '请输入邮箱地址',
+    'adduser password' => '请输入密码',
+    'adduser realname' => '请输入姓名',
+    'adduser role' => '请选择角色',
+    'adduser-platform' => '确认添加',
+
+    'dear' => '亲爱的',
+    'notice account has been opened' => '帐号已经开通',
+    'email exists' => '用户邮箱已经存在',
+];
