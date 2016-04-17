@@ -46,8 +46,8 @@ class AddUserForm extends Model {
             $user->realname = $this->realname;
             $user->setpassword($this->password);
 
-            // 不用激活  给默认头像
-            $user->is_email_verified = 1;
+            // 需要激活  给默认头像
+            $user->status = User::STATUS_INACTIVE;
             $user->avatar = 'default.jpg';
 
             if ($user->save()) {

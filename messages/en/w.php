@@ -41,6 +41,7 @@ return [
     'js delete failed' => 'Delete failed: ',
 
     'you are not master of project' => 'you are not master of project：(',
+    'delete' => 'delete',
     'delete failed' => 'delete failed',
     'update failed' => 'update failed',
 
@@ -72,4 +73,5 @@ return [
     'register password' => 'Password',
     'register role' => 'Role',
     'back' => 'Back',
+    'option' => 'option',
 ];

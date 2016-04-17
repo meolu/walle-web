@@ -28,13 +28,24 @@ use app\models\queries\UserQuery;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+
+    // 邮件未激活
+    const MAIL_INACTIVE = 0;
+
+    // 邮件激活
+    const MAIL_ACTIVE = 1;
+
     // 管理员未审核通过
     const STATUS_INACTIVE = 0;
 
     // 管理员审核通过
     const STATUS_ACTIVE = 10;
 
+    // 冻结
+    const STATUS_INVALID = 2;
+
     const ROLE_USER = 10;
+
     /**
      * 管理员
      */

@@ -15,4 +15,5 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 
 <br><br>
 <h3><?= Html::a(yii::t('user', 'reset password'), $resetLink) ?></h3>
-
+<br>
+<a href="<?= $resetLink ?>"> <?= $resetLink ?></a>
