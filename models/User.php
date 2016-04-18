@@ -111,7 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
             [['username','email','password','role'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ADMIN_ACTIVE, self::STATUS_ACTIVE]],
+            ['status', 'in', 'range' => [self::STATUS_ADMIN_ACTIVE, self::STATUS_ACTIVE, self::STATUS_INVALID]],
 
             ['role', 'default', 'value' => self::ROLE_DEV],
             ['role', 'in', 'range' => [self::ROLE_DEV, self::ROLE_ADMIN]],
@@ -299,7 +299,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function getInactiveAdminList() {
         return static::find()
-            ->where(['is_email_verified' => 1, 'role' => static::ROLE_ADMIN, 'status' => static::STATUS_ACTIVE])
+            ->where(['is_email_verified' => static::MAIL_ACTIVE, 'role' => static::ROLE_ADMIN, 'status' => static::STATUS_ACTIVE])
             ->asArray()->all();
     }
 }
