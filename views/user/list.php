@@ -37,7 +37,7 @@ use app\models\User;
                     <th><?= yii::t('user', 'realname') ?></th>
                     <th><?= yii::t('user', 'email') ?></th>
                     <th><?= yii::t('user', 'status') ?></th>
-                    <th><?= yii::t('user', 'u_oprea') ?></th>
+                    <th><?= yii::t('user', 'option') ?></th>
                 </tr>
                 <?php foreach ($userList as $row) {?>
                     <tr>
@@ -53,7 +53,7 @@ use app\models\User;
                             <?php if ($row['status'] == User::STATUS_INVALID) { ?>
                                 <i class="icon icon-ban-circle red" data-placement="top" data-rel="tooltip" data-title="<?= yii::t('user', 'status to opposite 10') ?>"></i>
                             <?php } ?>
-                            <?php if ($row['status'] == User::STATUS_INACTIVE) { ?>
+                            <?php if ($row['is_email_verified'] == User::MAIL_INACTIVE) { ?>
                                 <i class="icon icon-envelope red" data-placement="top" data-rel="tooltip" data-title="<?= yii::t('user', 'inactive') ?>"></i>
                             <?php } ?>
                         </td>
@@ -102,8 +102,8 @@ use app\models\User;
                           </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><?= yii::t('user', 'u_btn_cancel') ?></button>
-                        <button type="button" class="btn btn-primary btn-submit"><?= yii::t('user', 'u_btn_submit') ?></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?= yii::t('user', 'btn cancel') ?></button>
+                        <button type="button" class="btn btn-primary btn-submit"><?= yii::t('w', 'bnt sure') ?></button>
                     </div>
                 </div>
             </div>

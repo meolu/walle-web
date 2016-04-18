@@ -13,18 +13,18 @@ use app\models\user;
     <div class="box-body">
         <?= $form->field($model, 'email')
             ->textInput(['class' => 'col-xs-5',])
-            ->label(Yii::t('user', 'email'), ['class' => 'control-label bolder blue col-xs-2']) ?>
+            ->label(Yii::t('user', 'email'), ['class' => 'text-right bolder blue col-xs-2']) ?>
         <div class="clearfix"></div>
         <?= $form->field($model, 'password')
             ->passwordInput(['class' => 'col-xs-5',])
-            ->label(Yii::t('user', 'password'), ['class' => 'control-label bolder blue col-xs-2']) ?>
+            ->label(Yii::t('user', 'password'), ['class' => 'text-right bolder blue col-xs-2']) ?>
         <div class="clearfix"></div>
 
         <?= $form->field($model, 'realname')
             ->textInput(['class' => 'col-xs-5',])
-            ->label(Yii::t('user', 'realname'), ['class' => 'control-label bolder blue col-xs-2']) ?>
+            ->label(Yii::t('user', 'realname'), ['class' => 'text-right bolder blue col-xs-2']) ?>
         <div class="clearfix"></div>
-        <?= $form->field($model, 'role')->label(Yii::t('user', 'role'), ['class' => 'control-label bolder blue col-xs-2'])
+        <?= $form->field($model, 'role')->label(Yii::t('user', 'role'), ['class' => 'text-right bolder blue col-xs-2'])
             ->dropDownList([
             User::ROLE_DEV => \Yii::t('w', 'user_role_' . User::ROLE_DEV),
             User::ROLE_ADMIN => \Yii::t('w', 'user_role_' . User::ROLE_ADMIN),

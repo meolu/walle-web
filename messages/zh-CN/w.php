@@ -75,5 +75,6 @@ return [
     'register role' => '角色',
     'back' => '返回登录',
     'option' => '操作',
-    'option' => '操作',
+    'btn sure' => '确认',
+    'btn cancel' => '取消',
 ];
