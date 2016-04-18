@@ -99,9 +99,9 @@ class GlobalHelper {
      */
     public static function isValidAdmin() {
         return \Yii::$app->user
-            && \Yii::$app->user->identity->role == \app\models\User::ROLE_ADMIN
-            && \Yii::$app->user->identity->is_email_verified == \app\models\User::MAIL_ACTIVE
-            && \Yii::$app->user->identity->status == \app\models\User::STATUS_ADMIN_ACTIVE;
+            && \Yii::$app->user->identity->role == User::ROLE_ADMIN
+            && \Yii::$app->user->identity->is_email_verified == User::MAIL_ACTIVE
+            && \Yii::$app->user->identity->status == User::STATUS_ADMIN_ACTIVE;
     }
 
 }

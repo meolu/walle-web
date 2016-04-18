@@ -4,7 +4,7 @@
  */
 use yii\db\Schema;
 use yii\db\Migration;
-use app\Models\User;
+use app\models\User;
 
 class m160418_035413_user_status_migrate extends Migration
 {

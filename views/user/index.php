@@ -4,7 +4,7 @@
  */
 $this->title = yii::t('user', 'profile title');
 use \app\components\GlobalHelper;
-use app\Models\User;
+use app\models\User;
 use yii\helpers\Url;
 
 ?>
