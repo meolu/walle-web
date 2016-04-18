@@ -208,6 +208,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
             </script>
 
             <ul class="nav nav-list">
+
                 <?php if (\Yii::$app->user->identity->role == app\models\User::ROLE_ADMIN) { ?>
                 <li class="<?= \Yii::$app->controller->id == 'conf' ? 'active' : '' ?>">
                     <a href="<?= Url::to('@web/conf/') ?>">
@@ -216,6 +217,30 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                             <?= yii::t('w', 'menu config project') ?>
                         </span>
                     </a>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-group"></i>
+                        <span class="menu-text"> 用户管理 </span>
+
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+
+                    <ul class="submenu" style="display: none;">
+                        <li>
+                            <a href="<?= Url::to('@web/user/list') ?>">
+                                <i class="icon-double-angle-right"></i>
+                                用户列表
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?= Url::to('@web/user/add') ?>">
+                                <i class="icon-double-angle-right"></i>
+                                添加用户
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <?php } ?>
                 <li class="<?= \Yii::$app->controller->id == 'task' && \Yii::$app->controller->action->id == 'index'
@@ -246,6 +271,12 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                     </a>
                 </li>
             </ul><!-- /.nav-list -->
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-right" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+            </div>
+            <script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+            </script>
         </div>
 
         <div class="main-content">

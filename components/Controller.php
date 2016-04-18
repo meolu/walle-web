@@ -13,6 +13,16 @@ use yii;
 
 class Controller extends yii\web\Controller {
 
+    /**
+     * 返回成功
+     */
+    const SUCCESS = 0;
+
+    /**
+     * 返回失败
+     */
+    const FAIL    = -1;
+
     public $uid = null;
 
     /**
@@ -35,15 +45,14 @@ class Controller extends yii\web\Controller {
      * @param string    $msg  错误信息
      * @param int       $option json_encode options
      */
-    public static function renderJson($data, $code = 0, $msg = '', $option = 0) {
+    public static function renderJson($data, $code = self::SUCCESS, $msg = '', $option = 0) {
         Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
-        $ret = [
+
+        Yii::$app->response->data = [
             'code' => (int)$code,
             'msg'  => $msg,
             'data' => $data,
-        ];
-
-        Yii::$app->response->data = $ret;
+        ];;
         Yii::$app->end();
     }
 
