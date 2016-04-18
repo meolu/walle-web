@@ -35,26 +35,31 @@ class User extends ActiveRecord implements IdentityInterface
     // 邮件激活
     const MAIL_ACTIVE = 1;
 
-    // 管理员未审核通过
-    const STATUS_INACTIVE = 0;
-
-    // 管理员审核通过
-    const STATUS_ACTIVE = 10;
+    /**
+     * status状态表
+     *
+     * developer：注册 1 =》 激活 1
+     * admin：注册 1 =》 激活 1 =》 其它admin认证 2
+     */
 
     // 冻结
-    const STATUS_INVALID = 2;
+    const STATUS_INVALID  = 0;
 
-    const ROLE_USER = 10;
+    // 注册后默认状态（激活后即可用）或 其它admin认证前的状态
+    const STATUS_ACTIVE = 1;
 
-    /**
-     * 管理员
-     */
-    const ROLE_ADMIN = 1;
+    // 管理员审核通过
+    const STATUS_ADMIN_ACTIVE   = 2;
 
     /**
      * 开发者
      */
-    const ROLE_DEV   = 2;
+    const ROLE_DEV   = 1;
+
+    /**
+     * 管理员
+     */
+    const ROLE_ADMIN = 2;
 
     /**
      * 头像目录
@@ -106,10 +111,10 @@ class User extends ActiveRecord implements IdentityInterface
             [['username','email','password','role'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['status', 'in', 'range' => [self::STATUS_ADMIN_ACTIVE, self::STATUS_ACTIVE]],
 
             ['role', 'default', 'value' => self::ROLE_DEV],
-            ['role', 'in', 'range' => [self::ROLE_USER, self::ROLE_DEV, self::ROLE_ADMIN]],
+            ['role', 'in', 'range' => [self::ROLE_DEV, self::ROLE_ADMIN]],
 
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
@@ -294,7 +299,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function getInactiveAdminList() {
         return static::find()
-            ->where(['is_email_verified' => 1, 'role' => static::ROLE_ADMIN, 'status' => static::STATUS_INACTIVE])
+            ->where(['is_email_verified' => 1, 'role' => static::ROLE_ADMIN, 'status' => static::STATUS_ACTIVE])
             ->asArray()->all();
     }
 }

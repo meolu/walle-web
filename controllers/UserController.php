@@ -107,11 +107,7 @@ class UserController extends Controller {
         $this->validateAdmin();
         $user = $this->findModel($id);
 
-        if ($user->role != User::ROLE_ADMIN || $user->is_email_verified != 1
-            || $user->status != User::STATUS_INACTIVE) {
-            throw new \Exception(yii::t('user', 'only pass inactive manager'));
-        }
-        $user->status = User::STATUS_ACTIVE;
+        $user->status = User::STATUS_ADMIN_ACTIVE;
         if (!$user->update()) throw new \Exception(yii::t('w', 'update failed'));
         $this->renderJson([]);
     }

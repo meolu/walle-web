@@ -101,7 +101,7 @@ class GlobalHelper {
         return \Yii::$app->user
             && \Yii::$app->user->identity->role == \app\models\User::ROLE_ADMIN
             && \Yii::$app->user->identity->is_email_verified == \app\models\User::MAIL_ACTIVE
-            && \Yii::$app->user->identity->status == \app\models\User::STATUS_ACTIVE;
+            && \Yii::$app->user->identity->status == \app\models\User::STATUS_ADMIN_ACTIVE;
     }
 
 }

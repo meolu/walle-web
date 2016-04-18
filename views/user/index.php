@@ -4,6 +4,7 @@
  */
 $this->title = yii::t('user', 'profile title');
 use \app\components\GlobalHelper;
+use app\Models\User;
 use yii\helpers\Url;
 
 ?>
@@ -70,7 +71,7 @@ use yii\helpers\Url;
                     <div class="profile-info-value">
                         <span>
                             <?= \Yii::t('w', 'user_role_' . $user->role) ?>
-                            <?= $user->status == \app\models\User::STATUS_INACTIVE ? yii::t('user', 'inactive') : '' ?>
+                            <?= $user->role == User::ROLE_ADMIN && $user->status != \app\models\User::STATUS_ADMIN_ACTIVE ? yii::t('user', 'un-auth') : '' ?>
                         </span>
                     </div>
                 </div>

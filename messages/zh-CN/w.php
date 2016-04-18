@@ -7,8 +7,8 @@ return [
     'bool_0' => 'No',
     'bool_1' => 'Yes',
 
-    'user_role_1' => '管理员',
-    'user_role_2' => '开发者',
+    'user_role_1' => '开发者',
+    'user_role_2' => '管理员',
 
     'task_status_0' => '新提交',
     'task_status_1' => '审核通过',
