@@ -74,5 +74,7 @@ return [
     'register password' => 'Password',
     'register role' => 'Role',
     'back' => 'Back',
-    'option' => 'option',
+    'option' => 'Option',
+    'btn sure' => 'Sure',
+    'btn cancel' => 'Cancel',
 ];
