@@ -154,7 +154,7 @@ use app\models\User;
                     if (!o.code) {
                         location.reload();
                     } else {
-                        alert('<?= yii::t('conf', 'js copy failed') ?>' + o.msg);
+                        alert(o.msg);
                     }
                 })
             });
