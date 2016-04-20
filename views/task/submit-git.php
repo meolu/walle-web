@@ -6,6 +6,7 @@ $this->title = yii::t('task', 'submit task title');
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\Project;
+use app\models\Task;
 
 ?>
 <div class="box">
@@ -29,6 +30,42 @@ use app\models\Project;
         <!-- 分支选取 end -->
         <?= $form->field($task, 'commit_id')->dropDownList([])
           ->label(yii::t('task', 'select branch').'<i class="get-history icon-spinner icon-spin orange bigger-125"></i>', ['class' => 'control-label bolder blue']) ?>
+
+          <!-- 全量/增量 -->
+          <div class="form-group">
+              <label class="text-right bolder blue">
+                  全量/增量:
+              </label>
+              <div id="transmission-full-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="全量上线所有文件, 删除不在代码仓库中的文件" data-placement="right">
+                  <label>
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" checked="checked" type="radio" class="ace">
+                      <span class="lbl"> 全量上线 </span>
+                  </label>
+              </div>
+
+              <div id="transmission-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="指定文件列表, 只发布指定的文件和目录" data-placement="right">
+                  <label>
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" type="radio" class="ace">
+                      <span class="lbl"> 指定文件 </span>
+                  </label>
+              </div>
+          </div>
+          <!-- 全量/增量 end -->
+
+          <!-- 文件列表 -->
+          <?= $form->field($task, 'file_list')
+              ->textarea([
+                  'rows'           => 12,
+                  'placeholder'    => "index.php\nREADME.md\ndir*",
+                  'data-html'      => 'true',
+                  'data-placement' => 'top',
+                  'data-rel'       => 'tooltip',
+                  'data-title'     => yii::t('task', 'file list placeholder'),
+                  'style'          => 'display: none',
+              ])
+              ->label(yii::t('task', 'file list'),
+                  ['class' => 'control-label bolder blue', 'style' => 'display: none']) ?>
+          <!-- 文件列表 end -->
 
       </div><!-- /.box-body -->
 
@@ -88,7 +125,7 @@ use app\models\Project;
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
-                if(data.data.length == 1){                     
+                if(data.data.length == 1){
                     $('#branch').change();
                 }
 
@@ -147,6 +184,19 @@ use app\models\Project;
         // 清除提示框内容
         $("#myModal").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
+        });
+
+        // 公共提示
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+        $('[data-rel=popover]').popover({container:'body'});
+
+        // 切换显示文件列表
+        $('body').on('click', '#transmission-full-ctl', function() {
+            $('#task-file_list').hide();
+            $('label[for="task-file_list"]').hide();
+        }).on('click', '#transmission-part-ctl', function() {
+            $('#task-file_list').show();
+            $('label[for="task-file_list"]').show();
         });
 
     })

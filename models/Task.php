@@ -29,38 +29,57 @@ class Task extends \yii\db\ActiveRecord
      * 普通上线任务
      */
     const ACTION_ONLINE = 0;
+
     /**
      * 回滚任务
      */
     const ACTION_ROLLBACK = 1;
+
     /**
      * 任务新提交
      */
     const STATUS_SUBMIT = 0;
+
     /**
      * 任务通过
      */
     const STATUS_PASS   = 1;
+
     /**
      * 任务拒绝
      */
     const STATUS_REFUSE = 2;
+
     /**
      * 任务上线完成
      */
     const STATUS_DONE   = 3;
+
     /**
      * 任务上线失败
      */
     const STATUS_FAILED = 4;
+
     /**
      * 可回滚
      */
     const ROLLBACK_TRUE  = 1;
+
     /**
      * 不可回滚
      */
     const ROLLBACK_FALSE = 0;
+
+    /**
+     * 上线模式: 全量发布
+     */
+    const FILE_TRANSMISSION_MODE_FULL = 1;
+
+    /**
+     * 上线模式: 指定文件列表
+     */
+    const FILE_TRANSMISSION_MODE_PART = 2;
+
     /**
      * @inheritdoc
      */

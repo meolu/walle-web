@@ -106,10 +106,11 @@ use yii\widgets\ActiveForm;
                               ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'excludes')
                           ->textarea([
-                              'placeholder'    => '.git' . PHP_EOL . 'README.md',
+                              'placeholder'    => ".git\n.svn\nREADME.md",
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'excludes tip'),
+                              'rows'           => 10,
                           ])
                           ->label(yii::t('conf', 'excludes'), ['class' => 'text-right bolder']) ?>
                   </div>
@@ -175,6 +176,7 @@ use yii\widgets\ActiveForm;
                               'data-placement' => 'top',
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'servers tip'),
+                              'rows'           => 5,
                           ])
                           ->label(yii::t('conf', 'servers').'<small><i class="light-blue icon-asterisk"></i></small>',
                               ['class' => 'text-right bolder']) ?>
@@ -266,14 +268,14 @@ use yii\widgets\ActiveForm;
             </label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('conf', 'branch tip') ?>" data-placement="right">
                 <label>
-                    <input name="Project[repo_mode]" value="<?= Project::REPO_BRANCH ?>" <?= $conf->repo_mode == Project::REPO_BRANCH ? 'checked' : '' ?> type="radio" checked class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_BRANCH ?>" <?= $conf->repo_mode == Project::REPO_BRANCH ? 'checked="checked"' : '' ?> type="radio" class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('conf', 'tag tip') ?>" data-placement="right">
                 <label>
-                    <input name="Project[repo_mode]" value="<?= Project::REPO_TAG ?>" <?= $conf->repo_mode == Project::REPO_TAG ? 'checked' : '' ?> type="radio" class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_TAG ?>" <?= $conf->repo_mode == Project::REPO_TAG ? 'checked="checked"' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
                 </label>
             </div>
