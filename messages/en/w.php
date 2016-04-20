@@ -7,8 +7,8 @@ return [
     'bool_0' => 'No',
     'bool_1' => 'Yes',
 
-    'user_role_1' => 'Manager',
-    'user_role_2' => 'Developer',
+    'user_role_1' => 'Developer',
+    'user_role_2' => 'Manager',
 
     'task_status_0' => 'submit',
     'task_status_1' => 'pass',
@@ -37,10 +37,12 @@ return [
     'submit' => 'Submit',
     'modal error title' => 'An error has occurred',
 
-    'js delete confirm' => 'Sure you want to delete the record?',
+    'js delete confirm' => 'Sure you want to delete?',
     'js delete failed' => 'Delete failed: ',
 
     'you are not master of project' => 'you are not master of project：(',
+    'delete' => 'delete',
+    'edit' => 'edit',
     'delete failed' => 'delete failed',
     'update failed' => 'update failed',
 
@@ -72,4 +74,7 @@ return [
     'register password' => 'Password',
     'register role' => 'Role',
     'back' => 'Back',
+    'option' => 'Option',
+    'btn sure' => 'Sure',
+    'btn cancel' => 'Cancel',
 ];

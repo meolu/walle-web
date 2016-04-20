@@ -7,8 +7,8 @@ return [
     'bool_0' => 'No',
     'bool_1' => 'Yes',
 
-    'user_role_1' => '管理员',
-    'user_role_2' => '开发者',
+    'user_role_1' => '开发者',
+    'user_role_2' => '管理员',
 
     'task_status_0' => '新提交',
     'task_status_1' => '审核通过',
@@ -37,10 +37,12 @@ return [
     'submit' => '提交',
     'modal error title' => '发生了错误',
 
-    'js delete confirm' => '确定要删除该记录？',
+    'js delete confirm' => '确定要删除？',
     'js delete failed' => '删除失败：',
 
     'you are not master of project' => '不可以操作其它人的项目：(',
+    'delete' => '删除',
+    'edit' => '编辑',
     'delete failed' => '删除失败',
     'update failed' => '更新失败',
 
@@ -72,4 +74,7 @@ return [
     'register password' => '密码',
     'register role' => '角色',
     'back' => '返回登录',
+    'option' => '操作',
+    'btn sure' => '确认',
+    'btn cancel' => '取消',
 ];

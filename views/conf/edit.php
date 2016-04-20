@@ -6,9 +6,7 @@ $this->title = yii::t('conf', 'edit');
 use app\models\Project;
 use yii\widgets\ActiveForm;
 ?>
-<style>
-    .control-label {text-align: right;}
-</style>
+
 <div class="box">
     <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
     <div class="box-body">
@@ -16,7 +14,7 @@ use yii\widgets\ActiveForm;
             ->textInput([
                 'class'          => 'col-xs-11',
             ])
-            ->label(yii::t('conf', 'name'), ['class' => 'control-label bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'name'), ['class' => 'text-right bolder blue col-xs-1']) ?>
 
         <div class="clearfix"></div>
         <?= $form->field($conf, 'level')->dropDownList([
@@ -25,7 +23,7 @@ use yii\widgets\ActiveForm;
             Project::LEVEL_PROD => \Yii::t('w', 'conf_level_' . Project::LEVEL_PROD),
         ],[
             'class'          => 'col-xs-11',])
-            ->label(yii::t('conf', 'env'), ['class' => 'control-label bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'env'), ['class' => 'text-right bolder blue col-xs-1']) ?>
         <div class="clearfix"></div>
         <?php if (empty($_GET['projectId'])) { ?>
         <div class="widget-box transparent" id="recent-box" style="margin-top:15px">
@@ -56,7 +54,7 @@ use yii\widgets\ActiveForm;
                 'data-rel'       => 'tooltip',
                 'data-title'     => yii::t('conf', 'repo url tip'),
             ])
-            ->label(yii::t('conf', 'url'), ['class' => 'control-label bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'url'), ['class' => 'text-right bolder blue col-xs-1']) ?>
         <!-- 地址 配置 end-->
         <div class="clearfix"></div>
         <?php if (empty($_GET['projectId']) || $conf->repo_type == Project::REPO_SVN) { ?>
@@ -65,12 +63,12 @@ use yii\widgets\ActiveForm;
             ->textInput([
                 'class'          => 'col-xs-3',
             ])
-            ->label(yii::t('conf', 'username'), ['class' => 'control-label bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'username'), ['class' => 'text-right bolder blue col-xs-1']) ?>
         <?= $form->field($conf, 'repo_password')
             ->passwordInput([
                 'class'          => 'col-xs-3',
             ])
-            ->label(yii::t('conf', 'password'), ['class' => 'control-label bolder blue col-xs-1']); ?>
+            ->label(yii::t('conf', 'password'), ['class' => 'text-right bolder blue col-xs-1']); ?>
         </div>
         <div class="clearfix"></div>
 
@@ -105,7 +103,7 @@ use yii\widgets\ActiveForm;
                                   'data-title'     => yii::t('conf', 'deploy from tip'),
                               ])
                           ->label(yii::t('conf', 'deploy from').'<small><i class="light-blue icon-asterisk"></i></small>',
-                              ['class' => 'control-label bolder']) ?>
+                              ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'excludes')
                           ->textarea([
                               'placeholder'    => '.git' . PHP_EOL . 'README.md',
@@ -113,7 +111,7 @@ use yii\widgets\ActiveForm;
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'excludes tip'),
                           ])
-                          ->label(yii::t('conf', 'excludes'), ['class' => 'control-label bolder']) ?>
+                          ->label(yii::t('conf', 'excludes'), ['class' => 'text-right bolder']) ?>
                   </div>
               </div>
           </div>
@@ -144,7 +142,7 @@ use yii\widgets\ActiveForm;
                               'data-title'     => yii::t('conf', 'target user tip'),
                           ])
                           ->label(yii::t('conf', 'target user').'<small><i class="light-blue icon-asterisk"></i></small>',
-                              ['class' => 'control-label bolder']) ?>
+                              ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'release_to')
                           ->textInput([
                               'placeholder'    => '/data/www/walle',
@@ -152,7 +150,7 @@ use yii\widgets\ActiveForm;
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'webroot tip'),
                           ])
-                          ->label('webroot<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'control-label bolder']) ?>
+                          ->label('webroot<small><i class="light-blue icon-asterisk"></i></small>', ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'release_library')
                           ->textInput([
                               'placeholder'    => '/data/releases',
@@ -161,7 +159,7 @@ use yii\widgets\ActiveForm;
                               'data-title'     => yii::t('conf', 'releases tip'),
                           ])
                           ->label(yii::t('conf', 'releases').'<small><i class="light-blue icon-asterisk"></i></small>',
-                              ['class' => 'control-label bolder']) ?>
+                              ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'keep_version_num')
                           ->textInput([
                               'placeholder'    => '20',
@@ -170,7 +168,7 @@ use yii\widgets\ActiveForm;
                               'data-title'     => yii::t('conf', 'keep version tip'),
                           ])
                           ->label(yii::t('conf', 'keep version').'<small><i class="light-blue icon-asterisk"></i></small>',
-                              ['class' => 'control-label bolder']) ?>
+                              ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'hosts')
                           ->textarea([
                               'placeholder'    => '192.168.0.1' . PHP_EOL . '192.168.0.2:8888',
@@ -179,7 +177,7 @@ use yii\widgets\ActiveForm;
                               'data-title'     => yii::t('conf', 'servers tip'),
                           ])
                           ->label(yii::t('conf', 'servers').'<small><i class="light-blue icon-asterisk"></i></small>',
-                              ['class' => 'control-label bolder']) ?>
+                              ['class' => 'text-right bolder']) ?>
                   </div>
               </div>
           </div>
@@ -215,7 +213,7 @@ use yii\widgets\ActiveForm;
                               'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                               'onblur'         => "clearInterval(this.clock);",
                           ])
-                          ->label('pre_deploy', ['class' => 'control-label bolder']) ?>
+                          ->label('pre_deploy', ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'post_deploy')
                           ->textarea([
                               'data-placement' => 'top',
@@ -225,7 +223,7 @@ use yii\widgets\ActiveForm;
                               'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                               'onblur'         => "clearInterval(this.clock);",
                           ])
-                          ->label('post_deploy', ['class' => 'control-label bolder']) ?>
+                          ->label('post_deploy', ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'pre_release')
                           ->textarea([
                               'data-placement' => 'top',
@@ -235,7 +233,7 @@ use yii\widgets\ActiveForm;
                               'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                               'onblur'         => "clearInterval(this.clock);",
                           ])
-                          ->label('pre_release', ['class' => 'control-label bolder']) ?>
+                          ->label('pre_release', ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'post_release')
                           ->textarea([
                               'data-placement' => 'top',
@@ -245,7 +243,7 @@ use yii\widgets\ActiveForm;
                               'onfocus'        => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
                               'onblur'         => "clearInterval(this.clock);",
                           ])
-                          ->label('post_release', ['class' => 'control-label bolder']) ?>
+                          ->label('post_release', ['class' => 'text-right bolder']) ?>
                       <?= $form->field($conf, 'post_release_delay')
                           ->textInput([
                               'placeholder'    => '0',
@@ -253,7 +251,7 @@ use yii\widgets\ActiveForm;
                               'data-rel'       => 'tooltip',
                               'data-title'     => yii::t('conf', 'post_release_delay tip'),
                           ])
-                          ->label(yii::t('conf', 'post_release_delay'), ['class' => 'control-label bolder']) ?>
+                          ->label(yii::t('conf', 'post_release_delay'), ['class' => 'text-right bolder']) ?>
                   </div>
               </div>
           </div>
@@ -263,7 +261,7 @@ use yii\widgets\ActiveForm;
         <div class="hr hr-dotted"></div>
 
         <div class="form-group">
-            <label class="control-label bolder blue">
+            <label class="text-right bolder blue">
                 <?= yii::t('conf', 'branch/tag') ?>
             </label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('conf', 'branch tip') ?>" data-placement="right">
@@ -281,7 +279,7 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label bolder blue" for="form-field-2">
+            <label class="text-right bolder blue" for="form-field-2">
                 <?= yii::t('conf', 'enable audit') ?>
                 <input name="Project[audit]" value="0" type="hidden">
                 <input name="Project[audit]" value="1" type="checkbox" <?= $conf->audit ? 'checked' : '' ?>
@@ -291,7 +289,7 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="form-group">
-            <label class="control-label bolder blue" for="form-field-2">
+            <label class="text-right bolder blue" for="form-field-2">
                 <?= yii::t('conf', 'enable ansible') ?>
                 <input name="Project[ansible]" value="0" type="hidden">
                 <input name="Project[ansible]" value="1" type="checkbox" <?= $conf->ansible ? 'checked' : '' ?>
@@ -301,7 +299,7 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="form-group">
-            <label class="control-label bolder blue">
+            <label class="text-right bolder blue">
                 <?= yii::t('conf', 'enable open') ?>
                 <input name="Project[status]" value="0" type="hidden">
                 <input name="Project[status]" value="1" <?= $conf->status ? 'checked' : '' ?> type="checkbox"
