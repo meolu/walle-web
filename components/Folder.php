@@ -62,23 +62,28 @@ class Folder extends Ansible {
     }
 
     /**
-     * rsync 同步文件
+     * tar scp 文件到服务器
      *
-     * @param $remoteHost 远程host，格式：host 、host:port
+     * @param Project $project
+     * @param Task $task
      * @return bool
+     * @throws \Exception
      */
-    public function syncFiles($remoteHost, $version) {
-        $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
+    public function scpCopyFiles(Project $project, Task $task) {
 
-        $command = sprintf('rsync -avzq --rsh="ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false -p %d" %s %s %s@%s:%s',
-            $this->getHostPort($remoteHost),
-            $this->excludes($excludes),
-            escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
-            escapeshellarg($this->getConfig()->release_user),
-            escapeshellarg($this->getHostName($remoteHost)),
-            escapeshellarg(Project::getReleaseVersionDir($version)));
+        // 1. 宿主机 tar 打包
+        $this->_packageFiles($project, $task);
 
-        return $this->runLocalCommand($command);
+        // 2. 传输 tar.gz 文件
+        foreach (Project::getHosts() as $remoteHost) {
+            // 循环 scp 传输
+            $this->_copyPackageToServer($remoteHost, $project, $task);
+        }
+
+        // 3. 目标机 tar 解压
+        $this->_unpackageFiles($project, $task);
+
+        return true;
     }
 
     /**
@@ -108,12 +113,42 @@ class Folder extends Ansible {
     }
 
     /**
+     * @param $remoteHost
      * @param Project $project
      * @param Task $task
      * @return bool
      * @throws \Exception
      */
-    protected function _copyPackageToServer(Project $project, Task $task) {
+    protected function _copyPackageToServer($remoteHost, Project $project, Task $task) {
+
+        $version = $task->link_id;
+        $packagePath = Project::getDeployPackagePath($version);
+
+        $releasePackage = Project::getReleaseVersionPackage($version);
+
+        $scpCommand = sprintf('scp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false -P %d %s %s@%s:%s',
+            $this->getHostPort($remoteHost),
+            $packagePath,
+            escapeshellarg($this->getConfig()->release_user),
+            escapeshellarg($this->getHostName($remoteHost)),
+            $releasePackage);
+
+        $ret = $this->runLocalCommand($scpCommand);
+
+        if (!$ret) {
+            throw new \Exception(yii::t('walle', 'rsync error'));
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _copyPackageToServerByAnsible(Project $project, Task $task) {
 
         $version = $task->link_id;
         $packagePath = Project::getDeployPackagePath($version);
@@ -143,6 +178,31 @@ class Folder extends Ansible {
             $releasePath,
             $releasePackage
         );
+        $ret = $this->runRemoteCommand($unpackageCommand);
+
+        if (!$ret) {
+            throw new \Exception(yii::t('walle', 'rsync error'));
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _unpackageFilesByAnsible(Project $project, Task $task) {
+
+        $version = $task->link_id;
+        $releasePackage = Project::getReleaseVersionPackage($version);
+
+        $releasePath = Project::getReleaseVersionDir($version);
+        $unpackageCommand = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
+            $releasePath,
+            $releasePackage
+        );
         $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
 
         if (!$ret) {
@@ -155,22 +215,21 @@ class Folder extends Ansible {
     /**
      * 将多个文件/目录通过ansible传输到指定的多个目标机
      *
-     * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
-     *
-     * @param $version
-     * @param string $files 相对仓库文件/目录路径, 空格分割
-     * @param array $remoteHosts
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
      */
-    public function copyFiles(Project $project, Task $task) {
+    public function ansibleCopyFiles(Project $project, Task $task) {
 
         // 1. 宿主机 tar 打包
         $this->_packageFiles($project, $task);
 
         // 2. 传输 tar.gz 文件
-        $this->_copyPackageToServer($project, $task);
+        $this->_copyPackageToServerByAnsible($project, $task);
 
         // 3. 目标机 tar 解压
-        $this->_unpackageFiles($project, $task);
+        $this->_unpackageFilesByAnsible($project, $task);
 
         return true;
     }
@@ -237,9 +296,7 @@ class Folder extends Ansible {
      */
     public function cleanUpLocal($version) {
         $cmd[] = 'rm -rf ' . Project::getDeployWorkspace($version);
-        if (Project::getAnsibleStatus()) {
-            $cmd[] = 'rm -f ' . Project::getDeployPackagePath($version);
-        }
+        $cmd[] = sprintf('rm -f %s/*.tar.gz', dirname(Project::getDeployPackagePath($version)));
         if ($this->config->repo_type == Project::REPO_SVN) {
             $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
         }

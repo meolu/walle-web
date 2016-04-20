@@ -221,5 +221,4 @@ class Command {
         return !empty($hostInfo[1]) ? $hostInfo[1] : $default;
     }
 
-
 }

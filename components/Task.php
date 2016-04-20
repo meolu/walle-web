@@ -78,9 +78,7 @@ class Task extends Ansible {
         $ansibleStatus = Project::getAnsibleStatus();
 
         $cmd[] = sprintf('cd %s', Project::getReleaseVersionDir());
-        if ($ansibleStatus) {
-            $cmd[] = sprintf('rm -f %s/*.tar.gz', rtrim(Project::getReleaseVersionDir(), '/'));
-        }
+        $cmd[] = sprintf('rm -f %s/*.tar.gz', rtrim(Project::getReleaseVersionDir(), '/'));
         $cmd[] = sprintf('ls -1 | sort -r | awk \'FNR > %d  {printf("rm -rf %%s\n", $0);}\' | bash', $this->config->keep_version_num);
 
         $command = join(' && ', $cmd);

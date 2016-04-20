@@ -460,51 +460,21 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _transmission() {
-        if (Project::getAnsibleStatus()) {
-            // ansible copy
-            return $this->_ansibleCopy();
-        } else {
-            // 循环 rsync
-            return $this->_rsync();
-        }
-    }
-
-    /**
-     * ansible copy
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    private function _ansibleCopy() {
 
         $sTime = Command::getMs();
-        $this->walleFolder->copyFiles($this->conf, $this->task);
+
+        if (Project::getAnsibleStatus()) {
+            // ansible copy
+            $this->walleFolder->ansibleCopyFiles($this->conf, $this->task);
+        } else {
+            // 循环 scp
+            $this->walleFolder->scpCopyFiles($this->conf, $this->task);
+        }
+
+        // 记录执行时间
         $duration = Command::getMs() - $sTime;
 
         Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-
-        return true;
-    }
-
-    /**
-     * 同步文件到服务器
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    private function _rsync() {
-
-        // 循环rsync传输
-        foreach (Project::getHosts() as $remoteHost) {
-            $sTime = Command::getMs();
-            $ret = $this->walleFolder->syncFiles($remoteHost, $this->task->link_id);
-            // 记录执行时间
-            $duration = Command::getMs() - $sTime;
-            Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-            if (!$ret) {
-                throw new \Exception(yii::t('walle', 'rsync error'));
-            }
-        }
 
         return true;
     }
