@@ -9,6 +9,7 @@
 namespace app\components;
 
 use app\models\Project;
+use app\models\Task;
 
 class Folder extends Ansible {
 
@@ -81,18 +82,16 @@ class Folder extends Ansible {
     }
 
     /**
-     * 将多个文件/目录通过ansible传输到指定的多个目标机
-     *
-     * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
-     *
-     * @param $version
-     * @param string $files 相对仓库文件/目录路径, 空格分割
-     * @param array $remoteHosts
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
      */
-    public function copyFiles($version, $files = '*', $remoteHosts = []) {
+    protected function _packageFiles(Project $project, Task $task) {
 
-        // 1. 打包
-        $excludes = GlobalHelper::str2arr($this->getConfig()->excludes);
+        $version = $task->link_id;
+        $files = '`ls -A1 --color=never`';
+        $excludes = GlobalHelper::str2arr($project->excludes);
         $packagePath = Project::getDeployPackagePath($version);
         $packageCommand = sprintf('cd %s && tar -p %s -cz -f %s %s',
             escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
@@ -102,25 +101,78 @@ class Folder extends Ansible {
         );
         $ret = $this->runLocalCommand($packageCommand);
         if (!$ret) {
-            return false;
+            throw new \Exception(yii::t('walle', 'rsync error'));
         }
 
-        // 2. 传输文件
+        return true;
+    }
+
+    /**
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _copyPackageToServer(Project $project, Task $task) {
+
+        $version = $task->link_id;
+        $packagePath = Project::getDeployPackagePath($version);
+
         $releasePackage = Project::getReleaseVersionPackage($version);
         $ret = $this->copyFilesByAnsibleCopy($packagePath, $releasePackage);
         if (!$ret) {
-            return false;
+            throw new \Exception(yii::t('walle', 'rsync error'));
         }
 
-        // 3. 解压
+        return true;
+    }
+
+    /**
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
+     */
+    protected function _unpackageFiles(Project $project, Task $task) {
+
+        $version = $task->link_id;
+        $releasePackage = Project::getReleaseVersionPackage($version);
+
         $releasePath = Project::getReleaseVersionDir($version);
         $unpackageCommand = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
             $releasePath,
             $releasePackage
-            );
+        );
         $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
 
-        return $ret;
+        if (!$ret) {
+            throw new \Exception(yii::t('walle', 'rsync error'));
+        }
+
+        return true;
+    }
+
+    /**
+     * 将多个文件/目录通过ansible传输到指定的多个目标机
+     *
+     * ansible 不支持 rsync模块, 改用宿主机 tar 打包, ansible 并发传输到目标机临时目录, 目标机解压
+     *
+     * @param $version
+     * @param string $files 相对仓库文件/目录路径, 空格分割
+     * @param array $remoteHosts
+     */
+    public function copyFiles(Project $project, Task $task) {
+
+        // 1. 宿主机 tar 打包
+        $this->_packageFiles($project, $task);
+
+        // 2. 传输 tar.gz 文件
+        $this->_copyPackageToServer($project, $task);
+
+        // 3. 目标机 tar 解压
+        $this->_unpackageFiles($project, $task);
+
+        return true;
     }
 
     /**

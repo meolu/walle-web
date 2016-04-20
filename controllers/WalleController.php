@@ -477,16 +477,11 @@ class WalleController extends Controller {
      */
     private function _ansibleCopy() {
 
-        $revision = Repo::getRevision($this->conf);
-        $files = $revision->getCommandFiles($this->task); // 更新到指定版本
-
         $sTime = Command::getMs();
-        $ret = $this->walleFolder->copyFiles($this->task->link_id, $files);
+        $this->walleFolder->copyFiles($this->conf, $this->task);
         $duration = Command::getMs() - $sTime;
+
         Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
-        if (!$ret) {
-            throw new \Exception(yii::t('walle', 'rsync error'));
-        }
 
         return true;
     }
