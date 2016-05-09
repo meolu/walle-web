@@ -8,6 +8,7 @@
  * *****************************************************************/
 namespace app\components;
 
+use Yii;
 use app\models\Project;
 use app\models\Task;
 
@@ -95,8 +96,8 @@ class Folder extends Ansible {
     protected function _packageFiles(Project $project, Task $task) {
 
         $version = $task->link_id;
-        $files = '`ls -A1 --color=never`';
-        $excludes = GlobalHelper::str2arr($project->excludes);
+        $files = $task->getCommandFiles();
+        $excludes = GlobalHelper::str2arr($project->excludes) ;
         $packagePath = Project::getDeployPackagePath($version);
         $packageCommand = sprintf('cd %s && tar -p %s -cz -f %s %s',
             escapeshellarg(rtrim(Project::getDeployWorkspace($version), '/') . '/'),
@@ -106,7 +107,7 @@ class Folder extends Ansible {
         );
         $ret = $this->runLocalCommand($packageCommand);
         if (!$ret) {
-            throw new \Exception(yii::t('walle', 'rsync error'));
+            throw new \Exception(yii::t('walle', 'package error'));
         }
 
         return true;
@@ -173,15 +174,27 @@ class Folder extends Ansible {
         $version = $task->link_id;
         $releasePackage = Project::getReleaseVersionPackage($version);
 
+        $webrootPath = Project::getTargetWorkspace();
         $releasePath = Project::getReleaseVersionDir($version);
-        $unpackageCommand = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
+
+        $cmd = [];
+
+        if ($task->file_transmission_mode == Task::FILE_TRANSMISSION_MODE_PART) {
+            // 增量传输时, 在解压数据包之前, 需要把目标机当前版本复制一份到release目录
+            $cmd[] = sprintf('cp -arf %s/. %s', $webrootPath, $releasePath);
+        }
+
+        $cmd[] = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
             $releasePath,
             $releasePackage
         );
-        $ret = $this->runRemoteCommand($unpackageCommand);
+
+        $command = join(' && ', $cmd);
+
+        $ret = $this->runRemoteCommand($command);
 
         if (!$ret) {
-            throw new \Exception(yii::t('walle', 'rsync error'));
+            throw new \Exception(yii::t('walle', 'unpackage error'));
         }
 
         return true;
@@ -279,13 +292,18 @@ class Folder extends Ansible {
      */
     protected function excludes($excludes) {
 
-        $excludesRsync = '';
+        $excludesCmd = '';
+
+        // 无论是否填写排除.git和.svn, 这两个目录都不会发布
+        array_push($excludes, '.git');
+        array_push($excludes, '.svn');
+
+        $excludes = array_unique($excludes);
         foreach ($excludes as $exclude) {
-            $excludesRsync .= sprintf("--exclude=%s ", escapeshellarg(trim($exclude)));
+            $excludesCmd .= sprintf("--exclude=%s ", escapeshellarg(trim($exclude)));
         }
 
-
-        return trim($excludesRsync);
+        return trim($excludesCmd);
     }
 
     /**

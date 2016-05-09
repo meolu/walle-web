@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\helpers\StringHelper;
+use app\components\GlobalHelper;
 
 /**
  * This is the model class for table "task".
@@ -110,7 +112,7 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'project_id', 'status', 'title'], 'required'],
-            [['user_id', 'project_id', 'action', 'status'], 'integer'],
+            [['user_id', 'project_id', 'action', 'status', 'file_transmission_mode'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['file_list'], 'string'],
             [['title', 'link_id', 'ex_link_id', 'commit_id', 'branch'], 'string', 'max' => 100],
@@ -163,4 +165,37 @@ class Task extends \yii\db\ActiveRecord
     public function getProject() {
         return $this->hasOne(Project::className(), ['id' => 'project_id']);
     }
+
+    /**
+     * 获取要发布的文件列表
+     *
+     * @param bool $getFileAndVersionList 获取文件名和指定版本号, svn更新时使用
+     * @return array|string
+     */
+    public function getCommandFiles($getFileAndVersionList = false) {
+
+        if ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_FULL) {
+            return '`ls -A1 --color=never`';
+        } elseif ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_PART && $this->file_list) {
+
+            $fileList = GlobalHelper::str2arr($this->file_list);
+            $commandFiles = '';
+            $fileAndVersion = [];
+            foreach ($fileList as $file) {
+                list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
+                $fileAndVersion[] = ['file' => $file, 'version' => $version];
+                $commandFiles .= trim($file) . ' ';
+            }
+
+            if ($getFileAndVersionList) {
+                return $fileAndVersion;
+            } else {
+                return trim($commandFiles);
+            }
+
+        } else {
+            throw new \InvalidArgumentException('file list empty');
+        }
+    }
+
 }

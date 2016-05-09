@@ -29,6 +29,8 @@ return [
     'pre deploy task error' => 'pre_deploy task error',
     'post deploy task error' => 'post_deploy task error',
     'rsync error' => 'rsync files to remote servers error',
+    'package error' => 'package files error',
+    'unpackage error' => 'unpackage files error',
     'project configuration works' => 'project configuration works, congratulation：）',
     'update servers error' => 'update the remote servers error',
     'ssh-key to git' => 'add php process user {user} ssh-key to github/gitlab\'s deploy-keys',

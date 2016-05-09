@@ -217,8 +217,7 @@ class Project extends \yii\db\ActiveRecord
 
         return sprintf("%s/%s/%s", rtrim($from, '/'), rtrim($env, '/'), $project);
     }
-
-
+    
     /**
      * 获取目标机要发布的目录
      * {webroot}

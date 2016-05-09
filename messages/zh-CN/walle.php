@@ -29,6 +29,8 @@ return [
     'pre deploy task error' => '代码检出前置任务操作失败',
     'post deploy task error' => '代码检出后置任务操作失败',
     'rsync error' => '同步文件到目标服务器群出错',
+    'package error' => '打包文件出错, 请确认文件列表填写正确',
+    'unpackage error' => '目标机解压文件出错',
     'project configuration works' => '配置检测通过，恭喜：）',
     'update servers error' => '全量更新服务器出错',
     'ssh-key to git' => '把php进程用户{user}的ssh-key加入git的deploy-keys列表',
