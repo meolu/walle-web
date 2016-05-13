@@ -36,7 +36,7 @@ class TaskController extends Controller {
         $list = $tasks->offset(($page - 1) * $size)->limit($size)
             ->asArray()->all();
 
-        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
+        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => $size]);
         return $this->render('list', [
             'list'  => $list,
             'pages' => $pages,
