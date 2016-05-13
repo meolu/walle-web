@@ -28,6 +28,7 @@ use app\models\Task;
           </div>
         <?php } ?>
         <!-- 分支选取 end -->
+
         <?= $form->field($task, 'commit_id')->dropDownList([])
           ->label(yii::t('task', 'select branch').'<i class="get-history icon-spinner icon-spin orange bigger-125"></i>', ['class' => 'control-label bolder blue']) ?>
 
@@ -100,7 +101,7 @@ use app\models\Task;
     jQuery(function($) {
         // 用户上次选择的分支作为转为分支
         var project_id = <?= (int)$_GET['projectId'] ?>;
-        var branch_name= 'pre_branch_' + project_id;
+        var branch_name = 'pre_branch_' + project_id;
         var pre_branch = ace.cookie.get(branch_name);
         if (pre_branch) {
             var option = '<option value="' + pre_branch + '" selected>' + pre_branch + '</option>';
@@ -121,11 +122,12 @@ use app\models\Task;
                     // 默认选中 master 分支
                     var checked = value.id == 'master' ? 'selected' : '';
                     select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
-                })
+                });
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
-                if(data.data.length == 1){
+                if(data.data.length == 1 || ace.cookie.get(branch_name) != 'master') {
+                    // 获取分支完成后, 一定条件重新获取提交列表
                     $('#branch').change();
                 }
 
@@ -143,7 +145,7 @@ use app\models\Task;
                 var select = '';
                 $.each(data.data, function (key, value) {
                     select += '<option value="' + value.id + '">' + value.message + '</option>';
-                })
+                });
                 $('#task-commit_id').html(select);
                 $('.get-history').hide()
             });
@@ -153,7 +155,7 @@ use app\models\Task;
             // 添加cookie记住最近使用的分支名字
             ace.cookie.set(branch_name, $(this).val(), 86400*30)
             getCommitList();
-        })
+        });
 
         // 页面加载完默认拉取master的commit log
         getCommitList();
@@ -169,7 +171,7 @@ use app\models\Task;
             })
             .click(function() {
                 getBranchList();
-            })
+            });
 
         // 错误提示
         function showError($msg) {

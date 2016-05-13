@@ -125,7 +125,6 @@ class WalleController extends Controller {
         $this->renderJson([]);
     }
 
-
     /**
      * 提交任务
      *
@@ -385,7 +384,7 @@ class WalleController extends Controller {
     private function _initWorkspace() {
         $sTime = Command::getMs();
         // 本地宿主机工作区初始化
-        $this->walleFolder->initLocalWorkspace($this->task->link_id);
+        $this->walleFolder->initLocalWorkspace($this->task);
 
         // 远程目标目录检查，并且生成版本目录
         $ret = $this->walleFolder->initRemoteVersion($this->task->link_id);

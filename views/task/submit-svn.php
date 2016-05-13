@@ -6,6 +6,7 @@ $this->title = yii::t('task', 'submit task title');
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use app\models\Project;
+use app\models\Task;
 
 ?>
 <style>
@@ -38,43 +39,48 @@ use app\models\Project;
                   </select>
               </div>
           <?php } ?>
-          <div class="between-history" style="display: none">
-          <div class="form-group col-xs-3" style="padding-left: 0">
-              <label class="control-label bolder blue">commit id start</label>
-              <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
-              <select name="i_don_not_care_this" id="start" class="form-control select2 col-xs-3 history-list">
-              </select>
-          </div>
-          <div class="form-group col-xs-3">
-              <label class="control-label bolder blue">commit id end</label>
-              <i class="getting-history icon-spinner icon-spin orange bigger-125" style=""></i>
-              <select name="Task[commit_id]" id="end" class="form-control select2 col-xs-3 history-list">
-              </select>
-          </div>
-          </div>
+
+          <!-- 分支选取 end -->
           <div class="clearfix"></div>
 
-        <!-- 分支选取 end -->
+          <?= $form->field($task, 'commit_id')->dropDownList([])
+              ->label(yii::t('task', 'select branch').'<i class="get-history icon-spinner icon-spin orange bigger-125"></i>', ['class' => 'control-label bolder blue']) ?>
 
+          <!-- 全量/增量 -->
+          <div class="form-group">
+              <label class="text-right bolder blue">
+                  全量/增量:
+              </label>
+              <div id="transmission-full-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="全量上线所有文件, 删除不在代码仓库中的文件" data-placement="right">
+                  <label>
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" checked="checked" type="radio" class="ace">
+                      <span class="lbl"> 全量上线 </span>
+                  </label>
+              </div>
+
+              <div id="transmission-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="指定文件列表, 只发布指定的文件和目录" data-placement="right">
+                  <label>
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" type="radio" class="ace">
+                      <span class="lbl"> 指定文件 </span>
+                  </label>
+              </div>
+          </div>
+          <!-- 全量/增量 end -->
+
+          <!-- 文件列表 -->
           <?= $form->field($task, 'file_list')
               ->textarea([
                   'rows'           => 12,
-                  'placeholder'    => 'index.php  1234',
+                  'placeholder'    => "index.php\nREADME.md\ndir*",
                   'data-html'      => 'true',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
                   'data-title'     => yii::t('task', 'file list placeholder'),
-                  'style'          => 'overflow:scroll;overflow-y:hidden;;overflow-x:hidden',
-                  'onchange'       => "window.activeobj=this;this.clock=setInterval(function(){activeobj.style.height=activeobj.scrollHeight+'px';},200);",
-                  'onblur'         => "clearInterval(this.clock);",
-                  'value'          => '*',
+                  'style'          => 'display: none',
               ])
-              ->label(yii::t('task', 'file list')
-                  . '<a class="icon-magic green show-between-history" data-rel="tooltip" data-placement="top" data-title="'
-                  . yii::t('task', 'diff tip')
-                  . '" href="javascript:;"></a>'
-                  . '<i class="getting-change-files icon-spinner icon-spin orange bigger-125" style="display: none"></i>',
-                  ['class' => 'control-label bolder blue']) ?>
+              ->label(yii::t('task', 'file list'),
+                  ['class' => 'control-label bolder blue', 'style' => 'display: none']) ?>
+
       </div><!-- /.box-body -->
 
       <div class="box-footer">
@@ -110,13 +116,14 @@ use app\models\Project;
 
         var projectId =  <?= (int)$_GET['projectId'] ?>;
         // 用户上次选择的分支作为转为分支
-        var branch_name= 'pre_branch_' + projectId;
+        var branch_name = 'pre_branch_' + projectId;
         var pre_branch = ace.cookie.get(branch_name);
         if (pre_branch) {
             var option = '<option value="' + pre_branch + '" selected>' + (pre_branch ? pre_branch : 'non-trunk') + '</option>';
-            $('#branch').html(option)
+            $('#branch').html(option);
             getCommitList();
         }
+
         // 无trunk时，直接获取commit log
         if (!$('#branch').val()) {
             getCommitList();
@@ -139,7 +146,7 @@ use app\models\Project;
                     var checked = value.id == 'trunk' ? 'selected' : '';
                     select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
                     nonTrunk = ++count == 1 && value.id == '';
-                })
+                });
                 if (nonTrunk) {
                     // 添加cookie记住最近使用的分支名字
                     ace.cookie.set(branch_name, '', 86400*30)
@@ -147,12 +154,16 @@ use app\models\Project;
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
-                getCommitList();
+
+                if(data.data.length == 1 || ace.cookie.get(branch_name) != 'trunk') {
+                    // 获取分支完成后, 一定条件重新获取提交列表
+                    $('#branch').change();
+                }
             });
         }
         // 获取commit log
         function getCommitList() {
-            $('.getting-history').show();
+            $('.get-history').show();
             $.get("<?= Url::to('@web/walle/get-commit-history?projectId=') ?>" + projectId +"&branch=" + $('#branch').val(), function (data) {
                 // 获取commit log失败
                 if (data.code) {
@@ -162,25 +173,9 @@ use app\models\Project;
                 var select = '';
                 $.each(data.data, function (key, value) {
                     select += '<option value="' + value.id + '">' + value.id + ' - ' + value.message + '</option>';
-                })
-                $('.history-list').html(select);
-                $('.getting-history').hide()
-            });
-        }
-
-        function getChangeFiles(projectId, branch, start, end) {
-            $.get("<?= Url::to('@web/walle/get-commit-file?projectId=') ?>" + projectId +"&branch=" + branch + "&start=" + start + "&end=" + end, function (data) {
-                // 获取commit log失败
-                if (data.code) {
-                    showError(data.msg);
-                }
-
-                var files = '';
-                $.each(data.data, function (key, value) {
-                    files += value + "\n";
-                })
-                $('#task-file_list').html(files);
-                $('.getting-change-files').hide();
+                });
+                $('#task-commit_id').html(select);
+                $('.get-history').hide()
             });
         }
 
@@ -188,27 +183,10 @@ use app\models\Project;
             // 添加cookie记住最近使用的分支名字
             ace.cookie.set(branch_name, $(this).val(), 86400*30)
             getCommitList();
-        })
+        });
 
-        // 选择两个commit_id之间提交的文件
-        $('.history-list').change(function() {
-            var startId = $('#start').val();
-            var endId   = $('#end').val();
-            $('.getting-change-files').show();
-            getChangeFiles(projectId, $('#branch').val(), startId, endId);
-        })
-
-        $('.show-between-history').click(function() {
-            $('.between-history').show();
-        })
-
-        // 页面加载完默认拉取trunk
-        // getBranchList();
-        // 页面加载完默认拉取trunk
-        if ($('#branch').val()) {
-           // getCommitList();
-        }
-
+        // 页面加载完默认拉取master的commit log
+        getCommitList();
 
         // 查看所有分支提示
         $('.show-tip')
@@ -221,7 +199,7 @@ use app\models\Project;
             })
             .click(function() {
                 getBranchList();
-            })
+            });
 
         // 错误提示
         function showError($msg) {
@@ -236,6 +214,19 @@ use app\models\Project;
         // 清除提示框内容
         $("#myModal").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
+        });
+
+        // 公共提示
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+        $('[data-rel=popover]').popover({container:'body'});
+
+        // 切换显示文件列表
+        $('body').on('click', '#transmission-full-ctl', function() {
+            $('#task-file_list').hide();
+            $('label[for="task-file_list"]').hide();
+        }).on('click', '#transmission-part-ctl', function() {
+            $('#task-file_list').show();
+            $('label[for="task-file_list"]').show();
         });
     })
 

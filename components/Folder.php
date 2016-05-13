@@ -14,17 +14,20 @@ use app\models\Task;
 
 class Folder extends Ansible {
 
-
     /**
      * 初始化宿主机部署工作空间
      *
-     * @return bool
+     * @param Task $task
+     * @return bool|int
      */
-    public function initLocalWorkspace($version) {
+    public function initLocalWorkspace(Task $task) {
+
+        $version = $task->link_id;
+        $branch = $task->branch;
+
         // svn
         if ($this->config->repo_type == Project::REPO_SVN) {
-            $cmd[] = 'mkdir -p ' . Project::getDeployWorkspace($version);
-            $cmd[] = sprintf('mkdir -p %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
+            $cmd[] = sprintf('cp -rf %s %s ', Project::getSvnDeployBranchFromDir($branch), Project::getDeployWorkspace($version));
         }
         // git 直接把项目代码拷贝过来，然后更新，取代之前原项目检出，提速
         else {
@@ -45,12 +48,8 @@ class Folder extends Ansible {
      * @return bool
      */
     public function initRemoteVersion($version) {
-        $cmd[] = sprintf('mkdir -p %s', Project::getReleaseVersionDir($version));
-        if ($this->config->repo_type == Project::REPO_SVN) {
-            $cmd[] = sprintf('test -d %s && cp -rf %s/* %s/ || echo 1', // 无论如何总得要$?执行成功
-                $this->config->release_to, $this->config->release_to, Project::getReleaseVersionDir($version));
-        }
-        $command = join(' && ', $cmd);
+
+        $command = sprintf('mkdir -p %s', Project::getReleaseVersionDir($version));
 
         if (Project::getAnsibleStatus()) {
             // ansible 并发执行远程命令
@@ -315,9 +314,6 @@ class Folder extends Ansible {
     public function cleanUpLocal($version) {
         $cmd[] = 'rm -rf ' . Project::getDeployWorkspace($version);
         $cmd[] = sprintf('rm -f %s/*.tar.gz', dirname(Project::getDeployPackagePath($version)));
-        if ($this->config->repo_type == Project::REPO_SVN) {
-            $cmd[] = sprintf('rm -rf %s-svn', rtrim(Project::getDeployWorkspace($version), '/'));
-        }
         $command = join(' && ', $cmd);
         return $this->runLocalCommand($command);
     }

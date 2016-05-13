@@ -217,7 +217,29 @@ class Project extends \yii\db\ActiveRecord
 
         return sprintf("%s/%s/%s", rtrim($from, '/'), rtrim($env, '/'), $project);
     }
-    
+
+    /**
+     * 拼接宿主机的SVN仓库目录(带branches/tags目录)
+     *
+     * @param string $branchName
+     * @return string
+     */
+    public static function getSvnDeployBranchFromDir($branchName = 'trunk') {
+
+        $deployFromDir = static::getDeployFromDir();
+        if ($branchName == '') {
+            $branchFromDir = $deployFromDir;
+        } elseif ($branchName == 'trunk') {
+            $branchFromDir = sprintf('%s/trunk', $deployFromDir);
+        } elseif (static::$CONF->repo_mode == 'branch') {
+            $branchFromDir = sprintf('%s/branches/%s', $deployFromDir, $branchName);
+        } elseif (static::$CONF->repo_mode == 'tag') {
+            $branchFromDir = sprintf('%s/tags/%s', $deployFromDir, $branchName);
+        }
+
+        return $branchFromDir;
+    }
+
     /**
      * 获取目标机要发布的目录
      * {webroot}

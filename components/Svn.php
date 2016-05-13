@@ -35,7 +35,7 @@ class Svn extends Command {
         else {
             $cmd[] = sprintf('mkdir -p %s ', $svnDir);
             $cmd[] = sprintf('cd %s ', $svnDir);
-            $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s .', $this->getConfig()->repo_url));
+            $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s .', escapeshellarg($this->getConfig()->repo_url)));
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -49,30 +49,11 @@ class Svn extends Command {
      */
     public function updateToVersion(TaskModel $task) {
 
-        // 兼容无trunk、无branches、无tags下为空
-        $branch = ($task->branch == 'trunk' || $task->branch == '')
-            ? $task->branch
-            : ($this->getConfig()->repo_mode == Project::REPO_BRANCH ? 'branches/' : 'tags/') . $task->branch;
         // 先更新
-        $versionSvnDir = sprintf('%s-svn', rtrim(Project::getDeployWorkspace($task->link_id), '/'));
+        $versionSvnDir = rtrim(Project::getDeployWorkspace($task->link_id), '/');
         $cmd[] = sprintf('cd %s ', $versionSvnDir);
-        $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s/%s .', $this->getConfig()->repo_url, $branch));
-        // 更新指定文件到指定版本，并复制到同步目录
-        $fileAndVersion = $this->getFileAndVersionList($task);
-        foreach ($fileAndVersion as $assign) {
-            if (in_array($assign['file'], ['.', '..'])) continue;
-            $cmd[] = $this->_getSvnCmd(sprintf('svn up -q %s %s',
-                $assign['file'],
-                empty($assign['version']) ? '' : ' -r ' . $assign['version']
-            ));
-            // 多层目录需要先新建父目录，否则复制失败
-            if (strpos($assign['file'], '/') !== false) {
-                $cmd[] = sprintf('mkdir -p %s/%s',
-                    Project::getDeployWorkspace($task->link_id), dirname($assign['file']));
-            }
-            $cmd[] = sprintf('cp -rf %s %s/%s',
-                rtrim($assign['file'], '/'), Project::getDeployWorkspace($task->link_id), dirname($assign['file']));
-        }
+        $cmd[] = $this->_getSvnCmd(sprintf('svn up -q -r %d', $task->commit_id));
+
         $command = join(' && ', $cmd);
 
         return $this->runLocalCommand($command);
