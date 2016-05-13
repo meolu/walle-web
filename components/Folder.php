@@ -229,15 +229,27 @@ class Folder extends Ansible {
         $version = $task->link_id;
         $releasePackage = Project::getReleaseVersionPackage($version);
 
+        $webrootPath = Project::getTargetWorkspace();
         $releasePath = Project::getReleaseVersionDir($version);
-        $unpackageCommand = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
+
+        $cmd = [];
+
+        if ($task->file_transmission_mode == Task::FILE_TRANSMISSION_MODE_PART) {
+            // 增量传输时, 在解压数据包之前, 需要把目标机当前版本复制一份到release目录
+            $cmd[] = sprintf('cp -arf %s/. %s', $webrootPath, $releasePath);
+        }
+
+        $cmd[] = sprintf('cd %1$s && tar --no-same-owner -pm -C %1$s -xz -f %2$s',
             $releasePath,
             $releasePackage
         );
-        $ret = $this->runRemoteCommandByAnsibleShell($unpackageCommand);
+
+        $command = join(' && ', $cmd);
+
+        $ret = $this->runRemoteCommandByAnsibleShell($command);
 
         if (!$ret) {
-            throw new \Exception(yii::t('walle', 'rsync error'));
+            throw new \Exception(yii::t('walle', 'unpackage error'));
         }
 
         return true;
