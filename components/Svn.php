@@ -247,41 +247,7 @@ class Svn extends Command {
             : ($tag ? 'tags/'.$branch : 'branches/'.$branch);
         return sprintf('%s/%s', $svnDir, $branchDir);
     }
-
-    /**
-     * 根据任务里提交的带版本号的文件列表, 过滤生成 tar/rysnc 等命令需要的文件列表参数
-     *
-     * @param TaskModel $task
-     * @return string
-     */
-    public function getCommandFiles(TaskModel $task) {
-        $fileList = GlobalHelper::str2arr($task->file_list);
-        $files = '';
-        foreach ($fileList as $file) {
-            list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
-            $files .= trim($file) . ' ';
-        }
-
-        return trim($files);
-    }
-
-    /**
-     * 获取文件和版本号列表
-     *
-     * @param TaskModel $task
-     * @return array
-     */
-    public function getFileAndVersionList(TaskModel $task) {
-        $fileList = GlobalHelper::str2arr($task->file_list);
-        $fileAndVersion = [];
-        foreach ($fileList as $file) {
-            list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
-            $fileAndVersion[] = ['file' => $file, 'version' => $version];
-        }
-
-        return $fileAndVersion;
-    }
-
+    
     /**
      * @param $cmd
      * @return string

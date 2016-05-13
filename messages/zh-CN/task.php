@@ -30,7 +30,7 @@ return [
     'all branches' => '查看所有分支',
     'select branch' => '版本选取',
     'submit title' => '上线单标题',
-    'file list placeholder' => '1.上线所有文件：* (不包含.开头的文件)<br />2.上线指定目录：dir_name<br />3.上线指定文件：file_name<br />4.上线指定文件的指定版本：file_name commit_id',
+    'file list placeholder' => '1.上线指定目录：dir_name<br />2.上线指定文件：file_name<br />3.通配符 file*',
     'file list' => '文件列表',
     'diff tip' => '自动获取该分支/tag下的两提交历史间的文件',
 ];

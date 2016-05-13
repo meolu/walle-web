@@ -169,30 +169,18 @@ class Task extends \yii\db\ActiveRecord
     /**
      * 获取要发布的文件列表
      *
-     * @param bool $getFileAndVersionList 获取文件名和指定版本号, svn更新时使用
      * @return array|string
      */
-    public function getCommandFiles($getFileAndVersionList = false) {
+    public function getCommandFiles() {
 
         if ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_FULL) {
             return '.';
         } elseif ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_PART && $this->file_list) {
 
             $fileList = GlobalHelper::str2arr($this->file_list);
-            $commandFiles = '';
-            $fileAndVersion = [];
-            foreach ($fileList as $file) {
-                list($file, $version) = array_pad(StringHelper::explode($file, ' ', true, true), 2, null);
-                $fileAndVersion[] = ['file' => $file, 'version' => $version];
-                $commandFiles .= trim($file) . ' ';
-            }
+            $commandFiles = join(' ', $fileList);
 
-            if ($getFileAndVersionList) {
-                return $fileAndVersion;
-            } else {
-                return trim($commandFiles);
-            }
-
+            return trim($commandFiles);
         } else {
             throw new \InvalidArgumentException('file list empty');
         }

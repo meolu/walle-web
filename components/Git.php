@@ -160,18 +160,5 @@ class Git extends Command {
         }
         return $history;
     }
-
-    /**
-     * 根据任务里提交的带版本号的文件列表, 过滤生成 tar/rysnc 等命令需要的文件列表参数
-     *
-     * git 仓库总是返回 * 所有文件
-     *
-     * @param TaskModel $task
-     * @return string
-     */
-    public function getCommandFiles(TaskModel $task) {
-
-        return '*';
-    }
-
+    
 }

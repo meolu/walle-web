@@ -71,7 +71,7 @@ use app\models\Task;
           <?= $form->field($task, 'file_list')
               ->textarea([
                   'rows'           => 12,
-                  'placeholder'    => "index.php\nREADME.md\ndir*",
+                  'placeholder'    => "index.php\nREADME.md\ndir_name\nfile*",
                   'data-html'      => 'true',
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
