@@ -15,6 +15,13 @@ class TaskController extends Controller {
 
     protected $task;
 
+    /**
+     * 我的上线列表
+     * 
+     * @param int $page
+     * @param int $size
+     * @return string
+     */
     public function actionIndex($page = 1, $size = 10) {
         $size = $this->getParam('per-page') ?: $size;
         $list = Task::find()
@@ -27,7 +34,7 @@ class TaskController extends Controller {
         if ($auditProjects) {
             $list->orWhere(['project_id' => $auditProjects]);
         }
-        
+
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
@@ -47,36 +54,36 @@ class TaskController extends Controller {
     /**
      * 提交任务
      *
-     * @param $projectId
+     * @param $projectId 没有projectId则显示列表
      * @return string
      */
     public function actionSubmit($projectId = null) {
-        $task = new Task();
-        if ($projectId) {
-            // svn下无trunk
-            $nonTrunk = false;
-            $conf = Project::find()
-                ->where(['id' => $projectId, 'status' => Project::STATUS_VALID])
-                ->one();
-            $conf = Project::getConf($projectId);
-            // 第一次可能会因为更新而耗时，但一般不会，第一次初始化会是在检测里
-            if ($conf->repo_type == Project::REPO_SVN && !file_exists(Project::getDeployFromDir())) {
-                $version = Repo::getRevision($conf);
-                $version->updateRepo();
-            }
-            // 为了简化svn无trunk, branches时，不需要做查看分支，直接就是主干
-            $svnTrunk = sprintf('%s/trunk', Project::getDeployFromDir());
-            // svn下无trunk目录
-            if (!file_exists($svnTrunk)) {
-                $nonTrunk = true;
-            }
+
+        if (!$projectId) {
+            // 显示所有项目列表
+            $projects = Project::find()
+                ->leftJoin(Group::tableName(), '`group`.`project_id`=`project`.`id`')
+                ->where(['project.status' => Project::STATUS_VALID, '`group`.`user_id`' => $this->uid])
+                ->asArray()->all();
+            return $this->render('select-project', [
+                'projects' => $projects,
+            ]);
         }
+
+        $task = new Task();
+        $conf = Project::getConf($projectId);
+        if (!$conf) {
+            throw new \Exception(yii::t('task', 'unknown project'));
+        }
+
         if (\Yii::$app->request->getIsPost()) {
-            if (!$conf) throw new \Exception(yii::t('task', 'unknown project'));
+
             $group = Group::find()
                 ->where(['user_id' => $this->uid, 'project_id' => $projectId])
                 ->count();
-            if (!$group) throw new \Exception(yii::t('task', 'you are not the member of project'));
+            if (!$group) {
+                throw new \Exception(yii::t('task', 'you are not the member of project'));
+            }
 
             if ($task->load(\Yii::$app->request->post())) {
                 // 是否需要审核
@@ -89,24 +96,14 @@ class TaskController extends Controller {
                 }
             }
         }
-        if ($projectId) {
-            $tpl = $conf->repo_type == Project::REPO_GIT ? 'submit-git' : 'submit-svn';
-            return $this->render($tpl, [
-                'task' => $task,
-                'conf' => $conf,
-                'nonTrunk' => $nonTrunk,
-            ]);
-        }
-        // 成员所属项目
-        $projects = Project::find()
-            ->leftJoin(Group::tableName(), '`group`.project_id=project.id')
-            ->where(['project.status' => Project::STATUS_VALID, '`group`.user_id' => $this->uid])
-            ->asArray()->all();
-        return $this->render('select-project', [
-            'projects' => $projects,
+
+        $tpl = $conf->repo_type == Project::REPO_GIT ? 'submit-git' : 'submit-svn';
+        return $this->render($tpl, [
+            'task' => $task,
+            'conf' => $conf,
         ]);
     }
-    
+
     /**
      * 任务删除
      *

@@ -15,7 +15,7 @@ use app\models\Task;
         <?= $form->field($task, 'title')->label(yii::t('task', 'submit title'), ['class' => 'control-label bolder blue']) ?>
 
         <!-- 分支选取 -->
-        <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
+        <?php if ($conf->repo_mode == Project::REPO_MODE_BRANCH) { ?>
           <div class="form-group">
               <label><?= yii::t('task', 'select branches') ?>
                   <a class="show-tip icon-refresh green" href="javascript:;"></a>

@@ -303,7 +303,7 @@ class WalleController extends Controller {
     public function actionGetCommitHistory($projectId, $branch = 'master') {
         $conf = Project::getConf($projectId);
         $revision = Repo::getRevision($conf);
-        if ($conf->repo_mode == Project::REPO_TAG && $conf->repo_type == Project::REPO_GIT) {
+        if ($conf->repo_mode == Project::REPO_MODE_TAG && $conf->repo_type == Project::REPO_GIT) {
             $list = $revision->getTagList();
         } else {
             $list = $revision->getCommitList($branch);

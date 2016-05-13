@@ -21,7 +21,7 @@ use app\models\Task;
       <div class="box-body">
         <?= $form->field($task, 'title')->label(yii::t('task', 'submit title'), ['class' => 'control-label bolder blue']) ?>
           <!-- 无trunk时，不需要查看所有分支-->
-          <?php if ($nonTrunk) { ?>
+          <?php if ($conf->repo_mode == Project::REPO_MODE_NONTRUNK) { ?>
               <input type="hidden" id="branch" class="form-control" name="Task[branch]" value="">
           <?php } else { ?>
               <!-- 分支选取 -->
@@ -33,7 +33,7 @@ use app\models\Task;
                       <i class="get-branch icon-spinner icon-spin orange bigger-125" style="display: none"></i>
                   </label>
                   <select name="Task[branch]" aria-hidden="true" tabindex="-1" id="branch" class="form-control select2 select2-hidden-accessible">
-                      <?php if ($conf->repo_mode == Project::REPO_BRANCH) { ?>
+                      <?php if ($conf->repo_mode == Project::REPO_MODE_BRANCH) { ?>
                           <option value="trunk">trunk</option>
                       <?php } ?>
                   </select>
@@ -114,12 +114,13 @@ use app\models\Task;
     jQuery(function($) {
         $('[data-rel=tooltip]').tooltip({container:'body'});
 
-        var projectId =  <?= (int)$_GET['projectId'] ?>;
+        var projectId = <?= (int)$_GET['projectId'] ?>;
+
         // 用户上次选择的分支作为转为分支
         var branch_name = 'pre_branch_' + projectId;
         var pre_branch = ace.cookie.get(branch_name);
         if (pre_branch) {
-            var option = '<option value="' + pre_branch + '" selected>' + (pre_branch ? pre_branch : 'non-trunk') + '</option>';
+            var option = '<option value="' + pre_branch + '" selected>' + pre_branch + '</option>';
             $('#branch').html(option);
         }
 
@@ -133,18 +134,11 @@ use app\models\Task;
                     showError(data.msg);
                 }
                 var select = '';
-                var nonTrunk = false;
-                var count = 0;
                 $.each(data.data, function (key, value) {
                     // 默认选中 trunk 主干
                     var checked = value.id == 'trunk' ? 'selected' : '';
                     select += '<option value="' + value.id + '"' + checked + '>' + value.message + '</option>';
-                    nonTrunk = ++count == 1 && value.id == '';
                 });
-                if (nonTrunk) {
-                    // 添加cookie记住最近使用的分支名字
-                    ace.cookie.set(branch_name, '', 86400*30)
-                }
                 $('#branch').html(select);
                 $('.get-branch').hide();
                 $('.show-tip').show();
@@ -155,6 +149,7 @@ use app\models\Task;
                 }
             });
         }
+
         // 获取commit log
         function getCommitList() {
             $('.get-history').show();

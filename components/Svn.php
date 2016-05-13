@@ -24,17 +24,17 @@ class Svn extends Command {
     public function updateRepo($branch = 'trunk', $svnDir = null) {
         $svnDir = $svnDir ?: Project::getDeployFromDir();
         $dotSvn = rtrim($svnDir, '/') . '/.svn';
-        // 存在svn目录，直接update
+
         if (file_exists($dotSvn)) {
+            // 存在svn目录，直接update
             $cmd[] = sprintf('cd %s ', $svnDir);
             $cmd[] = $this->_getSvnCmd('svn cleanup');
             $cmd[] = $this->_getSvnCmd('svn revert . -q -R');
             $cmd[] = $this->_getSvnCmd('svn up -q --force');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
-        }
-        // 不存在，则先checkout
-        else {
+        } else {
+            // 不存在，则先checkout
             $cmd[] = sprintf('mkdir -p %s ', $svnDir);
             $cmd[] = sprintf('cd %s ', $svnDir);
             $cmd[] = $this->_getSvnCmd(sprintf('svn checkout -q %s .', escapeshellarg($this->getConfig()->repo_url)));
@@ -73,7 +73,7 @@ class Svn extends Command {
         $list = [];
         $branchDir = 'tags';
         // 分支模式
-        if ($this->getConfig()->repo_mode == Project::REPO_BRANCH) {
+        if ($this->getConfig()->repo_mode == Project::REPO_MODE_BRANCH) {
             $branchDir = 'branches';
             $trunkDir  = sprintf("%s/trunk", rtrim(Project::getDeployFromDir(), '/'));
 
@@ -124,7 +124,7 @@ class Svn extends Command {
         // 先更新
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
-        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()->repo_mode == Project::REPO_TAG ?: false));
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()));
         $cmd[] = $this->_getSvnCmd('svn log --xml -l ' . $count);
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -181,7 +181,7 @@ class Svn extends Command {
         // 先更新
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
-        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()->repo_mode == Project::REPO_TAG ?: false));
+        $cmd[] = sprintf('cd %s ', static::getBranchDir($branch, $this->getConfig()));
         $cmd[] = $this->_getSvnCmd(sprintf('svn diff -r %d:%d --summarize', $star, $end));
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -235,19 +235,28 @@ class Svn extends Command {
     }
 
     /**
+     * 获取svn分支目录
      * @param $branch
-     * @param bool $tag
+     * @param Project $project
      * @return string
      */
-    public static function getBranchDir($branch, $tag = false) {
+    public static function getBranchDir($branch, Project $project) {
+
         $svnDir = Project::getDeployFromDir();
-        // 兼容无trunk、无branches、无tags下为空
-        $branchDir = ($branch == '' || $branch == 'trunk') && !$tag
-            ? $branch
-            : ($tag ? 'tags/'.$branch : 'branches/'.$branch);
-        return sprintf('%s/%s', $svnDir, $branchDir);
+        if ($project->repo_mode == Project::REPO_MODE_NONTRUNK) {
+            return $svnDir;
+        } elseif ($branch == 'trunk') {
+            return sprintf('%s/trunk', $svnDir);
+        } elseif ($project->repo_mode == Project::REPO_MODE_BRANCH) {
+            return sprintf('%s/branches/%s', $svnDir, $branch);
+        } elseif ($project->repo_mode == Project::REPO_MODE_TAG) {
+            return sprintf('%s/tags/%s', $svnDir, $branch);
+        } else {
+            throw new \InvalidArgumentException('error');
+        }
+
     }
-    
+
     /**
      * @param $cmd
      * @return string

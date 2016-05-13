@@ -268,15 +268,22 @@ use yii\widgets\ActiveForm;
             </label>
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('conf', 'branch tip') ?>" data-placement="right">
                 <label>
-                    <input name="Project[repo_mode]" value="<?= Project::REPO_BRANCH ?>" <?= $conf->repo_mode == Project::REPO_BRANCH ? 'checked="checked"' : '' ?> type="radio" class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_MODE_BRANCH ?>" <?= $conf->repo_mode == Project::REPO_MODE_BRANCH ? 'checked="checked"' : '' ?> type="radio" class="ace">
                     <span class="lbl"> branch </span>
                 </label>
             </div>
 
             <div class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('conf', 'tag tip') ?>" data-placement="right">
                 <label>
-                    <input name="Project[repo_mode]" value="<?= Project::REPO_TAG ?>" <?= $conf->repo_mode == Project::REPO_TAG ? 'checked="checked"' : '' ?> type="radio" class="ace">
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_MODE_TAG ?>" <?= $conf->repo_mode == Project::REPO_MODE_TAG ? 'checked="checked"' : '' ?> type="radio" class="ace">
                     <span class="lbl"> tag </span>
+                </label>
+            </div>
+
+            <div id="div-repo_mode_nontrunk" class="radio" style="display: <?php if ($conf->repo_type == Project::REPO_SVN) { echo 'inline';} else {echo 'none';} ?>;" data-rel="tooltip" data-title="<?= yii::t('conf', 'nontrunk tip') ?>" data-placement="right">
+                <label>
+                    <input name="Project[repo_mode]" value="<?= Project::REPO_MODE_NONTRUNK ?>" <?= $conf->repo_mode == Project::REPO_MODE_NONTRUNK ? 'checked="checked"' : '' ?> type="radio" class="ace">
+                    <span class="lbl"> 无trunk/无branches </span>
                 </label>
             </div>
         </div>
@@ -324,11 +331,13 @@ use yii\widgets\ActiveForm;
         $('[data-rel=popover]').popover({container:'body'});
         $('.show-git').click(function() {
             $('.username-password').hide();
-            $('#project-repo_type').val('git')
-        })
+            $('#project-repo_type').val('git');
+            $('#div-repo_mode_nontrunk').hide();
+        });
         $('.show-svn').click(function() {
             $('.username-password').show();
-            $('#project-repo_type').val('svn')
-        })
+            $('#project-repo_type').val('svn');
+            $('#div-repo_mode_nontrunk').css({'display': 'inline'});
+        });
     });
 </script>
