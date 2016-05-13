@@ -25,12 +25,11 @@ class Folder extends Ansible {
         $version = $task->link_id;
         $branch = $task->branch;
 
-        // svn
         if ($this->config->repo_type == Project::REPO_SVN) {
+            // svn cp 过来指定分支的目录, 然后 svn up 到指定版本
             $cmd[] = sprintf('cp -rf %s %s ', Project::getSvnDeployBranchFromDir($branch), Project::getDeployWorkspace($version));
-        }
-        // git 直接把项目代码拷贝过来，然后更新，取代之前原项目检出，提速
-        else {
+        } else {
+            // git cp 仓库, 然后 checkout 切换分支, up 到指定版本
             $cmd[] = sprintf('cp -rf %s %s ', Project::getDeployFromDir(), Project::getDeployWorkspace($version));
         }
         $command = join(' && ', $cmd);
@@ -39,9 +38,7 @@ class Folder extends Ansible {
 
     /**
      * 目标机器的版本库初始化
-     * 这里会有点特殊化：
-     * 1.（git只需要生成版本目录即可）new：好吧，现在跟2一样了，毕竟本地的copy要比rsync要快，到时只需要rsync做增量更新即可
-     * 2.svn还需要把线上版本复制到1生成的版本目录中，做增量发布
+     * git 和 svn 没有任何区别, 只初始空目录
      *
      * @author wushuiyong
      * @param $log
@@ -62,7 +59,7 @@ class Folder extends Ansible {
     }
 
     /**
-     * tar scp 文件到服务器
+     * 将多个文件/目录通过tar + scp传输到指定的多个目标机
      *
      * @param Project $project
      * @param Task $task
@@ -82,6 +79,28 @@ class Folder extends Ansible {
 
         // 3. 目标机 tar 解压
         $this->_unpackageFiles($project, $task);
+
+        return true;
+    }
+
+    /**
+     * 将多个文件/目录通过tar + ansible传输到指定的多个目标机
+     *
+     * @param Project $project
+     * @param Task $task
+     * @return bool
+     * @throws \Exception
+     */
+    public function ansibleCopyFiles(Project $project, Task $task) {
+
+        // 1. 宿主机 tar 打包
+        $this->_packageFiles($project, $task);
+
+        // 2. 传输 tar.gz 文件
+        $this->_copyPackageToServerByAnsible($project, $task);
+
+        // 3. 目标机 tar 解压
+        $this->_unpackageFilesByAnsible($project, $task);
 
         return true;
     }
@@ -220,28 +239,6 @@ class Folder extends Ansible {
         if (!$ret) {
             throw new \Exception(yii::t('walle', 'rsync error'));
         }
-
-        return true;
-    }
-
-    /**
-     * 将多个文件/目录通过ansible传输到指定的多个目标机
-     *
-     * @param Project $project
-     * @param Task $task
-     * @return bool
-     * @throws \Exception
-     */
-    public function ansibleCopyFiles(Project $project, Task $task) {
-
-        // 1. 宿主机 tar 打包
-        $this->_packageFiles($project, $task);
-
-        // 2. 传输 tar.gz 文件
-        $this->_copyPackageToServerByAnsible($project, $task);
-
-        // 3. 目标机 tar 解压
-        $this->_unpackageFilesByAnsible($project, $task);
 
         return true;
     }

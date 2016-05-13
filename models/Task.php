@@ -175,7 +175,7 @@ class Task extends \yii\db\ActiveRecord
     public function getCommandFiles($getFileAndVersionList = false) {
 
         if ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_FULL) {
-            return '`ls -A1 --color=never`';
+            return '.';
         } elseif ($this->file_transmission_mode == static::FILE_TRANSMISSION_MODE_PART && $this->file_list) {
 
             $fileList = GlobalHelper::str2arr($this->file_list);

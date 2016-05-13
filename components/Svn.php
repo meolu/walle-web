@@ -27,7 +27,9 @@ class Svn extends Command {
         // 存在svn目录，直接update
         if (file_exists($dotSvn)) {
             $cmd[] = sprintf('cd %s ', $svnDir);
-            $cmd[] = $this->_getSvnCmd('svn up -q');
+            $cmd[] = $this->_getSvnCmd('svn cleanup');
+            $cmd[] = $this->_getSvnCmd('svn revert . -q -R');
+            $cmd[] = $this->_getSvnCmd('svn up -q --force');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -52,7 +54,7 @@ class Svn extends Command {
         // 先更新
         $versionSvnDir = rtrim(Project::getDeployWorkspace($task->link_id), '/');
         $cmd[] = sprintf('cd %s ', $versionSvnDir);
-        $cmd[] = $this->_getSvnCmd(sprintf('svn up -q -r %d', $task->commit_id));
+        $cmd[] = $this->_getSvnCmd(sprintf('svn up -q --force -r %d', $task->commit_id));
 
         $command = join(' && ', $cmd);
 
