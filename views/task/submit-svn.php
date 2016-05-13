@@ -121,12 +121,6 @@ use app\models\Task;
         if (pre_branch) {
             var option = '<option value="' + pre_branch + '" selected>' + (pre_branch ? pre_branch : 'non-trunk') + '</option>';
             $('#branch').html(option);
-            getCommitList();
-        }
-
-        // 无trunk时，直接获取commit log
-        if (!$('#branch').val()) {
-            getCommitList();
         }
 
         function getBranchList() {
