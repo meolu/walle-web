@@ -126,6 +126,13 @@ class ConfController extends Controller
 
         if (\Yii::$app->request->getIsPost() && $project->load(Yii::$app->request->post())) {
             $project->user_id = $this->uid;
+
+            // TODO 似乎Yii应该可以在Model配置 这些字段的属性 rtrim
+            $project->repo_url = rtrim($project->repo_url, '/');
+            $project->deploy_from = rtrim($project->deploy_from, '/');
+            $project->release_to = rtrim($project->release_to, '/');
+            $project->release_library = rtrim($project->release_library, '/');
+
             if ($project->save()) {
                 // 保存ansible需要的hosts文件
                 $this->_saveAnsibleHosts($project);
