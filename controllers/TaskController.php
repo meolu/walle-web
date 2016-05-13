@@ -33,7 +33,7 @@ class TaskController extends Controller {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
         }
         $tasks = $list->orderBy('id desc');
-        $list = $tasks->offset(($page - 1) * $size)->limit(10)
+        $list = $tasks->offset(($page - 1) * $size)->limit($size)
             ->asArray()->all();
 
         $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
