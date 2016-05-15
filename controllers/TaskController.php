@@ -36,7 +36,7 @@ class TaskController extends Controller {
         $list = $tasks->offset(($page - 1) * $size)->limit($size)
             ->asArray()->all();
 
-        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
+        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => $size]);
         return $this->render('list', [
             'list'  => $list,
             'pages' => $pages,
@@ -55,9 +55,6 @@ class TaskController extends Controller {
         if ($projectId) {
             // svn下无trunk
             $nonTrunk = false;
-            $conf = Project::find()
-                ->where(['id' => $projectId, 'status' => Project::STATUS_VALID])
-                ->one();
             $conf = Project::getConf($projectId);
             // 第一次可能会因为更新而耗时，但一般不会，第一次初始化会是在检测里
             if ($conf->repo_type == Project::REPO_SVN && !file_exists(Project::getDeployFromDir())) {
