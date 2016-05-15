@@ -7,9 +7,9 @@ RUN docker-php-ext-install bcmath intl mbstring mcrypt mysqli opcache pdo_mysql
 RUN a2enmod rewrite
 
 COPY ./ /opt/walle-web
-COPY php.ini /usr/local/etc/php/conf.d/walle-web.ini
-COPY apache2.conf /etc/apache2/apache2.conf
-COPY entrypoint.sh /entrypoint.sh
+COPY docker/php.ini /usr/local/etc/php/conf.d/walle-web.ini
+COPY docker/apache2.conf /etc/apache2/apache2.conf
+COPY docker/entrypoint.sh /entrypoint.sh
 
 WORKDIR /opt/walle-web
 RUN curl -sS https://getcomposer.org/installer | php \
