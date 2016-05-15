@@ -14,9 +14,9 @@ return [
     ],
 
     // *******操作日志目录*******
-    'log.dir' => '/tmp/walle/',
+    'log.dir' => isset($_ENV['WALLE_LOG_PATH']) ? $_ENV['WALLE_LOG_PATH'] : '/tmp/walle/',
     // *******Ansible Hosts 主机列表目录*******
-    'ansible_hosts.dir' => realpath(__DIR__ . '/../runtime') . '/ansible_hosts/',
+    'ansible_hosts.dir' => isset($_ENV['WALLE_ANSIBLE_HOSTS_DIR']) ? $_ENV['WALLE_ANSIBLE_HOSTS_DIR'] : realpath(__DIR__ . '/../runtime') . '/ansible_hosts/',
     // *******指定公司邮箱后缀*******
     'mail-suffix' => [
         '*', # 支持多个
