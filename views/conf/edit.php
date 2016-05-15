@@ -283,7 +283,7 @@ use yii\widgets\ActiveForm;
             <div id="div-repo_mode_nontrunk" class="radio" style="display: <?php if ($conf->repo_type == Project::REPO_SVN) { echo 'inline';} else {echo 'none';} ?>;" data-rel="tooltip" data-title="<?= yii::t('conf', 'nontrunk tip') ?>" data-placement="right">
                 <label>
                     <input name="Project[repo_mode]" value="<?= Project::REPO_MODE_NONTRUNK ?>" <?= $conf->repo_mode == Project::REPO_MODE_NONTRUNK ? 'checked="checked"' : '' ?> type="radio" class="ace">
-                    <span class="lbl"> 无trunk/无branches </span>
+                    <span class="lbl"><?= yii::t('conf', 'nontrunk') ?></span>
                 </label>
             </div>
         </div>

@@ -48,6 +48,8 @@ return [
     'post_release_delay tip' => 'In order to do advanced tasks on each target server, and it will be paused x seconds on each target server. default set to 0.',
     'branch tip' => 'Recommended options of test，maybe you would chose branch+commit',
     'tag tip' => 'Recommended options of production',
+    'nontrunk' => 'non-trunk/non-branches',
+    'nontrunk tip' => 'no trunk, no branches, no tags directories in svn repository',
     'audit tip' => 'development bill should be audited before deploying',
     'ansible tip' => 'use ansible to accelerate the speed of deploying, you need to have installed ansible on "Hosted Server"',
     'ansible hosts save error' => 'Unable to save ansible hosts file: "{path}"',

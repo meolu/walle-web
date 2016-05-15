@@ -49,19 +49,19 @@ use app\models\Task;
           <!-- 全量/增量 -->
           <div class="form-group">
               <label class="text-right bolder blue">
-                  全量/增量:
+                  <?= yii::t('task', 'file transmission mode'); ?>
               </label>
-              <div id="transmission-full-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="全量上线所有文件, 删除不在代码仓库中的文件" data-placement="right">
+              <div id="transmission-full-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'file transmission mode full tip') ?>" data-placement="right">
                   <label>
                       <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" checked="checked" type="radio" class="ace">
-                      <span class="lbl"> 全量上线 </span>
+                      <span class="lbl"><?= yii::t('task', 'file transmission mode full') ?></span>
                   </label>
               </div>
 
-              <div id="transmission-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="指定文件列表, 只发布指定的文件和目录" data-placement="right">
+              <div id="transmission-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'file transmission mode part tip') ?>" data-placement="right">
                   <label>
                       <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" type="radio" class="ace">
-                      <span class="lbl"> 指定文件 </span>
+                      <span class="lbl"><?= yii::t('task', 'file transmission mode part') ?></span>
                   </label>
               </div>
           </div>

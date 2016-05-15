@@ -50,6 +50,8 @@ return [
         设置为大于 0 的值会出现代码发布阶段各个服务器业务代码逻辑不一致的情况，请谨慎配置',
     'branch tip' => '测试环境推荐选项，可以选择branch+commit',
     'tag tip' => '生产环境推荐选项',
+    'nontrunk' => '无trunk/无branches',
+    'nontrunk tip' => 'svn仓库下没有trunk、branches、tags目录时选择',
     'audit tip' => '开启时，用户提交上线任务需要审核方可上线',
     'ansible tip' => '开启时，通过Ansible并发传输文件，加快多机器时的代码发布速度。需安装 ansible，详见文档',
     'open tip' => '关闭时，用户不能对此项目发起上线',
