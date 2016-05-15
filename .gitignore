@@ -1,3 +1,4 @@
 /vendor
 /config/local.php
 tests/_output/*
+.idea/

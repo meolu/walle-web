@@ -7,9 +7,7 @@ use yii\data\Pagination;
 use app\components\Controller;
 use app\models\Task;
 use app\models\Project;
-use app\models\User;
 use app\models\Group;
-use app\components\Repo;
 
 class TaskController extends Controller {
 
@@ -17,7 +15,7 @@ class TaskController extends Controller {
 
     /**
      * 我的上线列表
-     * 
+     *
      * @param int $page
      * @param int $size
      * @return string
@@ -40,10 +38,10 @@ class TaskController extends Controller {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
         }
         $tasks = $list->orderBy('id desc');
-        $list = $tasks->offset(($page - 1) * $size)->limit(10)
+        $list = $tasks->offset(($page - 1) * $size)->limit($size)
             ->asArray()->all();
 
-        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => 10]);
+        $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => $size]);
         return $this->render('list', [
             'list'  => $list,
             'pages' => $pages,
@@ -71,6 +69,7 @@ class TaskController extends Controller {
         }
 
         $task = new Task();
+
         $conf = Project::getConf($projectId);
         if (!$conf) {
             throw new \Exception(yii::t('task', 'unknown project'));
