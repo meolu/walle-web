@@ -10,15 +10,12 @@ namespace app\components;
 
 use Yii;
 use yii\base\BootstrapInterface;
-use yii\web\NotFoundHttpException;
-use yii\helpers\Url;
 
 class EventBootstrap implements BootstrapInterface
 {
     public function bootstrap($app) {
         $this->event();
     }
-
 
     public function event() {
         Yii::$app->on(\yii\base\Application::EVENT_BEFORE_ACTION, function ($event) {

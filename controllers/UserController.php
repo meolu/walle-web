@@ -8,10 +8,8 @@ use app\components\Controller;
 use app\components\GlobalHelper;
 use app\models\User;
 use app\models\forms\UserResetPasswordForm;
-use yii\base\InvalidParamException;
 use app\models\forms\AddUserForm;
 use yii\data\Pagination;
-
 
 class UserController extends Controller {
 

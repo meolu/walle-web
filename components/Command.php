@@ -8,7 +8,6 @@
  * *****************************************************************/
 namespace app\components;
 
-
 class Command {
 
     protected static $LOGDIR = '';

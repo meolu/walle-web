@@ -11,7 +11,6 @@ use app\models\User;
 use app\models\Group;
 use app\components\GlobalHelper;
 
-
 class ConfController extends Controller
 {
 

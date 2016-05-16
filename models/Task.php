@@ -5,7 +5,6 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
-use yii\helpers\StringHelper;
 use app\components\GlobalHelper;
 
 /**

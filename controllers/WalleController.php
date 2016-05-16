@@ -19,7 +19,6 @@ use app\models\Project;
 use app\models\Record;
 use app\models\Task;
 use yii;
-use yii\data\Pagination;
 
 class WalleController extends Controller {
 
@@ -49,8 +48,7 @@ class WalleController extends Controller {
     protected $walleFolder;
 
     public $enableCsrfValidation = false;
-
-
+    
     /**
      * 发起上线
      *
