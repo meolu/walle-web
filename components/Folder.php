@@ -10,17 +10,17 @@ namespace app\components;
 
 use Yii;
 use app\models\Project;
-use app\models\Task;
+use app\models\Task as TaskModel;
 
 class Folder extends Ansible {
 
     /**
      * 初始化宿主机部署工作空间
      *
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool|int
      */
-    public function initLocalWorkspace(Task $task) {
+    public function initLocalWorkspace(TaskModel $task) {
 
         $version = $task->link_id;
         $branch = $task->branch;
@@ -62,11 +62,11 @@ class Folder extends Ansible {
      * 将多个文件/目录通过tar + scp传输到指定的多个目标机
      *
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    public function scpCopyFiles(Project $project, Task $task) {
+    public function scpCopyFiles(Project $project, TaskModel $task) {
 
         // 1. 宿主机 tar 打包
         $this->_packageFiles($project, $task);
@@ -87,11 +87,11 @@ class Folder extends Ansible {
      * 将多个文件/目录通过tar + ansible传输到指定的多个目标机
      *
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    public function ansibleCopyFiles(Project $project, Task $task) {
+    public function ansibleCopyFiles(Project $project, TaskModel $task) {
 
         // 1. 宿主机 tar 打包
         $this->_packageFiles($project, $task);
@@ -107,11 +107,11 @@ class Folder extends Ansible {
 
     /**
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    protected function _packageFiles(Project $project, Task $task) {
+    protected function _packageFiles(Project $project, TaskModel $task) {
 
         $version = $task->link_id;
         $files = $task->getCommandFiles();
@@ -134,11 +134,11 @@ class Folder extends Ansible {
     /**
      * @param $remoteHost
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    protected function _copyPackageToServer($remoteHost, Project $project, Task $task) {
+    protected function _copyPackageToServer($remoteHost, Project $project, TaskModel $task) {
 
         $version = $task->link_id;
         $packagePath = Project::getDeployPackagePath($version);
@@ -163,11 +163,11 @@ class Folder extends Ansible {
 
     /**
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    protected function _copyPackageToServerByAnsible(Project $project, Task $task) {
+    protected function _copyPackageToServerByAnsible(Project $project, TaskModel $task) {
 
         $version = $task->link_id;
         $packagePath = Project::getDeployPackagePath($version);
@@ -183,11 +183,11 @@ class Folder extends Ansible {
 
     /**
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    protected function _unpackageFiles(Project $project, Task $task) {
+    protected function _unpackageFiles(Project $project, TaskModel $task) {
 
         $version = $task->link_id;
         $releasePackage = Project::getReleaseVersionPackage($version);
@@ -197,7 +197,7 @@ class Folder extends Ansible {
 
         $cmd = [];
 
-        if ($task->file_transmission_mode == Task::FILE_TRANSMISSION_MODE_PART) {
+        if ($task->file_transmission_mode == TaskModel::FILE_TRANSMISSION_MODE_PART) {
             // 增量传输时, 在解压数据包之前, 需要把目标机当前版本复制一份到release目录
             $cmd[] = sprintf('cp -arf %s/. %s', $webrootPath, $releasePath);
         }
@@ -220,11 +220,11 @@ class Folder extends Ansible {
 
     /**
      * @param Project $project
-     * @param Task $task
+     * @param TaskModel $task
      * @return bool
      * @throws \Exception
      */
-    protected function _unpackageFilesByAnsible(Project $project, Task $task) {
+    protected function _unpackageFilesByAnsible(Project $project, TaskModel $task) {
 
         $version = $task->link_id;
         $releasePackage = Project::getReleaseVersionPackage($version);
@@ -234,7 +234,7 @@ class Folder extends Ansible {
 
         $cmd = [];
 
-        if ($task->file_transmission_mode == Task::FILE_TRANSMISSION_MODE_PART) {
+        if ($task->file_transmission_mode == TaskModel::FILE_TRANSMISSION_MODE_PART) {
             // 增量传输时, 在解压数据包之前, 需要把目标机当前版本复制一份到release目录
             $cmd[] = sprintf('cp -arf %s/. %s', $webrootPath, $releasePath);
         }

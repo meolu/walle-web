@@ -17,7 +17,7 @@ use app\components\Repo;
 use app\components\Task as WalleTask;
 use app\models\Project;
 use app\models\Record;
-use app\models\Task;
+use app\models\Task as TaskModel;
 use yii;
 
 class WalleController extends Controller {
@@ -48,7 +48,7 @@ class WalleController extends Controller {
     protected $walleFolder;
 
     public $enableCsrfValidation = false;
-    
+
     /**
      * 发起上线
      *
@@ -59,7 +59,7 @@ class WalleController extends Controller {
         if (!$taskId) {
             $this->renderJson([], -1, yii::t('walle', 'deployment id is empty'));
         }
-        $this->task = Task::findOne($taskId);
+        $this->task = TaskModel::findOne($taskId);
         if (!$this->task) {
             throw new \Exception(yii::t('walle', 'deployment id not exists'));
         }
@@ -67,7 +67,7 @@ class WalleController extends Controller {
             throw new \Exception(yii::t('w', 'you are not master of project'));
         }
         // 任务失败或者审核通过时可发起上线
-        if (!in_array($this->task->status, [Task::STATUS_PASS, Task::STATUS_FAILED])) {
+        if (!in_array($this->task->status, [TaskModel::STATUS_PASS, TaskModel::STATUS_FAILED])) {
             throw new \Exception(yii::t('walle', 'deployment only done for once'));
         }
         // 清除历史记录
@@ -78,7 +78,7 @@ class WalleController extends Controller {
         $this->walleTask   = new WalleTask($this->conf);
         $this->walleFolder = new Folder($this->conf);
         try {
-            if ($this->task->action == Task::ACTION_ONLINE) {
+            if ($this->task->action == TaskModel::ACTION_ONLINE) {
                 $this->_makeVersion();
                 $this->_initWorkspace();
                 $this->_preDeploy();
@@ -96,14 +96,14 @@ class WalleController extends Controller {
 
             // 记录此次上线的版本（软链号）和上线之前的版本
             ///对于回滚的任务不记录线上版本
-            if ($this->task->action == Task::ACTION_ONLINE) {
+            if ($this->task->action == TaskModel::ACTION_ONLINE) {
                 $this->task->ex_link_id = $this->conf->version;
             }
             // 第一次上线的任务不能回滚、回滚的任务不能再回滚
-            if ($this->task->action == Task::ACTION_ROLLBACK || $this->task->id == 1) {
-                $this->task->enable_rollback = Task::ROLLBACK_FALSE;
+            if ($this->task->action == TaskModel::ACTION_ROLLBACK || $this->task->id == 1) {
+                $this->task->enable_rollback = TaskModel::ROLLBACK_FALSE;
             }
-            $this->task->status = Task::STATUS_DONE;
+            $this->task->status = TaskModel::STATUS_DONE;
             $this->task->save();
 
             // 可回滚的版本设置
@@ -113,7 +113,7 @@ class WalleController extends Controller {
             $this->conf->version = $this->task->link_id;
             $this->conf->save();
         } catch (\Exception $e) {
-            $this->task->status = Task::STATUS_FAILED;
+            $this->task->status = TaskModel::STATUS_FAILED;
             $this->task->save();
             // 清理本地部署空间
             $this->_cleanUpLocal($this->task->link_id);
@@ -330,7 +330,7 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     public function actionDeploy($taskId) {
-        $this->task = Task::find()
+        $this->task = TaskModel::find()
             ->where(['id' => $taskId])
             ->with(['project'])
             ->one();
@@ -516,8 +516,8 @@ class WalleController extends Controller {
      */
     private function _enableRollBack() {
         $where = ' status = :status AND project_id = :project_id ';
-        $param = [':status' => Task::STATUS_DONE, ':project_id' => $this->task->project_id];
-        $offset = Task::find()
+        $param = [':status' => TaskModel::STATUS_DONE, ':project_id' => $this->task->project_id];
+        $offset = TaskModel::find()
             ->select(['id'])
             ->where($where, $param)
             ->orderBy(['id' => SORT_DESC])
@@ -527,7 +527,7 @@ class WalleController extends Controller {
 
         $where .= ' AND id <= :offset ';
         $param[':offset'] = $offset;
-        return Task::updateAll(['enable_rollback' => Task::ROLLBACK_FALSE], $where, $param);
+        return TaskModel::updateAll(['enable_rollback' => TaskModel::ROLLBACK_FALSE], $where, $param);
     }
 
     /**
