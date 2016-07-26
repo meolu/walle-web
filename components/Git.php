@@ -70,6 +70,7 @@ class Git extends Command {
         // 应该先更新，不然在remote git删除当前选中的分支后，获取分支列表会失败
         $this->updateRepo('master', $destination);
         $cmd[] = sprintf('cd %s ', $destination);
+        $cmd[] = '/usr/bin/env git fetch -p';
         $cmd[] = '/usr/bin/env git pull -a';
         $cmd[] = '/usr/bin/env git branch -a';
         $command = join(' && ', $cmd);
