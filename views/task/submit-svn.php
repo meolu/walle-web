@@ -64,6 +64,7 @@ use app\models\Task;
                       <span class="lbl"><?= yii::t('task', 'file transmission mode part') ?></span>
                   </label>
               </div>
+              
           </div>
           <!-- 全量/增量 end -->
 
@@ -167,7 +168,24 @@ use app\models\Task;
                 $('.get-history').hide()
             });
         }
-
+        // 获取当前版本提交的文件列表，默认填到按文件发布的文本框
+		function getCommitFiles() {
+			endid = $('#task-commit_id').val();
+			startid = endid - 1;
+			$.get("<?= Url::to('@web/walle/get-commit-file?projectId=') ?>" 
+					+ projectId +"&branch=" + $('#branch').val() +"&start="+startid+"&end="+endid, function (data) {
+                // 获取commit file失败
+                if (data.code) {
+                    showError(data.msg);
+                }
+				//get suc
+                var text = '';
+                $.each(data.data, function (key, value) {
+                	text += value + "\r\n";
+                });
+                $('#task-file_list').val(text);
+            });
+		}
         $('#branch').change(function() {
             // 添加cookie记住最近使用的分支名字
             ace.cookie.set(branch_name, $(this).val(), 86400*30)
@@ -216,6 +234,11 @@ use app\models\Task;
         }).on('click', '#transmission-part-ctl', function() {
             $('#task-file_list').show();
             $('label[for="task-file_list"]').show();
+            getCommitFiles();
+        });
+        $('#task-commit_id').change(function(){
+            // 选择版本的时候更新输入框
+            getCommitFiles();
         });
     })
 
