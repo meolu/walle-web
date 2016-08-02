@@ -223,7 +223,7 @@ class WalleController extends Controller {
                 $code = -1;
                 $log[] = yii::t('walle', 'target server is not writable error', [
                     'remote_user' => $project->release_user,
-                    'path'        => $project->release_to,
+                    'path'        => $project->release_library,
                 ]);
             }
 
