@@ -19,11 +19,11 @@ install:
 before_script:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
   - ./yii migrate/up  --interactive=0
-  - cd tests && ../vendor/bin/codecept build
+  - cd tests && ./vendor/bin/codecept build
 
 script:
-  - find ../ -path '../vendor' -prune -o -type f -iname "*.php" -print0 | xargs -0 -n1 php -l
-  - ../vendor/bin/codecept run
+  - find ./ -path './vendor' -prune -o -type f -iname "*.php" -print0 | xargs -0 -n1 php -l
+  - ./vendor/bin/codecept run
 matrix:
   fast_finish: true
 

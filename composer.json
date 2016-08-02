@@ -7,7 +7,7 @@
     "license": "BSD-3-Clause",
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "yiisoft/yii2": ">=2.0.4",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*"
