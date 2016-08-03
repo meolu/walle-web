@@ -112,7 +112,7 @@ class Project extends \yii\db\ActiveRecord
             [['name', 'repo_password'], 'string', 'max' => 100],
             [['version'], 'string', 'max' => 20],
             ['repo_type', 'default', 'value' => self::REPO_GIT],
-            [['repo_url', 'deploy_from'], 'filter', 'filter' => function ($value) {
+            [['repo_url', 'deploy_from', 'release_to', 'release_library'], 'filter', 'filter' => function ($value) {
                 return rtrim($value, '/');
             }],
             [['deploy_from', 'release_to', 'release_library', 'repo_url'], 'string', 'max' => 200],
