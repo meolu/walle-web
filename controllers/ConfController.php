@@ -31,8 +31,12 @@ class ConfController extends Controller
      *
      */
     public function actionIndex() {
+
+        // 显示该用户为管理员的所有项目
         $project = Project::find()
-            ->where(['user_id' => $this->uid]);
+            ->leftJoin(Group::tableName(), '`group`.`project_id`=`project`.`id`')
+            ->where(['`group`.`user_id`' => $this->uid, '`group`.`type`' => Group::TYPE_ADMIN]);
+
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
             $project->andWhere(['like', "name", $kw]);
@@ -191,10 +195,7 @@ class ConfController extends Controller
         if (!$group) {
             throw new \Exception(yii::t('conf', 'relation not exists'));
         }
-        $project = Project::findOne($group->project_id);
-        if ($project->user_id != $this->uid) {
-            throw new \Exception(yii::t('conf', 'you are not master of project'));
-        }
+        $project = $this->findModel($group->project_id);
 
         if (!$group->delete()) throw new \Exception(yii::t('w', 'delete failed'));
         $this->renderJson([]);
@@ -211,10 +212,7 @@ class ConfController extends Controller
         if (!$group) {
             throw new \Exception(yii::t('conf', 'relation not exists'));
         }
-        $project = Project::findOne($group->project_id);
-        if ($project->user_id != $this->uid) {
-            throw new \Exception(yii::t('w', 'you are not master of project'));
-        }
+        $project = $this->findModel($group->project_id);
         if (!in_array($type, [Group::TYPE_ADMIN, Group::TYPE_USER])) {
             throw new \Exception(yii::t('conf', 'unknown relation type'));
         }
@@ -232,8 +230,9 @@ class ConfController extends Controller
      */
     protected function findModel($id) {
         if (($model = Project::getConf($id)) !== null) {
-            if ($model->user_id != $this->uid) {
-                throw new \Exception(yii::t('w', 'you are not master of project'));
+            //判断是否为管理员
+            if(!Group::isAuditAdmin($this->uid, $model->id)){
+                throw new \Exception(yii::t('w', 'you are not admin of project'));
             }
             return $model;
         } else {

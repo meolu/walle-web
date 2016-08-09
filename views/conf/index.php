@@ -7,7 +7,7 @@ use yii\helpers\Url;
 ?>
 <div class="box">
     <div class="box-header">
-        <form action="/conf/" method="POST">
+        <form action="<?= Url::to('@web/conf') ?>" method="POST">
             <input type="hidden" value="<?= \Yii::$app->request->getCsrfToken(); ?>" name="_csrf">
             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                 <div class="input-group">
