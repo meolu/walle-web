@@ -27,7 +27,7 @@ class Git extends Command {
         if (file_exists($dotGit)) {
             $cmd[] = sprintf('cd %s ', $gitDir);
             $cmd[] = sprintf('/usr/bin/env git checkout -q %s', $branch);
-            $cmd[] = sprintf('/usr/bin/env git fetch -q --all');
+            $cmd[] = sprintf('/usr/bin/env git fetch -p -q --all');
             $cmd[] = sprintf('/usr/bin/env git reset -q --hard origin/%s', $branch);
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
@@ -161,5 +161,5 @@ class Git extends Command {
         }
         return $history;
     }
-    
+
 }
