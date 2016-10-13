@@ -45,7 +45,7 @@ use yii\helpers\Url;
                     <td><?= \Yii::t('w', 'conf_audit_' . $item['audit']) ?></td>
                     <td><?= \Yii::t('w', 'conf_status_' . $item['status']) ?></td>
                     <td class="<?= \Yii::t('w', 'conf_status_' . $item['status'] . '_color') ?>">
-                        <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                        <div class="action-buttons">
                             <a href="<?= Url::to("@web/conf/preview/?projectId={$item['id']}") ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="icon-zoom-in bigger-130"></i>
                                 <?= yii::t('conf', 'p_preview') ?>

@@ -56,7 +56,7 @@ use yii\helpers\Url;
                 <td class="<?= \Yii::t('w', 'task_status_' . $item['status'] . '_color') ?>">
                     <?= \Yii::t('w', 'task_status_' . $item['status']) ?></td>
                 <td>
-                    <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+                    <div class="action-buttons">
                     <?php if ($audit && !in_array($item['status'],[Task::STATUS_DONE, Task::STATUS_FAILED])) { ?>
                         <label>
                             <input class="ace ace-switch ace-switch-5 task-operation"
