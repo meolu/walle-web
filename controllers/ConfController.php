@@ -32,10 +32,13 @@ class ConfController extends Controller
      */
     public function actionIndex() {
 
+        // 为了方便用户更改表名，避免表名直接定死
+        $groupTable   = Group::tableName();
+        $projectTable = Project::tableName();
         // 显示该用户为管理员的所有项目
         $project = Project::find()
-            ->leftJoin(Group::tableName(), '`group`.`project_id`=`project`.`id`')
-            ->where(['`group`.`user_id`' => $this->uid, '`group`.`type`' => Group::TYPE_ADMIN]);
+            ->leftJoin(Group::tableName(), "`$groupTable`.`project_id`=`$projectTable`.`id`")
+            ->where(["`$groupTable`.`user_id`" => $this->uid, "`$groupTable`.`type`" => Group::TYPE_ADMIN]); 
 
         $kw = \Yii::$app->request->post('kw');
         if ($kw) {
