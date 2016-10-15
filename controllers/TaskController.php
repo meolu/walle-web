@@ -57,11 +57,14 @@ class TaskController extends Controller {
      */
     public function actionSubmit($projectId = null) {
 
+        // 为了方便用户更改表名，避免表名直接定死
+        $projectTable = Project::tableName();
+        $groupTable   = Group::tableName();
         if (!$projectId) {
             // 显示所有项目列表
             $projects = Project::find()
-                ->leftJoin(Group::tableName(), '`group`.`project_id`=`project`.`id`')
-                ->where(['project.status' => Project::STATUS_VALID, '`group`.`user_id`' => $this->uid])
+                ->leftJoin(Group::tableName(), "`$groupTable`.`project_id` = `$projectTable`.`id`")
+                ->where(["`$projectTable`.status" => Project::STATUS_VALID, "`$groupTable`.`user_id`" => $this->uid])
                 ->asArray()->all();
             return $this->render('select-project', [
                 'projects' => $projects,
