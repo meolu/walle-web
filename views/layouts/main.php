@@ -17,6 +17,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <title><?= Html::encode($this->title) ?> - <?= yii::t('w', 'walle') ?></title>
     <link href="<?= Url::to('@web/dist/css/bootstrap.min.css') ?>" rel="stylesheet" />
     <link href="<?= Url::to('@web/dist/css/font-awesome.min.css') ?>" rel="stylesheet" />
@@ -67,13 +68,13 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     </script>
 
     <div class="navbar-container" id="navbar-container">
-        <div class="navbar-header pull-left">
+        <div class="pull-left">
             <a href="javascript:;" class="navbar-brand">
                 <small>Walle</small>
             </a><!-- /.brand -->
         </div><!-- /.navbar-header -->
 
-        <div class="navbar-header pull-right" role="navigation">
+        <div class="pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <?php if (GlobalHelper::isValidAdmin() && ($count = count(User::getInactiveAdminList()))) { ?>
                 <li class="light-blue">

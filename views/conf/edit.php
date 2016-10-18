@@ -12,9 +12,9 @@ use yii\widgets\ActiveForm;
     <div class="box-body">
         <?= $form->field($conf, 'name')
             ->textInput([
-                'class'          => 'col-xs-11',
+                'class'          => 'col-sm-11',
             ])
-            ->label(yii::t('conf', 'name'), ['class' => 'text-right bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'name'), ['class' => 'text-right bolder blue col-sm-1']) ?>
 
         <div class="clearfix"></div>
         <?= $form->field($conf, 'level')->dropDownList([
@@ -22,8 +22,8 @@ use yii\widgets\ActiveForm;
             Project::LEVEL_SIMU => \Yii::t('w', 'conf_level_' . Project::LEVEL_SIMU),
             Project::LEVEL_PROD => \Yii::t('w', 'conf_level_' . Project::LEVEL_PROD),
         ],[
-            'class'          => 'col-xs-11',])
-            ->label(yii::t('conf', 'env'), ['class' => 'text-right bolder blue col-xs-1']) ?>
+            'class'          => 'col-sm-11',])
+            ->label(yii::t('conf', 'env'), ['class' => 'text-right bolder blue col-sm-1']) ?>
         <div class="clearfix"></div>
         <?php if (empty($_GET['projectId'])) { ?>
         <div class="widget-box transparent" id="recent-box" style="margin-top:15px">
@@ -48,27 +48,27 @@ use yii\widgets\ActiveForm;
         <!-- 地址 配置-->
         <?= $form->field($conf, 'repo_url')
             ->textInput([
-                'class'          => 'col-xs-11',
+                'class'          => 'col-sm-11',
                 'placeholder'    => 'git@github.com:meolu/walle-web.git',
                 'data-placement' => 'top',
                 'data-rel'       => 'tooltip',
                 'data-title'     => yii::t('conf', 'repo url tip'),
             ])
-            ->label(yii::t('conf', 'url'), ['class' => 'text-right bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'url'), ['class' => 'text-right bolder blue col-sm-1']) ?>
         <!-- 地址 配置 end-->
         <div class="clearfix"></div>
         <?php if (empty($_GET['projectId']) || $conf->repo_type == Project::REPO_SVN) { ?>
         <div class="username-password" style="<?= empty($_GET['projectId']) ? 'display:none' : '' ?>">
         <?= $form->field($conf, 'repo_username')
             ->textInput([
-                'class'          => 'col-xs-3',
+                'class'          => 'col-sm-3',
             ])
-            ->label(yii::t('conf', 'username'), ['class' => 'text-right bolder blue col-xs-1']) ?>
+            ->label(yii::t('conf', 'username'), ['class' => 'text-right bolder blue col-sm-1']) ?>
         <?= $form->field($conf, 'repo_password')
             ->passwordInput([
-                'class'          => 'col-xs-3',
+                'class'          => 'col-sm-3',
             ])
-            ->label(yii::t('conf', 'password'), ['class' => 'text-right bolder blue col-xs-1']); ?>
+            ->label(yii::t('conf', 'password'), ['class' => 'text-right bolder blue col-sm-1']); ?>
         </div>
         <div class="clearfix"></div>
 
