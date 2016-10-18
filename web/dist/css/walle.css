@@ -14,3 +14,6 @@ body {
 .show {
     display: block;
 }
+.green {
+    color: #18791b!important
+}

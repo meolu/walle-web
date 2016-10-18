@@ -61,6 +61,43 @@ use yii\helpers\Url;
         <i class="icon-bullhorn"></i><span><?= yii::t('walle', 'error todo') ?></span>
     </div>
 
+    <div class="timeline-items">
+        <div class="timeline-item clearfix">
+            <div class="widget-box transparent" style="border-left:0;margin-left:0;">
+                <div class="widget-header widget-header-small">
+                    <h5 class="smaller">
+                        <span class="grey">部署日志</span>
+                    </h5>
+
+                    <span class="widget-toolbar no-border">
+                        <i class="icon-time bigger-110"></i>
+                        16:22
+                    </span>
+
+                    <span class="widget-toolbar">
+                        <a href="#" data-action="reload">
+                            <i class="icon-refresh"></i>
+                        </a>
+
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </span>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <?php foreach ($record as $item) { ?>
+                            <span class="gray">[<?= date('Y-m-d H:i:s', $item['created_at']) ?> work@192.168.1.1:/home/work/www/marketing]$ </span>
+                            <span class="<?= $item['status'] ? 'green' : 'red' ?>"><?= $item['command'] ?><br /></span>
+                            <span class="gray"><?= $item['memo'] ?><br /></span>
+                        <?php } ?>
+                        <?php var_dump($record); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">

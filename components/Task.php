@@ -9,8 +9,15 @@
 namespace app\components;
 
 use app\models\Project;
+use app\models\Record;
 
 class Task extends Ansible {
+
+    /**
+     * 当前部署任务状态
+     * @var
+     */
+    public static $PROCESS_STAGE;
 
     /**
      * pre-deploy部署代码前置触发任务
@@ -19,6 +26,8 @@ class Task extends Ansible {
      * @return bool
      */
     public function preDeploy($version) {
+        // 状态更新
+        static::$PROCESS_STAGE = Record::STAGE_PRE_DEPLOY;
         $tasks = GlobalHelper::str2arr($this->getConfig()->pre_deploy);
         if (empty($tasks)) return true;
 
@@ -48,6 +57,8 @@ class Task extends Ansible {
      * @return bool
      */
     public function postDeploy($version) {
+        // 状态更新
+        static::$PROCESS_STAGE = Record::STAGE_POST_DEPLOY;
         $tasks = GlobalHelper::str2arr($this->getConfig()->post_deploy);
         if (empty($tasks)) return true;
 
@@ -74,6 +85,8 @@ class Task extends Ansible {
      * 设置了版本保留数量，超出了设定值，则删除老版本
      */
     public function cleanUpReleasesVersion() {
+        // 状态更新
+        static::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
 
         $ansibleStatus = Project::getAnsibleStatus();
 
@@ -132,7 +145,8 @@ class Task extends Ansible {
      * @return mixed
      */
     public function runRemoteTaskCommandPackage($tasks, $delay = 0) {
-
+        // 状态更新
+        static::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
         $task = join(' && ', $tasks);
 
         if (Project::getAnsibleStatus() && !$delay) {

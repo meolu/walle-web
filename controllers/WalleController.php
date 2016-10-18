@@ -334,6 +334,10 @@ class WalleController extends Controller {
             ->where(['id' => $taskId])
             ->with(['project'])
             ->one();
+
+        $deployRecord = Record::find()
+            ->where(['task_id' => $taskId])
+            ->asArray()->all();
         if (!$this->task) {
             throw new \Exception(yii::t('walle', 'deployment id not exists'));
         }
@@ -342,7 +346,8 @@ class WalleController extends Controller {
         }
 
         return $this->render('deploy', [
-            'task' => $this->task,
+            'task'   => $this->task,
+            'record' => $deployRecord,
         ]);
     }
 
@@ -380,15 +385,14 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _initWorkspace() {
-        $sTime = Command::getMs();
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_PERMISSION;
+
         // 本地宿主机工作区初始化
         $this->walleFolder->initLocalWorkspace($this->task);
 
         // 远程目标目录检查，并且生成版本目录
         $ret = $this->walleFolder->initRemoteVersion($this->task->link_id);
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_PERMSSION, $duration);
 
         if (!$ret) throw new \Exception(yii::t('walle', 'init deployment workspace error'));
         return true;
@@ -401,13 +405,12 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _revisionUpdate() {
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_CHECK_OUT;
         // 更新代码文件
         $revision = Repo::getRevision($this->conf);
-        $sTime = Command::getMs();
-        $ret = $revision->updateToVersion($this->task); // 更新到指定版本
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($revision, $this->task->id, Record::ACTION_CLONE, $duration);
+        // 更新到指定版本
+        $ret = $revision->updateToVersion($this->task);
 
         if (!$ret) throw new \Exception(yii::t('walle', 'update code error'));
         return true;
@@ -421,11 +424,9 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _preDeploy() {
-        $sTime = Command::getMs();
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_PRE_DEPLOY;
         $ret = $this->walleTask->preDeploy($this->task->link_id);
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_PRE_DEPLOY, $duration);
 
         if (!$ret) throw new \Exception(yii::t('walle', 'pre deploy task error'));
         return true;
@@ -440,11 +441,9 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _postDeploy() {
-        $sTime = Command::getMs();
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_POST_DEPLOY;
         $ret = $this->walleTask->postDeploy($this->task->link_id);
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_POST_DEPLOY, $duration);
 
         if (!$ret) throw new \Exception(yii::t('walle', 'post deploy task error'));
         return true;
@@ -457,9 +456,8 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _transmission() {
-
-        $sTime = Command::getMs();
-
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_SYNC;
         if (Project::getAnsibleStatus()) {
             // ansible copy
             $this->walleFolder->ansibleCopyFiles($this->conf, $this->task);
@@ -467,11 +465,6 @@ class WalleController extends Controller {
             // 循环 scp
             $this->walleFolder->scpCopyFiles($this->conf, $this->task);
         }
-
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-
-        Record::saveRecord($this->walleFolder, $this->task->id, Record::ACTION_SYNC, $duration);
 
         return true;
     }
@@ -485,6 +478,8 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     private function _updateRemoteServers($version, $delay = 0) {
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
         $cmd = [];
         // pre-release task
         if (($preRelease = WalleTask::getRemoteTaskCommand($this->conf->pre_release, $version))) {
@@ -499,12 +494,8 @@ class WalleController extends Controller {
             $cmd[] = $postRelease;
         }
 
-        $sTime = Command::getMs();
         // run the task package
         $ret = $this->walleTask->runRemoteTaskCommandPackage($cmd, $delay);
-        // 记录执行时间
-        $duration = Command::getMs() - $sTime;
-        Record::saveRecord($this->walleTask, $this->task->id, Record::ACTION_UPDATE_REMOTE, $duration);
         if (!$ret) throw new \Exception(yii::t('walle', 'update servers error'));
         return true;
     }
@@ -534,6 +525,8 @@ class WalleController extends Controller {
      * 只保留最大版本数，其余删除过老版本
      */
     private function _cleanRemoteReleaseVersion() {
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
         return $this->walleTask->cleanUpReleasesVersion();
     }
 
@@ -544,6 +537,8 @@ class WalleController extends Controller {
      * @throws \Exception
      */
     public function _rollback($version) {
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
         return $this->_updateRemoteServers($version);
     }
 
@@ -551,6 +546,8 @@ class WalleController extends Controller {
      * 收尾工作，清除宿主机的临时部署空间
      */
     private function _cleanUpLocal($version = null) {
+        // 状态更新
+        WalleTask::$PROCESS_STAGE = Record::STAGE_UPDATE_REMOTE;
         // 创建链接指向
         $this->walleFolder->cleanUpLocal($version);
         return true;

@@ -8,9 +8,14 @@
  * *****************************************************************/
 namespace app\components;
 
+use app\models\Record;
+
 class Command {
 
+    protected $taskId;
+
     protected static $LOGDIR = '';
+
     /**
      * Handler to the current Log File.
      * @var mixed
@@ -29,7 +34,23 @@ class Command {
      */
     protected $status = 1;
 
+    /**
+     * 每次执行的命令
+     * @var string
+     */
     protected $command = '';
+
+    /**
+     * 每次执行的开始时间
+     * @var string
+     */
+    protected $startTime = '';
+
+    /**
+     * 每次执行的时长，单位毫秒
+     * @var int
+     */
+    protected $duration = 0;
 
     protected $log = null;
 
@@ -61,8 +82,12 @@ class Command {
 
         $status = 1;
         $log = '';
+        $this->startTime = time();
 
+        $executeStartMs = $this->getMs();
         exec($command . ' 2>&1', $log, $status);
+        $this->duration = $this->getMs() - $executeStartMs;
+
         // 执行过的命令
         $this->command = $command;
         // 执行的状态
@@ -74,6 +99,8 @@ class Command {
         $this->log($log);
         $this->log('---------------------------------');
 
+        // log save to mysql
+        Record::saveRecord($this, $this->taskId, Task::$PROCESS_STAGE);
         return $this->status;
     }
 
@@ -166,6 +193,26 @@ class Command {
      */
     public function getExeCommand() {
         return $this->command;
+    }
+
+    /**
+     * 获取执行执行时间
+     *
+     * @author wushuiyong
+     * @return string
+     */
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * 获取开始执行时间
+     *
+     * @author wushuiyong
+     * @return string
+     */
+    public function getStartTime() {
+        return $this->startTime;
     }
 
     /**
