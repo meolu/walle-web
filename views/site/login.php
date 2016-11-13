@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div><!-- /widget-main -->
 
         <div class="toolbar clearfix">
+            <?php if($isLdapLigin !== true) { ?>
             <div>
                 <a href="<?= Url::to('@web/site/request-password-reset') ?>" class="forgot-password-link">
                     <i class="icon-arrow-left"></i>
@@ -48,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <i class="icon-arrow-right"></i>
                 </a>
             </div>
+            <?php } ?>
         </div>
 
     </div><!-- /widget-body -->

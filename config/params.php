@@ -21,4 +21,20 @@ return [
     'mail-suffix' => [
         '*', # 支持多个
     ],
+    'user_driver'=>'ldap',
+    'ldap'=>[
+        'host'=>'127.0.0.1',
+        'port'=>389,
+        'username'=>'cn=root,dc=example,dc=com',
+        'password'=>'password',
+        'accountBase'=>'dc=example,dc=com',
+        'accountPattern'=>'(&(objectClass=inetOrgPerson)(cn=${username}))',
+        'identity'=>'uid',
+        'attributesMap'=>array(
+            'uid'=>'username',
+            'mail'=>'email',
+            'givenName'=>'realname',
+        ),
+        'ssl'=>false,
+    ],
 ];

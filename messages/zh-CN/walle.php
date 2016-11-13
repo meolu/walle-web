@@ -51,4 +51,12 @@ return [
     'get tags failed' => '获取tag列表失败：',
     'unknown scm' => '未知的版本管理',
 
+    'login type could not support' => '{loginType} 登录方式不支持',
+    'the login type does not provide security' => '{loginType} 登录方式不提供找回密码',
+    'the login type does not provide registration' => '{loginType} 登录方式不提供注册',
+    'the login dirver configs does not defined' => '{loginType} 配置未定义',
+    'the login dirver configs parse error' => '{loginType} 配置解析出错',
+    'illegal service port' => '非法的 {service} 端口：{port}',
+    'account base dn could not defined' => 'Account base DN 未定义',
+    'account pattern could not defined' => '用户搜索模式未定义'
 ];
