@@ -158,7 +158,6 @@ class User extends ActiveRecord implements IdentityInterface
              if (!$this->realname) {
                 $this->realname = $this->username;
             }
-            $this->username = $this->email;
         }
         return parent::beforeSave($insert);
     }
@@ -169,6 +168,16 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentity($id)
     {
         return static::findOne($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findByUsername($username)
+    {
+        return static::findOne(array(
+                'username' => $username
+            ));
     }
 
     /**
