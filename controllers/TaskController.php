@@ -52,8 +52,9 @@ class TaskController extends Controller {
     /**
      * 提交任务
      *
-     * @param $projectId 没有projectId则显示列表
+     * @param integer $projectId 没有projectId则显示列表
      * @return string
+     * @throws
      */
     public function actionSubmit($projectId = null) {
 
@@ -157,6 +158,7 @@ class TaskController extends Controller {
 
         $rollbackTask = new Task();
         $rollbackTask->attributes = $this->task->attributes;
+        $rollbackTask->commit_id = $this->task->getRollbackCommitId();
         $rollbackTask->status = $status;
         $rollbackTask->action = Task::ACTION_ROLLBACK;
         $rollbackTask->link_id = $this->task->ex_link_id;
