@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 use app\components\GlobalHelper;
@@ -183,6 +182,15 @@ class Task extends \yii\db\ActiveRecord
         } else {
             throw new \InvalidArgumentException('file list empty');
         }
+    }
+
+    /**
+     * 取得回滚的当前commit_id
+     * @return bool|string
+     */
+    public function getRollbackCommitId()
+    {
+        return $this->ex_link_id ? static::find()->where(['link_id'=>$this->ex_link_id])->orderBy(['id'=>SORT_ASC])->select('commit_id')->scalar():'';
     }
 
 }
