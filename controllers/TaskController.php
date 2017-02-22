@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use yii;
 use yii\data\Pagination;
+use yii\helpers\Url;
 use app\components\Controller;
 use app\models\Task;
 use app\models\Project;
@@ -167,8 +168,8 @@ class TaskController extends Controller {
         $rollbackTask->title = $this->task->title . ' - ' . yii::t('task', 'rollback');
         if ($rollbackTask->save()) {
             $url = $conf->audit == Project::AUDIT_YES
-                ? '/task/'
-                : '/walle/deploy?taskId=' . $rollbackTask->id;
+                ? Url::to('@web/task/')
+                : Url::to('@web/walle/deploy?taskId=' . $rollbackTask->id);
             $this->renderJson([
                 'url' => $url,
             ]);
