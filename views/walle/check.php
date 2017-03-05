@@ -42,16 +42,17 @@ $this->title = yii::t('walle', 'md5 title');
     $(function() {
         $('.get-md5').click(function() {
 
-            var fileName = $('input[name=file]').val();
+            var fileName = $('input[name=file]').val(),
+                projectId = $("select[name=project]").val();
 
-            if(fileName == '') {
+            if(fileName == '' || projectId == 0) {
 
                 return false;
             }
 
             $('.getting').show();
 
-            $.get("<?= Url::to('@web/walle/file-md5?projectId=') ?>" + $("select[name=project]").val() + "&file=" + fileName, function(o) {
+            $.get("<?= Url::to('@web/walle/file-md5?projectId=') ?>" + projectId + "&file=" + fileName, function(o) {
                 $('.md5-msg').html(o.data).show()
                 $('.getting').hide()
             });
