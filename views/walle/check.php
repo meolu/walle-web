@@ -18,6 +18,7 @@ $this->title = yii::t('walle', 'md5 title');
             <label><?= yii::t('walle', 'project') ?></label>
             <select name="project" aria-hidden="true" tabindex="-1"
                     class="form-control select2 select2-hidden-accessible">
+                <option value="0"><?= yii::t('walle', 'file project') ?></option>
                 <?php foreach ($projects as $project) { ?>
                     <option value="<?= $project['id'] ?>"><?= $project['name'] ?> - <?= \Yii::t('w',
                             'conf_level_' . $project['level']) ?></option>

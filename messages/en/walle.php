@@ -4,6 +4,7 @@ return [
     'md5 title' => 'File Fingerprint',
     'file' => 'File',
     'file placeholder' => "Project's Relative Path：backend/web/index.php",
+    'file project' => 'Project name',
     'project' => 'Project',
     'file md5' => 'View file md5',
     'error todo' => 'Please contact SA or redeployment',

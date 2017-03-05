@@ -30,7 +30,14 @@ class TaskController extends Controller
                     ->with('project')
                     ->where(['user_id' => $this->uid]);
 
+        $projectTable = Project::tableName();
+        $groupTable = Group::tableName();
         $projects = Project::find()
+                           ->leftJoin(Group::tableName(), "`$groupTable`.`project_id` = `$projectTable`.`id`")
+                           ->where([
+                               "`$projectTable`.status" => Project::STATUS_VALID,
+                               "`$groupTable`.`user_id`" => $this->uid
+                           ])
                            ->asArray()
                            ->all();
 

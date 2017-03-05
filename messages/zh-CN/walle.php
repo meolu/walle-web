@@ -4,6 +4,7 @@ return [
     'md5 title' => '线上文件指纹',
     'file' => '文件',
     'file placeholder' => '项目的相对地址：backend/web/index.php',
+    'file project' => '项目名称',
     'project' => '项目',
     'file md5' => '查询文件md5',
     'error todo' => '请联系SA或者重新部署',
