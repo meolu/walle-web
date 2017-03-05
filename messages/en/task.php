@@ -2,6 +2,7 @@
 
 return [
     'list title' => 'Deployment List',
+    'list project' => 'Project name',
     'list placeholder' => 'title、commit id',
     'create task' => 'Create Deployment Bill',
 
