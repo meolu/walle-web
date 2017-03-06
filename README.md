@@ -158,3 +158,7 @@ Discussing
 ----------
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - email: wushuiyong@huamanshu.com
+
+勾搭下
+--------
+<img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/weixin.wushuiyong.jpg" width="244" height="314" alt="吴水永微信" align=left />
