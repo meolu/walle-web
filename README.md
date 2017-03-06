@@ -158,3 +158,7 @@ Discussing
 ----------
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 - email: wushuiyong@huamanshu.com
+
+交个朋友吧
+--------
+![](https://raw.github.com/meolu/docs/master/walle-web/docs/weixin.wushuiyong.jpg)
