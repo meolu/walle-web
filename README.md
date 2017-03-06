@@ -162,3 +162,4 @@ Discussing
 交个朋友吧
 --------
 ![](https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/weixin.wushuiyong.jpg)
+<img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/weixin.wushuiyong.jpg" width="300" height="200" alt="图片名称" align=left />
