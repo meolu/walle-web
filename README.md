@@ -161,4 +161,4 @@ Discussing
 
 交个朋友吧
 --------
-![](https://raw.github.com/meolu/docs/master/walle-web/docs/weixin.wushuiyong.jpg)
+![](https://raw.github.com/meolu/docs/feature-weixin/walle-web/docs/weixin.wushuiyong.jpg)
