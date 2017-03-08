@@ -155,8 +155,13 @@ class User extends ActiveRecord implements IdentityInterface
             $this->generateAuthKey();
             $this->generateEmailConfirmationToken();
             // 名字与邮箱
-             if (!$this->realname) {
+            if (!$this->realname) {
                 $this->realname = $this->username;
+            }
+            // 本地注册需要把 username = email
+            $userDriver = isset(\Yii::$app->params['user_driver']) == true && empty(\Yii::$app->params['user_driver']) == false ? \Yii::$app->params['user_driver'] : 'local';
+            if ($userDriver == 'local') {
+                $this->username = $this->email;
             }
         }
         return parent::beforeSave($insert);
@@ -175,9 +180,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(array(
+        return static::findOne([
                 'username' => $username
-            ));
+            ]);
     }
 
     /**
