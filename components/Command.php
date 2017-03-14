@@ -8,23 +8,28 @@
  * *****************************************************************/
 namespace app\components;
 
-class Command {
+class Command
+{
 
     protected static $LOGDIR = '';
+
     /**
      * Handler to the current Log File.
+     *
      * @var mixed
      */
     protected static $logFile = null;
 
     /**
      * Config
+     *
      * @var \walle\config\Config
      */
     protected $config;
 
     /**
      * 命令运行返回值：0失败，1成功
+     *
      * @var int
      */
     protected $status = 1;
@@ -40,7 +45,8 @@ class Command {
      * @return $this
      * @throws \Exception
      */
-    public function __construct($config) {
+    public function __construct($config)
+    {
         if ($config) {
             $this->config = $config;
         } else {
@@ -54,7 +60,8 @@ class Command {
      * @param $command
      * @return bool|int true 成功，false 失败
      */
-    final public function runLocalCommand($command) {
+    final public function runLocalCommand($command)
+    {
         $command = trim($command);
         $this->log('---------------------------------');
         $this->log('---- Executing: $ ' . $command);
@@ -84,19 +91,16 @@ class Command {
      * @param integer $delay 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
      * @return bool
      */
-    final public function runRemoteCommand($command, $delay = 0) {
+    final public function runRemoteCommand($command, $delay = 0)
+    {
         $this->log = '';
         $needTTY = '-T';
 
         foreach (GlobalHelper::str2arr($this->getConfig()->hosts) as $remoteHost) {
 
             $localCommand = sprintf('ssh %s -p %d -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o CheckHostIP=false %s@%s %s',
-                $needTTY,
-                $this->getHostPort($remoteHost),
-                escapeshellarg($this->getConfig()->release_user),
-                escapeshellarg($this->getHostName($remoteHost)),
-                escapeshellarg($command)
-            );
+                $needTTY, $this->getHostPort($remoteHost), escapeshellarg($this->getConfig()->release_user),
+                escapeshellarg($this->getHostName($remoteHost)), escapeshellarg($command));
 
             if ($delay > 0) {
                 // 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
@@ -113,7 +117,6 @@ class Command {
             if (!$this->status) {
                 return false;
             }
-
         }
 
         return true;
@@ -126,28 +129,38 @@ class Command {
      * @return $this
      * @throws \Exception
      */
-    public function setConfig($config) {
+    public function setConfig($config)
+    {
         if ($config) {
             $this->config = $config;
         } else {
             throw new \Exception(\yii::t('walle', 'unknown config'));
         }
+
         return $this;
     }
 
     /**
      * 获取配置
+     *
      * @return \walle\config\Config
      */
-    protected function getConfig() {
+    protected function getConfig()
+    {
         return $this->config;
     }
 
-    public static function log($message) {
-        if (empty(\Yii::$app->params['log.dir'])) return;
+    public static function log($message)
+    {
+        if (empty(\Yii::$app->params['log.dir'])) {
+            return;
+        }
 
         $logDir = \Yii::$app->params['log.dir'];
-        if (!file_exists($logDir)) return;
+
+        if (is_dir($logDir) === false && mkdir($logDir, 0777, true) === false) {
+            return;
+        }
 
         $logFile = realpath($logDir) . '/walle-' . date('Ymd') . '.log';
         if (self::$logFile === null) {
@@ -164,7 +177,8 @@ class Command {
      * @author wushuiyong
      * @return string
      */
-    public function getExeCommand() {
+    public function getExeCommand()
+    {
         return $this->command;
     }
 
@@ -174,7 +188,8 @@ class Command {
      * @author wushuiyong
      * @return string
      */
-    public function getExeLog() {
+    public function getExeLog()
+    {
         return $this->log;
     }
 
@@ -184,7 +199,8 @@ class Command {
      * @author wushuiyong
      * @return string
      */
-    public function getExeStatus() {
+    public function getExeStatus()
+    {
         return $this->status;
     }
 
@@ -193,7 +209,8 @@ class Command {
      *
      * @return int
      */
-    public static function getMs() {
+    public static function getMs()
+    {
         return intval(microtime(true) * 1000);
     }
 
@@ -203,20 +220,24 @@ class Command {
      * @param $host
      * @return mixed
      */
-    protected function getHostName($host) {
+    protected function getHostName($host)
+    {
         list($hostName,) = explode(':', $host);
+
         return $hostName;
     }
 
     /**
      * 获取目标机器的ssh端口
      *
-     * @param $host
+     * @param     $host
      * @param int $default
      * @return int
      */
-    protected function getHostPort($host, $default = 22) {
+    protected function getHostPort($host, $default = 22)
+    {
         $hostInfo = explode(':', $host);
+
         return !empty($hostInfo[1]) ? $hostInfo[1] : $default;
     }
 

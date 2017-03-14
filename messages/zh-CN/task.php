@@ -2,6 +2,7 @@
 
 return [
     'list title' => '上线单列表',
+    'list project' => '项目名称',
     'list placeholder' => '上线标题、commit号',
     'create task' => '创建上线单',
 

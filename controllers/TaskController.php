@@ -10,7 +10,8 @@ use app\models\Task;
 use app\models\Project;
 use app\models\Group;
 
-class TaskController extends Controller {
+class TaskController extends Controller
+{
 
     protected $task;
 
@@ -21,12 +22,24 @@ class TaskController extends Controller {
      * @param int $size
      * @return string
      */
-    public function actionIndex($page = 1, $size = 10) {
+    public function actionIndex($page = 1, $size = 15)
+    {
         $size = $this->getParam('per-page') ?: $size;
         $list = Task::find()
-            ->with('user')
-            ->with('project')
-            ->where(['user_id' => $this->uid]);
+                    ->with('user')
+                    ->with('project')
+                    ->where(['user_id' => $this->uid]);
+
+        $projectTable = Project::tableName();
+        $groupTable = Group::tableName();
+        $projects = Project::find()
+                           ->leftJoin(Group::tableName(), "`$groupTable`.`project_id` = `$projectTable`.`id`")
+                           ->where([
+                               "`$projectTable`.status" => Project::STATUS_VALID,
+                               "`$groupTable`.`user_id`" => $this->uid
+                           ])
+                           ->asArray()
+                           ->all();
 
         // 有审核权限的任务
         $auditProjects = Group::getAuditProjectIds($this->uid);
@@ -38,15 +51,27 @@ class TaskController extends Controller {
         if ($kw) {
             $list->andWhere(['or', "commit_id like '%" . $kw . "%'", "title like '%" . $kw . "%'"]);
         }
+
+        $projectId = (int)\Yii::$app->request->post('project_id');
+        if (!empty($projectId)) {
+            $list->andWhere(['=', 'project_id', $projectId]);
+        }
+
         $tasks = $list->orderBy('id desc');
-        $list = $tasks->offset(($page - 1) * $size)->limit($size)
-            ->asArray()->all();
+        $list = $tasks->offset(($page - 1) * $size)
+                      ->limit($size)
+                      ->asArray()
+                      ->all();
 
         $pages = new Pagination(['totalCount' => $tasks->count(), 'pageSize' => $size]);
+
         return $this->render('list', [
-            'list'  => $list,
+            'list' => $list,
             'pages' => $pages,
             'audit' => $auditProjects,
+            'projects' => $projects,
+            'kw' => $kw,
+            'projectId' => $projectId
         ]);
     }
 
@@ -57,17 +82,23 @@ class TaskController extends Controller {
      * @return string
      * @throws
      */
-    public function actionSubmit($projectId = null) {
+    public function actionSubmit($projectId = null)
+    {
 
         // 为了方便用户更改表名，避免表名直接定死
         $projectTable = Project::tableName();
-        $groupTable   = Group::tableName();
+        $groupTable = Group::tableName();
         if (!$projectId) {
             // 显示所有项目列表
             $projects = Project::find()
-                ->leftJoin(Group::tableName(), "`$groupTable`.`project_id` = `$projectTable`.`id`")
-                ->where(["`$projectTable`.status" => Project::STATUS_VALID, "`$groupTable`.`user_id`" => $this->uid])
-                ->asArray()->all();
+                               ->leftJoin(Group::tableName(), "`$groupTable`.`project_id` = `$projectTable`.`id`")
+                               ->where([
+                                   "`$projectTable`.status" => Project::STATUS_VALID,
+                                   "`$groupTable`.`user_id`" => $this->uid
+                               ])
+                               ->asArray()
+                               ->all();
+
             return $this->render('select-project', [
                 'projects' => $projects,
             ]);
@@ -83,8 +114,8 @@ class TaskController extends Controller {
         if (\Yii::$app->request->getIsPost()) {
 
             $group = Group::find()
-                ->where(['user_id' => $this->uid, 'project_id' => $projectId])
-                ->count();
+                          ->where(['user_id' => $this->uid, 'project_id' => $projectId])
+                          ->count();
             if (!$group) {
                 throw new \Exception(yii::t('task', 'you are not the member of project'));
             }
@@ -102,6 +133,7 @@ class TaskController extends Controller {
         }
 
         $tpl = $conf->repo_type == Project::REPO_GIT ? 'submit-git' : 'submit-svn';
+
         return $this->render($tpl, [
             'task' => $task,
             'conf' => $conf,
@@ -114,7 +146,8 @@ class TaskController extends Controller {
      * @return string
      * @throws \Exception
      */
-    public function actionDelete($taskId) {
+    public function actionDelete($taskId)
+    {
         $task = Task::findOne($taskId);
         if (!$task) {
             throw new \Exception(yii::t('task', 'unknown deployment bill'));
@@ -125,9 +158,10 @@ class TaskController extends Controller {
         if ($task->status == Task::STATUS_DONE) {
             throw new \Exception(yii::t('task', 'can\'t delele the job which is done'));
         }
-        if (!$task->delete()) throw new \Exception(yii::t('w', 'delete failed'));
+        if (!$task->delete()) {
+            throw new \Exception(yii::t('w', 'delete failed'));
+        }
         $this->renderJson([]);
-
     }
 
     /**
@@ -136,7 +170,8 @@ class TaskController extends Controller {
      * @return string
      * @throws \Exception
      */
-    public function actionRollback($taskId) {
+    public function actionRollback($taskId)
+    {
         $this->task = Task::findOne($taskId);
         if (!$this->task) {
             throw new \Exception(yii::t('task', 'unknown deployment bill'));
@@ -148,8 +183,8 @@ class TaskController extends Controller {
             throw new \Exception(yii::t('task', 'no rollback twice'));
         }
         $conf = Project::find()
-            ->where(['id' => $this->task->project_id, 'status' => Project::STATUS_VALID])
-            ->one();
+                       ->where(['id' => $this->task->project_id, 'status' => Project::STATUS_VALID])
+                       ->one();
         if (!$conf) {
             throw new \Exception(yii::t('task', 'can\'t rollback the closed project\'s job'));
         }
@@ -165,9 +200,7 @@ class TaskController extends Controller {
         $rollbackTask->link_id = $this->task->ex_link_id;
         $rollbackTask->title = $this->task->title . ' - ' . yii::t('task', 'rollback');
         if ($rollbackTask->save()) {
-            $url = $conf->audit == Project::AUDIT_YES
-                ? Url::to('@web/task/')
-                : Url::to('@web/walle/deploy?taskId=' . $rollbackTask->id);
+            $url = $conf->audit == Project::AUDIT_YES ? Url::to('@web/task/') : Url::to('@web/walle/deploy?taskId=' . $rollbackTask->id);
             $this->renderJson([
                 'url' => $url,
             ]);
@@ -182,7 +215,8 @@ class TaskController extends Controller {
      * @param $id
      * @param $operation
      */
-    public function actionTaskOperation($id, $operation) {
+    public function actionTaskOperation($id, $operation)
+    {
         $task = Task::findOne($id);
         if (!$task) {
             static::renderJson([], -1, yii::t('task', 'unknown deployment bill'));
