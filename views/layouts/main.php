@@ -219,27 +219,21 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                         </span>
                     </a>
                 </li>
-                <li>
+                <li <?= \Yii::$app->controller->id == 'user' ? ' class="active open"' : '' ?>>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-group"></i>
-                        <span class="menu-text"> 用户管理 </span>
+                        <span class="menu-text"> <?= yii::t('w', 'manage_user') ?> </span>
 
                         <b class="arrow icon-angle-down"></b>
                     </a>
-
-                    <ul class="submenu" style="display: none;">
-                        <li>
+                    <ul class="submenu">
+                        <li <?= \Yii::$app->controller->id == 'user' && \Yii::$app->controller->action->id == 'list' ? 'class="active"' : '' ?>>
                             <a href="<?= Url::to('@web/user/list') ?>">
-                                <i class="icon-double-angle-right"></i>
-                                用户列表
-                            </a>
+                                <i class="icon-double-angle-right"></i><?= yii::t('w', 'users_list') ?></a>
                         </li>
-
-                        <li>
+                        <li <?= \Yii::$app->controller->id == 'user' && \Yii::$app->controller->action->id == 'add' ? 'class="active"' : '' ?>>
                             <a href="<?= Url::to('@web/user/add') ?>">
-                                <i class="icon-double-angle-right"></i>
-                                添加用户
-                            </a>
+                                <i class="icon-double-angle-right"></i><?= yii::t('w', 'add_users') ?></a>
                         </li>
                     </ul>
                 </li>
