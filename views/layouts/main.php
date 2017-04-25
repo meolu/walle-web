@@ -222,7 +222,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
                 <li <?= \Yii::$app->controller->id == 'user' ? ' class="active open"' : '' ?>>
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-group"></i>
-                        <span class="menu-text"> <?= yii::t('w', 'manage_user') ?> </span>
+                        <span class="menu-text"><?= yii::t('w', 'manage_user') ?></span>
 
                         <b class="arrow icon-angle-down"></b>
                     </a>
@@ -346,7 +346,6 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
 
     })
 </script>
-    <?php $this->endBody() ?>
 
   </body>
 </html>

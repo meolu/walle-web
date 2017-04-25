@@ -8,7 +8,7 @@ use yii\widgets\LinkPager;
 use app\models\User;
 ?>
 <div class="box">
-    <div class="box-header">
+    <div class="page-header">
         <form action="<?= Url::to('@web/user/list') ?>" method="POST">
             <input type="hidden" value="<?= \Yii::$app->request->getCsrfToken(); ?>" name="_csrf">
             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
@@ -134,6 +134,7 @@ use app\models\User;
             }
         })
 
+            var title = $('#update-real-name').find('.modal-title').html();
         $('#update-real-name').on('show.bs.modal', function (e) {
             var me = $(this),
                 srcTar = $(e.relatedTarget).parents('.data-user'),
@@ -146,7 +147,6 @@ use app\models\User;
                 name = me.find('#real-name');
             name.val(realname)
 
-            var title = modalTit.html();
             modalTit.html(title + '：' + email);
 
             subBtn.click(function () {

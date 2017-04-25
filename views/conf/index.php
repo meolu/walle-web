@@ -6,7 +6,7 @@ $this->title = yii::t('conf', 'index');
 use yii\helpers\Url;
 ?>
 <div class="box">
-    <div class="box-header">
+    <div class="page-header">
         <form action="<?= Url::to('@web/conf') ?>" method="POST">
             <input type="hidden" value="<?= \Yii::$app->request->getCsrfToken(); ?>" name="_csrf">
             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
@@ -46,11 +46,11 @@ use yii\helpers\Url;
                     <td><?= \Yii::t('w', 'conf_status_' . $item['status']) ?></td>
                     <td class="<?= \Yii::t('w', 'conf_status_' . $item['status'] . '_color') ?>">
                         <div class="action-buttons">
-                            <a href="<?= Url::to("@web/conf/preview/?projectId={$item['id']}") ?>" data-toggle="modal" data-target="#myModal">
+                            <a href="<?= Url::to("@web/conf/preview/?projectId={$item['id']}") ?>" data-toggle="modal" class="viewmodal_hook" data-target="#viewModal">
                                 <i class="icon-zoom-in bigger-130"></i>
                                 <?= yii::t('conf', 'p_preview') ?>
                             </a>
-                            <a href="<?= Url::to("@web/conf/detection/?projectId={$item['id']}") ?>" data-toggle="modal" data-target="#myModal">
+                            <a href="<?= Url::to("@web/conf/detection/?projectId={$item['id']}") ?>" data-toggle="modal" class="viewmodal_hook"  data-target="#viewModal">
                                 <i class="icon-screenshot bigger-130"></i>
                                 <?= yii::t('conf', 'p_detection') ?>
                             </a>
@@ -78,7 +78,11 @@ use yii\helpers\Url;
         </table>
 
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
         </div>
 
     </div><!-- /.box-body -->
@@ -110,8 +114,9 @@ use yii\helpers\Url;
                 })
             }
         })
-        $("#myModal").on("hidden.bs.modal", function() {
+        $("#viewModal").on("hidden.bs.modal", function() {
             $(this).removeData("bs.modal");
         });
+       
     });
 </script>
