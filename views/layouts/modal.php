@@ -17,11 +17,10 @@ $user = User::findOne(\Yii::$app->user->id);
 		</button>
 		<h4 class="modal-title" id="myModalLabel"><?= $this->title ?></h4>
 	</div>
-<div class="modal-body">
+	<div class="modal-body">
 
-<?= $content ?>
-
-</div>
+	<?= $content ?>
+	</div>
 <?php $this->endPage() ?>
 
 

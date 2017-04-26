@@ -79,11 +79,11 @@ use yii\helpers\Url;
 
         <!-- 模态框（Modal） -->
         <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-                <div class="modal-content">
-                </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-        </div>
+			<div class="modal-dialog">
+				<div class="modal-content">
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+		</div>
 
     </div><!-- /.box-body -->
 </div>
