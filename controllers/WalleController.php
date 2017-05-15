@@ -19,6 +19,7 @@ use app\models\Project;
 use app\models\Group;
 use app\models\Record;
 use app\models\Task as TaskModel;
+use app\models\Message as MessageModel;
 use yii;
 class WalleController extends Controller
 {
@@ -87,7 +88,7 @@ class WalleController extends Controller
                 $this->_revisionUpdate();
                 $this->_postDeploy();
                 $this->_transmission();
-                $this->_updateRemoteServers($this->task->link_id, $this->conf->post_release_delay);
+                $this->_updateRemoteServers($this->task->link_id, $this->conf->post_release_delay, true);
                 $this->_cleanRemoteReleaseVersion();
                 $this->_cleanUpLocal($this->task->link_id);
             } else {
@@ -519,9 +520,10 @@ class WalleController extends Controller
      *
      * @param string  $version
      * @param integer $delay 每台机器延迟执行post_release任务间隔, 不推荐使用, 仅当业务无法平滑重启时使用
+     * @param bool $message
      * @throws \Exception
      */
-    private function _updateRemoteServers($version, $delay = 0)
+    private function _updateRemoteServers($version, $delay = 0, $message = false)
     {
         $cmd = [];
         // pre-release task
@@ -547,6 +549,14 @@ class WalleController extends Controller
             throw new \Exception(yii::t('walle', 'update servers error'));
         }
 
+        if($message){
+            //消息发送
+            $task = TaskModel::find()
+                ->where(['id' => $this->task->id])
+                ->with(['project'])
+                ->one();
+            MessageModel::releaseWeiXinMessage($task);
+        }
         return true;
     }
 
@@ -592,7 +602,27 @@ class WalleController extends Controller
      */
     public function _rollback($version)
     {
-        return $this->_updateRemoteServers($version);
+        $ret = $this->_updateRemoteServers($version);
+        if($ret){
+            //回滚任务
+            $rollBackTaskObj =  TaskModel::find()
+                ->where(['id' => $this->task->id])
+                ->with(['project'])
+                ->one();
+
+            //回滚前任务
+            $lastTaskObj = TaskModel::find()
+                ->where(['project_id'=>$this->task->project_id])
+                ->with(['project'])
+                ->orderBy(['id'=> SORT_DESC])
+                ->limit(2)->all();
+
+            if($lastTaskObj){
+                //发送微信消息
+                MessageModel::rollBackWeiXinMessage($rollBackTaskObj, $lastTaskObj[1]);
+            }
+        }
+        return $ret;
     }
 
     /**
