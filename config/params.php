@@ -40,18 +40,22 @@ return [
         'ssl'            => false,
     ],
     'message-release' => [ //推送发布提醒消息
-        'weixin' => [//微信消息 企业号
-            'host' => isset($_ENV['WALLE_MESSAGE_WEIXIN_HOST']) ? $_ENV['WALLE_MESSAGE_WEIXIN_HOST'] : 'https://qyapi.weixin.qq.com',//接口host
-            'corpid' => isset($_ENV['WALLE_MESSAGE_WEIXIN_CORPID']) ? $_ENV['WALLE_MESSAGE_WEIXIN_CORPID'] : 'wx437fe4a3eed11',//企业id
-            'corpsecret' => isset($_ENV['WALLE_MESSAGE_WEIXIN_CORPSECRET']) ? $_ENV['WALLE_MESSAGE_WEIXIN_CORPSECRET'] : 'hiahxZ2qhYHl1NLN_rjeK53_lt3dL94o6iwwhvOMLPJI20VuXWHkeaQLNs3',
-            'sendUrl' => isset($_ENV['WALLE_MESSAGE_WEIXIN_SEND_URL']) ? $_ENV['WALLE_MESSAGE_WEIXIN_SEND_URL'] : '/cgi-bin/message/send?access_token=',//消息推送url
-            'tokenUrl' => isset($_ENV['WALLE_MESSAGE_WEIXIN_TOKEN_URL']) ? $_ENV['WALLE_MESSAGE_WEIXIN_TOKEN_URL'] : '/cgi-bin/gettoken',//token 获取url
-            'msgtype' => isset($_ENV['WALLE_MESSAGE_WEIXIN_MSGTYPE']) ? $_ENV['WALLE_MESSAGE_WEIXIN_MSGTYPE'] : 'text',//消息类型
-            'touser' => isset($_ENV['WALLE_MESSAGE_WEIXIN_TOUSER']) ? $_ENV['WALLE_MESSAGE_WEIXIN_TOUSER'] : '@all',//标签ID列表
-            'totag' => isset($_ENV['WALLE_MESSAGE_WEIXIN_TOTAG']) ? $_ENV['WALLE_MESSAGE_WEIXIN_TOTAG'] : 'wx_send_msg_tag',//标签ID列表
-            'toparty' => isset($_ENV['WALLE_MESSAGE_WEIXIN_TOPARTY']) ? $_ENV['WALLE_MESSAGE_WEIXIN_TOPARTY'] : '@all',//     部门ID列表
-            'agentid' => isset($_ENV['WALLE_MESSAGE_WEIXIN_AGENT_ID']) ? $_ENV['WALLE_MESSAGE_WEIXIN_AGENT_ID'] : 2,//企业应用ID
-            'safe' => isset($_ENV['WALLE_MESSAGE_WEIXIN_SAFE']) ? 1 : 0,//是否加密发送
+        'weixin' => [
+            'host' => 'https://qyapi.weixin.qq.com',//接口host
+            'sendUrl' => '/cgi-bin/message/send?access_token=',//消息推送url
+            'tokenUrl' => '/cgi-bin/gettoken',//token 获取url
+            'msgtype' => 'text',//消息类型
+            //以上配置谨慎修改
+
+            //以下配置可按自己业务修改
+            'isOpen'=> true,//是否开启
+            'corpid' => 'wx68b034ed',//企业id
+            'corpsecret' => 'hiahxZ2qhYHl1NLN_rjeK53_lQZFoe6iwwhvOMLPJI20VuXWHkeaQLNs3',
+            'touser' => '@all',//标签ID列表
+            'totag' => 'wx_send_msg_tag',//标签ID列表
+            'toparty' => '@all',//     部门ID列表
+            'agentid' =>  2,//企业应用ID
+            'safe' => 0,//是否加密发送 0否 1是
         ],
     ],
 ];

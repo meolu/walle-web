@@ -7,7 +7,7 @@ use yii\web\NotFoundHttpException;
 use yii\helpers\ArrayHelper;
 use app\util\CurlUtil;
 
-class Message extends Model
+class WeiXinMessage extends Model
 {
     /**
      * token url
@@ -68,6 +68,15 @@ class Message extends Model
         return Yii::$app->params['message-release'][$type];
     }
 
+    /**
+     * 是否开启消息发送
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function isOpen(){
+        $configs = self::getConfigs('weixin');
+        return ArrayHelper::getValue($configs,'isOpen');
+    }
     /**
      * 生成微信消息推送数据
      * @param string $content
