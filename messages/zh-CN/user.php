@@ -58,6 +58,10 @@ return [
 
 	'btn cancel'=> '取消',
 	'bnt sure'=> '确定',
+	'retry email content'=> '重发邮件内容',
+	'retry email'=> '邮件重发',
+
+	
     'user auto register failure' => '用户自动注册失败'
 
 ];

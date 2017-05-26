@@ -67,6 +67,7 @@ use app\models\User;
 		data-status-url="<?= $row['status'] == User::STATUS_INVALID ? Url::to('@web/user/un-ban') : Url::to('@web/user/ban') ?>"
 		data-role-url="<?= $row['role'] == User::ROLE_ADMIN ? Url::to('@web/user/to-dev') : Url::to('@web/user/to-admin') ?>"
 		data-delete-url="<?= Url::to('@web/user/delete') ?>"
+		data-retry-email="<?= Url::to('@web/user/retry-email') ?>"
 							>
 								<a data-toggle="modal" data-target="#update-real-name" href="javascript:;">
 									<i class="icon-pencil bigger-130"></i>
@@ -87,6 +88,12 @@ use app\models\User;
 									<?= yii::t('user', 'role to opposite ' . $row['role']) ?>
 								</a>
 
+                            <?php if ($row['is_email_verified'] == User::MAIL_INACTIVE) { ?>
+								<a class="cnt-user-option" data-url-key="retry-email" data-confirm="<?= yii::t('user', 'retry email content') ?>" href="javascript:;">
+                                <i class="icon icon-envelope red"></i>
+								<?= yii::t('user', 'retry email') ?>
+								</a>
+                            <?php } ?>
 
 							</div>
                         </td>

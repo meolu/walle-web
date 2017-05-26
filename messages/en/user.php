@@ -56,6 +56,8 @@ return [
 	
 	'btn cancel'=> 'Cancel',
 	'bnt sure'=> 'Sure',
+	'retry email content'=> 'Retry Email Content!',
+	'retry email'=> 'RetryEmail',
 
     'email exists' => 'User email already exists',
 

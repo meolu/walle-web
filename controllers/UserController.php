@@ -240,18 +240,36 @@ class UserController extends Controller {
                 Yii::$app->mail->compose('accountNotice', ['user' => $user])
                     ->setFrom(Yii::$app->mail->messageConfig['from'])
                     ->setTo($user->email)
-                    ->setSubject('瓦力平台 - 帐号已开通')
+                    ->setSubject('帐号已开通')
                     ->send();
-
                 return $this->redirect('@web/user/list');
-            }
-            else {
+            }else {
                 throw new \Exception(yii::t('user', 'email exists'));//修改这里添加用户有问题
             }
         }
-
         return $this->render('add', [
             'model' => $model
         ]);
     }
+
+    /**
+     * 邮件重发
+     */
+    public function actionRetryEmail($uid) {
+        $this->validateAdmin();
+        if ($uid) {
+            $user = User::findOne($uid);
+                Yii::$app->mail->compose('accountNotice', ['user' => $user])
+                    ->setFrom(Yii::$app->mail->messageConfig['from'])
+                    ->setTo($user->email)
+                    ->setSubject('帐号已开通')
+                    ->send();
+                return $this->redirect('@web/user/list');
+        }
+
+        $this->renderJson([], self::SUCCESS);
+	
+	}
+
+
 }
