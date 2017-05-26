@@ -56,5 +56,8 @@ return [
     'notice account has been opened' => '帐号已经开通，账号信息如下，请点击激活链接进行认证。',
     'email exists' => '用户邮箱已经存在',
 
+	'btn cancel'=> '取消',
+	'bnt sure'=> '确定',
     'user auto register failure' => '用户自动注册失败'
+
 ];

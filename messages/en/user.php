@@ -53,6 +53,10 @@ return [
     'label real name' => 'Real Name',
     'add user' => 'Create User',
     'notice account has been opened' => 'Account is created, message should be saved secretly, and active your account by clicking the active link.',
+	
+	'btn cancel'=> 'Cancel',
+	'bnt sure'=> 'Sure',
+
     'email exists' => 'User email already exists',
 
 ];
