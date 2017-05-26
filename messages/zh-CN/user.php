@@ -36,6 +36,7 @@ return [
     'realname' => '真实用户名',
     'is admin' => '是否管理员',
     'status' => '状态',
+    'option' => '操作',
     'status to opposite 0' => '解冻',
     'status to opposite 1' => '冻结',
     'status to opposite 2' => '冻结',

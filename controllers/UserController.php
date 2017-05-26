@@ -246,7 +246,7 @@ class UserController extends Controller {
                 return $this->redirect('@web/user/list');
             }
             else {
-                throw new \Exception(yii::t('user', 'email exists'));
+                throw new \Exception(yii::t('user', 'email exists'));//修改这里添加用户有问题
             }
         }
 

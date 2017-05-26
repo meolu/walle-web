@@ -37,6 +37,7 @@ return [
     'realname' => 'Real Name',
     'is admin' => 'Is admin',
     'status' => 'Status',
+    'option' => 'Option',
     'status to opposite 0' => 'unban',
     'status to opposite 1' => 'ban',
     'status to opposite 2' => 'ban',
