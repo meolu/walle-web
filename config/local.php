@@ -5,6 +5,15 @@ defined('YII_DEBUG') or define('YII_DEBUG', false);
 // Uncomment to enable dev environment. Recommended for development
 defined('YII_ENV') or define('YII_ENV', 'prod');
 
+if (empty($_ENV)) {
+    $_ENV = $_SERVER;
+    foreach ($_ENV as $key => $value) {
+        if (strpos($key, '_PASS')) {
+            $_ENV[$key] = base64_decode($value);
+        }
+    }
+}
+
 return [
     'components' => [
         'db' => [
