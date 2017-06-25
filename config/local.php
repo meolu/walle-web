@@ -10,6 +10,9 @@ if (empty($_ENV)) {
     foreach ($_ENV as $key => $value) {
         if (strpos($key, '_PASS')) {
             $_ENV[$key] = base64_decode($value);
+            if ($_ENV[$key] === false) {
+                $_ENV[$key] = $value;
+            }
         }
     }
 }
