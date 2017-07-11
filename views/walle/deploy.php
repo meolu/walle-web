@@ -75,7 +75,6 @@ use yii\helpers\Url;
             $.post("<?= Url::to('@web/walle/start-deploy') ?>", {taskId: task_id}, function(o) {
                 action = o.code ? o.msg + ':' : '';
                 if (o.code != 0) {
-                    clearInterval(timer);
                     $('.progress-status').removeClass('progress-bar-success').addClass('progress-bar-danger');
                     $('.error-msg').text(action + detail);
                     $('.result-failed').show();
@@ -86,10 +85,12 @@ use yii\helpers\Url;
             $('.result-failed').hide();
             function getProcess() {
                 $.get("<?= Url::to('@web/walle/get-process?taskId=') ?>" + task_id, function (o) {
-                    data = o.data;
+                    var data = o.data;
+                    if (0 != data.percent) {
+                        $('.progress-status').attr('aria-valuenow', data.percent).width(data.percent + '%');
+                    }
                     // 执行失败
                     if (0 == data.status) {
-                        clearInterval(timer);
                         $('.step-' + data.step).removeClass('text-yellow').addClass('text-red');
                         $('.progress-status').removeClass('progress-bar-success').addClass('progress-bar-danger');
                         detail = o.msg + ':' + data.memo + '<br>' + data.command;
@@ -100,16 +101,14 @@ use yii\helpers\Url;
                     } else {
                         $('.progress-status')
                             .removeClass('progress-bar-danger progress-bar-striped')
-                            .addClass('progress-bar-success')
-                    }
-                    if (0 != data.percent) {
-                        $('.progress-status').attr('aria-valuenow', data.percent).width(data.percent + '%');
+                            .addClass('progress-bar-success');
                     }
                     if (100 == data.percent) {
                         $('.progress-status').removeClass('progress-bar-striped').addClass('progress-bar-success');
                         $('.progress-status').parent().removeClass('progress-striped');
                         $('.result-success').show();
-                        clearInterval(timer)
+                    } else {
+                        setTimeout(getProcess, 600);
                     }
                     for (var i = 1; i <= data.step; i++) {
                         $('.step-' + i).removeClass('text-yellow text-red')
@@ -117,7 +116,7 @@ use yii\helpers\Url;
                     }
                 });
             }
-            timer = setInterval(getProcess, 600);
+            setTimeout(getProcess, 600);
         })
 
         var _hmt = _hmt || [];
@@ -128,5 +127,4 @@ use yii\helpers\Url;
             s.parentNode.insertBefore(hm, s);
         })();
     })
-
 </script>
