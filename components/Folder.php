@@ -261,15 +261,17 @@ class Folder extends Ansible {
      * @param null $version
      * @return bool
      */
-    public function getLinkCommand($version) {
-        $user = $this->config->release_user;
-        $project = Project::getGitProjectName($this->getConfig()->repo_url);
+    public function getLinkCommand($version)
+    {
+        $user       = $this->config->release_user;
+        $project    = Project::getGitProjectName($this->getConfig()->repo_url);
         $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
         // 遇到回滚，则使用回滚的版本version
-        $linkFrom = Project::getReleaseVersionDir($version);
-        $cmd[] = sprintf('ln -sfn %s %s', $linkFrom, $currentTmp);
-        $cmd[] = sprintf('chown -h %s %s', $user, $currentTmp);
-        $cmd[] = sprintf('mv -fT %s %s', $currentTmp, $this->getConfig()->release_to);
+        $linkFrom   = Project::getReleaseVersionDir($version);
+        $executeDir = dirname($this->getConfig()->release_to);
+        $cmd[]      = sprintf('cd %s && ln -sfn %s %s', $executeDir, $this->getRelativePath($linkFrom, $this->getConfig()->release_to), $currentTmp);
+        $cmd[]      = sprintf('chown -h %s %s', $user, $currentTmp);
+        $cmd[]      = sprintf('mv -fT %s %s', $currentTmp, $this->getConfig()->release_to);
 
         return join(' && ', $cmd);
     }
@@ -339,5 +341,48 @@ class Folder extends Ansible {
         return $this->runLocalCommand($command);
     }
 
-}
 
+    /** 计算path1 相对于 path2 的路径,即在path2引用path1的相对路径
+     *
+     * @param  String $path1
+     * @param  String $path2
+     *
+     * @return String
+     */
+    public function getRelativePath($path1, $path2){
+        $arr1 = explode('/', $path1);
+        $arr2 = explode('/', $path2);
+
+        // 获取相同路径的部分
+        $intersection = array_intersect_assoc($arr1, $arr2);
+
+        $depth = 0;
+
+        for($i=0,$len=count($intersection); $i<$len; $i++){
+            $depth = $i;
+            if(!isset($intersection[$i])){
+                break;
+            }
+        }
+
+        // 前面全部匹配
+        if($i==count($intersection)){
+            $depth ++;
+        }
+
+        // 将path2的/ 转为 ../，path1获取后面的部分，然后合拼
+
+        // 计算前缀
+        if(count($arr2)-$depth-1>0){
+            $prefix = array_fill(0, count($arr2)-$depth-1, '..');
+        }else{
+            $prefix = array('.');
+        }
+
+        $tmp = array_merge($prefix, array_slice($arr1, $depth));
+
+        $relativePath = implode('/', $tmp);
+
+        return $relativePath;
+    }
+}
