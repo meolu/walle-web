@@ -159,6 +159,7 @@ class Git extends Command {
                 'message' => $item,
             ];
         }
+        $history = array_reverse($history);
         return $history;
     }
 
