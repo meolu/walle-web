@@ -57,6 +57,10 @@ return [
     'menu file md5' => 'File Fingerprint',
     'breadcrumb index' => 'Index',
 
+    'manage_user' => 'Manage User',
+    'users_list' => 'Users List',
+    'add_users' => 'Add Users',
+
     'need login' => 'login first ：）',
     'something went wrong' => 'Something Wrong',
 

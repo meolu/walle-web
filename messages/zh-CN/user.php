@@ -36,6 +36,7 @@ return [
     'realname' => '真实用户名',
     'is admin' => '是否管理员',
     'status' => '状态',
+    'option' => '操作',
     'status to opposite 0' => '解冻',
     'status to opposite 1' => '冻结',
     'status to opposite 2' => '冻结',
@@ -55,5 +56,12 @@ return [
     'notice account has been opened' => '帐号已经开通，账号信息如下，请点击激活链接进行认证。',
     'email exists' => '用户邮箱已经存在',
 
+	'btn cancel'=> '取消',
+	'bnt sure'=> '确定',
+	'retry email content'=> '重发邮件内容',
+	'retry email'=> '邮件重发',
+
+	
     'user auto register failure' => '用户自动注册失败'
+
 ];

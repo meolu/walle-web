@@ -37,6 +37,7 @@ return [
     'realname' => 'Real Name',
     'is admin' => 'Is admin',
     'status' => 'Status',
+    'option' => 'Option',
     'status to opposite 0' => 'unban',
     'status to opposite 1' => 'ban',
     'status to opposite 2' => 'ban',
@@ -52,6 +53,12 @@ return [
     'label real name' => 'Real Name',
     'add user' => 'Create User',
     'notice account has been opened' => 'Account is created, message should be saved secretly, and active your account by clicking the active link.',
+	
+	'btn cancel'=> 'Cancel',
+	'bnt sure'=> 'Sure',
+	'retry email content'=> 'Retry Email Content!',
+	'retry email'=> 'RetryEmail',
+
     'email exists' => 'User email already exists',
 
 ];

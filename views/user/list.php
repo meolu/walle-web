@@ -8,15 +8,14 @@ use yii\widgets\LinkPager;
 use app\models\User;
 ?>
 <div class="box">
-    <div class="box-header">
+    <div class="page-header">
         <form action="<?= Url::to('@web/user/list') ?>" method="POST">
             <input type="hidden" value="<?= \Yii::$app->request->getCsrfToken(); ?>" name="_csrf">
             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                 <div class="input-group">
                     <input type="text" name="kw" class="form-control search-query" placeholder="<?= yii::t('user', 'search placeholder') ?>">
                     <span class="input-group-btn">
-                        <button type="submit"
-                                class="btn btn-default btn-sm">
+                        <button type="submit" class="btn btn-default btn-sm">
                             Search
                             <i class="icon-search icon-on-right bigger-110"></i>
                         </button>
@@ -30,10 +29,11 @@ use app\models\User;
         </a>
     </div><!-- /.box-header -->
 
-    <div class="box-body table-responsive no-padding clearfix">
+    <div class="box-body no-padding clearfix">
         <table class="table table-striped table-bordered table-hover">
             <tbody>
                 <tr>
+                    <th><?= yii::t('user', 'username') ?></th>
                     <th><?= yii::t('user', 'realname') ?></th>
                     <th><?= yii::t('user', 'email') ?></th>
                     <th><?= yii::t('user', 'status') ?></th>
@@ -41,6 +41,7 @@ use app\models\User;
                 </tr>
                 <?php foreach ($userList as $row) {?>
                     <tr>
+                        <td><?= $row['username'] ?></td>
                         <td><?= $row['realname'] ?></td>
                         <td><?= $row['email'] ?></td>
                         <td>
@@ -51,37 +52,50 @@ use app\models\User;
                             <?php } ?>
 
                             <?php if ($row['status'] == User::STATUS_INVALID) { ?>
-                                <i class="icon icon-ban-circle red" data-placement="top" data-rel="tooltip" data-title="<?= yii::t('user', 'status to opposite 10') ?>"></i>
+                                <i class="icon icon-ban-circle red" data-placement="top" data-rel="tooltip" data-title="<?= yii::t('user', 'status blocked account') ?>"></i>
                             <?php } ?>
                             <?php if ($row['is_email_verified'] == User::MAIL_INACTIVE) { ?>
                                 <i class="icon icon-envelope red" data-placement="top" data-rel="tooltip" data-title="<?= yii::t('user', 'inactive') ?>"></i>
                             <?php } ?>
                         </td>
                         <td>
-                            <div class="nav">
-                                <li>
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();">
-                                        <i class="icon-cog"></i>&nbsp;<?= yii::t('w', 'option') ?>
-                                        <i class="icon-caret-down bigger-110 width-auto"></i>
-                                    </a>
-                                    <ul class="dropdown-menu data-user"
-                                        data-user-id="<?= $row['id']?>"
-                                        data-user-realname="<?= $row['realname']?>"
-                                        data-user-email="<?= $row['email']?>"
-                                        data-rename-url="<?= Url::to('@web/user/rename') ?>"
-                                        data-status-url="<?= $row['status'] == User::STATUS_INVALID ? Url::to('@web/user/un-ban') : Url::to('@web/user/ban') ?>"
-                                        data-role-url="<?= $row['role'] == User::ROLE_ADMIN ? Url::to('@web/user/to-dev') : Url::to('@web/user/to-admin') ?>"
-                                        data-delete-url="<?= Url::to('@web/user/delete') ?>"
-                                        >
-                                        <li><a href="###" data-toggle="modal" data-target="#update-real-name" ><i class="icon-pencil"></i> <?= yii::t('w', 'edit') ?></a></li>
-                                        <li><a href="###" class="cnt-user-option" data-url-key="status-url" data-confirm="<?= yii::t('user', 'label status to opposite ' . $row['status']) ?>"><i class="<?= $row['status'] == User::STATUS_INVALID ? 'icon-ok-circle' : 'icon-ban-circle' ?>"></i> <?= yii::t('user', 'status to opposite ' . $row['status']) ?> </a></li>
-                                        <li><a href="###" class="cnt-user-option" data-url-key="delete-url" data-confirm="<?= yii::t('user', 'js delete user') ?>"><i class="icon-trash"></i> <?= yii::t('w', 'delete') ?></a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="###" class="cnt-user-option" data-url-key="role-url" data-confirm="<?= yii::t('user', 'label role to opposite ' . $row['role']) ?>"><i class="i"></i> <?= yii::t('user', 'role to opposite ' . $row['role']) ?></a></li>
-                                    </ul>
-                                </li>
+							<div class="action-buttons data-user"
+		data-user-id="<?= $row['id']?>"
+		data-user-realname="<?= $row['realname']?>"
+		data-user-email="<?= $row['email']?>"
+		data-rename-url="<?= Url::to('@web/user/rename') ?>"
+		data-status-url="<?= $row['status'] == User::STATUS_INVALID ? Url::to('@web/user/un-ban') : Url::to('@web/user/ban') ?>"
+		data-role-url="<?= $row['role'] == User::ROLE_ADMIN ? Url::to('@web/user/to-dev') : Url::to('@web/user/to-admin') ?>"
+		data-delete-url="<?= Url::to('@web/user/delete') ?>"
+		data-retry-email="<?= Url::to('@web/user/retry-email') ?>"
+							>
+								<a data-toggle="modal" data-target="#update-real-name" href="javascript:;">
+									<i class="icon-pencil bigger-130"></i>
+									<?= yii::t('w', 'edit') ?>
+								</a>
 
-                            </div>
+								<a class="cnt-user-option" data-url-key="status-url" data-confirm="<?= yii::t('user', 'label status to opposite ' . $row['status']) ?>" href="javascript:;">
+									<i class="<?= $row['status'] == User::STATUS_INVALID ? 'icon-ok-circle red' : 'icon-ban-circle' ?>"></i>
+									<?= yii::t('user', 'status to opposite ' . $row['status']) ?>
+								</a>
+								<a class="red btn-delete cnt-user-option" data-url-key="delete-url" data-confirm="<?= yii::t('user', 'js delete user') ?>" href="javascript:;">
+									<i class="icon-trash bigger-130"></i>
+									<?= yii::t('conf', 'p_delete') ?>
+								</a>
+
+								<a class="cnt-user-option" data-url-key="role-url" data-confirm="<?= yii::t('user', 'label role to opposite ' . $row['role']) ?>" href="javascript:;">
+									<i class="i"></i>
+									<?= yii::t('user', 'role to opposite ' . $row['role']) ?>
+								</a>
+
+                            <?php if ($row['is_email_verified'] == User::MAIL_INACTIVE) { ?>
+								<a class="cnt-user-option" data-url-key="retry-email" data-confirm="<?= yii::t('user', 'retry email content') ?>" href="javascript:;">
+                                <i class="icon icon-envelope red"></i>
+								<?= yii::t('user', 'retry email') ?>
+								</a>
+                            <?php } ?>
+
+							</div>
                         </td>
                     </tr>
                 <?php } ?>
@@ -103,7 +117,7 @@ use app\models\User;
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><?= yii::t('user', 'btn cancel') ?></button>
-                        <button type="button" class="btn btn-primary btn-submit"><?= yii::t('w', 'bnt sure') ?></button>
+                        <button type="button" class="btn btn-primary btn-submit"><?= yii::t('user', 'bnt sure') ?></button>
                     </div>
                 </div>
             </div>
@@ -134,6 +148,7 @@ use app\models\User;
             }
         })
 
+            var title = $('#update-real-name').find('.modal-title').html();
         $('#update-real-name').on('show.bs.modal', function (e) {
             var me = $(this),
                 srcTar = $(e.relatedTarget).parents('.data-user'),
@@ -146,7 +161,6 @@ use app\models\User;
                 name = me.find('#real-name');
             name.val(realname)
 
-            var title = modalTit.html();
             modalTit.html(title + '：' + email);
 
             subBtn.click(function () {
