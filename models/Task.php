@@ -110,9 +110,9 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'project_id', 'status', 'title'], 'required'],
-            [['user_id', 'project_id', 'action', 'status', 'file_transmission_mode'], 'integer'],
+            [['user_id', 'project_id', 'action', 'status', 'file_transmission_mode', 'server_publish_mode'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['file_list'], 'string'],
+            [['file_list', 'hosts'], 'string'],
             [['title', 'link_id', 'ex_link_id', 'commit_id', 'branch'], 'string', 'max' => 100],
         ];
     }

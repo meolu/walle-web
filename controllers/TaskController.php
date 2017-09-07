@@ -125,18 +125,28 @@ class TaskController extends Controller
                 $status = $conf->audit == Project::AUDIT_YES ? Task::STATUS_SUBMIT : Task::STATUS_PASS;
                 $task->user_id = $this->uid;
                 $task->project_id = $projectId;
+                if ($task->hosts && is_array($task->hosts)) {
+                    $task->hosts = implode("\n", $task->hosts);
+                }
                 $task->status = $status;
                 if ($task->save()) {
                     return $this->redirect('@web/task/');
                 }
             }
         }
+        $hosts_temp = preg_split("/\r\n|\r|\n/", $conf->hosts);
+        $hosts = [];
+        foreach ($hosts_temp as $k => $v) {
+            $hosts[$v] = $v;
+        }
+        unset($hosts_temp);
 
         $tpl = $conf->repo_type == Project::REPO_GIT ? 'submit-git' : 'submit-svn';
 
         return $this->render($tpl, [
             'task' => $task,
             'conf' => $conf,
+            'hosts' => $hosts,
         ]);
     }
 

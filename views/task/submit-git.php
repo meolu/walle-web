@@ -68,6 +68,41 @@ use app\models\Task;
                   ['class' => 'control-label bolder blue', 'style' => 'display: none']) ?>
           <!-- 文件列表 end -->
 
+          <!-- 服务器 -->
+          <div class="form-group">
+              <label class="text-right bolder blue">
+                  <?= yii::t('task', 'server publish mode'); ?>
+              </label>
+              <div id="server-all-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'server publish mode all tip') ?>" data-placement="right">
+                  <label>
+                      <input name="Task[server_publish_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" checked="checked" type="radio" class="ace">
+                      <span class="lbl"><?= yii::t('task', 'server publish mode all') ?></span>
+                  </label>
+              </div>
+
+              <div id="server-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'server publish mode part tip') ?>" data-placement="right">
+                  <label>
+                      <input name="Task[server_publish_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" type="radio" class="ace">
+                      <span class="lbl"><?= yii::t('task', 'server publish mode part') ?></span>
+                  </label>
+              </div>
+          </div>
+          <!-- 服务器 end -->
+
+          <!-- 服务器列表 -->
+          <?= $form->field($task, 'hosts')
+              ->checkboxList($hosts, [
+                  'style' => 'display: none',
+                  'itemOptions' => [
+                      'labelOptions' => [
+                          'style' => 'display: block'
+                      ]
+                  ]
+              ])
+              ->label(yii::t('task', 'server list'),
+                  ['class' => 'control-label bolder blue', 'style' => 'display: none']) ?>
+          <!-- 服务器列表 end -->
+
       </div><!-- /.box-body -->
 
       <div class="box-footer">
@@ -199,6 +234,15 @@ use app\models\Task;
         }).on('click', '#transmission-part-ctl', function() {
             $('#task-file_list').show();
             $('label[for="task-file_list"]').show();
+        });
+
+        // 切换显示服务器列表
+        $('body').on('click', '#server-all-ctl', function() {
+            $('#task-hosts').hide();
+            $('label[for="task-hosts"]').hide();
+        }).on('click', '#server-part-ctl', function() {
+            $('#task-hosts').show();
+            $('label[for="task-hosts"]').show();
         });
 
     })

@@ -77,6 +77,12 @@ class WalleController extends Controller
 
         // 项目配置
         $this->conf = Project::getConf($this->task->project_id);
+
+        // 部分发布（AB发布）模式，用task配置覆盖conf的hosts项，注意：请不要保存该修改
+        if ($this->task->server_publish_mode == 2 && $this->task->hosts) {
+            $this->conf->hosts = $this->task->hosts;
+        }
+
         $this->walleTask = new WalleTask($this->conf);
         $this->walleFolder = new Folder($this->conf);
         try {
@@ -113,7 +119,8 @@ class WalleController extends Controller
 
             // 记录当前线上版本（软链）回滚则是回滚的版本，上线为新版本
             $this->conf->version = $this->task->link_id;
-            $this->conf->save();
+            // 只保存版本号
+            $this->conf->save(true, ['version']);
         } catch (\Exception $e) {
             $this->task->status = TaskModel::STATUS_FAILED;
             $this->task->save();
