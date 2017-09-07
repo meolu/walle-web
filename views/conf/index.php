@@ -11,7 +11,7 @@ use yii\helpers\Url;
             <input type="hidden" value="<?= \Yii::$app->request->getCsrfToken(); ?>" name="_csrf">
             <div class="col-xs-12 col-sm-8" style="padding-left: 0;margin-bottom: 10px;">
                 <div class="input-group">
-                    <input type="text" name="kw" class="form-control search-query" placeholder="<?= yii::t('conf', 'index search placeholder') ?>">
+                    <input type="text" name="kw" class="form-control search-query" value="<?= $filters['kw']?>" placeholder="<?= yii::t('conf', 'index search placeholder') ?>">
                     <span class="input-group-btn">
                         <button type="submit"
                                 class="btn btn-default btn-sm">

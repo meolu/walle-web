@@ -40,13 +40,18 @@ class ConfController extends Controller
             ->leftJoin(Group::tableName(), "`$groupTable`.`project_id`=`$projectTable`.`id`")
             ->where(["`$groupTable`.`user_id`" => $this->uid, "`$groupTable`.`type`" => Group::TYPE_ADMIN]); 
 
-        $kw = \Yii::$app->request->post('kw');
+        $kw = (string)\Yii::$app->request->post('kw');
         if ($kw) {
             $project->andWhere(['like', "name", $kw]);
         }
         $project = $project->asArray()->all();
+
+        $filters = [
+            'kw' => $kw,
+        ];
         return $this->render('index', [
-            'list' => $project,
+            'filters' => $filters,
+            'list'    => $project,
         ]);
     }
 
