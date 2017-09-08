@@ -22,6 +22,8 @@ use app\components\GlobalHelper;
  * @property integer $updated_at
  * @property string $branch
  * @property string $file_list
+ * @property integer $server_publish_mode
+ * @property string $hosts
  */
 class Task extends \yii\db\ActiveRecord
 {
