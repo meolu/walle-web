@@ -69,7 +69,11 @@ class Command
         $status = 1;
         $log = '';
 
-        exec($command . ' 2>&1', $log, $status);
+        $commands = explode(' && ', $command);
+        $command = implode(' 2>&1 && ', $commands);
+        $command .= ' 2>&1';
+
+        exec($command, $log, $status);
         // 执行过的命令
         $this->command = $command;
         // 执行的状态
