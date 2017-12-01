@@ -15,6 +15,10 @@ return [
     'task_status_2' => '审核拒绝',
     'task_status_3' => '上线完成',
     'task_status_4' => '上线失败',
+	
+    'deploy_mode' => '全量/增量',
+	'deploy_mode_1' => '全量',
+	'deploy_mode_2' => '增量',
 
     'task_status_0_color' => 'text-primary',
     'task_status_1_color' => '',

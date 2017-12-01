@@ -19,7 +19,7 @@ $userName =  \Yii::$app->user->id ? $user->getName() : '';
     <meta charset="utf-8" />
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <title><?= Html::encode($this->title) ?> - <?= yii::t('w', 'walle') ?></title>
-    <link href="<?= Url::to('@web/dist/css/bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= Url::to('@web/dist/css/bootstrap.min.css?v=20171201') ?>" rel="stylesheet" />
     <link href="<?= Url::to('@web/dist/css/font-awesome.min.css') ?>" rel="stylesheet" />
 
     <!--[if IE 7]>

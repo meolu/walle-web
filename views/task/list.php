@@ -50,6 +50,7 @@ use yii\helpers\Url;
                 <?php } ?>
                 <th><?= yii::t('task', 'l_project') ?></th>
                 <th><?= yii::t('task', 'l_title') ?></th>
+                <th><?= \Yii::t('w', 'deploy_mode') ?></th>
                 <th><?= yii::t('task', 'l_time') ?></th>
                 <th><?= yii::t('task', 'l_branch') ?></th>
                 <th><?= yii::t('task', 'l_commit') ?></th>
@@ -64,6 +65,9 @@ use yii\helpers\Url;
                     <td><?= $item['project']['name'] ?> - <?= \Yii::t('w',
                             'conf_level_' . $item['project']['level']) ?></td>
                     <td><?= $item['title'] ?></td>
+                    <td <?php if ($item['file_transmission_mode'] == 2) { ?> data-html="true" data-rel="popover" data-content="<?= nl2br($item['file_list']) ?>" data-placement="right" <?php } ?> >
+					<?= \Yii::t('w', 'deploy_mode_' . $item['file_transmission_mode']) ?>
+					</td>
                     <td><?= $item['updated_at'] ?></td>
                     <td><?= $item['branch'] ?></td>
                     <td><?= $item['commit_id'] ?></td>
@@ -157,5 +161,9 @@ use yii\helpers\Url;
                 })
             }
         })
+		
+        // 公共提示
+        $('[data-rel=popover]').popover({container:'body'});
+		
     })
 </script>
