@@ -113,7 +113,6 @@ class Git extends Command {
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-//        $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty="%h - %an %s - -date:%ad" ';
         $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty=format:"%h - %ad - %an %s  " --date=local';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
@@ -125,7 +124,6 @@ class Git extends Command {
         // 总有一些同学没有团队协作意识，不设置好编码：(
         $log = htmlspecialchars(GlobalHelper::convert2Utf8($this->getExeLog()));
         $list = explode(PHP_EOL, $log);
-//        var_dump($result);
         foreach ($list as $item) {
             $commitId = substr($item, 0, strpos($item, '-') - 1);
             $history[] = [
