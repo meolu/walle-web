@@ -176,7 +176,7 @@ class Project extends \yii\db\ActiveRecord
             return $match[1];
         }
 
-        return basename($gitUrl);;
+        return basename($gitUrl);
     }
 
     /**
