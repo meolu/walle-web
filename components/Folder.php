@@ -264,7 +264,8 @@ class Folder extends Ansible {
     public function getLinkCommand($version) {
         $user = $this->config->release_user;
         $project = Project::getGitProjectName($this->getConfig()->repo_url);
-        $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $project, $project);
+        //发布目录不用git仓库名称，改成project_id
+        $currentTmp = sprintf('%s/%s/current-%s.tmp', rtrim($this->getConfig()->release_library, '/'), $this->getConfig()->id, $project);
         // 遇到回滚，则使用回滚的版本version
         $linkFrom = Project::getReleaseVersionDir($version);
         $cmd[] = sprintf('ln -sfn %s %s', $linkFrom, $currentTmp);
