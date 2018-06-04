@@ -165,6 +165,6 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/docs/weixin.wushuiyong.jpg" width="244" height="314" alt="吴水永微信" align=left />
 
-<img src="https://raw.githubusercontent.com/meolu/walle-web/master/docs/yexinhao.jpeg" width="244" height="314" alt="叶歆昊微信" align=left />
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/docs/yexinhao.jpeg" width="280" height="314" alt="叶歆昊微信" align=left />
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/docs/sunhenzhe.jpeg" width="244" height="314" alt="孙恒哲微信" align=left />
