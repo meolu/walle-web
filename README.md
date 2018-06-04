@@ -161,7 +161,7 @@ Discussing
 
 勾搭下
 --------
-人脉也是一件非常重要能力，请备注姓名@公司，谢谢：）
+人脉也是一项非常重要能力，请备注姓名@公司，谢谢：）
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/weixin.wushuiyong.jpg" width="244" height="314" alt="吴水永微信" align=left />
 
