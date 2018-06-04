@@ -161,10 +161,4 @@ Discussing
 
 勾搭下
 --------
-人脉也是一项非常重要能力，请备注姓名@公司，谢谢：）
-
 <img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/weixin.wushuiyong.jpg" width="244" height="314" alt="吴水永微信" align=left />
-
-<img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/yexinhao.jpeg" width="244" height="314" alt="叶歆昊微信" align=left />
-
-<img src="https://raw.githubusercontent.com/meolu/walle-web/feature-weixin/docs/sunhenzhe.jpeg" width="244" height="314" alt="孙恒哲微信" align=left />
