@@ -376,7 +376,7 @@ class WalleController extends Controller
                         ->asArray()
                         ->one();
         $record['memo'] = stripslashes($record['memo']);
-        $record['command'] = stripslashes($record['command']);
+        $record['command'] = stripslashes( isset($record['command']) ? $record['command'] : '' );
 
         $this->renderJson($record);
     }
