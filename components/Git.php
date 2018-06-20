@@ -163,4 +163,60 @@ class Git extends Command {
         return $history;
     }
 
+    /**
+     * 获取上线diff文件以及内容
+     * @param $task
+     * @return array
+     */
+    public function getDeployDiff(\app\models\Task $task) {
+        $diffs = [];
+
+        $local = Project::getDeployFromDir();
+        $cmd[] = sprintf('cd %s ', $local);
+
+        // 全量上线
+        if ($task->file_list == '') {
+            $cmd[] = '/usr/bin/env git log -p -1 ' . $task->commit_id;
+            $command = join(' && ', $cmd);
+            $result = $this->runLocalCommand($command);
+            if ($result) {
+                $diffs = $this->_formatGitLog($this->getExeLog());
+            }
+            return $diffs;
+        }
+
+        foreach (array_filter(array_map('trim', explode("\n", $task->file_list))) as $path) {
+            $cmd[] = sprintf('/usr/bin/env git log -p -1 %s -- %s', $task->commit_id, $path);
+            //var_dump(join(' && ', $cmd));
+            $result = $this->runLocalCommand(join(' && ', $cmd));
+            if ($result) {
+                $diffs = array_merge($diffs, $this->_formatGitLog($this->getExeLog()));
+            }
+        }
+        return $diffs;
+    }
+
+    /**
+     * 格式化diff命令结果
+     * @param $diffLog
+     * @return array
+     */
+    private function _formatGitLog($diffLog) {
+        $logs = [];
+        foreach (explode("\n", $diffLog) as $k => $line) {
+            if ($k <= 5) continue;
+            if (strpos($line, 'diff --git') !== false) {
+                $tmp = explode(' ', $line);
+                $script = array_pop($tmp);
+            }
+            if ($script) {
+                if (isset($logs[$script]) && count($logs[$script]) >= 160) {
+                    continue;
+                }
+                $logs[$script][] = $line;
+            }
+        }
+        return $logs;
+    }
+
 }

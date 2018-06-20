@@ -357,8 +357,13 @@ class WalleController extends Controller
             throw new \Exception(yii::t('w', 'you are not master of project'));
         }
 
+        $conf = Project::getConf($this->task->project->id);
+        $revision = Repo::getRevision($conf);
+        $diff = $revision->getDeployDiff($this->task);
+
         return $this->render('deploy', [
             'task' => $this->task,
+            'diff' => $diff
         ]);
     }
 

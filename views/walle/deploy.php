@@ -20,6 +20,10 @@ use yii\helpers\Url;
         /*float: right;*/
         margin-left: 30px;
     }
+    pre {
+        font-size: 11px;
+    }
+
 </style>
 <div class="box" style="height: 100%">
     <h4 class="box-title header smaller red">
@@ -59,6 +63,19 @@ use yii\helpers\Url;
         </span>
         <br><br>
         <i class="icon-bullhorn"></i><span><?= yii::t('walle', 'error todo') ?></span>
+    </div>
+
+    <!-- code 代码对比-->
+    <div id="code_compare">
+        <?php foreach ($diff as $file => $lines) {?>
+        <h4><a href="javascript:void(0);" class="btn-show"><?php echo htmlspecialchars($file); ?></a></h4>
+        <pre style="display: none">
+            <?php foreach ($lines as $line) {?>
+                <?php $clz = substr($line, 0, 1) == '+' ? 'bg-success' : (substr($line, 0, 1) == '-' ? 'bg-warning' : '');?>
+                <span class="pull-left <?php echo $clz;?>"><?= $line?></span>
+            <?php } ?>
+        </pre>
+        <?php } ?>
     </div>
 
 </div>
@@ -118,6 +135,16 @@ use yii\helpers\Url;
             }
             setTimeout(getProcess, 600);
         })
+
+        // 默认第一个diff显示
+        $("#code_compare").find('pre').eq(0).show();
+        $(".btn-show").click(function () {
+            var that = $(this)
+            $("#code_compare").find('pre').each(function () {
+                $(this).hide();
+            });
+            that.parent().next().show();
+        });
 
         var _hmt = _hmt || [];
         (function() {

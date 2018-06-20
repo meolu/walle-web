@@ -208,6 +208,47 @@ class Svn extends Command {
     }
 
     /**
+     * 对比上线文件差异
+     * @param Task $task
+     */
+    public function getDeployDiff(\app\models\Task $task) {
+
+        $local = $task->project->getSvnDeployBranchFromDir($task->branch);
+        $cmd[] = sprintf('cd %s ', $local);
+
+        if ($task->file_list == '') {
+            $cmd[] = $this->_getSvnCmd(sprintf("svn diff -x '-w --ignore-eol-style' -r BASE:%d", $task->commit_id));
+            $command = join(' && ', $cmd);
+            $result = $this->runLocalCommand($command);
+            if ($result) {
+                return $this->_formatSvnLog($this->getExeLog());
+            }
+            return [];
+        }
+
+        $diffs = [];
+        foreach (array_filter(array_map('trim', explode("\n", $task->file_list))) as $path) {
+            $file = sprintf('%s/%s', $local, $path);
+            if (!file_exists($file)) {
+                $cmd = $this->_getSvnCmd("svn up -r BASE {$file}");
+                exec($cmd, $output, $error);
+                if ($error != 0) {
+                    $diffs[$path][] = 'new add file!';
+                }
+                continue;
+            }
+            $cmd[] = $this->_getSvnCmd(" svn diff -x '-w --ignore-eol-style' -r BASE:{$task->commit_id} {$path}");
+
+            $command = join(' && ', $cmd);
+            $result = $this->runLocalCommand($command);
+            if ($result) {
+                $diffs = array_merge($diffs, $this->_formatSvnLog($this->getExeLog()));
+            }
+        }
+        return $diffs;
+    }
+
+    /**
      * 格式化svn log xml 2 array
      *
      * @param $xmlString
@@ -264,6 +305,34 @@ class Svn extends Command {
     private function _getSvnCmd($cmd) {
         return sprintf('/usr/bin/env LC_ALL=en_US.UTF-8 %s --username=%s --password=%s --non-interactive --trust-server-cert',
             $cmd, escapeshellarg($this->config->repo_username), escapeshellarg($this->config->repo_password));
+    }
+
+    /**
+     * 格式化svn diff的log
+     * @param $diffLog
+     * @return array
+     */
+    private function _formatSvnLog($diffLog) {
+        $logs = [];
+        $script = '';
+        foreach (explode("\n", $diffLog) as $k => $line) {
+            if (strpos($line, 'Index: ') === 0 || strpos($line, '===') === 0) {
+                continue;
+            }
+            if (in_array($prefix = substr($line, 0, 4), array('--- ', '+++ '))) {
+
+                if ($prefix == '+++ ') {
+                    $script = strstr(substr( $line, 4), "\t", true);
+                }
+            }
+            if ($script != '') {
+                if (isset($logs[$script]) && count($logs[$script]) >= 160) {
+                    continue;
+                }
+                $logs[$script][] = $line;
+            }
+        }
+        return $logs;
     }
 
 }
