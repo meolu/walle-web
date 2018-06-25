@@ -255,14 +255,14 @@ class Project extends \yii\db\ActiveRecord
 
     /**
      * 拼接目标机要发布的目录
-     * {release_library}/{project}/{version}
+     * {release_library}/{project_id}/{version}
      *
      * @param $version
      * @return string
      */
     public static function getReleaseVersionDir($version = '') {
         return sprintf('%s/%s/%s', rtrim(static::$CONF->release_library, '/'),
-            static::getGitProjectName(static::$CONF->repo_url), $version);
+                static::$CONF->id,$version);
     }
 
     /**
