@@ -94,6 +94,7 @@ class ConfController extends Controller
         // 添加用户
         if (\Yii::$app->request->getIsPost() && \Yii::$app->request->post('user')) {
             Group::addGroupUser($projectId, \Yii::$app->request->post('user'));
+            $this->refresh();
         }
         // 项目的分组用户
         $group = Group::find()
