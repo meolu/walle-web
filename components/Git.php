@@ -113,7 +113,7 @@ class Git extends Command {
         $destination = Project::getDeployFromDir();
         $this->updateRepo($branch, $destination);
         $cmd[] = sprintf('cd %s ', $destination);
-        $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty="%h - %an %s" ';
+        $cmd[] = '/usr/bin/env git log -' . $count . ' --pretty=format:"%h - %ad - %an %s  " --date=local';
         $command = join(' && ', $cmd);
         $result = $this->runLocalCommand($command);
         if (!$result) {
