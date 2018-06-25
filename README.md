@@ -1,6 +1,7 @@
 ![](https://raw.github.com/meolu/walle-web/master/docs/logo.jpg)
 
 Walle - A Deployment Tool
+
 =========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 [![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)

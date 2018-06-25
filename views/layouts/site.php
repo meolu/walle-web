@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <title><?= yii::t("w","log-platform")?> - <?= yii::t("w","w")?></title>
     <!-- basic styles -->
 
-    <link href="<?= Url::to('@web/dist/css/bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= Url::to('@web/dist/css/bootstrap.min.css?v=20171201') ?>" rel="stylesheet" />
     <link rel="stylesheet" href="<?= Url::to('@web/dist/css/font-awesome.min.css') ?>" />
 
     <!--[if IE 7]>

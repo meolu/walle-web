@@ -37,16 +37,20 @@ use app\models\Task;
               <label class="text-right bolder blue">
                   <?= yii::t('task', 'file transmission mode'); ?>
               </label>
+			  
+			  <!--管理员、测试、预发布可全量-->
+			  <?php if ($conf['user_id'] == 1 or $conf['level'] == 1 or $conf['level'] == 2) { ?>
               <div id="transmission-full-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'file transmission mode full tip') ?>" data-placement="right">
                   <label>
-                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" checked="checked" type="radio" class="ace">
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_FULL ?>" type="radio" class="ace">
                       <span class="lbl"><?= yii::t('task', 'file transmission mode full') ?></span>
                   </label>
               </div>
+			  <?php } ?>
 
               <div id="transmission-part-ctl" class="radio" style="display: inline;" data-rel="tooltip" data-title="<?= yii::t('task', 'file transmission mode part tip') ?>" data-placement="right">
                   <label>
-                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" type="radio" class="ace">
+                      <input name="Task[file_transmission_mode]" value="<?= Task::FILE_TRANSMISSION_MODE_PART ?>" checked="checked" type="radio" class="ace">
                       <span class="lbl"><?= yii::t('task', 'file transmission mode part') ?></span>
                   </label>
               </div>
@@ -62,7 +66,7 @@ use app\models\Task;
                   'data-placement' => 'top',
                   'data-rel'       => 'tooltip',
                   'data-title'     => yii::t('task', 'file list placeholder'),
-                  'style'          => 'display: none',
+                  'style'          => 'display: inline-block;',
               ])
               ->label(yii::t('task', 'file list'),
                   ['class' => 'control-label bolder blue', 'style' => 'display: none']) ?>
