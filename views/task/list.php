@@ -63,7 +63,7 @@ use yii\helpers\Url;
                     <?php } ?>
                     <td><?= $item['project']['name'] ?> - <?= \Yii::t('w',
                             'conf_level_' . $item['project']['level']) ?></td>
-                    <td><?= $item['title'] ?></td>
+                    <td><a href="<?= Url::to('@web/walle/deploy?taskId=') . $item['id'] ?>"><?= $item['title'] ?></a></td>
                     <td><?= $item['updated_at'] ?></td>
                     <td><?= $item['branch'] ?></td>
                     <td><?= $item['commit_id'] ?></td>

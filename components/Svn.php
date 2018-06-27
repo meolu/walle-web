@@ -214,6 +214,9 @@ class Svn extends Command {
     public function getDeployDiff(\app\models\Task $task) {
 
         $local = $task->project->getSvnDeployBranchFromDir($task->branch);
+        if (!file_exists($local) || count(scandir($local)) == 0) {
+            return [];
+        }
         $cmd[] = sprintf('cd %s ', $local);
 
         if ($task->file_list == '') {

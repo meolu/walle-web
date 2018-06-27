@@ -172,8 +172,11 @@ class Git extends Command {
         $diffs = [];
 
         $local = Project::getDeployFromDir();
-        $cmd[] = sprintf('cd %s ', $local);
 
+        if (!file_exists($local) || count(scandir($local)) == 0) {
+            return $diffs;
+        }
+        $cmd[] = sprintf('cd %s ', $local);
         // 全量上线
         if ($task->file_list == '') {
             $cmd[] = '/usr/bin/env git log -p -1 ' . $task->commit_id;
