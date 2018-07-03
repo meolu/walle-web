@@ -9,16 +9,16 @@
     "require": {
         "php": ">=5.5.0",
         "yiisoft/yii2": "~2.0.15",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*"
+        "yiisoft/yii2-bootstrap": "~2.0.8",
+        "yiisoft/yii2-swiftmailer": "~2.0.7"
     },
     "require-dev": {
         "codeception/codeception": "~2.4.2",
         "codeception/specify": "~0.4.6",
         "codeception/verify": "~0.4.0",
-        "yiisoft/yii2-debug": "*",
-        "yiisoft/yii2-gii": "*",
-        "yiisoft/yii2-faker": "*"
+        "yiisoft/yii2-debug": "~2.0.13",
+        "yiisoft/yii2-gii": "~2.0.7",
+        "yiisoft/yii2-faker": "~2.0.4"
     },
     "config": {
         "process-timeout": 1800,
