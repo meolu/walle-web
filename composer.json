@@ -13,7 +13,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.7"
     },
     "require-dev": {
-        "codeception/codeception": "~2.4.2",
+        "codeception/codeception": "~2.2.12",
         "codeception/specify": "~0.4.6",
         "codeception/verify": "~0.4.0",
         "yiisoft/yii2-debug": "~2.0.13",
