@@ -332,7 +332,7 @@ class Svn extends Command {
                 if (isset($logs[$script]) && count($logs[$script]) >= 160) {
                     continue;
                 }
-                $logs[$script][] = $line;
+                $logs[$script][] = htmlspecialchars($line);
             }
         }
         return $logs;
