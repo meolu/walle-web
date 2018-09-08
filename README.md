@@ -7,6 +7,10 @@ Walle - A Deployment Tool
 [![Packagist](https://img.shields.io/packagist/v/meolu/walle-web.svg)](https://packagist.org/packages/meolu/walle-web)
 [![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
 
+:clap: :clap: :clap: :clap: :clap:
+
+**Now, Walle-web 2.0 is developing and testing, if you are interested in 2.0, you can add wechat: wu-shuiyong with your name and company, for more infomation or a trial edition, thank you : )**
+
 A web deployment tool, Easy for configuration, Fully functional, Smooth interface, Out of the box.
 support git/svn Version control system, no matter what language you are, php/java/ruby/python, just as jenkins. you can deploy the code or output to multiple servers easily by walle.
 
