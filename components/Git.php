@@ -29,6 +29,7 @@ class Git extends Command {
             $cmd[] = sprintf('/usr/bin/env git checkout -q %s', $branch);
             $cmd[] = sprintf('/usr/bin/env git fetch -p -q --all');
             $cmd[] = sprintf('/usr/bin/env git reset -q --hard origin/%s', $branch);
+            $cmd[] = sprintf('/usr/bin/env git submodule --quiet update --init');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
@@ -38,6 +39,7 @@ class Git extends Command {
             $cmd[] = sprintf('cd %s ', $gitDir);
             $cmd[] = sprintf('/usr/bin/env git clone -q %s .', $this->getConfig()->repo_url);
             $cmd[] = sprintf('/usr/bin/env git checkout -q %s', $branch);
+            $cmd[] = sprintf('/usr/bin/env git submodule --quiet update --init');
             $command = join(' && ', $cmd);
             return $this->runLocalCommand($command);
         }
