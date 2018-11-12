@@ -21,12 +21,12 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
 
 
 Discussing
-----------
+=========================
 - [submit issue](https://github.com/meolu/walle-web/issues/new)
 
 
 勾搭下
---------
+=========================
 写开源是我的业余爱好，大数据平台和营销技术才是主业，无论哪个都欢迎交流。  
 人脉也是一项重要能力，请备注姓名@公司，谢谢：）
 
@@ -37,11 +37,10 @@ Discussing
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/weixin-ye.jpg" width="244" height="314" alt="叶歆昊微信" align=left />  
 
 
----
-
+<br>
 
 新的惊喜
---------
+=========================
 后续更新和解剖讨论将会放到公众号：walle-web，晨间除了写开源，也会写千字文，关注不迷路，谢谢：）
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/wechat-gzh.jpg" width="244" height="314" alt="公众号 walle-web" />
