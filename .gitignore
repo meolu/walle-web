@@ -1,4 +1,1 @@
-/vendor
-/config/local.php
-tests/_output/*
-.idea/
+.DS_Store
