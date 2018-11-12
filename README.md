@@ -27,7 +27,8 @@ Discussing
 
 勾搭下
 --------
-写开源是我的业余爱好，大数据平台和营销技术才是主业，无论哪个都欢迎交流。人脉也是一项重要能力，请备注姓名@公司，谢谢：）
+写开源是我的业余爱好，大数据平台和营销技术才是主业，无论哪个都欢迎交流。  
+人脉也是一项重要能力，请备注姓名@公司，谢谢：）
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/weixin-wushuiyong.jpg" width="244" height="314" alt="吴水永微信" align=left />
 
@@ -35,6 +36,8 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/weixin-ye.jpg" width="244" height="314" alt="叶歆昊微信" align=left />  
 
+
+---
 
 
 新的惊喜
