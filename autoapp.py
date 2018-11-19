@@ -8,7 +8,7 @@ from walle.config.settings_dev import DevConfig
 from walle.config.settings_test import TestConfig
 from walle.config.settings_prod import ProdConfig
 
-CONFIG = DevConfig if get_debug_flag(default=True) else ProdConfig
+CONFIG = DevConfig if get_debug_flag() else ProdConfig
 
 # from flask_login import current_user
 
