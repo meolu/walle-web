@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_mail import Mail
 from walle.service.rbac.role import Permission
+from flask_socketio import SocketIO
 
 
 bcrypt = Bcrypt()
@@ -18,3 +19,4 @@ login_manager = LoginManager()
 mail = Mail()
 
 permission = Permission()
+socketio = SocketIO()

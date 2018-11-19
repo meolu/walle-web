@@ -430,9 +430,9 @@ class ServerModel(SurrogatePK, Model):
 
     def enable(self):
         # current_app.logger.info(dir(permission.app))
-        current_app.logger.info(permission.enable_uid(3))
+        # current_app.logger.info(permission.enable_uid(3))
         return {
-            'enable_update': permission.enable_role(DEVELOPER),
+            # 'enable_update': permission.enable_role(DEVELOPER),
             # 'enable_delete': permission.enable_role(DEVELOPER),
             'enable_create': False,
             'enable_online': False,
