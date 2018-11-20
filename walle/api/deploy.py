@@ -12,7 +12,6 @@ from flask import request
 from walle.api.api import SecurityResource
 from walle.model.deploy import TaskRecordModel
 from walle.service.deployer import Deployer
-from walle.service.websocket import WSHandler
 
 
 class DeployAPI(SecurityResource):
@@ -49,7 +48,7 @@ class DeployAPI(SecurityResource):
         task_id = request.form['task_id']
         if not task_id or not task_id.isdigit():
             return self.render_json(code=-1)
-        wi = Deployer(task_id, websocket=WSHandler)
+        wi = Deployer(task_id)
         ret = wi.walle_deploy()
         record = TaskRecordModel().fetch(task_id)
         return self.render_json(data={
