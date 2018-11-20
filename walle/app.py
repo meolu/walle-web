@@ -1,45 +1,36 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 import logging
-import sys, os
+import os
+import sys
 
-from flask import Flask, render_template, current_app, session,request, abort, Response
+from flask import Flask, render_template, current_app
+from flask_login import current_user
 from flask_restful import Api
-from tornado.ioloop import IOLoop
-from tornado.web import Application, FallbackHandler
-from tornado.wsgi import WSGIContainer
+from flask_socketio import emit, join_room
 from walle import commands
-from walle.api.api import ApiResource
 from walle.api import access as AccessAPI
 from walle.api import api as BaseAPI
 from walle.api import deploy as DeployAPI
 from walle.api import environment as EnvironmentAPI
+from walle.api import general as GeneralAPI
 from walle.api import group as GroupAPI
 from walle.api import passport as PassportAPI
 from walle.api import project as ProjectAPI
-from walle.api import general as GeneralAPI
+from walle.api import repo as RepoApi
 from walle.api import role as RoleAPI
 from walle.api import server as ServerAPI
+from walle.api import space as SpaceAPI
 from walle.api import task as TaskAPI
 from walle.api import user as UserAPI
-from walle.api import space as SpaceAPI
-from walle.api import repo as RepoApi
-from walle.config.settings_dev import DevConfig
-from walle.config.settings_test import TestConfig
+from walle.api.api import ApiResource
 from walle.config.settings_prod import ProdConfig
-from walle.model.user import UserModel, MemberModel
+from walle.model.user import UserModel
+from walle.service.code import Code
+from walle.service.error import WalleError
 from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
-from walle.service.error import WalleError
-from walle.service.websocket import WSHandler
-from flask_socketio import emit, join_room, leave_room
 
-from walle.service.code import Code
-from flask_login import current_user
-
-
-# TODO 添加到这,则对单测有影响
-# app = Flask(__name__.split('.')[0])
 
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
@@ -109,7 +100,6 @@ def register_extensions(app):
     def unauthorized():
         # TODO log
         current_app.logger.info('============ @login_manager.unauthorized_handler ============')
-        # return Response(ApiResource.render_json(code=Code.space_error))
         return BaseAPI.ApiResource.json(code=Code.unlogin)
 
     login_manager.init_app(app)
@@ -137,8 +127,7 @@ def register_blueprints(app):
     api.add_resource(ProjectAPI.ProjectAPI, '/api/project/', '/api/project/<int:project_id>', '/api/project/<int:project_id>/<string:action>', endpoint='project')
     api.add_resource(RepoApi.RepoAPI, '/api/repo/<string:action>/', endpoint='repo')
     api.add_resource(TaskAPI.TaskAPI, '/api/task/', '/api/task/<int:task_id>', '/api/task/<int:task_id>/<string:action>', endpoint='task')
-    api.add_resource(EnvironmentAPI.EnvironmentAPI, '/api/environment/', '/api/environment/<int:env_id>',
-                     endpoint='environment')
+    api.add_resource(EnvironmentAPI.EnvironmentAPI, '/api/environment/', '/api/environment/<int:env_id>', endpoint='environment')
 
     return None
 
