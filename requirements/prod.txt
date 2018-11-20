@@ -1,6 +1,6 @@
 # Everything needed in production
 fabric2==2.3.1
-tornado==5.1
+eventlet==0.23.0
 
 # Flask
 Flask==0.12.2
