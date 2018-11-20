@@ -32,7 +32,7 @@ from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
 from walle.service.error import WalleError
 from walle.service.websocket import WSHandler
-from flask_socketio import emit
+from flask_socketio import emit, join_room, leave_room
 
 from walle.service.code import Code
 from flask_login import current_user
@@ -210,47 +210,33 @@ def register_logging(app):
     file_handler_error.setLevel(logging.ERROR)
     app.logger.addHandler(file_handler_error)
 
+
 def register_socketio(app):
     socketio.init_app(app)
+    namespace = '/walle'
+    room = 12
 
-    # @socketio.on('connect', namespace='/websocket')
-    # def test_connect():
-    #     emit('server_response', {'data': 'ttt'}, namespace='/websocket')
-
-    @socketio.on('joined', namespace='/websocket')
+    @socketio.on('open', namespace=namespace)
     def joined(message):
-        """Sent by clients when they enter a room.
-        A status message is broadcast to all people in the room."""
-        emit('message', {'msg': current_user.username + " | " + str(current_user.id) + " | " + str(session['space_id'])},)
+        app.logger.info('====== join =====')
+        app.logger.info(message)
 
+        if not current_user.is_authenticated:
+            emit('close', {'msg': 'closing becuse you are not login'})
 
-    @socketio.on('deploy', namespace='/websocket')
+        join_room(room=room, namespace=namespace)
+        emit('console', {'msg': 'opening....'}, room=room)
+
+    @socketio.on('deploy', namespace=namespace)
     def test_message(message):
-        emit('message', {'msg': message['msg']})
+        # join_room(room="BigData", sid=1, namespace=namespace)
+        emit('console', {'msg': message['msg']}, room=room)
         from walle.service.deployer import DeploySocketIO
         wi = DeploySocketIO(12)
-        current_app.logger.info(current_user.id)
         ret = wi.deploy()
 
-    socketio.run(app, host='dev.admin.walle-web.io', port=5000)
-
-def register_websocket(app):
-    settings = {'debug': True}
-
-    # TODO fix websocket app_context
-    ctx = app.app_context()
-    ctx.push()
-
-    wsgi_app = WSGIContainer(app)
-
-    application = Application([
-        (r'/websocket/console', WSHandler),
-        (r'.*', FallbackHandler, dict(fallback=wsgi_app))
-    ], **settings)
-
-    application.listen(5000)
-    IOLoop.instance().start()
-    pass
+    socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
+    return app
 
 
 class InfoFilter(logging.Filter):

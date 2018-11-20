@@ -7,6 +7,8 @@ from datetime import timedelta
 class DevConfig(Config):
     """Development configuration."""
 
+    HOST = 'dev.admin.walle-web.io'
+    PORT = 5000
     ENV = 'dev'
     DEBUG = True
     DB_NAME = 'walle_python'

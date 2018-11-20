@@ -106,7 +106,7 @@ class DeploySocketIO:
         # 检查 当前用户
         command = 'whoami'
         current_app.logger.info(command)
-        emit('message', {'msg':  command})
+        emit('message', {'commad':  command}, room=self.task_id)
 
         result = self.local.run(command, wenv=self.config())
 

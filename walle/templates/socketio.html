@@ -3,36 +3,59 @@
 <head>
     <meta charset="utf-8">
 </head>
-<p>Flask Tornado</p>
-<textarea id="log"style="
-    width: 300px;
-    height: 200px;
-" ></textarea>
+<style>
+    #solo {
+        width: 800px;
+    }
+</style>
+<p>Flask SocketIO</p>
+<div id="solo">
+    welcome to walle 2.0
+</div>
 <br>
-<input id="say" type="text" >
+<input id="say" type="text">
 <button id="send" type="button">Send!</button>
 <body>
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="http://dev.admin.walle-web.io/socket.io.min.js"></script>
 <script>
     $(document).ready(function () {
-        namespace = '/websocket'
+        namespace = '/walle'
+        solo = $('#solo')
 
         var socket = io.connect('http://' + document.domain + namespace);
-        socket.on('connect', function () {
-            socket.emit('joined', {});
+        data = {
+            'msg': 10
+        }
+        socket.on('connect', function (data) {
+            write(data)
+            socket.emit('open', data);
         });
 
-        socket.on('message', function (data) {
-            $('#log').val($('#log').val() + data.msg + '\n' );
+        socket.on('console', function (data) {
+            write(data)
             console.log(data)
         });
+
+        socket.on('close', function (data) {
+            write(data)
+            socket.close()
+        });
+
+        function write(data) {
+            console.log(data)
+            if (!data) {
+                return ''
+            }
+            msg = JSON.stringify(data);
+            solo.html(solo.html() + '<br>' + msg);
+        }
 
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {
                 $("#send").trigger("click");
-                say = $('#say').val();
-                socket.emit('deploy', {msg: say});
+                task = $('#say').val();
+                socket.emit('deploy', {msg: task});
                 $('#say').val('')
             }
         });
