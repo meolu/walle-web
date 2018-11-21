@@ -1,0 +1,40 @@
+# Everything needed in production
+fabric2==2.3.1
+tornado==5.1
+
+# Flask
+Flask==0.12.2
+MarkupSafe==1.0
+Werkzeug==0.12.2
+Jinja2==2.9.6
+Flask-RESTful==0.3.5
+Flask-Babel==0.11.2
+Flask-Mail==0.9.0
+flask-socketio==3.0.2
+
+# Database
+Flask-SQLAlchemy==2.2
+psycopg2==2.7.1
+SQLAlchemy==1.1.9
+MySQL-python==1.2.5
+marshmallow==2.13.5
+
+# Migrations
+Flask-Migrate==2.0.3
+
+# Forms
+Flask-WTF==0.14.2
+WTForms==2.1
+
+# Deployment
+gunicorn>=19.1.1
+
+# Auth
+Flask-Login==0.4.0
+Flask-Bcrypt==0.7.1
+
+anyjson==0.3.3
+celery==3.1.18
+pycrypto==2.6.1
+pytz==2015.6
+requests==2.7.0

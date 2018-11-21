@@ -1,4 +1,54 @@
-/vendor
-/config/local.php
-tests/_output/*
-.idea/
+############################# python 中间文件 #############################
+*.pyc
+walle_web.egg-info/
+build/
+dist/
+env/
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.swo
+.swp
+
+############################# 日志文件 #############################
+*.log
+nohup.out
+
+############################# 配置文件 #############################
+*.idea
+.DS_Store
+.project
+.pydevproject
+
+############################# 可能的数据文件 #############################
+*.db
+
+############################# 压缩文件 #############################
+*.tar.gz
+*.tgz
+
+############################# 开发文件 #############################
+flask
+.tox/
+.coverage
+.cache
+.coveralls.yml
+nosetests.xml
+coverage.xml
+venv
+
+############################# 保留文件 #############################
+!requirements.txt
+!requirements/
+!.travis.yml
+

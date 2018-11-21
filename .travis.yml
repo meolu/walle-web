@@ -1,28 +1,35 @@
-language: php
-php:
-  - 5.5
-  - 5.6
-
-mysql:
-  database: travis_ci_drupal_module_example_test
-  username: root
-  encoding: utf8
-
-install:
-  - travis_retry composer self-update && composer update nothing && composer --version
-  - travis_retry composer global require fxp/composer-asset-plugin --no-plugins
-  - composer install --prefer-source --no-interaction --dev
-  - echo 'xdebug.max_nesting_level=600' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
-before_script:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS walle DEFAULT CHARSET utf8 COLLATE utf8_general_ci;'
-  - ./yii migrate/up  --interactive=0
-
-script:
-  - find ./ -path './vendor' -prune -o -type f -iname "*.php" -print0 | xargs -0 -n1 php -l
+language: python
+sudo: enabled
+cache:
+  directories:
+    - $HOME/.cache/pip
+python:
+  - "2.7"
 matrix:
+  # NOTE: comment this out if we have to reinstate any allow_failures, because
+  # of https://github.com/travis-ci/travis-ci/issues/1696 (multiple
+  # notifications)
   fast_finish: true
-
+install:
+  - echo "#install#"
+  # For some reason Travis' build envs have wildly different pip/setuptools
+  # versions between minor Python versions, and this can cause many hilarious
+  # corner packaging cases. So...
+  - pip install -U pip
+  # Setuptools 34+ seems to get less stable
+  - pip install 'setuptools>33,<34'
+  # Pre-requirements sanity test (again, resembles pure, non-dev install
+  # environment.) Avoids e.g. spec's 'six' from gumming up our attempts to
+  # import our vendorized 'six'.
+  - pip install -r requirements/dev.txt
+  - pip list --format=columns
+before_script:
+  - echo "#before_script#"
+  - mkdir -p /tmp/walle/{logs,library,webroot,releases}
+script:
+  - echo "#script#"
+  - export FLASK_APP=autoapp.py
+  - python -m flask test
 notifications:
     on_success: never
     on_failure: always
