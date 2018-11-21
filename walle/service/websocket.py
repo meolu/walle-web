@@ -6,67 +6,29 @@
     :created time: 2018-09-06 20:20:33
     :author: wushuiyong@walle-web.io
 """
-import anyjson as json
-from tornado.websocket import WebSocketHandler
 from flask import current_app
 from flask_login import current_user
-from walle.service.deployer import Deployer
+from flask_socketio import emit, join_room
+from walle.model.deploy import TaskRecordModel
 
-class WSHandler(WebSocketHandler):
-    waiters = set()
 
+class WalleSocketIO(object):
     app = None
+    room = None
+
+    def __init__(self, room):
+        self.room = room
 
     def init_app(self, app):
         self.app = app
 
-    def check_origin(self, origin):
-        return True
-
-    def open(self):
-        # TODO
-        # from walle.model.user import UserModel
-        # from flask_login import login_user
-        # user = UserModel.query.filter_by(email='wushuiyong-owner@walle-web.io').first()
-        # login_user(user)
-        from flask import session
-
-        ctx = current_app.app_context()
-        ctx.push()
-        current_app.logger.info(session['space_id'])
-
-        WSHandler.waiters.add(self)
-
-        print 'new connection'
-        self.write_message(json.dumps(dict(output="Hello World")))
-
-    def on_message(self, incoming):
-        print 'message received %s' % incoming
-
-        text = json.loads(incoming).get('text', None)
-        task_id = text if text else 'Sorry could you repeat?'
-
-
-        wi = Deployer(task_id, websocket=self)
-        current_app.logger.info(current_user.id)
-        ret = wi.walle_deploy()
-
-        response = json.dumps(dict(output='receive: {0}'.format(task_id)))
-        self.write_message(response)
-
-    def on_close(self):
-        print 'connection closed'
-
-
-    @classmethod
-    def send_updates(cls, incoming):
-        response = json.dumps(incoming)
-        current_app.logger.info("sending %s to %d waiters", str(incoming), len(cls.waiters))
-        current_app.logger.info(cls.waiters)
-        for waiter in cls.waiters:
-            try:
-                waiter.write_message(response)
-            except Exception, e:
-                current_app.logger.exception(e)
+    def logs(self):
+        emit('console', {'event': 'task:console', 'data': {'task': self.room}}, room=self.room)
+        logs = TaskRecordModel().fetch(task_id=self.room)
+        for log in logs:
+            # current_app.logger.info(log)
+            log = TaskRecordModel.logs(**log)
+            # current_app.logger.info(self.room)
+            emit('console', {'event': 'task:console', 'data': log}, room=self.room)
 
 

@@ -24,14 +24,46 @@
         solo = $('#solo')
 
         var socket = io.connect('http://' + document.domain + namespace);
-        data = {
-            'msg': 10
+        post = {
+            'task': 12
         }
+        /// 返回基本结构: emit('construct', {
+        ///                      'event': 'pusher:construct',
+        ///                       'data': {"status":0,"success":"","sequence":1,"cmd":"python --version","host":"127.0.0.1","error":""}
+        ///                  })
+        ///     client              server
+        ///     -------------|------------
+        ///     connect      ->
+        ///                         open
+        ///     construct    <-
+        ///                  ->
+        ///     console      <-     deploy
+        ///     console      <-
+        ///
+        ///     获取历史日志
+        ///     client              server
+        ///     -------------|------------
+        ///     connect      ->
+        ///                         open
+        ///     construct    <-
+        ///                  ->
+        ///     console      <-     logs
+        ///     console      <-
+        ///
+
+        // 1.发起连接, 连上之后发起open
         socket.on('connect', function (data) {
             write(data)
-            socket.emit('open', data);
+            socket.emit('open', post);
+        });
+        // 2.返回construct, 初始化页面信息
+        socket.on('construct', function (data) {
+            write(data)
+            console.log(data)
+            socket.emit('logs', {'task': 12})
         });
 
+        // 3.发送deploy命令之后, 将会收到console
         socket.on('console', function (data) {
             write(data)
             console.log(data)
@@ -55,7 +87,7 @@
             if (event.keyCode == 13) {
                 $("#send").trigger("click");
                 task = $('#say').val();
-                socket.emit('deploy', {msg: task});
+                socket.emit('deploy', {'task': task});
                 $('#say').val('')
             }
         });

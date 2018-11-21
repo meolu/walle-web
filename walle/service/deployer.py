@@ -60,7 +60,7 @@ class DeploySocketIO:
                             port=current_app.config.get('LOCAL_SERVER_PORT'))
         self.TaskRecord = TaskModel.TaskRecordModel()
         current_app.logger.info('DeploySocketIO.__init__ before')
-        emit('message', {'msg': 'DeploySocketIO.__init__'})
+        emit('console', {'event': 'pusher:console', 'data': {'msg': 'init task'}})
         current_app.logger.info('DeploySocketIO.__init__ after')
         # if websocket:
         #     websocket.send_updates(__name__)
@@ -93,10 +93,6 @@ class DeploySocketIO:
 
         :return:
         '''
-        current_app.logger.info('deploy ing')
-        emit('message', {'msg':  'deploy ing'})
-        current_app.logger.info('deploy end')
-
         self.stage = self.stage_prev_deploy
         self.sequence = 1
 
@@ -106,7 +102,7 @@ class DeploySocketIO:
         # 检查 当前用户
         command = 'whoami'
         current_app.logger.info(command)
-        emit('message', {'commad':  command}, room=self.task_id)
+        emit('console', {'event': 'task:console', 'data': {'commad':  command}}, room=self.task_id)
 
         result = self.local.run(command, wenv=self.config())
 

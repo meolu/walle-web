@@ -5,7 +5,6 @@
 # @Description:
 
 from sqlalchemy import String, Integer, Text, DateTime
-from flask import current_app
 # from flask_cache import Cache
 from datetime import datetime
 
@@ -110,7 +109,6 @@ class TaskModel(SurrogatePK, Model):
 
         db.session.add(project)
         db.session.commit()
-        
 
         if project.id:
             self.id = project.id
@@ -133,7 +131,7 @@ class TaskModel(SurrogatePK, Model):
         id = id if id else self.id
         self.query.filter_by(id=id).update({'status': self.status_remove})
         ret = db.session.commit()
-        
+
         return ret
 
     def to_json(self):
@@ -205,6 +203,18 @@ class TaskRecordModel(Model):
         data = self.query.filter_by(task_id=task_id).order_by('id desc').all()
         return [p.to_json() for p in data]
 
+    @classmethod
+    def logs(cls, host, command, status, stage, sequence, success, error, *args, **kwargs):
+        return {
+            'host': host,
+            'cmd': command,
+            'status': status,
+            'stage': stage,
+            'sequence': sequence,
+            'success': success,
+            'error': error,
+        }
+
     def to_json(self):
         return {
             'id': self.id,
@@ -271,7 +281,7 @@ class EnvironmentModel(Model):
 
         db.session.add(env)
         db.session.commit()
-        
+
         if env.id:
             self.id = env.id
 
@@ -283,7 +293,7 @@ class EnvironmentModel(Model):
         role.name = env_name
         role.status = status
         ret = db.session.commit()
-        
+
         return ret
 
     def remove(self, env_id=None):
@@ -294,7 +304,7 @@ class EnvironmentModel(Model):
         """
         self.query.filter_by(id=self.id).update({'status': self.status_remove})
         ret = db.session.commit()
-        
+
         return ret
 
     def to_json(self):
@@ -368,7 +378,7 @@ class ServerModel(SurrogatePK, Model):
 
         db.session.add(server)
         db.session.commit()
-        
+
         if server.id:
             self.id = server.id
 
@@ -386,7 +396,7 @@ class ServerModel(SurrogatePK, Model):
         role.host = host
 
         ret = db.session.commit()
-        
+
         return ret
 
     def remove(self, id=None):
@@ -399,7 +409,7 @@ class ServerModel(SurrogatePK, Model):
         self.query.filter_by(id=id).update({'status': self.status_remove})
 
         ret = db.session.commit()
-        
+
         return ret
 
     @classmethod
@@ -415,7 +425,6 @@ class ServerModel(SurrogatePK, Model):
         query = ServerModel.query.filter(ServerModel.id.in_(ids))
         data = query.order_by('id desc').all()
         return [p.to_json() for p in data]
-
 
     def to_json(self):
         item = {
@@ -527,7 +536,7 @@ class ProjectModel(SurrogatePK, Model):
 
         db.session.add(project)
         db.session.commit()
-        
+
         self.id = project.id
         return self.id
 
@@ -548,7 +557,7 @@ class ProjectModel(SurrogatePK, Model):
         ProjectModel.query.filter_by(id=role_id).update({'status': self.status_remove})
 
         ret = db.session.commit()
-        
+
         return ret
 
     def to_json(self):
@@ -630,7 +639,7 @@ class TagModel(SurrogatePK, Model):
         TagModel.query.filter_by(id=tag_id).update({'status': self.status_remove})
 
         ret = db.session.commit()
-        
+
         return ret
 
     def to_json(self):

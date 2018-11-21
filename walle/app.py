@@ -30,6 +30,7 @@ from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.extensions import bcrypt, csrf_protect, db, migrate
 from walle.service.extensions import login_manager, mail, permission, socketio
+from walle.service.websocket import WalleSocketIO
 
 
 def create_app(config_object=ProdConfig):
@@ -63,15 +64,6 @@ def create_app(config_object=ProdConfig):
     @app.route('/api/websocket')
     def index():
         return render_template('socketio.html')
-
-    # @app.route('/api/socketio')
-    # def index():
-    #
-    #     return render_template('socketio.html')
-
-    # 测试环境跑单测失败
-    # if not app.config['TESTING']:
-    #     register_websocket(app)
 
     register_socketio(app)
 
@@ -203,26 +195,32 @@ def register_logging(app):
 def register_socketio(app):
     socketio.init_app(app)
     namespace = '/walle'
-    room = 12
 
     @socketio.on('open', namespace=namespace)
-    def joined(message):
-        app.logger.info('====== join =====')
-        app.logger.info(message)
-
+    def open(message):
+        current_app.logger.info(message)
+        task = message['task']
         if not current_user.is_authenticated:
-            emit('close', {'msg': 'closing becuse you are not login'})
+            emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=task)
+        join_room(room=task, namespace=namespace)
 
-        join_room(room=room, namespace=namespace)
-        emit('console', {'msg': 'opening....'}, room=room)
+        emit('construct', {'event': 'pusher:connect', 'data': {}}, room=task)
 
     @socketio.on('deploy', namespace=namespace)
-    def test_message(message):
-        # join_room(room="BigData", sid=1, namespace=namespace)
-        emit('console', {'msg': message['msg']}, room=room)
+    def deploy(message):
+        task = message['task']
+        emit('console', {'event': 'task:console', 'data': {}}, room=task)
         from walle.service.deployer import DeploySocketIO
         wi = DeploySocketIO(12)
         ret = wi.deploy()
+
+    @socketio.on('logs', namespace=namespace)
+    def logs(message):
+        current_app.logger.info(message)
+        task = message['task']
+        emit('console', {'event': 'task:console', 'data': {'logs':'logs'}}, room=task)
+        walle_socket = WalleSocketIO(room=task)
+        walle_socket.logs()
 
     socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
     return app
