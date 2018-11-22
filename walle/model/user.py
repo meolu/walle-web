@@ -273,13 +273,18 @@ class UserModel(UserMixin, SurrogatePK, Model):
 
     @classmethod
     def fresh_session(cls):
+        # 0.超管
+        if current_user.role == SUPER:
+            return True
+
         spaces = current_user.has_spaces()
 
-        # 1.无空间权限
-        if not spaces:
+        # 1.无空间权限且非超管
+        if not spaces and current_user.role <> SUPER:
             raise WalleError(Code.space_empty)
 
         default_space = spaces.keys()[0]
+
         # 2.第一次登录无空间
         if not current_user.last_space:
             current_user.last_space = default_space
@@ -665,6 +670,8 @@ class MemberModel(SurrogatePK, Model):
         for member in members:
             user_update.append(member['user_id'])
 
+        current_app.logger.info(group_model['user_ids'])
+        current_app.logger.info(user_update)
         # project新增用户是否在space's group中,无则抛出
         if list(set(user_update).difference(set(group_model['user_ids']))):
             raise ValueError('用户不存在')

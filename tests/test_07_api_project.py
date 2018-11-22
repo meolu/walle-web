@@ -38,7 +38,7 @@ class TestApiProject:
     }
 
     project_data_members = [
-        {"user_id": 1, "role": "MASTER"},
+        {"user_id": 3, "role": "MASTER"},
         {"user_id": 2, "role": "DEVELOPER"}
     ]
 

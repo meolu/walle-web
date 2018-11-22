@@ -116,6 +116,9 @@ class Permission():
         :param role:
         :return:
         '''
+        if current_user.role == SUPER:
+            return True
+
         # TODO about project/task
         current_role = session['space_info']['role']
         return self.compare_role(current_role, role)

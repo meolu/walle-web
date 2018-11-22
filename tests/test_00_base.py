@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 """Model unit tests."""
 
+from copy import deepcopy
+
 import pytest
 from walle.model.user import MenuModel
-from walle.model.user import RoleModel
 from walle.model.user import UserModel
 from werkzeug.security import generate_password_hash
-from copy import deepcopy
+from walle.service.rbac.role import *
+
 user_data_login = {
     'username': u'wushuiyong',
     'email': u'wushuiyong@walle-web.io',
     'password': u'WU123shuiyong',
+}
+space_base = {
+    'name': u'walle-2.0',
+    'user_id': u'1',
 }
 
 
@@ -513,66 +519,21 @@ class TestAccess:
             )
             access.save()
 
-class TestUser:
-    user_data_login = deepcopy(user_data_login)
-    def test_add(self):
 
-        self.user_data_login['password'] = generate_password_hash(user_data_login['password'])
-        user = UserModel(**self.user_data_login)
+class TestUser:
+    user_super_login = deepcopy(user_data_login)
+
+    def test_add(self):
+        self.user_super_login['role'] = SUPER
+        self.user_super_login['password'] = generate_password_hash(self.user_super_login['password'])
+        user = UserModel(**self.user_super_login)
         user.save()
 
-        # class TestUser:
-        #     """User tests."""
-        #
-        #     def test_get_by_id(self):
-        #         """Get user by ID."""
-        #         user = Foo(username='wushuiyongoooo', email='wushuiyong@mail.com')
-        #         user.save()
-        #
-        #         retrieved = User.get_by_id(user.id)
-        #         assert retrieved == user
 
-        # def test_created_at_defaults_to_datetime(self):
-        #     """Test creation date."""
-        #     user = User(username='foo', email='foo@bar.com')
-        #     user.save()
-        #     assert bool(user.created_at)
-        #     assert isinstance(user.created_at, dt.datetime)
-        #
-        # def test_password_is_nullable(self):
-        #     """Test null password."""
-        #     user = User(username='foo', email='foo@bar.com')
-        #     user.save()
-        #     assert user.password is None
-        #
-        # def test_factory(self, db):
-        #     """Test user factory."""
-        #     user = UserFactory(password='myprecious')
-        #     db.session.commit()
-        #     assert bool(user.username)
-        #     assert bool(user.email)
-        #     assert bool(user.created_at)
-        #     assert user.is_admin is False
-        #     assert user.active is True
-        #     assert user.check_password('myprecious')
-        #
-        # def test_check_password(self):
-        #     """Check password."""
-        #     user = User.create(username='foo', email='foo@bar.com',
-        #                        password='foobarbaz123')
-        #     assert user.check_password('foobarbaz123') is True
-        #     assert user.check_password('barfoobaz') is False
-        #
-        # def test_full_name(self):
-        #     """User full name."""
-        #     user = UserFactory(first_name='Foo', last_name='Bar')
-        #     assert user.full_name == 'Foo Bar'
-        #
-        # def test_roles(self):
-        #     """Add a role to a user."""
-        #     role = Role(name='admin')
-        #     role.save()
-        #     user = UserFactory()
-        #     user.roles.append(role)
-        #     user.save()
-        #     assert role in user.roles
+# class TestSpace:
+#     user_data_login = deepcopy(user_data_login)
+#
+#     def test_add(self):
+#         self.user_data_login['password'] = generate_password_hash(user_data_login['password'])
+#         user = UserModel(**self.user_data_login)
+#         user.save()

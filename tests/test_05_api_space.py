@@ -12,10 +12,11 @@ class TestApiSpace:
 
     user_id = {}
 
+    #: user list (1, 2, 3)
     space_data = {
         'name': u'大数据',
         'user_id': u'1',
-        'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 2, "role": "DEVELOPER"}, {"user_id": 3, "role": "DEVELOPER"}]),
+        'members': json.dumps([{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
 
     space_name_2 = u'瓦力'
@@ -23,13 +24,13 @@ class TestApiSpace:
     space_data_2 = {
         'name': u'瓦力',
         'user_id': u'2',
-        'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 2, "role": "DEVELOPER"}, {"user_id": 4, "role": "DEVELOPER"}]),
+        'members': json.dumps([{"user_id": 3, "role": "MASTER"}, {"user_id": 1, "role": "DEVELOPER"}]),
     }
 
     space_data_remove = {
         'name': u'瓦尔登',
         'user_id': u'2',
-        'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 2, "role": "DEVELOPER"}]),
+        'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
 
     def test_create(self, user, testapp, client, db):
@@ -113,6 +114,14 @@ class TestApiSpace:
 
     def test_get_update(self, user, testapp, client):
         """Login successful."""
+        # 1.update
+        space_data = self.space_data
+        space_data['name'] = u'大数据平台'
+        resp = client.put('%s/%d' % (self.uri_prefix, self.space_data['space_id']), data=space_data)
+
+        response_success(resp)
+        self.compare_member_req_resp(self.space_data, resp)
+
         # 1.update
         space_data_2 = self.space_data_2
         space_data_2['name'] = u'瓦力2.0'
