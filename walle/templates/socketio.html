@@ -3,36 +3,91 @@
 <head>
     <meta charset="utf-8">
 </head>
-<p>Flask Tornado</p>
-<textarea id="log"style="
-    width: 300px;
-    height: 200px;
-" ></textarea>
+<style>
+    #solo {
+        width: 800px;
+    }
+</style>
+<p>Flask SocketIO</p>
+<div id="solo">
+    welcome to walle 2.0
+</div>
 <br>
-<input id="say" type="text" >
+<input id="say" type="text">
 <button id="send" type="button">Send!</button>
 <body>
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script type="text/javascript" src="http://dev.admin.walle-web.io/socket.io.min.js"></script>
+<script type="text/javascript" src="/socket.io.min.js"></script>
 <script>
     $(document).ready(function () {
-        namespace = '/websocket'
+        namespace = '/walle'
+        solo = $('#solo')
 
         var socket = io.connect('http://' + document.domain + namespace);
-        socket.on('connect', function () {
-            socket.emit('joined', {});
+        post = {
+            'task': 12
+        }
+        /// 返回基本结构: emit('construct', {
+        ///                      'event': 'pusher:construct',
+        ///                       'data': {"status":0,"success":"","sequence":1,"cmd":"python --version","host":"127.0.0.1","error":""}
+        ///                  })
+        ///     client              server
+        ///     -------------|------------
+        ///     connect      ->
+        ///                         open
+        ///     construct    <-
+        ///                  ->
+        ///     console      <-     deploy
+        ///     console      <-
+        ///
+        ///     获取历史日志
+        ///     client              server
+        ///     -------------|------------
+        ///     connect      ->
+        ///                         open
+        ///     construct    <-
+        ///                  ->
+        ///     console      <-     logs
+        ///     console      <-
+        ///
+
+        // 1.发起连接, 连上之后发起open
+        socket.on('connect', function (data) {
+            write(data)
+            socket.emit('open', post);
+        });
+        // 2.返回construct, 初始化页面信息
+        socket.on('construct', function (data) {
+            write(data)
+            console.log(data)
+            socket.emit('logs', {'task': 12})
         });
 
-        socket.on('message', function (data) {
-            $('#log').val($('#log').val() + data.msg + '\n' );
+        // 3.发送deploy命令之后, 将会收到console
+        socket.on('console', function (data) {
+            write(data)
             console.log(data)
         });
+
+        socket.on('close', function (data) {
+            write(data)
+            socket.close()
+        });
+
+        function write(data) {
+            console.log(data)
+            if (!data) {
+                return ''
+            }
+            msg = JSON.stringify(data);
+            solo.html(solo.html() + '<br>' + msg);
+        }
 
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {
                 $("#send").trigger("click");
-                say = $('#say').val();
-                socket.emit('deploy', {msg: say});
+                task = $('#say').val();
+                socket.emit('deploy', {'task': task});
                 $('#say').val('')
             }
         });

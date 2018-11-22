@@ -6,7 +6,8 @@ from walle.config.settings import Config
 
 class ProdConfig(Config):
     """Production configuration."""
-
+    HOST = 'admin.walle-web.io'
+    PORT = 5000
     ENV = 'prod'
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/example'  # TODO: Change me

@@ -6,67 +6,48 @@
     :created time: 2018-09-06 20:20:33
     :author: wushuiyong@walle-web.io
 """
-import anyjson as json
-from tornado.websocket import WebSocketHandler
 from flask import current_app
 from flask_login import current_user
-from walle.service.deployer import Deployer
+from flask_socketio import emit, join_room, Namespace
+from walle.model.deploy import TaskRecordModel
 
-class WSHandler(WebSocketHandler):
-    waiters = set()
 
-    app = None
+class WalleSocketIO(Namespace):
+    namespace, room, app = None, None, None
+
+    def __init__(self, namespace, room=None, app=None):
+        super(WalleSocketIO, self).__init__(namespace=namespace)
+        self.room = room
+        self.app = app
 
     def init_app(self, app):
         self.app = app
 
-    def check_origin(self, origin):
-        return True
+    def on_connect(self):
+        pass
 
-    def open(self):
-        # TODO
-        # from walle.model.user import UserModel
-        # from flask_login import login_user
-        # user = UserModel.query.filter_by(email='wushuiyong-owner@walle-web.io').first()
-        # login_user(user)
-        from flask import session
+    def on_open(self, message):
+        current_app.logger.info(message)
+        self.room = message['task']
+        if not current_user.is_authenticated:
+            emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=self.room)
+        join_room(room=self.room)
 
-        ctx = current_app.app_context()
-        ctx.push()
-        current_app.logger.info(session['space_id'])
+        emit('construct', {'event': 'pusher:connect', 'data': {}}, room=self.room)
 
-        WSHandler.waiters.add(self)
-
-        print 'new connection'
-        self.write_message(json.dumps(dict(output="Hello World")))
-
-    def on_message(self, incoming):
-        print 'message received %s' % incoming
-
-        text = json.loads(incoming).get('text', None)
-        task_id = text if text else 'Sorry could you repeat?'
-
-
-        wi = Deployer(task_id, websocket=self)
-        current_app.logger.info(current_user.id)
+    def on_deploy(self, message):
+        emit('console', {'event': 'task:console', 'data': {}}, room=self.room)
+        from walle.service.deployer import Deployer
+        wi = Deployer(task_id=self.room)
         ret = wi.walle_deploy()
 
-        response = json.dumps(dict(output='receive: {0}'.format(task_id)))
-        self.write_message(response)
+    def on_logs(self, message):
+        current_app.logger.info(message)
+        self.logs(task=self.room)
 
-    def on_close(self):
-        print 'connection closed'
-
-
-    @classmethod
-    def send_updates(cls, incoming):
-        response = json.dumps(incoming)
-        current_app.logger.info("sending %s to %d waiters", str(incoming), len(cls.waiters))
-        current_app.logger.info(cls.waiters)
-        for waiter in cls.waiters:
-            try:
-                waiter.write_message(response)
-            except Exception, e:
-                current_app.logger.exception(e)
-
-
+    def logs(self, task):
+        emit('console', {'event': 'task:console', 'data': {'task': task}}, room=task)
+        logs = TaskRecordModel().fetch(task_id=task)
+        for log in logs:
+            log = TaskRecordModel.logs(**log)
+            emit('console', {'event': 'task:console', 'data': log}, room=task)

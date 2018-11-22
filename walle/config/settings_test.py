@@ -6,6 +6,8 @@ from walle.config.settings import Config
 class TestConfig(Config):
     """Test configuration."""
 
+    HOST = 'admin.walle-web.io'
+    PORT = 5000
     TESTING = True
     ENV = 'test'
     DEBUG = True

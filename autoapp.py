@@ -16,4 +16,3 @@ if len(sys.argv) > 2 and sys.argv[2] == 'test':
     CONFIG = TestConfig
 
 app = create_app(CONFIG)
-('============ @app.teardown_request ============')
