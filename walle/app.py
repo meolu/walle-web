@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
 import logging
-import os
 import sys
 
+import os
 from flask import Flask, render_template, current_app
-from flask_login import current_user
 from flask_restful import Api
-from flask_socketio import emit, join_room, send
 from walle import commands
 from walle.api import access as AccessAPI
 from walle.api import api as BaseAPI
@@ -87,7 +85,6 @@ def register_extensions(app):
 
         return UserModel.query.get(user_id)
 
-
     @login_manager.unauthorized_handler
     def unauthorized():
         # TODO log
@@ -126,6 +123,7 @@ def register_blueprints(app):
 
 def register_errorhandlers(app):
     """Register error handlers."""
+
     @app.errorhandler(WalleError)
     def render_error(error):
         app.logger.info('============ register_errorhandlers ============')
@@ -133,14 +131,13 @@ def register_errorhandlers(app):
         return error.render_error()
 
     def render_errors():
-
         """Render error template."""
         app.logger.info('============ render_errors ============')
         # If a HTTPException, pull the `code` attribute; default to 500
         return ApiResource.render_json(code=Code.space_error)
-    #
-    #     error_code = getattr(error, 'code', 500)
-    #     return render_template('{0}.html'.format(error_code)), error_code
+        #
+        #     error_code = getattr(error, 'code', 500)
+        #     return render_template('{0}.html'.format(error_code)), error_code
 
 
 def register_shellcontext(app):
@@ -194,33 +191,7 @@ def register_logging(app):
 
 def register_socketio(app):
     socketio.init_app(app)
-    namespace = '/walle'
-
-    @socketio.on('open', namespace=namespace)
-    def open(message):
-        current_app.logger.info(message)
-        task = message['task']
-        if not current_user.is_authenticated:
-            emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=task)
-        join_room(room=task, namespace=namespace)
-
-        emit('construct', {'event': 'pusher:connect', 'data': {}}, room=task)
-
-    @socketio.on('deploy', namespace=namespace)
-    def deploy(message):
-        task = message['task']
-        emit('console', {'event': 'task:console', 'data': {}}, room=task)
-        from walle.service.deployer import Deployer
-        wi = Deployer(task_id=task)
-        ret = wi.walle_deploy()
-
-    @socketio.on('logs', namespace=namespace)
-    def logs(message):
-        current_app.logger.info(message)
-        task = message['task']
-        walle_socket = WalleSocketIO(room=task)
-        walle_socket.logs()
-
+    socketio.on_namespace(WalleSocketIO(namespace='/walle'))
     socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
     return app
 
@@ -238,4 +209,3 @@ class InfoFilter(logging.Filter):
             return 1
         else:
             return 0
-
