@@ -53,7 +53,6 @@ class Waller(Connection):
             }
             emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
-                # wenv['websocket'].send_updates(ws_dict)
             TaskRecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                           task_id=wenv['task_id'], status=result.exited, host=self.host, user=self.user,
                                           command=result.command,success=result.stdout.strip(), error=result.stderr.strip())
@@ -124,36 +123,30 @@ class Waller(Connection):
             current_app.logger.info(message)
 
             # TODO
-            if wenv.has_key('websocket') and wenv['websocket']:
-
-                ws_dict = {
-                    'host': self.host,
-                    'cmd': command,
-                    'status': 1,
-                    'stage': wenv['stage'],
-                    'sequence': wenv['sequence'],
-                    'success': '',
-                    'error': result.stderr.strip(),
-                }
-                # wenv['websocket'].send_updates(ws_dict)
+            ws_dict = {
+                'host': self.host,
+                'cmd': command,
+                'status': 1,
+                'stage': wenv['stage'],
+                'sequence': wenv['sequence'],
+                'success': '',
+                'error': result.stderr.strip(),
+            }
+            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             return result
         except Exception, e:
             # TODO 收尾下
             current_app.logger.info('put: %s, %s', e, dir(e))
 
-
-            # TODO
-            if wenv.has_key('websocket') and wenv['websocket']:
-
-                # TODO command
-                ws_dict = {
-                    'host': self.host,
-                    'cmd': 'command',
-                    'status': 1,
-                    'stage': wenv['stage'],
-                    'sequence': wenv['sequence'],
-                    'success': '',
-                    'error': e.message,
-                }
-                # wenv['websocket'].send_updates(ws_dict)
+            # TODO command
+            ws_dict = {
+                'host': self.host,
+                'cmd': 'command',
+                'status': 1,
+                'stage': wenv['stage'],
+                'sequence': wenv['sequence'],
+                'success': '',
+                'error': e.message,
+            }
+            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])

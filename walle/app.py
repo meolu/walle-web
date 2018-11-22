@@ -7,7 +7,7 @@ import sys
 from flask import Flask, render_template, current_app
 from flask_login import current_user
 from flask_restful import Api
-from flask_socketio import emit, join_room
+from flask_socketio import emit, join_room, send
 from walle import commands
 from walle.api import access as AccessAPI
 from walle.api import api as BaseAPI
@@ -210,15 +210,14 @@ def register_socketio(app):
     def deploy(message):
         task = message['task']
         emit('console', {'event': 'task:console', 'data': {}}, room=task)
-        from walle.service.deployer import DeploySocketIO
-        wi = DeploySocketIO(12)
-        ret = wi.deploy()
+        from walle.service.deployer import Deployer
+        wi = Deployer(task_id=task)
+        ret = wi.walle_deploy()
 
     @socketio.on('logs', namespace=namespace)
     def logs(message):
         current_app.logger.info(message)
         task = message['task']
-        emit('console', {'event': 'task:console', 'data': {'logs':'logs'}}, room=task)
         walle_socket = WalleSocketIO(room=task)
         walle_socket.logs()
 
