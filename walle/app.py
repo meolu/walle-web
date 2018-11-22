@@ -63,7 +63,9 @@ def create_app(config_object=ProdConfig):
     def index():
         return render_template('socketio.html')
 
-    register_socketio(app)
+    # 单元测试不用开启 websocket
+    if app.config.get('ENV') <> 'test':
+        register_socketio(app)
 
     reload(sys)
     sys.setdefaultencoding('utf-8')
