@@ -10,7 +10,7 @@
 
 from flask import request
 from walle.api.api import SecurityResource
-from walle.model.deploy import TaskRecordModel
+from walle.model.record import RecordModel
 from walle.service.deployer import Deployer
 
 
@@ -50,7 +50,7 @@ class DeployAPI(SecurityResource):
             return self.render_json(code=-1)
         wi = Deployer(task_id)
         ret = wi.walle_deploy()
-        record = TaskRecordModel().fetch(task_id)
+        record = RecordModel().fetch(task_id)
         return self.render_json(data={
             'command': '',
             'record': record,

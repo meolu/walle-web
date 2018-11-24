@@ -11,7 +11,7 @@
 from flask import request, current_app, abort
 from walle.api.api import SecurityResource
 from walle.form.task import TaskForm
-from walle.model.deploy import TaskModel
+from walle.model.task import TaskModel
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 

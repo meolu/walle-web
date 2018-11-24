@@ -16,6 +16,7 @@ from walle.model.tag import TagModel
 from walle.api.api import SecurityResource
 from flask import current_app
 from walle.service.rbac.role import *
+from walle.service.extensions import permission
 
 class GroupAPI(SecurityResource):
 

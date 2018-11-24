@@ -127,7 +127,8 @@ class UserAPI(SecurityResource):
         MemberModel().remove(user_id=user_id)
         return self.render_json(message='')
 
-    def table(self, filter={}):
+    @staticmethod
+    def table(filter={}):
         table = {
             'username': {
                 'sort': 0

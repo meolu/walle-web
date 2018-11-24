@@ -11,7 +11,7 @@
 from flask import request
 from walle.api.api import SecurityResource
 from walle.form.server import ServerForm
-from walle.model.deploy import ServerModel
+from walle.model.server import ServerModel
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 

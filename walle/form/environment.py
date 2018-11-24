@@ -11,10 +11,9 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 from flask_wtf import Form
+from walle.model.environment import EnvironmentModel
 from wtforms import TextField
 from wtforms import validators, ValidationError
-
-from walle.model.deploy import EnvironmentModel
 
 
 class EnvironmentForm(Form):

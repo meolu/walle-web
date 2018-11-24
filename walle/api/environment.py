@@ -10,7 +10,7 @@
 
 from flask import request
 from walle.form.environment import EnvironmentForm
-from walle.model.deploy import EnvironmentModel
+from walle.model.environment import EnvironmentModel
 from walle.api.api import SecurityResource
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
