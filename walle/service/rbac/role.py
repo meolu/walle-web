@@ -103,10 +103,7 @@ class Permission():
         :return:
         '''
         # TODO
-        # current_app.logger.info(current_user.id)
-        # current_app.logger.info(current_user.is_active())
-        current_app.logger.info(dir(current_user))
-        current_app.logger.info(uid)
+        current_app.logger.info('uid %s current_uid %s %s', uid, current_user.id, current_user.id==uid)
         return current_user.id == uid
 
     # @classmethod

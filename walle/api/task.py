@@ -40,7 +40,7 @@ class TaskAPI(SecurityResource):
         kw = request.values.get('kw', '')
 
         task_model = TaskModel()
-        task_list, count = task_model.list(page=page, size=size, kw=kw)
+        task_list, count = task_model.list(page=page, size=size, kw=kw, space_id=self.space_id)
         return self.list_json(list=task_list, count=count, enable_create=permission.enable_role(REPORT))
 
     def item(self, task_id):
