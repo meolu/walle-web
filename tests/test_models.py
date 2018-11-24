@@ -6,7 +6,7 @@ import pytest
 
 from walle.model.user import RoleModel
 from walle.model.user import UserModel
-from walle.model.deploy import EnvironmentModel
+from walle.model.environment import EnvironmentModel
 from .factories import UserFactory
 
 
