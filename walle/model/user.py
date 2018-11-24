@@ -663,7 +663,7 @@ class MemberModel(SurrogatePK, Model):
         return ret
 
     def update_project(self, project_id, members, group_name=None):
-        space_info = walle.model.deploy.ProjectModel.query.filter_by(id=project_id).first().to_json()
+        space_info = walle.model.project.ProjectModel.query.filter_by(id=project_id).first().to_json()
         group_model = self.members(group_id=space_info['space_id'])
         user_update = []
 

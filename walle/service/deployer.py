@@ -15,6 +15,7 @@ from flask import current_app
 from walle.model.record import RecordModel
 from walle.service.waller import Waller
 from walle.model.project import ProjectModel
+from walle.model.task import TaskModel
 from flask_socketio import emit
 from walle.service.extensions import socketio
 
