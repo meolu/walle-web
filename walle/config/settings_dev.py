@@ -9,6 +9,7 @@ class DevConfig(Config):
 
     HOST = 'dev.admin.walle-web.io'
     PORT = 5000
+    # SERVER_NAME = 'dev.admin.walle-web.io:5000'
     ENV = 'dev'
     DEBUG = True
     DB_NAME = 'walle_python'
@@ -23,7 +24,7 @@ class DevConfig(Config):
     PERMANENT_SESSION_LIFETIME = timedelta(days=1) #设置session的保存时间。
 
     # 前端项目部署路径
-    FE_PATH = '/Users/wushuiyong/workspace/meolu/walle-fe/'
+    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/')
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + 'dist/' + AVATAR_PATH
 
