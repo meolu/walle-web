@@ -674,7 +674,7 @@ class MemberModel(SurrogatePK, Model):
         current_app.logger.info(user_update)
         # project新增用户是否在space's group中,无则抛出
         if list(set(user_update).difference(set(group_model['user_ids']))):
-            raise ValueError('用户不存在')
+            raise WalleError('用户不存在')
 
         # 修改用户组成员
         # clean up
