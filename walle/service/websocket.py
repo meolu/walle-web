@@ -10,6 +10,7 @@ from flask import current_app
 from flask_login import current_user
 from flask_socketio import emit, join_room, Namespace
 from walle.model.record import RecordModel
+from walle.model.task import TaskModel
 
 
 class WalleSocketIO(Namespace):
@@ -33,7 +34,8 @@ class WalleSocketIO(Namespace):
             emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=self.room)
         join_room(room=self.room)
 
-        emit('construct', {'event': 'pusher:connect', 'data': {}}, room=self.room)
+        task_info = TaskModel(id=self.room).item()
+        emit('construct', {'event': 'pusher:connect', 'data': task_info}, room=self.room)
 
     def on_deploy(self, message):
         emit('console', {'event': 'task:console', 'data': {}}, room=self.room)
