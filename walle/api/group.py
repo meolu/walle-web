@@ -40,7 +40,7 @@ class GroupAPI(SecurityResource):
         """
         page = int(request.args.get('page', 0))
         page = page - 1 if page else 0
-        size = float(request.args.get('size', 10))
+        size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
         filter = {'name': {'like': kw}} if kw else {}
         space_model = SpaceModel()

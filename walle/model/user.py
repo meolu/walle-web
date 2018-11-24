@@ -250,7 +250,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
         except NameError:
             return str(self.id)  # python 3
 
-    def list(self, uids=[], page=0, size=10, kw=None):
+    def list(self, uids=[], page=0, size=10, space_id=None, kw=None):
         """
         获取分页列表
         :param page:
