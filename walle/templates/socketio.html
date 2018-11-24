@@ -60,7 +60,6 @@
         // 2.返回construct, 初始化页面信息
         socket.on('construct', function (data) {
             write(data)
-            console.log(data)
             socket.emit('logs', {'task': 12})
         });
 
