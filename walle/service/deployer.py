@@ -12,9 +12,9 @@ import os
 # from fabric import context_managers, colors
 from flask import current_app
 
-from walle.model import deploy as TaskModel
+from walle.model.record import RecordModel
 from walle.service.waller import Waller
-from walle.model.deploy import ProjectModel
+from walle.model.project import ProjectModel
 from flask_socketio import emit
 from walle.service.extensions import socketio
 
@@ -59,11 +59,11 @@ class Deployer:
         self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
                             user=current_app.config.get('LOCAL_SERVER_USER'),
                             port=current_app.config.get('LOCAL_SERVER_PORT'))
-        self.TaskRecord = TaskModel.TaskRecordModel()
+        self.TaskRecord = RecordModel()
 
         if task_id:
             self.task_id = task_id
-            self.taskMdl = TaskModel.TaskModel().item(self.task_id)
+            self.taskMdl = TaskModel().item(self.task_id)
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
             self.task = self.taskMdl.get('target_user')

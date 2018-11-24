@@ -9,7 +9,7 @@
 from flask import current_app
 from flask_login import current_user
 from flask_socketio import emit, join_room, Namespace
-from walle.model.deploy import TaskRecordModel
+from walle.model.record import RecordModel
 
 
 class WalleSocketIO(Namespace):
@@ -47,7 +47,7 @@ class WalleSocketIO(Namespace):
 
     def logs(self, task):
         emit('console', {'event': 'task:console', 'data': {'task': task}}, room=task)
-        logs = TaskRecordModel().fetch(task_id=task)
+        logs = RecordModel().fetch(task_id=task)
         for log in logs:
-            log = TaskRecordModel.logs(**log)
+            log = RecordModel.logs(**log)
             emit('console', {'event': 'task:console', 'data': log}, room=task)
