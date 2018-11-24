@@ -27,13 +27,17 @@ class Code():
     #: 2xxx 表示参数错误
     params_error = 2000
 
+    #: 用户不存在
+    user_not_in_space = 2001
+
 
     code_msg = {
         unlogin: '未登录',
         not_allow: '无此权限',
         params_error: '参数错误',
-        space_empty: '尚未开通空间, 请联系空间负责人加入空间',
+        space_empty: '尚未开通空间，请联系空间负责人加入空间',
         space_error: '无此空间权限',
+        user_not_in_space: '用户不存在此空间，请联系空间所有人添加此用户到用户组',
     }
 
 
