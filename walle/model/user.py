@@ -264,7 +264,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
             query = query.filter(UserModel.id.in_(uids))
 
         count = query.count()
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
+        data = query.order_by(UserModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
         user_list = [p.to_json() for p in data]
         return user_list, count
 
@@ -319,7 +319,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
             return []
 
         query = UserModel.query.filter(UserModel.id.in_(uids)).filter(UserModel.status.notin_([cls.status_remove]))
-        data = query.order_by('id desc').all()
+        data = query.order_by(UserModel.id.desc()).all()
         return [p.to_json() for p in data]
 
     @classmethod
@@ -672,6 +672,7 @@ class MemberModel(SurrogatePK, Model):
 
         current_app.logger.info(group_model['user_ids'])
         current_app.logger.info(user_update)
+
         # project新增用户是否在space's group中,无则抛出
         if list(set(user_update).difference(set(group_model['user_ids']))):
             raise WalleError(Code.user_not_in_space)
@@ -805,7 +806,7 @@ class SpaceModel(SurrogatePK, Model):
         if g.role <> SUPER:
             query = query.filter_by(user_id=g.id)
         count = query.count()
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
+        data = query.order_by(SpaceModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
 
         uid2name = UserModel.uid2name(data=data)
         list = [p.to_json(uid2name) for p in data]

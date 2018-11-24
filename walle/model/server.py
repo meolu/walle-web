@@ -41,7 +41,7 @@ class ServerModel(SurrogatePK, Model):
             query = query.filter(ServerModel.name.like('%' + kw + '%'))
         count = query.count()
 
-        data = query.order_by('id desc') \
+        data = query.order_by(ServerModel.id.desc()) \
             .offset(int(size) * int(page)).limit(size) \
             .all()
         server_list = [p.to_json() for p in data]
@@ -108,7 +108,7 @@ class ServerModel(SurrogatePK, Model):
             return None
 
         query = ServerModel.query.filter(ServerModel.id.in_(ids))
-        data = query.order_by('id desc').all()
+        data = query.order_by(ServerModel.id.desc()).all()
         return [p.to_json() for p in data]
 
     def to_json(self):

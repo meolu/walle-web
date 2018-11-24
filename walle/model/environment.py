@@ -43,7 +43,7 @@ class EnvironmentModel(Model):
             query = query.filter(EnvironmentModel.name.like('%' + kw + '%'))
         count = query.count()
 
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
+        data = query.order_by(EnvironmentModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
         env_list = [p.to_json() for p in data]
         return env_list, count
 

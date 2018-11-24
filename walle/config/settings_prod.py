@@ -21,6 +21,7 @@ class ProdConfig(Config):
     # SERVER_NAME = 'dev.admin.walle-web.io:5000'
     ENV = 'prod'
     DEBUG = False
+    PROPAGATE_EXCEPTIONS = True
     DB_NAME = 'walle_python'
     # Put the db file in project root
     WTF_CSRF_ENABLED = False

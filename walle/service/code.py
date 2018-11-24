@@ -9,7 +9,6 @@
 
 
 class Code():
-
     #: 1xxx 表示用户相关: 登录, 权限
     #: 未登录, 大概是永远不会变了
     unlogin = 1000
@@ -23,13 +22,11 @@ class Code():
     #: 无此空间权限
     space_error = 1003
 
-
     #: 2xxx 表示参数错误
     params_error = 2000
 
     #: 用户不存在
     user_not_in_space = 2001
-
 
     code_msg = {
         unlogin: '未登录',
@@ -39,5 +36,3 @@ class Code():
         space_error: '无此空间权限',
         user_not_in_space: '用户不存在此空间，请联系空间所有人添加此用户到用户组',
     }
-
-
