@@ -59,7 +59,7 @@ class SecurityResource(ApiResource):
     space_id = None
 
     def __init__(self):
-        self.space_id = None if current_user.role == SUPER else session['space_id']
+        self.space_id = None if current_user.is_authenticated and current_user.role == SUPER else session['space_id']
 
     # @login_required
     def get(self, *args, **kwargs):
