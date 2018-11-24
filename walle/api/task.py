@@ -12,6 +12,8 @@ from flask import request, current_app, abort
 from walle.api.api import SecurityResource
 from walle.form.task import TaskForm
 from walle.model.deploy import TaskModel
+from walle.service.extensions import permission
+from walle.service.rbac.role import *
 
 
 class TaskAPI(SecurityResource):
@@ -39,7 +41,7 @@ class TaskAPI(SecurityResource):
 
         task_model = TaskModel()
         task_list, count = task_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=task_list, count=count)
+        return self.list_json(list=task_list, count=count, enable_create=permission.enable_role(REPORT))
 
     def item(self, task_id):
         """

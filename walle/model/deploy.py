@@ -12,7 +12,7 @@ from walle.model.database import SurrogatePK, db, Model
 from walle.model.user import UserModel
 from walle.service.rbac.role import *
 from walle.service.extensions import permission
-
+import walle.model
 
 # 上线单
 class TaskModel(SurrogatePK, Model):
@@ -70,18 +70,27 @@ class TaskModel(SurrogatePK, Model):
         query = TaskModel.query.filter(TaskModel.status.notin_([self.status_remove]))
         if kw:
             query = query.filter(TaskModel.name.like('%' + kw + '%'))
+
+        # 关联 projects
+        query = query.join(ProjectModel, TaskModel.project_id==ProjectModel.id)
+        query = query.filter(ProjectModel.status.notin_([self.status_remove]))
+
+        # 关联 environments
+        query = query.join(EnvironmentModel, EnvironmentModel.id==ProjectModel.environment_id)
+        query = query.filter(EnvironmentModel.status.notin_([self.status_remove]))
+
+        query = query.add_columns(ProjectModel.name, EnvironmentModel.name)
         count = query.count()
 
-        data = query.order_by('id desc') \
+        data = query.order_by(TaskModel.id.desc()) \
             .offset(int(size) * int(page)).limit(size) \
             .all()
         task_list = []
-
-        for task in data:
-            task = task.to_json()
-            project = ProjectModel().get_by_id(task['project_id']).to_dict()
-            task['project_name'] = project['name'] if project else u'未知项目'
-            task_list.append(task)
+        for p in data:
+            item = p[0].to_json()
+            item['project_name'] = p[1]
+            item['environment_name'] = p[2]
+            task_list.append(item)
 
         return task_list, count
 
@@ -135,11 +144,13 @@ class TaskModel(SurrogatePK, Model):
         return ret
 
     def to_json(self):
+        current_app.logger.info(self)
         item = {
             'id': self.id,
             'name': self.name,
             'user_id': int(self.user_id),
             'project_id': int(self.project_id),
+            'project_name': self.project_id if self.project_id else '',
             'action': self.action,
             'status': self.status,
             'link_id': self.link_id,
@@ -160,11 +171,11 @@ class TaskModel(SurrogatePK, Model):
 
     def enable(self):
         return {
-            # 'enable_update': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
-            # 'enable_delete': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
+            'enable_update': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
+            'enable_delete': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
             'enable_create': False,
-            # 'enable_online': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
-            # 'enable_audit': permission.enable_role(DEVELOPER),
+            'enable_online': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
+            'enable_audit': permission.enable_role(DEVELOPER),
             'enable_block': False,
         }
 
@@ -441,11 +452,11 @@ class ServerModel(SurrogatePK, Model):
         # current_app.logger.info(dir(permission.app))
         # current_app.logger.info(permission.enable_uid(3))
         return {
-            # 'enable_update': permission.enable_role(DEVELOPER),
-            # 'enable_delete': permission.enable_role(DEVELOPER),
+            'enable_update': permission.enable_role(DEVELOPER),
+            'enable_delete': permission.enable_role(DEVELOPER),
             'enable_create': False,
             'enable_online': False,
-            # 'enable_audit': permission.enable_role(OWNER),
+            'enable_audit': permission.enable_role(OWNER),
             'enable_block': False,
         }
 
@@ -502,14 +513,33 @@ class ProjectModel(SurrogatePK, Model):
         if kw:
             query = query.filter(ProjectModel.name.like('%' + kw + '%'))
 
+        # 关联 environments
+        query = query.join(EnvironmentModel, EnvironmentModel.id==ProjectModel.environment_id)
+        query = query.filter(EnvironmentModel.status.notin_([self.status_remove]))
+
+        # 关联 spaces
+        SpaceModel = walle.model.user.SpaceModel
+        query = query.join(SpaceModel, SpaceModel.id==ProjectModel.space_id)
+        query = query.filter(SpaceModel.status.notin_([self.status_remove]))
+
         if environment_id:
-            query = query.filter_by(environment_id=environment_id)
+            query = query.filter(ProjectModel.environment_id==environment_id)
+
         if space_id:
-            query = query.filter_by(space_id=space_id)
+            query = query.filter(ProjectModel.space_id==space_id)
+
+        query = query.add_columns(EnvironmentModel.name)
         count = query.count()
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
-        list = [p.to_json() for p in data]
-        return list, count
+
+        data = query.order_by(ProjectModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
+
+        project_list = []
+        for p in data:
+            item = p[0].to_json()
+            item['environment_name'] = p[1]
+            project_list.append(item)
+
+        return project_list, count
 
     def item(self, id=None):
         """

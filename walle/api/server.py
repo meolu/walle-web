@@ -12,6 +12,8 @@ from flask import request
 from walle.api.api import SecurityResource
 from walle.form.server import ServerForm
 from walle.model.deploy import ServerModel
+from walle.service.extensions import permission
+from walle.service.rbac.role import *
 
 
 class ServerAPI(SecurityResource):
@@ -39,7 +41,7 @@ class ServerAPI(SecurityResource):
 
         server_model = ServerModel()
         server_list, count = server_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=server_list, count=count)
+        return self.list_json(list=server_list, count=count, enable_create=permission.enable_role(MASTER))
 
     def item(self, id):
         """
