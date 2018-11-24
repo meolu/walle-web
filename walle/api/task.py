@@ -41,7 +41,7 @@ class TaskAPI(SecurityResource):
 
         task_model = TaskModel()
         task_list, count = task_model.list(page=page, size=size, kw=kw, space_id=self.space_id)
-        return self.list_json(list=task_list, count=count, enable_create=permission.enable_role(REPORT))
+        return self.list_json(list=task_list, count=count, enable_create=permission.enable_role(REPORT) and current_user.role <> SUPER)
 
     def item(self, task_id):
         """
