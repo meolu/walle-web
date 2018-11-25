@@ -34,7 +34,7 @@ class ProdConfig(Config):
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
 
     # 前端项目部署路径
-    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/')
+    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/') + '/'
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + 'dist/' + AVATAR_PATH
 

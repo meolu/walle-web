@@ -19,12 +19,13 @@ from walle.service.rbac.role import *
 class TaskModel(SurrogatePK, Model):
     __tablename__ = 'tasks'
     current_time = datetime.now()
-    # 状态0：新建提交，1审核通过，2审核拒绝，3上线完成，4上线失败
+    # 状态：0新建提交，1审核通过，2审核拒绝，3上线中，4上线完成，5上线失败
     status_new = 0
     status_pass = 1
     status_reject = 2
-    status_success = 3
-    status_fail = 4
+    status_doing = 3
+    status_success = 4
+    status_fail = 5
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
