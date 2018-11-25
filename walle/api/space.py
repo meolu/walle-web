@@ -8,17 +8,20 @@
     :author: wushuiyong@walle-web.io
 """
 
-from flask import request, current_app, session
+import json
+
+from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.form.space import SpaceForm
 from walle.model.user import SpaceModel, MemberModel, UserModel
-import json
-from walle.service.rbac.role import *
 from walle.service.extensions import permission
+from walle.service.rbac.role import *
+
 
 class SpaceAPI(SecurityResource):
+    actions = ['members', 'item', 'list']
 
-    def get(self, space_id=None):
+    def get(self, space_id=None, action=None):
         """
         fetch space list or one item
         /space/<int:space_id>
@@ -26,10 +29,16 @@ class SpaceAPI(SecurityResource):
         :return:
         """
         super(SpaceAPI, self).get()
+        if action is None:
+            action = 'item' if space_id else 'list'
 
-        return self.item(space_id) if space_id else self.list()
+        if action in self.actions:
+            self_action = getattr(self, action.lower(), None)
+            return self_action(space_id)
+        else:
+            abort(404)
 
-    def list(self):
+    def list(self, space_id=None):
         """
         fetch space list
 
@@ -134,3 +143,9 @@ class SpaceAPI(SecurityResource):
         current_user.save()
         UserModel.fresh_session()
         return self.render_json()
+
+    def members(self, space_id):
+        page = int(request.args.get('page', 1))
+        size = int(request.args.get('size', 10))
+        members = MemberModel(group_id=space_id).members(page=page, size=size)
+        return self.render_json(data=members)

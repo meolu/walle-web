@@ -701,7 +701,7 @@ class MemberModel(SurrogatePK, Model):
 
         return ret
 
-    def members(self, group_id=None, project_id=None):
+    def members(self, group_id=None, project_id=None, page=1, size=10):
         """
         获取单条记录
         :param role_id:
@@ -718,8 +718,6 @@ class MemberModel(SurrogatePK, Model):
         }
 
         # TODO
-        page = 1
-        size = 10
         groups, count = MemberModel.query_paginate(page=page, limit=size, filter_name_dict=filters)
 
         user_ids = []

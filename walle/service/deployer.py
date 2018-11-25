@@ -75,6 +75,9 @@ class Deployer:
             self.project_id = project_id
             self.project_info = ProjectModel(id=project_id).item()
 
+        # start to deploy
+
+
     def config(self):
         return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence, 'console': self.console}
 
