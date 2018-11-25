@@ -148,4 +148,4 @@ class SpaceAPI(SecurityResource):
         page = int(request.args.get('page', 1))
         size = int(request.args.get('size', 10))
         members = MemberModel(group_id=space_id).members(page=page, size=size)
-        return self.list_json(list=members, count=members['count'], enable_create=permission.enable_role(OWNER))
+        return self.list_json(list=members['members'], count=members['count'], enable_create=permission.enable_role(OWNER))
