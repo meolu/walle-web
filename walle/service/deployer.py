@@ -41,6 +41,8 @@ class Deployer:
     taskMdl = None
     TaskRecord = None
 
+    console = False
+
     version = datetime.now().strftime('%Y%m%d%H%M%s')
     project_name = 'walden'
     dir_codebase = '/tmp/walle/codebase/'
@@ -56,7 +58,7 @@ class Deployer:
     release_version_tar, release_version = None, None
     local = None
 
-    def __init__(self, task_id=None, project_id=None):
+    def __init__(self, task_id=None, project_id=None, console=False):
         self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
                             user=current_app.config.get('LOCAL_SERVER_USER'),
                             port=current_app.config.get('LOCAL_SERVER_PORT'))
@@ -74,7 +76,7 @@ class Deployer:
             self.project_info = ProjectModel(id=project_id).item()
 
     def config(self):
-        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence}
+        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence, 'console': self.console}
 
     # ===================== fabric ================
     # SocketHandler
@@ -100,7 +102,6 @@ class Deployer:
         # 检查 当前用户
         command = 'whoami'
         current_app.logger.info(command)
-        socketio.emit('console', {'event': 'task:console', 'data': {'cmd':command}}, room=self.task_id, ignore_queue=True)
         result = self.local.run(command, wenv=self.config())
 
         # 检查 python 版本

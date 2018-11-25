@@ -51,7 +51,8 @@ class Waller(Connection):
                 'success': result.stdout.strip(),
                 'error': result.stderr.strip(),
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                           task_id=wenv['task_id'], status=result.exited, host=self.host, user=self.user,
@@ -86,7 +87,8 @@ class Waller(Connection):
                 'success': '',
                 'error': e.message,
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
             current_app.logger.error(message)
 
             return False
@@ -132,7 +134,8 @@ class Waller(Connection):
                 'success': '',
                 'error': result.stderr.strip(),
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             return result
         except Exception, e:
@@ -149,4 +152,5 @@ class Waller(Connection):
                 'success': '',
                 'error': e.message,
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
