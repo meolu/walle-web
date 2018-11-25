@@ -739,7 +739,7 @@ class MemberModel(SurrogatePK, Model):
 
         members['user_ids'] = user_ids
         members['members'] = user_info
-        members['users'] = len(user_ids)
+        members['count'] = count
         return members
 
     def remove(self, group_id=None, user_id=None, project_id=None):
