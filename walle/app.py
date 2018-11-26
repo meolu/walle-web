@@ -62,7 +62,7 @@ def create_app(config_object=ProdConfig):
         return render_template('socketio.html')
 
     # 单元测试不用开启 websocket
-    if app.config.get('ENV') <> 'test':
+    if app.config.get('ENV') != 'test':
         register_socketio(app)
 
     reload(sys)

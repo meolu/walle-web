@@ -27,10 +27,10 @@ class WalleError(Exception):
             self.message = message
 
     def render_error(self):
-        if not Code.code_msg.has_key(self.code):
+        if self.code not in Code.code_msg:
             current_app.logger.error('unkown code %s' % (self.code))
 
-        if Code.code_msg.has_key(self.code):
+        if self.code in Code.code_msg:
             self.message = Code.code_msg[self.code]
 
         return jsonify({

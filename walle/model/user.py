@@ -280,7 +280,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
         spaces = current_user.has_spaces()
 
         # 1.无空间权限且非超管
-        if not spaces and current_user.role <> SUPER:
+        if not spaces and current_user.role != SUPER:
             raise WalleError(Code.space_empty)
 
         default_space = spaces.keys()[0]
@@ -445,21 +445,21 @@ class MenuModel(SurrogatePK, Model):
             .all()
         for m_id, m_name, c_id, c_name, a_id, a_name in data:
             # module
-            if not menus_module.has_key(m_id):
+            if m_id not in menus_module:
                 menus_module[m_id] = {
                     'id': m_id,
                     'title': m_name,
                     'sub_menu': {},
                 }
             # controller
-            if not menus_module[m_id]['sub_menu'].has_key(c_id) and c_name:
+            if c_id not in menus_module[m_id]['sub_menu'] and c_name:
                 menus_module[m_id]['sub_menu'][c_id] = {
                     'id': c_id,
                     'title': c_name,
                     'sub_menu': {},
                 }
             # action
-            if not menus_controller.has_key(c_id):
+            if c_id not in menus_controller:
                 menus_controller[c_id] = []
             if a_name:
                 menus_controller[c_id].append({
@@ -734,7 +734,7 @@ class MemberModel(SurrogatePK, Model):
         user_info = user_model.fetch_by_uid(uids=set(user_ids))
         if user_info:
             for user in user_info:
-                if user_role.has_key(user['id']):
+                if user['id'] in user_role:
                     user['role'] = user_role[user['id']]
 
         members['user_ids'] = user_ids
@@ -801,7 +801,7 @@ class SpaceModel(SurrogatePK, Model):
             query = query.filter(SpaceModel.name.like('%' + kw + '%'))
 
         # TODO 如果是超管,可以全量,否则需要过滤自己有权限的空间列表
-        if g.role <> SUPER:
+        if g.role != SUPER:
             query = query.filter_by(user_id=g.id)
         count = query.count()
         data = query.order_by(SpaceModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
@@ -867,7 +867,7 @@ class SpaceModel(SurrogatePK, Model):
         item = {
             'id': self.id,
             'user_id': self.user_id,
-            'user_name': uid2name[self.user_id] if uid2name and uid2name.has_key(self.user_id) else '',
+            'user_name': uid2name[self.user_id] if uid2name and self.user_id in uid2name else '',
             # TODO
             'group_id': 'self.group_id',
             'name': self.name,

@@ -58,7 +58,7 @@ class GeneralAPI(SecurityResource):
         }
         # TODO
         # 超管不需要展示空间列表
-        if current_user.role <> SUPER:
+        if current_user.role != SUPER:
             space = {
                 'current': session['space_info'],
                 'available': session['space_list'],

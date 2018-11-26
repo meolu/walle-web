@@ -32,10 +32,10 @@ class ApiResource(Resource):
 
     @staticmethod
     def json(code=0, message=None, data=[]):
-        if not Code.code_msg.has_key(code):
+        if code not in Code.code_msg:
             current_app.logger.error('unkown code %s' % (code))
 
-        if Code.code_msg.has_key(code) and not message:
+        if code in Code.code_msg and not message:
             message = Code.code_msg[code]
 
         return jsonify({
@@ -113,7 +113,7 @@ class SecurityResource(ApiResource):
     def is_super(func):
         @wraps(func)
         def is_enable(*args, **kwargs):
-            if current_user.role_info.name <> 'super':
+            if current_user.role_info.name != 'super':
                 return ApiResource.render_json(code=403, message=u'无操作权限')
             current_app.logger.info("user is login: %s" % (current_user.is_authenticated))
             current_app.logger.info("args: %s kwargs: %s" % (args, kwargs))
