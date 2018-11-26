@@ -41,6 +41,11 @@ class TestApiProject:
         {"user_id": 3, "role": "MASTER"},
         {"user_id": 2, "role": "DEVELOPER"}
     ]
+    project_data_members_error = [
+        {"user_id": 3, "role": "MASTER"},
+        {"user_id": 2, "role": "DEVELOPER"},
+        {"user_id": 4, "role": "DEVELOPER"},
+    ]
 
     # should be equal to project_data_2.name
     project_name_2 = u'walle-web'
@@ -189,6 +194,13 @@ class TestApiProject:
 
     def test_get_update_members(self, user, testapp, client):
         """Login successful."""
+        from walle.service.code import Code
+        # 1.1 create user group error
+        headers = {'content-type': 'application/json'}
+        resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']), data=json.dumps(self.project_data_members_error), headers=headers)
+        current_app.logger.info(resp)
+
+        response_error(resp, Code.user_not_in_space)
 
         # 1.1 create user group
         headers = {'content-type': 'application/json'}

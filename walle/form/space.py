@@ -14,7 +14,7 @@ from flask_wtf import Form
 from wtforms import TextField
 from wtforms import validators, ValidationError
 
-from walle.model.user import SpaceModel
+from walle.model.space import SpaceModel
 
 
 class SpaceForm(Form):
@@ -37,5 +37,6 @@ class SpaceForm(Form):
             'name': self.name.data if self.name.data else '',
             # TODO g.uid
             'user_id': self.user_id.data if self.user_id.data else '',
+            # TODO default value
             'status': 1,
         }

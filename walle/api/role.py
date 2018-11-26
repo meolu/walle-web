@@ -10,7 +10,7 @@
 
 from flask import request
 from walle.api.api import SecurityResource
-from walle.model.user import RoleModel
+from walle.model.role import RoleModel
 
 
 class RoleAPI(SecurityResource):

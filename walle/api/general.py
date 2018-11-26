@@ -13,7 +13,7 @@ from flask import request, abort, session, current_app
 from flask_login import current_user, login_required
 from walle.api.api import SecurityResource
 from walle.model.record import RecordModel
-from walle.model.user import MenuModel
+from walle.model.menu import MenuModel
 from walle.model.user import UserModel
 from walle.service import emails
 from walle.service.deployer import Deployer
