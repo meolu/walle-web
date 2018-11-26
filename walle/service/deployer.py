@@ -418,7 +418,7 @@ class Deployer:
             self.prev_release(self.connections[server])
             self.release(self.connections[server])
             self.post_release(self.connections[server])
-        except Exception, e:
+        except Exception as e:
             current_app.logger.exception(e)
             self.errors[server] = e.message
 

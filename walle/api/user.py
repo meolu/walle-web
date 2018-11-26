@@ -47,7 +47,7 @@ class UserAPI(SecurityResource):
         kw = request.values.get('kw', '')
 
         uids = []
-        if current_user.role <> SUPER and space_id:
+        if current_user.role != SUPER and space_id:
             members = MemberModel(group_id=current_user.last_space).members()
             uids = members['user_ids']
 
