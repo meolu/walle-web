@@ -1,0 +1,19 @@
+#root, .ant-layout {
+  height: 100%;
+}
+
+.ant-layout-content {
+  min-height: inherit !important;
+}
+
+.logo {
+  width: 120px;
+  height: 31px;
+  line-height: 31px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  margin: 16px 28px 16px 0;
+  float: left;
+}
