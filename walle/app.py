@@ -65,8 +65,11 @@ def create_app(config_object=ProdConfig):
     if app.config.get('ENV') != 'test':
         register_socketio(app)
 
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    try:
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+    except NameError:
+        pass
 
     return app
 
