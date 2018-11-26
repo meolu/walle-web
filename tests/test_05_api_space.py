@@ -3,14 +3,15 @@
 import pytest
 from flask import current_app
 from utils import *
-
-
+from test_00_base import space_base
+from copy import deepcopy
 @pytest.mark.usefixtures('db')
 class TestApiSpace:
     """api role testing"""
     uri_prefix = '/api/space'
 
     user_id = {}
+    space_default_base = deepcopy(space_base)
 
     #: user list (1, 2, 3)
     space_data = {
@@ -32,6 +33,20 @@ class TestApiSpace:
         'user_id': u'2',
         'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
+
+    def test_setUp(self):
+        pass
+
+
+    # 初始化 space_id=1的用户列表
+    def test_get_update_default_space(self, user, testapp, client):
+        """Login successful."""
+        # 1.update
+        self.space_default_base['members'] = json.dumps([{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}])
+        resp = client.put('%s/%d' % (self.uri_prefix, 1), data=self.space_default_base)
+
+        response_success(resp)
+        self.compare_member_req_resp(self.space_data, resp)
 
     def test_create(self, user, testapp, client, db):
 

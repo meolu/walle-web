@@ -24,7 +24,7 @@ class TestFoo:
 class TestEnvironment:
     def test_add(self):
         env_new = EnvironmentModel()
-        env_id = env_new.add(env_name=u'开发环境')
+        env_id = env_new.add(env_name=u'开发环境', space_id=1)
 
     # class TestUser:
     #     """User tests."""
