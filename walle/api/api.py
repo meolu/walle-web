@@ -14,6 +14,7 @@ from functools import wraps
 from walle.service.code import Code
 from flask import current_app, session
 from flask_login import current_user
+from walle.service.rbac.role import *
 
 class ApiResource(Resource):
     module = None
@@ -54,6 +55,12 @@ class SecurityResource(ApiResource):
     module = None
     controller = None
     action = None
+
+    space_id = None
+
+    def __init__(self):
+        if current_user.is_authenticated:
+            self.space_id = None if current_user.role == SUPER else session['space_id']
 
     # @login_required
     def get(self, *args, **kwargs):

@@ -6,7 +6,7 @@
 
 from fabric2 import Connection
 from flask import current_app
-from walle.model.deploy import TaskRecordModel
+from walle.model.record import RecordModel
 from flask_socketio import SocketIO, emit
 
 
@@ -51,9 +51,10 @@ class Waller(Connection):
                 'success': result.stdout.strip(),
                 'error': result.stderr.strip(),
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
-            TaskRecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
+            RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                           task_id=wenv['task_id'], status=result.exited, host=self.host, user=self.user,
                                           command=result.command,success=result.stdout.strip(), error=result.stderr.strip())
             current_app.logger.info(message)
@@ -63,7 +64,7 @@ class Waller(Connection):
             #current_app.logger.exception(e)
             #return None
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
-            TaskRecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
+            RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                           task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
                                           command=command, success='', error='e.result')
             if hasattr(e, 'resean') and hasattr(e, 'result'):
@@ -86,7 +87,8 @@ class Waller(Connection):
                 'success': '',
                 'error': e.message,
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
             current_app.logger.error(message)
 
             return False
@@ -115,7 +117,7 @@ class Waller(Connection):
 
             current_app.logger.info('put: %s, %s', result, dir(result))
             # TODO 可能会有非22端口的问题
-            TaskRecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
+            RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                           task_id=wenv['task_id'], status=0, host=self.host, user=self.user,
                                           command=command, )
             message = 'task_id=%d, host:%s command:%s status:0, success:, error:' % (
@@ -132,7 +134,8 @@ class Waller(Connection):
                 'success': '',
                 'error': result.stderr.strip(),
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             return result
         except Exception, e:
@@ -149,4 +152,5 @@ class Waller(Connection):
                 'success': '',
                 'error': e.message,
             }
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+            if wenv['console']:
+                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])

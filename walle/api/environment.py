@@ -10,9 +10,10 @@
 
 from flask import request
 from walle.form.environment import EnvironmentForm
-from walle.model.deploy import EnvironmentModel
+from walle.model.environment import EnvironmentModel
 from walle.api.api import SecurityResource
-
+from walle.service.extensions import permission
+from walle.service.rbac.role import *
 
 class EnvironmentAPI(SecurityResource):
 
@@ -38,7 +39,7 @@ class EnvironmentAPI(SecurityResource):
 
         page = int(request.args.get('page', 0))
         page = page - 1 if page else 0
-        size = float(request.args.get('size', 10))
+        size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
 
         table = [
@@ -51,7 +52,7 @@ class EnvironmentAPI(SecurityResource):
 
         env_model = EnvironmentModel()
         env_list, count = env_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=env_list, count=count, table=table)
+        return self.list_json(list=env_list, count=count, table=table, enable_create=permission.enable_role(MASTER) and current_user.role <> SUPER)
 
     def item(self, env_id):
         """

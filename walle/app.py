@@ -47,8 +47,6 @@ def create_app(config_object=ProdConfig):
 
     @app.before_request
     def before_request():
-        # current_app.logger.info(request)
-        # current_app.logger.info(app.request_class.url_rule)
         # TODO
         app.logger.info('============ @app.before_request ============')
 

@@ -250,7 +250,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
         except NameError:
             return str(self.id)  # python 3
 
-    def list(self, uids=[], page=0, size=10, kw=None):
+    def list(self, uids=[], page=0, size=10, space_id=None, kw=None):
         """
         获取分页列表
         :param page:
@@ -264,7 +264,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
             query = query.filter(UserModel.id.in_(uids))
 
         count = query.count()
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
+        data = query.order_by(UserModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
         user_list = [p.to_json() for p in data]
         return user_list, count
 
@@ -319,7 +319,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
             return []
 
         query = UserModel.query.filter(UserModel.id.in_(uids)).filter(UserModel.status.notin_([cls.status_remove]))
-        data = query.order_by('id desc').all()
+        data = query.order_by(UserModel.id.desc()).all()
         return [p.to_json() for p in data]
 
     @classmethod
@@ -663,7 +663,7 @@ class MemberModel(SurrogatePK, Model):
         return ret
 
     def update_project(self, project_id, members, group_name=None):
-        space_info = walle.model.deploy.ProjectModel.query.filter_by(id=project_id).first().to_json()
+        space_info = walle.model.project.ProjectModel.query.filter_by(id=project_id).first().to_json()
         group_model = self.members(group_id=space_info['space_id'])
         user_update = []
 
@@ -672,9 +672,10 @@ class MemberModel(SurrogatePK, Model):
 
         current_app.logger.info(group_model['user_ids'])
         current_app.logger.info(user_update)
+
         # project新增用户是否在space's group中,无则抛出
         if list(set(user_update).difference(set(group_model['user_ids']))):
-            raise ValueError('用户不存在')
+            raise WalleError(Code.user_not_in_space)
 
         # 修改用户组成员
         # clean up
@@ -700,7 +701,7 @@ class MemberModel(SurrogatePK, Model):
 
         return ret
 
-    def members(self, group_id=None, project_id=None):
+    def members(self, group_id=None, project_id=None, page=1, size=10):
         """
         获取单条记录
         :param role_id:
@@ -717,8 +718,6 @@ class MemberModel(SurrogatePK, Model):
         }
 
         # TODO
-        page = 1
-        size = 10
         groups, count = MemberModel.query_paginate(page=page, limit=size, filter_name_dict=filters)
 
         user_ids = []
@@ -740,7 +739,7 @@ class MemberModel(SurrogatePK, Model):
 
         members['user_ids'] = user_ids
         members['members'] = user_info
-        members['users'] = len(user_ids)
+        members['count'] = count
         return members
 
     def remove(self, group_id=None, user_id=None, project_id=None):
@@ -805,7 +804,7 @@ class SpaceModel(SurrogatePK, Model):
         if g.role <> SUPER:
             query = query.filter_by(user_id=g.id)
         count = query.count()
-        data = query.order_by('id desc').offset(int(size) * int(page)).limit(size).all()
+        data = query.order_by(SpaceModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
 
         uid2name = UserModel.uid2name(data=data)
         list = [p.to_json(uid2name) for p in data]

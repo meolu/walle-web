@@ -12,7 +12,7 @@ import os
 from flask import request, abort, session, current_app
 from flask_login import current_user, login_required
 from walle.api.api import SecurityResource
-from walle.model.deploy import TaskRecordModel
+from walle.model.record import RecordModel
 from walle.model.user import MenuModel
 from walle.model.user import UserModel
 from walle.service import emails
@@ -81,7 +81,7 @@ class GeneralAPI(SecurityResource):
         task_id = 12
         wi = Deployer(task_id)
         ret = wi.walle_deploy()
-        record = TaskRecordModel().fetch(task_id)
+        record = RecordModel().fetch(task_id)
         return self.render_json(data={
             'command': ret,
             'record': record,

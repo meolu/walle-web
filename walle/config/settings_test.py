@@ -23,7 +23,7 @@ class TestConfig(Config):
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
 
     # 前端项目部署路径
-    FE_PATH = '/Users/wushuiyong/workspace/meolu/walle-fe/'
+    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/')
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + 'dist/' + AVATAR_PATH
 

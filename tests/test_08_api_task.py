@@ -5,7 +5,7 @@ import types
 import urllib
 import pytest
 from utils import *
-from walle.model.deploy import TaskModel
+from walle.model.task import TaskModel
 
 class TestApiTask:
     """api role testing"""

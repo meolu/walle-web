@@ -27,6 +27,7 @@
         post = {
             'task': 12
         }
+
         /// 返回基本结构: emit('construct', {
         ///                      'event': 'pusher:construct',
         ///                       'data': {"status":0,"success":"","sequence":1,"cmd":"python --version","host":"127.0.0.1","error":""}
@@ -59,7 +60,6 @@
         // 2.返回construct, 初始化页面信息
         socket.on('construct', function (data) {
             write(data)
-            console.log(data)
             socket.emit('logs', {'task': 12})
         });
 

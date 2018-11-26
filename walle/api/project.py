@@ -14,7 +14,7 @@ from flask import request, current_app
 from flask_login import login_required
 from walle.api.api import SecurityResource
 from walle.form.project import ProjectForm
-from walle.model.deploy import ProjectModel
+from walle.model.project import ProjectModel
 from walle.model.user import MemberModel
 from walle.service.rbac.role import *
 from walle.service.extensions import permission
@@ -42,14 +42,13 @@ class ProjectAPI(SecurityResource):
         """
         page = int(request.args.get('page', 0))
         page = page - 1 if page else 0
-        size = float(request.args.get('size', 10))
+        size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
         environment_id = request.values.get('environment_id', '')
 
         project_model = ProjectModel()
-        space_id = None if current_user.role == SUPER else session['space_id']
-        project_list, count = project_model.list(page=page, size=size, kw=kw, environment_id=environment_id, space_id=space_id)
-        return self.list_json(list=project_list, count=count)
+        project_list, count = project_model.list(page=page, size=size, kw=kw, environment_id=environment_id, space_id=self.space_id)
+        return self.list_json(list=project_list, count=count, enable_create=permission.enable_role(MASTER) and current_user.role <> SUPER)
 
     def item(self, project_id):
         """

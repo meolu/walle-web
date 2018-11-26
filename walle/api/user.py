@@ -42,16 +42,17 @@ class UserAPI(SecurityResource):
         """
         page = int(request.args.get('page', 0))
         page = page - 1 if page else 0
-        size = float(request.args.get('size', 10))
+        size = int(request.args.get('size', 10))
+        space_id = int(request.args.get('space_id', 0))
         kw = request.values.get('kw', '')
 
         uids = []
-        if current_user.role <> SUPER:
+        if current_user.role <> SUPER and space_id:
             members = MemberModel(group_id=current_user.last_space).members()
             uids = members['user_ids']
 
         user_model = UserModel()
-        user_list, count = user_model.list(uids=uids, page=page, size=size, kw=kw)
+        user_list, count = user_model.list(uids=uids, page=page, size=size, space_id=space_id, kw=kw)
         filters = {
             'username': ['线上', '线下'],
             'status': ['正常', '禁用']
@@ -127,7 +128,8 @@ class UserAPI(SecurityResource):
         MemberModel().remove(user_id=user_id)
         return self.render_json(message='')
 
-    def table(self, filter={}):
+    @staticmethod
+    def table(filter={}):
         table = {
             'username': {
                 'sort': 0

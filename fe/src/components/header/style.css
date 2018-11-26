@@ -1,0 +1,7 @@
+:local .dropDown {
+  color:rgba(255, 255, 255, 0.67);
+}
+
+:local .dropDown:hover {
+  color: #fff;
+}

@@ -12,9 +12,10 @@ import os
 # from fabric import context_managers, colors
 from flask import current_app
 
-from walle.model import deploy as TaskModel
+from walle.model.record import RecordModel
 from walle.service.waller import Waller
-from walle.model.deploy import ProjectModel
+from walle.model.project import ProjectModel
+from walle.model.task import TaskModel
 from flask_socketio import emit
 from walle.service.extensions import socketio
 
@@ -40,6 +41,8 @@ class Deployer:
     taskMdl = None
     TaskRecord = None
 
+    console = False
+
     version = datetime.now().strftime('%Y%m%d%H%M%s')
     project_name = 'walden'
     dir_codebase = '/tmp/walle/codebase/'
@@ -55,15 +58,15 @@ class Deployer:
     release_version_tar, release_version = None, None
     local = None
 
-    def __init__(self, task_id=None, project_id=None):
+    def __init__(self, task_id=None, project_id=None, console=False):
         self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
                             user=current_app.config.get('LOCAL_SERVER_USER'),
                             port=current_app.config.get('LOCAL_SERVER_PORT'))
-        self.TaskRecord = TaskModel.TaskRecordModel()
+        self.TaskRecord = RecordModel()
 
         if task_id:
             self.task_id = task_id
-            self.taskMdl = TaskModel.TaskModel().item(self.task_id)
+            self.taskMdl = TaskModel().item(self.task_id)
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
             self.task = self.taskMdl.get('target_user')
@@ -72,8 +75,11 @@ class Deployer:
             self.project_id = project_id
             self.project_info = ProjectModel(id=project_id).item()
 
+        # start to deploy
+
+
     def config(self):
-        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence}
+        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence, 'console': self.console}
 
     # ===================== fabric ================
     # SocketHandler
@@ -99,7 +105,6 @@ class Deployer:
         # 检查 当前用户
         command = 'whoami'
         current_app.logger.info(command)
-        socketio.emit('console', {'event': 'task:console', 'data': {'cmd':command}}, room=self.task_id, ignore_queue=True)
         result = self.local.run(command, wenv=self.config())
 
         # 检查 python 版本

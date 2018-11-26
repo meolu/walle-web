@@ -14,7 +14,7 @@ from flask_wtf import Form
 from wtforms import TextField
 from wtforms import validators, ValidationError
 
-from walle.model.deploy import ServerModel
+from walle.model.server import ServerModel
 
 
 class ServerForm(Form):
