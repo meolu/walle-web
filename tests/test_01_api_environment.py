@@ -17,16 +17,19 @@ class TestApiEnv:
 
     env_data = {
         'env_name': u'测试环境',
+        'space_id': 1,
     }
 
     user_name_2 = u'Production'
 
     env_data_2 = {
         'env_name': u'Production',
+        'space_id': 1,
     }
 
     env_data_remove = {
         'env_name': u'environment_remove',
+        'space_id': 1,
     }
 
     def test_create(self, user, testapp, client, db):

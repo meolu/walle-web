@@ -74,7 +74,7 @@ class ProjectModel(SurrogatePK, Model):
         query = query.filter(EnvironmentModel.status.notin_([self.status_remove]))
 
         # 关联 spaces
-        SpaceModel = model.user.SpaceModel
+        SpaceModel = model.space.SpaceModel
         query = query.join(SpaceModel, SpaceModel.id == ProjectModel.space_id)
         query = query.filter(SpaceModel.status.notin_([self.status_remove]))
 

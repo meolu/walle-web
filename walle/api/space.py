@@ -13,7 +13,9 @@ import json
 from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.form.space import SpaceForm
-from walle.model.user import SpaceModel, MemberModel, UserModel
+from walle.model.space import SpaceModel
+from walle.model.member import MemberModel
+from walle.model.user import UserModel
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 
@@ -106,12 +108,14 @@ class SpaceAPI(SecurityResource):
 
         if action and action == 'switch':
             return self.switch(space_id)
-
+        current_app.logger.info(json.loads(request.form['members']))
         form = SpaceForm(request.form, csrf_enabled=False)
         form.set_id(space_id)
         if form.validate_on_submit():
             space = SpaceModel().get_by_id(space_id)
             data = form.form2dict()
+            current_app.logger.info(data)
+
             # a new type to update a model
             ret = space.update(data)
             # create group
@@ -146,6 +150,8 @@ class SpaceAPI(SecurityResource):
 
     def members(self, space_id):
         page = int(request.args.get('page', 1))
+        page = page - 1 if page else 0
         size = int(request.args.get('size', 10))
-        members = MemberModel(group_id=space_id).members(page=page, size=size)
-        return self.list_json(list=members['members'], count=members['count'], enable_create=permission.enable_role(OWNER))
+        kw = request.values.get('kw', '')
+        members, count = MemberModel(group_id=space_id).members_new(page=page, size=size, kw=kw)
+        return self.list_json(list=members, count=count, enable_create=permission.enable_role(OWNER))

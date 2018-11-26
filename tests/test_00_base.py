@@ -4,19 +4,37 @@
 from copy import deepcopy
 
 import pytest
-from walle.model.user import MenuModel
+from utils import *
+from walle.model.menu import MenuModel
 from walle.model.user import UserModel
-from werkzeug.security import generate_password_hash
 from walle.service.rbac.role import *
+from werkzeug.security import generate_password_hash
 
-user_data_login = {
-    'username': u'wushuiyong',
-    'email': u'wushuiyong@walle-web.io',
+#: 1 创建 super, owner
+
+#: 2 登录 super
+
+#: 3 创建 space, users
+
+#: 4 登录 owner
+
+user_super = {
+    'username': u'super',
+    'email': u'Super@walle-web.io',
     'password': u'WU123shuiyong',
 }
+
+user_owner = {
+    'username': u'owner',
+    'email': u'Owner@walle-web.io',
+    'password': u'WU123shuiyong',
+}
+
+user_data_login = user_owner
+
 space_base = {
     'name': u'walle-2.0',
-    'user_id': u'1',
+    'user_id': 1,
 }
 
 
@@ -520,20 +538,68 @@ class TestAccess:
             access.save()
 
 
+#: 1 创建 super, owner
 class TestUser:
-    user_super_login = deepcopy(user_data_login)
+    user_super_login = deepcopy(user_super)
+    user_owner_login = deepcopy(user_owner)
 
-    def test_add(self):
+    def test_add_super(self):
         self.user_super_login['role'] = SUPER
         self.user_super_login['password'] = generate_password_hash(self.user_super_login['password'])
         user = UserModel(**self.user_super_login)
         user.save()
 
+    def test_add_owner(self):
+        self.user_owner_login['role'] = OWNER
+        self.user_owner_login['password'] = generate_password_hash(self.user_owner_login['password'])
+        user = UserModel(**self.user_owner_login)
+        user.save()
 
-# class TestSpace:
-#     user_data_login = deepcopy(user_data_login)
-#
-#     def test_add(self):
-#         self.user_data_login['password'] = generate_password_hash(user_data_login['password'])
-#         user = UserModel(**self.user_data_login)
-#         user.save()
+
+#: 2 登录 super
+@pytest.mark.usefixtures('db')
+class TestApiPassport:
+    """api role testing"""
+    uri_prefix = '/api/passport'
+
+    user_id = {}
+
+    user_data = deepcopy(user_super)
+
+    def test_base_fetch(self):
+        u = UserModel.get_by_id(1)
+
+    def test_login_super(self, user, testapp, client, db):
+        """create successful."""
+
+        resp = client.post('%s/login' % (self.uri_prefix), data=self.user_data)
+
+        response_success(resp)
+
+        del self.user_data['password']
+        compare_req_resp(self.user_data, resp)
+
+
+#: 3 创建 space, users
+@pytest.mark.usefixtures('db')
+class TestApiSpaceInit:
+    """api role testing"""
+    uri_prefix = '/api/space'
+
+    user_id = {}
+
+    #: user list (1, 2, 3)
+    space_data = {
+        'name': u'walle-web 2.0',
+        'user_id': 2,
+    }
+
+    def test_base_create_space(self, user, testapp, client, db):
+        """create successful."""
+        # 1.create project
+        resp = client.post('%s/' % (self.uri_prefix), data=self.space_data)
+
+        response_success(resp)
+        # compare_req_resp(self.space_data, resp)
+        current_app.logger.info(resp_json(resp)['data'])
+        self.space_data['space_id'] = resp_json(resp)['data']['id']

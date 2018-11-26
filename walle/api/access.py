@@ -11,8 +11,8 @@
 from flask import request
 
 from walle.api.api import SecurityResource
-from walle.model.user import MenuModel
-from walle.model.user import RoleModel
+from walle.model.menu import MenuModel
+from walle.model.role import RoleModel
 
 
 class AccessAPI(SecurityResource):

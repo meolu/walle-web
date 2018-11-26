@@ -10,8 +10,9 @@
 from flask_login import login_required, current_user
 from flask import request
 from walle.form.group import GroupForm
-from walle.model.user import MemberModel, UserModel
-from walle.model.user import SpaceModel
+from walle.model.member import MemberModel
+from walle.model.user import UserModel
+from walle.model.space import SpaceModel
 from walle.model.tag import TagModel
 from walle.api.api import SecurityResource
 from flask import current_app
@@ -90,30 +91,6 @@ class GroupAPI(SecurityResource):
         group_info['group_name'] = group_info['name']
         group_info['group_id'] = group_info['id']
         return self.render_json(data=group_info)
-
-    def post(self):
-        """
-        create group
-        /group/
-
-        :return:
-        """
-        super(GroupAPI, self).post()
-        current_app.logger.info(request.form)
-        current_app.logger.info(request.form.user_ids)
-
-        form = GroupForm(request.form, csrf_enabled=False)
-        if form.validate_on_submit():
-            # user_ids = [int(uid) for uid in form.user_ids.data.split(',')]
-
-            group_id = 0
-            # group_new = MemberModel()
-            # group_id = group_new.add(group_name=form.group_name.data, user_ids=user_ids)
-            if not group_id:
-                return self.render_json(code=-1)
-            return self.render_json(data=group_new.item())
-        else:
-            return self.render_json(code=-1, message=form.errors)
 
     def put(self, group_id):
         """

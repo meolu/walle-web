@@ -15,7 +15,6 @@ from wtforms import PasswordField, TextField
 from wtforms import validators, ValidationError
 from wtforms.validators import Regexp
 
-from walle.model.user import RoleModel
 from walle.model.user import UserModel
 from flask import current_app
 import re

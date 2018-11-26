@@ -15,7 +15,7 @@ from flask_login import login_required
 from walle.api.api import SecurityResource
 from walle.form.project import ProjectForm
 from walle.model.project import ProjectModel
-from walle.model.user import MemberModel
+from walle.model.member import MemberModel
 from walle.service.rbac.role import *
 from walle.service.extensions import permission
 

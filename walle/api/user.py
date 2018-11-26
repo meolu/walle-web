@@ -13,7 +13,7 @@ from flask_login import current_user
 from walle.api.api import SecurityResource
 from walle.form.user import UserUpdateForm, RegistrationForm
 from walle.model.database import db
-from walle.model.user import MemberModel
+from walle.model.member import MemberModel
 from walle.model.user import UserModel
 from werkzeug.security import generate_password_hash
 from walle.service.rbac.role import *

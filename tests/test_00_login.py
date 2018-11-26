@@ -9,6 +9,7 @@ from walle.model.user import UserModel
 from copy import deepcopy
 from test_00_base import user_data_login
 
+#: 4 登录 owner
 @pytest.mark.usefixtures('db')
 class TestApiPassport:
     """api role testing"""
@@ -20,7 +21,7 @@ class TestApiPassport:
 
 
     def test_fetch(self):
-        u = UserModel.get_by_id(1)
+        u = UserModel.get_by_id(2)
 
     def test_login(self, user, testapp, client, db):
         """create successful."""
