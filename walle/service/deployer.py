@@ -44,9 +44,9 @@ class Deployer:
     console = False
 
     version = datetime.now().strftime('%Y%m%d%H%M%s')
-    project_name = 'walden'
+    project_name = None
     dir_codebase = '/tmp/walle/codebase/'
-    dir_codebase_project = dir_codebase + project_name
+    dir_codebase_project = ''
 
     # 定义远程机器
     # env.hosts = ['172.16.0.231', '172.16.0.177']
@@ -66,14 +66,21 @@ class Deployer:
 
         if task_id:
             self.task_id = task_id
+            # task start
+            TaskModel(id=self.task_id).update(status=TaskModel.status_doing)
+
             self.taskMdl = TaskModel().item(self.task_id)
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
             self.task = self.taskMdl.get('target_user')
             self.project_info = self.taskMdl.get('project_info')
+
         if project_id:
             self.project_id = project_id
             self.project_info = ProjectModel(id=project_id).item()
+
+        self.project_name = self.project_info['id']
+        self.dir_codebase_project = self.dir_codebase + str(self.project_name)
 
         # start to deploy
 
@@ -117,8 +124,10 @@ class Deployer:
         result = self.local.run(command, wenv=self.config())
         current_app.logger.info(command)
 
-        time.sleep(3)
         # 检查 目录是否存在
+        self.init_repo()
+
+        # TODO to be removed
         command = 'mkdir -p %s' % (self.dir_codebase_project)
         # TODO remove
         current_app.logger.info(command)
@@ -321,6 +330,8 @@ class Deployer:
             result = waller.run(command, wenv=self.config())
 
     def list_tag(self):
+        self.init_repo()
+
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
@@ -331,9 +342,11 @@ class Deployer:
         return None
 
     def list_branch(self):
+        self.init_repo()
+
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
-            # result = self.local.run(command, wenv=self.config())
+            result = self.local.run(command, wenv=self.config())
 
             current_app.logger.info(self.dir_codebase_project)
 
@@ -351,6 +364,8 @@ class Deployer:
         return None
 
     def list_commit(self, branch):
+        self.init_repo()
+
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
             result = self.local.run(command, wenv=self.config())
@@ -370,6 +385,27 @@ class Deployer:
             return commits
 
         return None
+
+    def init_repo(self):
+
+        current_app.logger.info('git dir: %s', self.dir_codebase_project + '/.git')
+        # 如果项目底下有 .git 目录则认为项目完整,可以直接检出代码
+        # TODO 不标准
+        if not os.path.exists(self.dir_codebase_project):
+            # 检查 目录是否存在
+            command = 'mkdir -p %s' % (self.dir_codebase_project)
+            # TODO remove
+            current_app.logger.info(command)
+            result = self.local.run(command, wenv=self.config())
+
+        if not os.path.exists(self.dir_codebase_project + '/.git'):
+            # 否则当作新项目检出完整代码
+            with self.local.cd(self.dir_codebase_project):
+                command = 'pwd && git clone %s .' % (self.project_info['repo_url'])
+                current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
+
+                result = self.local.run(command, wenv=self.config())
+
 
     def walle_deploy(self):
         self.prev_deploy()

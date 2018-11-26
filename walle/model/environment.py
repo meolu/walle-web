@@ -12,6 +12,7 @@ from sqlalchemy import String, Integer, DateTime
 from walle.model.database import db, Model
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
+from walle import model
 
 
 # 环境级别
@@ -26,11 +27,12 @@ class EnvironmentModel(Model):
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(String(20))
+    space_id = db.Column(Integer)
     status = db.Column(Integer)
     created_at = db.Column(DateTime, default=current_time)
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
 
-    def list(self, page=0, size=10, kw=None):
+    def list(self, page=0, size=10, kw=None, space_id=None):
         """
         获取分页列表
         :param page:
@@ -41,10 +43,22 @@ class EnvironmentModel(Model):
         query = self.query.filter(EnvironmentModel.status.notin_([self.status_remove]))
         if kw:
             query = query.filter(EnvironmentModel.name.like('%' + kw + '%'))
-        count = query.count()
+        if space_id:
+            query = query.filter(EnvironmentModel.space_id==space_id)
 
+        SpaceModel = model.space.SpaceModel
+        query = query.join(SpaceModel, SpaceModel.id==EnvironmentModel.space_id)
+        query = query.add_columns(SpaceModel.name)
+        count = query.count()
         data = query.order_by(EnvironmentModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
-        env_list = [p.to_json() for p in data]
+
+        current_app.logger.info(data)
+        env_list = []
+        for p in data:
+            item = p[0].to_json()
+            item['space_name'] = p[1]
+            env_list.append(item)
+
         return env_list, count
 
     def item(self, env_id=None):
@@ -56,9 +70,9 @@ class EnvironmentModel(Model):
         data = self.query.filter(EnvironmentModel.status.notin_([self.status_remove])).filter_by(id=self.id).first()
         return data.to_json() if data else []
 
-    def add(self, env_name):
+    def add(self, env_name, space_id):
         # todo permission_ids need to be formated and checked
-        env = EnvironmentModel(name=env_name, status=self.status_open)
+        env = EnvironmentModel(name=env_name, status=self.status_open, space_id=space_id)
 
         db.session.add(env)
         db.session.commit()
@@ -92,6 +106,7 @@ class EnvironmentModel(Model):
         item = {
             'id': self.id,
             'status': self.status,
+            'space_id': self.space_id,
             'env_name': self.name,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),

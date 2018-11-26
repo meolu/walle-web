@@ -4,7 +4,7 @@
 from copy import deepcopy
 
 import pytest
-from walle.model.user import MenuModel
+from walle.model.menu import MenuModel
 from walle.model.user import UserModel
 from werkzeug.security import generate_password_hash
 from walle.service.rbac.role import *
