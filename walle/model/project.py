@@ -24,6 +24,9 @@ class ProjectModel(SurrogatePK, Model):
     status_close = 0
     status_open = 1
 
+    enable_audit_true = 1
+    enable_audit_false = 0
+
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(Integer)

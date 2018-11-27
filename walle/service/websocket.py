@@ -16,6 +16,8 @@ from walle.model.task import TaskModel
 class WalleSocketIO(Namespace):
     namespace, room, app = None, None, None
 
+    task_info = None
+
     def __init__(self, namespace, room=None, app=None):
         super(WalleSocketIO, self).__init__(namespace=namespace)
         self.room = room
@@ -34,14 +36,18 @@ class WalleSocketIO(Namespace):
             emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=self.room)
         join_room(room=self.room)
 
-        task_info = TaskModel(id=self.room).item()
-        emit('construct', {'event': 'pusher:connect', 'data': task_info}, room=self.room)
+        self.task_info = TaskModel(id=self.room).item()
+        emit('construct', {'event': 'pusher:connect', 'data': self.task_info}, room=self.room)
 
     def on_deploy(self, message):
         emit('console', {'event': 'task:console', 'data': {}}, room=self.room)
         from walle.service.deployer import Deployer
-        wi = Deployer(task_id=self.room)
-        ret = wi.walle_deploy()
+        self.task_info = TaskModel(id=self.room).item()
+        if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
+            wi = Deployer(task_id=self.room)
+            ret = wi.walle_deploy()
+        else:
+            emit('console', {'event': 'task:forbidden', 'data': self.task_info}, room=self.room)
 
     def on_logs(self, message):
         current_app.logger.info(message)
@@ -52,4 +58,4 @@ class WalleSocketIO(Namespace):
         logs = RecordModel().fetch(task_id=task)
         for log in logs:
             log = RecordModel.logs(**log)
-            emit('console', {'event': 'task:console', 'data': log}, room=task)
+            emit('console', {'event': 'task:console', 'data': log}, room=self.room)
