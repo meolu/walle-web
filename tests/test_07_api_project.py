@@ -209,18 +209,14 @@ class TestApiProject:
 
         response_success(resp)
         current_app.logger.info(resp_json(resp)['data'])
-        self.project_data_2_update['members'] = json.dumps(self.project_data_members)
-        self.compare_member_req_resp(self.project_data_2_update, resp)
-
-        # # 1.update
-        # resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']), data=self.project_data_2_update)
-        #
-        # response_success(resp)
-        # self.project_compare_req_resp(self.project_data_2_update, resp)
+        # put /api/:project_id/members 跟 get /api/:project_id 的返回不一样
+        self.compare_member_req_resp_without_key(self.project_data_members, resp)
 
         # 3.get it
         resp = client.get('%s/%d' % (self.uri_prefix, self.project_data_2['id']))
         response_success(resp)
+        # put /api/:project_id/members 跟 get /api/:project_id 的返回不一样
+        self.project_data_2_update['members'] = json.dumps(self.project_data_members)
         self.compare_member_req_resp(self.project_data_2_update, resp)
 
     def test_get_remove(self, user, testapp, client):
@@ -266,5 +262,11 @@ class TestApiProject:
     def compare_member_req_resp(self, request, response):
         for user_response in resp_json(response)['data']['members']:
             for user_request in json.loads(request['members']):
+                if user_request['user_id'] == user_response['user_id']:
+                    assert user_request['role'] == user_response['role']
+
+    def compare_member_req_resp_without_key(self, request, response):
+        for user_response in resp_json(response)['data']:
+            for user_request in request:
                 if user_request['user_id'] == user_response['user_id']:
                     assert user_request['role'] == user_response['role']

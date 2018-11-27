@@ -154,4 +154,4 @@ class SpaceAPI(SecurityResource):
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
         members, count = MemberModel(group_id=space_id).members_new(page=page, size=size, kw=kw)
-        return self.list_json(list=members, count=count, enable_create=permission.enable_role(OWNER))
+        return self.list_json(list=members, count=count, enable_create=permission.enable_role(MASTER))
