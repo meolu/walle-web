@@ -119,7 +119,7 @@ class SpaceAPI(SecurityResource):
             # a new type to update a model
             ret = space.update(data)
             # create group
-            if request.form.has_key('members'):
+            if 'members' in request.form:
                 MemberModel(group_id=space_id).update_group(members=json.loads(request.form['members']))
             return self.render_json(data=space.item())
         else:

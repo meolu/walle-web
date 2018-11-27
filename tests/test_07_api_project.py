@@ -248,7 +248,7 @@ class TestApiProject:
         """
         resp_obj = resp_json(resp)['data']
         servers = []
-        if resp_obj.has_key('server_info'):
+        if 'server_info' in resp_obj:
             for server in resp_obj['server_info']:
                 servers.append(str(server['id']))
 

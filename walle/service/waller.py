@@ -60,7 +60,7 @@ class Waller(Connection):
             current_app.logger.info(message)
             return result
 
-        except Exception, e:
+        except Exception as e:
             #current_app.logger.exception(e)
             #return None
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
@@ -138,7 +138,7 @@ class Waller(Connection):
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             return result
-        except Exception, e:
+        except Exception as e:
             # TODO 收尾下
             current_app.logger.info('put: %s, %s', e, dir(e))
 

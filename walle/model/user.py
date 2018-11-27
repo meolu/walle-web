@@ -173,7 +173,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
         spaces = current_user.has_spaces()
 
         # 1.无空间权限且非超管
-        if not spaces and current_user.role <> SUPER:
+        if not spaces and current_user.role != SUPER:
             raise WalleError(Code.space_empty)
 
         default_space = spaces.keys()[0]
@@ -260,3 +260,4 @@ class UserModel(UserMixin, SurrogatePK, Model):
             'enable_audit': False,
             'enable_block': False,
         }
+
