@@ -77,21 +77,6 @@ class GroupAPI(SecurityResource):
             return self.render_json(data=group)
         return self.render_json(code=-1)
 
-        ## mixin 版本
-        group_model = TagModel().get_by_id(group_id)
-        if not group_model:
-            return self.render_json(code=-1)
-
-        user_model = UserModel()
-        user_info = user_model.fetch_by_uid(uids=group_model.users)
-
-        group_info = group_model.to_dict()
-        group_info['members'] = user_info
-        group_info['users'] = len(user_info)
-        group_info['group_name'] = group_info['name']
-        group_info['group_id'] = group_info['id']
-        return self.render_json(data=group_info)
-
     def put(self, group_id):
         """
         update group

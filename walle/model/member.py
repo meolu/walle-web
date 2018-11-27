@@ -11,7 +11,7 @@ from datetime import datetime
 from sqlalchemy import String, Integer, DateTime
 from walle import model
 from walle.model.database import SurrogatePK
-from walle.model.database import db, Model
+from walle.model.database import db, Model, or_
 from walle.model.user import UserModel
 from walle.service.rbac.role import *
 
@@ -127,17 +127,17 @@ class MemberModel(SurrogatePK, Model):
 
     def update_project(self, project_id, members, group_name=None):
         space_info = model.project.ProjectModel.query.filter_by(id=project_id).first().to_json()
-        group_model = self.members(group_id=space_info['space_id'])
-        user_update = []
+        space_members, count, user_ids = self.members(group_id=space_info['space_id'])
+        update_uids = []
 
         for member in members:
-            user_update.append(member['user_id'])
+            update_uids.append(member['user_id'])
 
-        current_app.logger.info(group_model['user_ids'])
-        current_app.logger.info(user_update)
+        current_app.logger.info(user_ids)
+        current_app.logger.info(update_uids)
 
         # project新增用户是否在space's group中,无则抛出
-        if list(set(user_update).difference(set(group_model['user_ids']))):
+        if list(set(update_uids).difference(set(user_ids))):
             raise WalleError(Code.user_not_in_space)
 
         # 修改用户组成员
@@ -164,7 +164,7 @@ class MemberModel(SurrogatePK, Model):
 
         return ret
 
-    def members(self, group_id=None, project_id=None, page=1, size=10, kw=None):
+    def members(self, group_id=None, project_id=None, page=0, size=10, kw=None):
         """
         获取单条记录
         :param role_id:
@@ -174,91 +174,30 @@ class MemberModel(SurrogatePK, Model):
         project_id = project_id if project_id else self.project_id
         source_id = group_id if group_id else project_id
         source_type = self.source_type_group if group_id else self.source_type_project
-        filters = {
-            'status': {'nin': [self.status_remove]},
-            'source_id': {'=': source_id},
-            'source_type': {'=': source_type},
-        }
-        # if kw:
-        #     filters['email'] = {'like': kw}
-
-        # TODO
-        groups, count = MemberModel.query_paginate(page=page, limit=size, filter_name_dict=filters)
-
-        user_ids = []
-        user_role = members = {}
-        current_app.logger.info(groups)
-
-        for group_info in groups:
-            user_ids.append(group_info.user_id)
-            # TODO
-            user_role[group_info.user_id] = group_info.access_level
-
-        current_app.logger.info(user_ids)
-        user_model = UserModel()
-        user_info = user_model.fetch_by_uid(uids=set(user_ids))
-        if user_info:
-            for user in user_info:
-                if user_role.has_key(user['id']):
-                    user['role'] = user_role[user['id']]
-
-        members['user_ids'] = user_ids
-        members['members'] = user_info
-        members['count'] = count
-        return members
-
-    def members_new(self, group_id=None, project_id=None, page=1, size=10, kw=None):
-        """
-        获取单条记录
-        :param role_id:
-        :return:
-        """
-        group_id = group_id if group_id else self.group_id
-        project_id = project_id if project_id else self.project_id
-        source_id = group_id if group_id else project_id
-        source_type = self.source_type_group if group_id else self.source_type_project
-        query = self.query.filter(MemberModel.source_id == source_id).filter(MemberModel.source_type == source_type)
-        query = query.join(UserModel, UserModel.id == MemberModel.user_id)
+        query = UserModel.query\
+            .filter(UserModel.status.notin_([self.status_remove]))\
+            .filter(MemberModel.source_id == source_id)\
+            .filter(MemberModel.source_type == source_type)
+        query = query.join(MemberModel, UserModel.id == MemberModel.user_id)
         if kw:
             query = query.filter(or_(UserModel.username.like('%' + kw + '%'), UserModel.email.like('%' + kw + '%')))
 
-        query = query.add_columns(UserModel.username)
+        query = query.add_columns(MemberModel.access_level, UserModel.id)
 
         count = query.count()
         data = query.order_by(MemberModel.id.asc()).offset(int(size) * int(page)).limit(size).all()
 
+        current_app.logger.info(data)
         list = []
+        user_ids = []
         for p in data:
             item = p[0].to_json()
-            item['username'] = p[1]
+            item['role'] = p[1]
+            user_ids.append(p[2])
             list.append(item)
+        current_app.logger.info(list)
 
-        return list, count
-
-        # TODO
-        groups, count = MemberModel.query_paginate(page=page, limit=size, filter_name_dict=filters)
-
-        user_ids = []
-        user_role = members = {}
-        current_app.logger.info(groups)
-
-        for group_info in groups:
-            user_ids.append(group_info.user_id)
-            # TODO
-            user_role[group_info.user_id] = group_info.access_level
-
-        current_app.logger.info(user_ids)
-        user_model = UserModel()
-        user_info = user_model.fetch_by_uid(uids=set(user_ids))
-        if user_info:
-            for user in user_info:
-                if user_role.has_key(user['id']):
-                    user['role'] = user_role[user['id']]
-
-        members['user_ids'] = user_ids
-        members['members'] = user_info
-        members['count'] = count
-        return members
+        return list, count, user_ids
 
     def remove(self, group_id=None, user_id=None, project_id=None):
         """

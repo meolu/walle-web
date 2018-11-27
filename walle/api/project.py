@@ -63,10 +63,9 @@ class ProjectAPI(SecurityResource):
         if not project_info:
             return self.render_json(code=-1)
 
-        group_info = MemberModel().members(project_id=project_id)
-        current_app.logger.info(group_info)
+        project_info['members'], count, project_info['user_uids'] = MemberModel().members(project_id=project_id)
 
-        return self.render_json(data=dict(project_info, **group_info))
+        return self.render_json(data=project_info)
 
     def post(self):
         """
@@ -91,8 +90,8 @@ class ProjectAPI(SecurityResource):
 
     def put(self, project_id, action=None):
         """
-        update environment
-        /environment/<int:id>
+        update project
+        /project/<int:id>
 
         :return:
         """
@@ -114,8 +113,8 @@ class ProjectAPI(SecurityResource):
 
     def delete(self, project_id):
         """
-        remove an environment
-        /environment/<int:id>
+        remove an project
+        /project/<int:id>
 
         :return:
         """
@@ -134,12 +133,11 @@ class ProjectAPI(SecurityResource):
         :return:
         """
         # TODO login for group id
-        group_id = 1
 
         group_model = MemberModel(project_id=project_id)
         ret = group_model.update_project(project_id=project_id, members=members)
 
-        item = group_model.members()
+        item, count, user_ids = group_model.members()
 
         return self.render_json(data=item)
 

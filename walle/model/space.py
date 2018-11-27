@@ -62,22 +62,18 @@ class SpaceModel(SurrogatePK, Model):
         MemberModel = model.member.MemberModel
         id = id if id else self.id
         data = self.query.filter_by(id=id).first()
-        members = MemberModel(group_id=id).members()
 
         if not data:
             return []
 
         data = data.to_json()
+        data['members'], count, user_ids = MemberModel(group_id=id).members()
 
-        return dict(data, **members)
+        return data
 
     def add(self, *args, **kwargs):
         # todo permission_ids need to be formated and checked
-        data = dict(*args)
 
-        # tag = TagModel(name=data['name'], label='user_group')
-        # db.session.add(tag)
-        # db.session.commit()
         data = dict(*args)
         space = SpaceModel(**data)
         db.session.add(space)

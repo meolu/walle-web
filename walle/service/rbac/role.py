@@ -118,6 +118,8 @@ class Permission():
 
         # TODO about project/task
         current_role = session['space_info']['role']
+        current_app.logger.info(current_role)
+        current_app.logger.info(role)
         return self.compare_role(current_role, role)
 
     # @classmethod
