@@ -3,16 +3,15 @@ sudo: enabled
 cache:
   directories:
     - $HOME/.cache/pip
-python:
-  - "2.7"
 matrix:
   # NOTE: comment out fast_finish if we have to reinstate any allow_failures,
   # because of https://github.com/travis-ci/travis-ci/issues/1696 (multiple
   # notifications)
   fast_finish: true
   include:
+    - python: "2.7"    
     - python: "3.7"
-      dist: xenial  # required for Python 3.7 (travis-ci/travis-ci#9069)
+      dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
 install:
   - echo "#install#"
   # For some reason Travis' build envs have wildly different pip/setuptools
@@ -24,7 +23,7 @@ install:
   # Pre-requirements sanity test (again, resembles pure, non-dev install
   # environment.) Avoids e.g. spec's 'six' from gumming up our attempts to
   # import our vendorized 'six'.
-  - pip install flake8 -r requirements/dev.txt
+  - pip install -r requirements/dev.txt
   - pip list --format=columns
 before_script:
   - echo "#before_script#"
