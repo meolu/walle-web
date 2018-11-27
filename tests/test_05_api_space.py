@@ -2,8 +2,8 @@
 """Test Apis."""
 import pytest
 from flask import current_app
-from utils import *
-from test_00_base import space_base
+from .utils import *
+from .test_00_base import space_base
 from copy import deepcopy
 @pytest.mark.usefixtures('db')
 class TestApiSpace:

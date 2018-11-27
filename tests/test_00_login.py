@@ -4,10 +4,10 @@ import urllib
 
 import pytest
 
-from utils import *
+from .utils import *
 from walle.model.user import UserModel
 from copy import deepcopy
-from test_00_base import user_data_login
+from .test_00_base import user_data_login
 
 #: 4 登录 owner
 @pytest.mark.usefixtures('db')
