@@ -84,7 +84,7 @@ class ProjectModel(SurrogatePK, Model):
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
 
-        query = query.add_columns(EnvironmentModel.name)
+        query = query.add_columns(EnvironmentModel.name, SpaceModel.name)
         count = query.count()
 
         data = query.order_by(ProjectModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
@@ -93,6 +93,7 @@ class ProjectModel(SurrogatePK, Model):
         for p in data:
             item = p[0].to_json()
             item['environment_name'] = p[1]
+            item['space_name'] = p[2]
             project_list.append(item)
 
         return project_list, count
