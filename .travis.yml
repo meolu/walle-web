@@ -4,6 +4,8 @@ cache:
   directories:
     - $HOME/.cache/pip
 matrix:
+  allow_failures:
+    - python: "3.7"  # until we can get Python 3 compatibility in place
   # NOTE: comment out fast_finish if we have to reinstate any allow_failures,
   # because of https://github.com/travis-ci/travis-ci/issues/1696 (multiple
   # notifications)

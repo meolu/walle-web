@@ -4,7 +4,7 @@ import urllib
 import json
 import pytest
 from flask import current_app
-from utils import *
+from .utils import *
 
 
 @pytest.mark.usefixtures('db')
