@@ -15,4 +15,4 @@ flake8-isort==2.5
 flake8-quotes==1.0.0
 isort==4.3.4
 pep8-naming==0.7.0
-pysqlite==2.8.3
+# pysqlite==2.8.3
