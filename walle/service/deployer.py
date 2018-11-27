@@ -82,6 +82,7 @@ class Deployer:
         self.dir_codebase_project = self.dir_codebase + str(self.project_name)
 
         # start to deploy
+        self.console = console
 
 
     def config(self):
