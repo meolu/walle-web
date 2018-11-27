@@ -6,25 +6,32 @@ cache:
 python:
   - "2.7"
 matrix:
-  # NOTE: comment this out if we have to reinstate any allow_failures, because
-  # of https://github.com/travis-ci/travis-ci/issues/1696 (multiple
+  # NOTE: comment out fast_finish if we have to reinstate any allow_failures,
+  # because of https://github.com/travis-ci/travis-ci/issues/1696 (multiple
   # notifications)
   fast_finish: true
+  include:
+    - python: "3.7"
+      dist: xenial  # required for Python 3.7 (travis-ci/travis-ci#9069)
 install:
   - echo "#install#"
   # For some reason Travis' build envs have wildly different pip/setuptools
   # versions between minor Python versions, and this can cause many hilarious
   # corner packaging cases. So...
-  - pip install -U pip
+  - pip install --upgrade pip
   # Setuptools 34+ seems to get less stable
   - pip install 'setuptools>33,<34'
   # Pre-requirements sanity test (again, resembles pure, non-dev install
   # environment.) Avoids e.g. spec's 'six' from gumming up our attempts to
   # import our vendorized 'six'.
-  - pip install -r requirements/dev.txt
+  - pip install flake8 -r requirements/dev.txt
   - pip list --format=columns
 before_script:
   - echo "#before_script#"
+  # stop the build if there are Python syntax errors or undefined names
+  - flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics
+  # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
+  - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
 script:
   - echo "#script#"
