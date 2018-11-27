@@ -46,10 +46,10 @@ class UserAPI(SecurityResource):
         space_id = int(request.args.get('space_id', 0))
         kw = request.values.get('kw', '')
 
-        uids = []
+        user_ids = []
         if current_user.role != SUPER and space_id:
             members = MemberModel(group_id=current_user.last_space).members()
-            uids = members['user_ids']
+            user_ids = members['user_ids']
 
         user_model = UserModel()
         user_list, count = user_model.list(uids=user_ids, page=page, size=size, space_id=space_id, kw=kw)
