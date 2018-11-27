@@ -428,7 +428,7 @@ class Deployer:
 
         all_servers_success = True
         for server_info in self.servers:
-            server = server_info.host
+            server = server_info['host']
             try:
                 self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
                 self.prev_release(self.connections[server])
