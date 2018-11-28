@@ -48,9 +48,6 @@ class Deployer:
     dir_codebase = '/tmp/walle/codebase/'
     dir_codebase_project = ''
 
-    # 定义远程机器
-    # env.hosts = ['172.16.0.231', '172.16.0.177']
-
     dir_release = None
     dir_webroot = None
 
