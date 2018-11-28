@@ -5,8 +5,9 @@ from flask import current_app
 from utils import *
 from test_00_base import space_base
 from copy import deepcopy
+from factories import TestApiBase
 @pytest.mark.usefixtures('db')
-class TestApiSpace:
+class TestApiSpace(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/space'
 
@@ -34,8 +35,11 @@ class TestApiSpace:
         'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
 
-    def test_setUp(self):
-        pass
+
+    def test_init(self, user, testapp, client, db):
+        self.init_vars(self.space_data)
+        self.init_vars(self.space_data_2)
+        self.init_vars(self.space_data_remove)
 
 
     # 初始化 space_id=1的用户列表

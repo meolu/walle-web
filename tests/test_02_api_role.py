@@ -5,10 +5,10 @@ import types
 import urllib
 import pytest
 from utils import *
-
+from factories import TestApiBase
 
 @pytest.mark.usefixtures('db')
-class TestApiRole:
+class TestApiRole(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/role'
 

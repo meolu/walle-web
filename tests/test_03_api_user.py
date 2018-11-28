@@ -5,7 +5,7 @@ import urllib
 import pytest
 from flask import current_app
 from utils import *
-
+from factories import TestApiBase
 user_data = {
     'email': u'test01@walle-web.io',
     'password': u'Walle987',

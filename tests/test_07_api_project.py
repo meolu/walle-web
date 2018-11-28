@@ -3,12 +3,13 @@
 import urllib
 import json
 import pytest
-from flask import current_app
+from flask import current_app, session, g
 from utils import *
-
+from flask_login import current_user
+from factories import TestApiBase
 
 @pytest.mark.usefixtures('db')
-class TestApiProject:
+class TestApiProject(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/project'
 
@@ -16,7 +17,7 @@ class TestApiProject:
 
     project_data = {
         "environment_id": 1,
-        "space_id": 1,
+        "space_id": 'to be init_vars',
         "excludes": u"*.log",
         "keep_version_num": 11,
         "name": u"walden-瓦尔登",
@@ -34,7 +35,7 @@ class TestApiProject:
         "target_user": u"work",
         "target_port": u"22",
         "task_vars": u"debug=1;\\napp=auotapp.py",
-        "user_id": 1,
+        "user_id": 'to be init_vars',
     }
 
     project_data_members = [
@@ -52,7 +53,7 @@ class TestApiProject:
 
     project_data_2 = {
         "environment_id": 2,
-        "space_id": 1,
+        "space_id": 'to be init_vars',
         "excludes": u"*.log",
         "keep_version_num": 10,
         "name": u"walle-web",
@@ -70,12 +71,12 @@ class TestApiProject:
         "target_user": u"work",
         "target_port": u"22",
         "task_vars": u"debug=1;\\napp=auotapp.py",
-        "user_id": 1
+        "user_id": 'to be init_vars',
     }
 
     project_data_2_update = {
         "environment_id": 1,
-        "space_id": 1,
+        "space_id": 'to be init_vars',
         "excludes": u"*.log",
         "keep_version_num": 11,
         "name": u"walle-web to walden edit",
@@ -93,13 +94,13 @@ class TestApiProject:
         "target_user": u"work",
         "target_port": u"22",
         "task_vars": u"debug=1;\\napp=auotapp.py; project=walden",
-        "user_id": 1
+        "user_id": 'to be init_vars',
     }
 
     project_data_remove = {
         'name': u'this server will be deleted soon',
         "environment_id": 1,
-        "space_id": 1,
+        "space_id": 'to be init_vars',
         "excludes": u"*.log",
         "keep_version_num": 11,
         "post_deploy": u"echo post_deploy",
@@ -116,8 +117,15 @@ class TestApiProject:
         "target_user": u"work",
         "target_port": u"22",
         "task_vars": u"debug=1;\\napp=auotapp.py",
-        "user_id": 1
+        "user_id": 'to be init_vars',
     }
+
+    def test_init(self, user, testapp, client, db):
+        self.init_vars(self.project_data)
+        self.init_vars(self.project_data_2)
+        self.init_vars(self.project_data_remove)
+        self.init_vars(self.project_data_2_update)
+
 
     def test_create(self, user, testapp, client, db):
         """create successful."""
