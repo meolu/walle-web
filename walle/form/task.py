@@ -37,10 +37,7 @@ class TaskForm(Form):
 
     def form2dict(self):
         project_info = ProjectModel(id=self.project_id.data).item()
-        task_status = TaskModel.status_new if project_info['enable_audit'] == ProjectModel.enable_audit_true else TaskModel.status_pass
-        current_app.logger.info(project_info)
-        current_app.logger.info(project_info['enable_audit'])
-        current_app.logger.info(task_status)
+        task_status = TaskModel.status_new if project_info['task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
         return {
             'name': self.name.data if self.name.data else '',
             # todo

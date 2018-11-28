@@ -10,18 +10,16 @@
 
 import json
 
-from flask import request, current_app
-from flask_login import login_required
+from flask import request
 from walle.api.api import SecurityResource
 from walle.form.project import ProjectForm
-from walle.model.project import ProjectModel
 from walle.model.member import MemberModel
-from walle.service.rbac.role import *
+from walle.model.project import ProjectModel
 from walle.service.extensions import permission
+from walle.service.rbac.role import *
 
 
 class ProjectAPI(SecurityResource):
-
     @permission.gte_develop_or_uid
     def get(self, action=None, project_id=None):
         """
@@ -47,8 +45,10 @@ class ProjectAPI(SecurityResource):
         environment_id = request.values.get('environment_id', '')
 
         project_model = ProjectModel()
-        project_list, count = project_model.list(page=page, size=size, kw=kw, environment_id=environment_id, space_id=self.space_id)
-        return self.list_json(list=project_list, count=count, enable_create=permission.enable_role(MASTER) and current_user.role != SUPER)
+        project_list, count = project_model.list(page=page, size=size, kw=kw, environment_id=environment_id,
+                                                 space_id=self.space_id)
+        return self.list_json(list=project_list, count=count,
+                              enable_create=permission.enable_role(MASTER) and current_user.role != SUPER)
 
     def item(self, project_id):
         """
@@ -140,4 +140,3 @@ class ProjectAPI(SecurityResource):
         item, count, user_ids = group_model.members()
 
         return self.render_json(data=item)
-

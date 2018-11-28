@@ -13,7 +13,7 @@ except ImportError:
 from flask_wtf import Form
 from wtforms import TextField
 from wtforms import validators, ValidationError
-
+from flask_login import current_user
 from walle.model.project import ProjectModel
 
 
@@ -44,7 +44,7 @@ class ProjectForm(Form):
     repo_mode = TextField('repo_mode', [validators.Length(min=1, max=50)])
     notice_type = TextField('notice_type', [])
     notice_hook = TextField('notice_hook', [])
-    enable_audit = TextField('enable_audit', [])
+    task_audit = TextField('task_audit', [])
 
     id = None
 
@@ -60,8 +60,7 @@ class ProjectForm(Form):
     def form2dict(self):
         return {
             'name': self.name.data if self.name.data else '',
-            # TODO g.uid
-            'user_id': 1,
+            'user_id': current_user.id,
 
             'status': self.status.data if self.status.data else 0,
             'master': self.master.data if self.master.data else '',
@@ -89,5 +88,5 @@ class ProjectForm(Form):
 
             'notice_type': self.notice_type.data if self.notice_type.data else '',
             'notice_hook': self.notice_hook.data if self.notice_hook.data else '',
-            'enable_audit': self.enable_audit.data if self.enable_audit.data else 0,
+            'task_audit': self.task_audit.data if self.task_audit.data else 0,
         }

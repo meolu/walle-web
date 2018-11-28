@@ -7,20 +7,19 @@
     :created time: 2017-03-25 11:15:01
     :author: wushuiyong@walle-web.io
 """
-from flask_login import login_required, current_user
+import json
+
 from flask import request
+from walle.api.api import SecurityResource
 from walle.form.group import GroupForm
 from walle.model.member import MemberModel
-from walle.model.user import UserModel
 from walle.model.space import SpaceModel
 from walle.model.tag import TagModel
-from walle.api.api import SecurityResource
-from flask import current_app
-from walle.service.rbac.role import *
 from walle.service.extensions import permission
+from walle.service.rbac.role import *
+
 
 class GroupAPI(SecurityResource):
-
     def get(self, group_id=None):
         """
         用户组列表
@@ -43,7 +42,6 @@ class GroupAPI(SecurityResource):
         page = page - 1 if page else 0
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
-        filter = {'name': {'like': kw}} if kw else {}
         space_model = SpaceModel()
         space_list, count = space_model.list(page=page, size=size, kw=kw)
         return self.list_json(list=space_list, count=count, enable_create=permission.enable_role(OWNER))
@@ -91,7 +89,6 @@ class GroupAPI(SecurityResource):
         if form.validate_on_submit():
             # pass
             # user_ids = [int(uid) for uid in form.user_ids.data.split(',')]
-            import json
             current_app.logger.info(form.uid_roles)
 
             current_app.logger.info(json.loads(form.uid_roles))
@@ -102,9 +99,6 @@ class GroupAPI(SecurityResource):
                 current_app.logger.info(uid_role)
                 group_model.create_or_update(uid_role, uid_role)
 
-            # group_model.update(group_id=group_id,
-            #                    group_name=form.group_name.data,
-            #                    user_ids=user_ids)
             return self.render_json(data=group_model.item())
 
         return self.render_json(code=-1, message=form.errors)
