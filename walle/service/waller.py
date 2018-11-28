@@ -64,12 +64,13 @@ class Waller(Connection):
             # current_app.logger.exception(e)
             # return None
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
+            error = e.result if 'result' in e else e.message
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                       task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
-                                      command=command, success='', error='e.result')
+                                      command=command, success='', error=error)
             if hasattr(e, 'resean') and hasattr(e, 'result'):
                 message = 'task_id=%s, host:%s command:%s, status=1, reason:%s, result:%s' % (
-                    wenv['task_id'], self.host, command, e.reason, e.result
+                    wenv['task_id'], self.host, command, e.reason, error
                 )
             else:
                 message = 'task_id=%s, host:%s command:%s, status=1, message:%s' % (
@@ -159,3 +160,4 @@ class Waller(Connection):
             }
             if wenv['console']:
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+
