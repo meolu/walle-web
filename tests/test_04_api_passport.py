@@ -4,9 +4,9 @@ from flask import json
 import types
 import urllib
 import pytest
-from utils import *
-from test_03_api_user import user_data
-from test_00_base import user_data_login
+from .utils import *
+from .test_03_api_user import user_data
+from .test_00_base import user_data_login
 from copy import deepcopy
 
 @pytest.mark.usefixtures('db')

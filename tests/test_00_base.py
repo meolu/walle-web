@@ -4,7 +4,7 @@
 from copy import deepcopy
 
 import pytest
-from utils import *
+from .utils import *
 from walle.model.menu import MenuModel
 from walle.model.user import UserModel
 from walle.service.rbac.role import *

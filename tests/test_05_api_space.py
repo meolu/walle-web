@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
+from copy import deepcopy
+
 import pytest
 from flask import current_app
-from utils import *
-from test_00_base import space_base
-from copy import deepcopy
-from factories import TestApiBase
+from .factories import TestApiBase
+from .test_00_base import space_base
+from .utils import *
+
+
 @pytest.mark.usefixtures('db')
 class TestApiSpace(TestApiBase):
     """api role testing"""
@@ -45,7 +48,8 @@ class TestApiSpace(TestApiBase):
     def test_get_update_default_space(self, user, testapp, client):
         """Login successful."""
         # 1.update
-        self.space_default_base['members'] = json.dumps([{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}])
+        self.space_default_base['members'] = json.dumps(
+                [{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}])
         resp = client.put('%s/%d' % (self.uri_prefix, 1), data=self.space_default_base)
 
         response_success(resp)

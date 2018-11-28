@@ -2,9 +2,9 @@
 """Test Apis."""
 import urllib
 
-from factories import TestApiBase
-from utils import *
 from walle.model.task import TaskModel
+from .factories import TestApiBase
+from .utils import *
 
 
 class TestApiTask(TestApiBase):

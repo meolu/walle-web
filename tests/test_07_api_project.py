@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
 import urllib
-import json
+
 import pytest
-from flask import current_app, session, g
-from utils import *
-from flask_login import current_user
-from factories import TestApiBase
+from flask import current_app
+from .factories import TestApiBase
+from .utils import *
+
 
 @pytest.mark.usefixtures('db')
 class TestApiProject(TestApiBase):
@@ -126,7 +126,6 @@ class TestApiProject(TestApiBase):
         self.init_vars(self.project_data_remove)
         self.init_vars(self.project_data_2_update)
 
-
     def test_create(self, user, testapp, client, db):
         """create successful."""
         # 1. create another project
@@ -205,14 +204,16 @@ class TestApiProject(TestApiBase):
         from walle.service.code import Code
         # 1.1 create user group error
         headers = {'content-type': 'application/json'}
-        resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']), data=json.dumps(self.project_data_members_error), headers=headers)
+        resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']),
+                          data=json.dumps(self.project_data_members_error), headers=headers)
         current_app.logger.info(resp)
 
         response_error(resp, Code.user_not_in_space)
 
         # 1.1 create user group
         headers = {'content-type': 'application/json'}
-        resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']), data=json.dumps(self.project_data_members), headers=headers)
+        resp = client.put('%s/%d/members' % (self.uri_prefix, self.project_data_2['id']),
+                          data=json.dumps(self.project_data_members), headers=headers)
         current_app.logger.info(resp)
 
         response_success(resp)

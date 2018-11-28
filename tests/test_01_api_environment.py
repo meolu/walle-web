@@ -3,8 +3,8 @@
 import urllib
 
 import pytest
-from factories import TestApiBase
-from utils import *
+from .factories import TestApiBase
+from .utils import *
 
 
 @pytest.mark.usefixtures('db')
