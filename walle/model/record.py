@@ -43,7 +43,7 @@ class RecordModel(Model):
         return ret
 
     def fetch(self, task_id):
-        data = self.query.filter_by(task_id=task_id).order_by('id asc').all()
+        data = self.query.filter_by(task_id=task_id).order_by(RecordModel.id.asc()).all()
         return [p.to_json() for p in data]
 
     @classmethod
