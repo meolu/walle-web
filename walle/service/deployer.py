@@ -435,7 +435,7 @@ class Deployer:
                 self.prev_release(self.connections[server])
                 self.release(self.connections[server])
                 self.post_release(self.connections[server])
-            except Exception, e:
+            except Exception as e:
                 all_servers_success = False
                 self.errors[server] = e.message
 
