@@ -35,12 +35,11 @@ class TestApiSpace(TestApiBase):
         'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
 
-
-    def test_init(self, user, testapp, client, db):
-        self.init_vars(self.space_data)
-        self.init_vars(self.space_data_2)
-        self.init_vars(self.space_data_remove)
-
+    # 忘了 user_id 是干嘛的了: (
+    # def test_init(self, user, testapp, client, db):
+    #     self.init_vars(self.space_data)
+    #     self.init_vars(self.space_data_2)
+    #     self.init_vars(self.space_data_remove)
 
     # 初始化 space_id=1的用户列表
     def test_get_update_default_space(self, user, testapp, client):
