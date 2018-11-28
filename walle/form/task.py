@@ -11,9 +11,11 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 from flask_wtf import Form
-
+from flask import current_app
 from wtforms import TextField, IntegerField
 from wtforms import validators
+from walle.model.project import ProjectModel
+from walle.model.task import TaskModel
 
 
 class TaskForm(Form):
@@ -34,14 +36,16 @@ class TaskForm(Form):
         self.id = id
 
     def form2dict(self):
+        project_info = ProjectModel(id=self.project_id.data).item()
+        task_status = TaskModel.status_new if project_info['task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
         return {
             'name': self.name.data if self.name.data else '',
             # todo
             'user_id': 1,
-            'project_id': self.project_id.data if self.project_id.data else '',
+            'project_id': self.project_id.data,
             # todo default value
             'action': 0,
-            'status': self.status.data if self.status.data else 0,
+            'status': task_status,
             'link_id': '',
             'ex_link_id': '',
             'servers': self.servers.data if self.servers.data else '',

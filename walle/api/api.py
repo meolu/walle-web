@@ -65,8 +65,6 @@ class SecurityResource(ApiResource):
     # @login_required
     def get(self, *args, **kwargs):
         self.action = 'get'
-        current_app.logger.info('========= SecurityResource =======')
-
 
         return self.validator()
 

@@ -40,9 +40,10 @@ class Waller(Connection):
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
                 wenv['task_id'], self.host, command, result.exited, result.stdout.strip(), result.stderr.strip()
             )
-
+            current_app.logger.error(dir(self))
             # TODO
             ws_dict = {
+                'user': self.user,
                 'host': self.host,
                 'cmd': command,
                 'status': result.exited,
@@ -79,6 +80,7 @@ class Waller(Connection):
             # TODO
 
             ws_dict = {
+                'user': self.user,
                 'host': self.host,
                 'cmd': command,
                 'status': 1,
@@ -126,6 +128,7 @@ class Waller(Connection):
 
             # TODO
             ws_dict = {
+                'user': self.user,
                 'host': self.host,
                 'cmd': command,
                 'status': 1,
@@ -144,6 +147,7 @@ class Waller(Connection):
 
             # TODO command
             ws_dict = {
+                'user': self.user,
                 'host': self.host,
                 'cmd': 'command',
                 'status': 1,

@@ -8,12 +8,10 @@ from datetime import datetime
 
 from flask_login import UserMixin
 from sqlalchemy import String, Integer, DateTime, or_
-from sqlalchemy.orm import aliased
+from walle import model
 from walle.model.database import SurrogatePK, db, Model
 from walle.service.extensions import permission
-from walle.service.rbac.access import Access as AccessRbac
 from walle.service.rbac.role import *
-from walle import model
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
@@ -45,7 +43,6 @@ class UserModel(UserMixin, SurrogatePK, Model):
         1: '正常',
         2: '冻结',
     }
-
 
     def add(self, *args, **kwargs):
         data = dict(*args)
@@ -164,6 +161,9 @@ class UserModel(UserMixin, SurrogatePK, Model):
         MemberModel = model.member.MemberModel
         return MemberModel().spaces(user_id=self.id)
 
+    def space_id(self):
+        return session['space_id']
+
     @classmethod
     def fresh_session(cls):
         # 0.超管
@@ -260,4 +260,3 @@ class UserModel(UserMixin, SurrogatePK, Model):
             'enable_audit': False,
             'enable_block': False,
         }
-

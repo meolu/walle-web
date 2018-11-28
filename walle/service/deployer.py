@@ -67,8 +67,7 @@ class Deployer:
         if task_id:
             self.task_id = task_id
             # task start
-            TaskModel(id=self.task_id).update(status=TaskModel.status_doing)
-
+            current_app.logger.info(self.task_id)
             self.taskMdl = TaskModel().item(self.task_id)
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
@@ -83,10 +82,15 @@ class Deployer:
         self.dir_codebase_project = self.dir_codebase + str(self.project_name)
 
         # start to deploy
+        self.console = console
 
 
     def config(self):
         return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence, 'console': self.console}
+
+    def start(self):
+        TaskModel().get_by_id(self.task_id).update({'status': TaskModel.status_doing})
+        self.taskMdl = TaskModel().item(self.task_id)
 
     # ===================== fabric ================
     # SocketHandler
@@ -105,9 +109,6 @@ class Deployer:
         '''
         self.stage = self.stage_prev_deploy
         self.sequence = 1
-
-        # TODO remove
-        # result = self.local.run('sleep 30', wenv=self.config())
 
         # 检查 当前用户
         command = 'whoami'
@@ -406,30 +407,37 @@ class Deployer:
 
                 result = self.local.run(command, wenv=self.config())
 
+    def end(self, success=True):
+        status = TaskModel.status_success if success else TaskModel.status_fail
+        TaskModel().get_by_id(self.task_id).update({'status': status})
 
     def walle_deploy(self):
+        self.start()
         self.prev_deploy()
         self.deploy()
         self.post_deploy()
 
-        server = '172.16.0.231'
-        try:
-            self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-            self.prev_release(self.connections[server])
-            self.release(self.connections[server])
-            self.post_release(self.connections[server])
-        except Exception as e:
-            current_app.logger.exception(e)
-            self.errors[server] = e.message
+        # server = '172.16.0.231'
+        # try:
+        #     self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
+        #     self.prev_release(self.connections[server])
+        #     self.release(self.connections[server])
+        #     self.post_release(self.connections[server])
+        # except Exception as e:
+        #     current_app.logger.exception(e)
+        #     self.errors[server] = e.message
 
-        # for server_info in self.servers:
-        #     server = server_info.host
-        #     try:
-        #         self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-        #         self.prev_release(self.connections[server])
-        #         self.release(self.connections[server])
-        #         self.post_release(self.connections[server])
-        #     except Exception, e:
-        #         self.errors[server] = e.message
+        all_servers_success = True
+        for server_info in self.servers:
+            server = server_info['host']
+            try:
+                self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
+                self.prev_release(self.connections[server])
+                self.release(self.connections[server])
+                self.post_release(self.connections[server])
+            except Exception as e:
+                all_servers_success = False
+                self.errors[server] = e.message
 
+        self.end(all_servers_success)
         return {'success': self.success, 'errors': self.errors}

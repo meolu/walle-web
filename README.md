@@ -32,15 +32,15 @@ Roadmap
     - `1.x`迁移到`2.0`脚本
     - 接受官网logo企业的`Trouble Shooting`
 - **2.0.0**  2018-12-30 :one:元旦前夕
-    - released tag、使用文档
+    - `released tag`、使用文档
     - 冲刺`github` 5000 `star`（靠你们了）
 - **2.0.1**  2019-01-13
     - 项目检测、复制
     - 任务的回滚
 - **2.0.2**  2019-01-20
-    - Dashboard（全新的玩法，欢迎提issue）
+    - `Dashboard`（全新的玩法，欢迎提issue）
 - **2.1.0**  2019-01-27 :new:新年版
-    - CAS
+    - `CAS`
     - 冲刺`github` 6000 `star`（靠你们和你们的同事们了）
 
 

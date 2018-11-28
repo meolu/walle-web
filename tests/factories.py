@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Factories to help in tests."""
-from factory import PostGenerationMethodCall, Sequence
+from factory import Sequence
 from factory.alchemy import SQLAlchemyModelFactory
-from werkzeug.security import generate_password_hash
-
 from walle.model.database import db
 from walle.model.user import UserModel
+from werkzeug.security import generate_password_hash
 
 
 class BaseFactory(SQLAlchemyModelFactory):
@@ -29,3 +28,18 @@ class UserFactory(BaseFactory):
         """Factory configuration."""
 
         model = UserModel
+
+
+import pytest
+
+
+@pytest.mark.usefixtures('db')
+class TestApiBase:
+
+    def init_vars(self, data):
+        from flask_login import current_user
+        if 'space_id' in data:
+            data['space_id'] = current_user.space_id()
+        if 'user_id' in data:
+            data['user_id'] = current_user.id
+

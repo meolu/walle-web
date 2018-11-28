@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
+from copy import deepcopy
+
 import pytest
 from flask import current_app
-from .utils import *
+from .factories import TestApiBase
 from .test_00_base import space_base
-from copy import deepcopy
+from .utils import *
+
+
 @pytest.mark.usefixtures('db')
-class TestApiSpace:
+class TestApiSpace(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/space'
 
@@ -34,15 +38,18 @@ class TestApiSpace:
         'members': json.dumps([{"user_id": 1, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}]),
     }
 
-    def test_setUp(self):
-        pass
-
+    # 忘了 user_id 是干嘛的了: (
+    # def test_init(self, user, testapp, client, db):
+    #     self.init_vars(self.space_data)
+    #     self.init_vars(self.space_data_2)
+    #     self.init_vars(self.space_data_remove)
 
     # 初始化 space_id=1的用户列表
     def test_get_update_default_space(self, user, testapp, client):
         """Login successful."""
         # 1.update
-        self.space_default_base['members'] = json.dumps([{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}])
+        self.space_default_base['members'] = json.dumps(
+                [{"user_id": 2, "role": "MASTER"}, {"user_id": 3, "role": "DEVELOPER"}])
         resp = client.put('%s/%d' % (self.uri_prefix, 1), data=self.space_default_base)
 
         response_success(resp)

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
-from flask import json
-import types
 import urllib
-import pytest
-from .utils import *
-from walle.model.task import TaskModel
 
-class TestApiTask:
+from walle.model.task import TaskModel
+from .factories import TestApiBase
+from .utils import *
+
+
+class TestApiTask(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/task'
 
@@ -147,7 +147,6 @@ class TestApiTask:
 
         response_success(resp)
         assert resp_json(resp)['data']['status'] == TaskModel.status_reject
-
 
     def test_get_remove(self, user, testapp, client):
         """Login successful."""

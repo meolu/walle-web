@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
-from flask import json
-import types
 import urllib
+
 import pytest
+from .factories import TestApiBase
 from .utils import *
 
 
 @pytest.mark.usefixtures('db')
-class TestApiServer:
+class TestApiServer(TestApiBase):
     """api role testing"""
     uri_prefix = '/api/server'
 

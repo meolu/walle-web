@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
-from flask import json
-import types
 import urllib
+
 import pytest
+from .factories import TestApiBase
 from .utils import *
 
 
 @pytest.mark.usefixtures('db')
-class TestApiEnv:
+class TestApiEnv(TestApiBase):
 
     """api role testing"""
     uri_prefix = '/api/environment'
@@ -31,6 +31,12 @@ class TestApiEnv:
         'env_name': u'environment_remove',
         'space_id': 1,
     }
+
+    def test_init(self, user, testapp, client, db):
+        self.init_vars(self.env_data)
+        self.init_vars(self.env_data_2)
+        self.init_vars(self.env_data_remove)
+
 
     def test_create(self, user, testapp, client, db):
         """create successful."""

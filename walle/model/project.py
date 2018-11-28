@@ -24,6 +24,9 @@ class ProjectModel(SurrogatePK, Model):
     status_close = 0
     status_open = 1
 
+    task_audit_true = 1
+    task_audit_false = 0
+
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(Integer)
@@ -52,7 +55,7 @@ class ProjectModel(SurrogatePK, Model):
     repo_type = db.Column(String(10))
     notice_type = db.Column(String(10))
     notice_hook = db.Column(Text)
-    enable_audit = db.Column(Integer)
+    task_audit = db.Column(Integer)
 
     created_at = db.Column(DateTime, default=current_time)
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
@@ -106,16 +109,19 @@ class ProjectModel(SurrogatePK, Model):
         """
         id = id if id else self.id
         data = self.query.filter(ProjectModel.status.notin_([self.status_remove])).filter_by(id=id).first()
-
+        current_app.logger.info(data)
         if not data:
             return []
 
-        data = data.to_json()
+        project_info = data.to_json()
+        current_app.logger.info(project_info)
+        current_app.logger.info(project_info)
 
         ServerModel = model.server.ServerModel
-        server_ids = data['server_ids']
-        data['servers_info'] = ServerModel.fetch_by_id(map(int, server_ids.split(',')))
-        return data
+        server_ids = project_info['server_ids']
+        project_info['servers_info'] = ServerModel.fetch_by_id(map(int, server_ids.split(',')))
+        current_app.logger.info(project_info)
+        return project_info
 
     def add(self, *args, **kwargs):
         # todo permission_ids need to be formated and checked
@@ -149,6 +155,8 @@ class ProjectModel(SurrogatePK, Model):
         return ret
 
     def to_json(self):
+        current_app.logger.info(self.task_audit)
+        current_app.logger.info(self)
         item = {
             'id': self.id,
             'user_id': self.user_id,
@@ -177,7 +185,7 @@ class ProjectModel(SurrogatePK, Model):
             'repo_type': self.repo_type,
             'notice_type': self.notice_type,
             'notice_hook': self.notice_hook,
-            'enable_audit': self.enable_audit,
+            'task_audit': self.task_audit,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
