@@ -4,6 +4,7 @@ import sys
 import time
 from datetime import datetime
 
+import os
 from flask import flash
 
 
@@ -36,3 +37,18 @@ else:
     string_types = (str,)
     unicode = str
     basestring = (str, bytes)
+
+
+def detailtrace():
+    from flask import current_app
+    retStr = ""
+    f = sys._getframe()
+    f = f.f_back
+    while hasattr(f, "f_code"):
+        co = f.f_code
+        retStr = "->%s(%s:%s)\n" % (os.path.basename(co.co_filename),
+                                    co.co_name,
+                                    f.f_lineno) + retStr
+        f = f.f_back
+    current_app.logger.info(retStr)
+    print retStr

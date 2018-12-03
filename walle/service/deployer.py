@@ -344,6 +344,10 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
+
+            from flask import current_app
+            from walle.service import utils
+            current_app.logger.info(utils.detailtrace())
             result = self.local.run(command, wenv=self.config())
 
             current_app.logger.info(self.dir_codebase_project)
