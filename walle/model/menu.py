@@ -46,7 +46,7 @@ class MenuModel(SurrogatePK, Model):
         data = {}
         filters = {
             MenuModel.visible == 1,
-            MenuModel.role >= role
+            MenuModel.role <= role
         }
         query = self.query \
             .filter(*filters) \

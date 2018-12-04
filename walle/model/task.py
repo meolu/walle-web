@@ -181,7 +181,7 @@ class TaskModel(SurrogatePK, Model):
     def enable(self):
         return {
             'enable_update': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new, self.status_reject]),
-            'enable_delete': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new]),
+            'enable_delete': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new, self.status_pass, self.status_reject]),
             'enable_create': False,
             'enable_online': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_pass]),
             'enable_audit': permission.enable_role(DEVELOPER) and (self.status in [self.status_new]),

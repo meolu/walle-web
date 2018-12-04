@@ -199,6 +199,36 @@ class MemberModel(SurrogatePK, Model):
 
         return list, count, user_ids
 
+    def member(self, user_id, role, group_id=None, project_id=None):
+        query = self.query
+        if group_id:
+            query = query.filter_by(source_id=group_id).filter_by(source_type=self.source_type_group)
+        elif project_id:
+            query = query.filter_by(project_id=project_id).filter_by(source_type=self.source_type_project)
+        if user_id:
+            query = query.filter_by(user_id=user_id)
+
+        if query.count():
+            query.update({'access_level': role})
+        else:
+            source_type = self.source_type_project if project_id else self.source_type_group
+            source_id = project_id if project_id else group_id
+
+            insert = {
+                'user_id': user_id,
+                'source_id': source_id,
+                'source_type': source_type,
+                'access_level': role.upper(),
+                'status': self.status_available,
+            }
+            current_app.logger.info(insert)
+            group = MemberModel(**insert)
+            db.session.add(group)
+
+        db.session.commit()
+
+        return self.members(group_id=group_id)
+
     def remove(self, group_id=None, user_id=None, project_id=None):
         """
 
