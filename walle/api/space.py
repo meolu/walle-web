@@ -21,7 +21,7 @@ from walle.service.rbac.role import *
 
 
 class SpaceAPI(SecurityResource):
-    actions = ['members', 'item', 'list', 'member']
+    actions = ['members', 'item', 'list', 'member', 'switch']
 
     def get(self, space_id=None, action=None):
         """
