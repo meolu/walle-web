@@ -35,30 +35,35 @@ class Waller(Connection):
             if sudo:
                 result = super(Waller, self).sudo(command, pty=False, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=False, **kwargs)
+                result = super(Waller, self).run(command, pty=True, hide='both', warn=True, **kwargs)
+
+            if result.failed:
+                exitcode, stdout, stderr = result.exited, '', result.stdout
+            else:
+                exitcode, stdout, stderr = 0, result.stdout, ''
 
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
-                wenv['task_id'], self.host, command, result.exited, result.stdout.strip(), result.stderr.strip()
+                wenv['task_id'], self.host, command, exitcode, stdout, stderr
             )
-            current_app.logger.error(dir(self))
+            current_app.logger.error(result)
             # TODO
             ws_dict = {
                 'user': self.user,
                 'host': self.host,
                 'cmd': command,
-                'status': result.exited,
+                'status': exitcode,
                 'stage': wenv['stage'],
                 'sequence': wenv['sequence'],
-                'success': result.stdout.strip(),
-                'error': result.stderr.strip(),
+                'success': stdout,
+                'error': stderr,
             }
             if wenv['console']:
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
-                                      task_id=wenv['task_id'], status=result.exited, host=self.host, user=self.user,
-                                      command=result.command, success=result.stdout.strip(),
-                                      error=result.stderr.strip())
+                                      task_id=wenv['task_id'], status=exitcode, host=self.host, user=self.user,
+                                      command=result.command, success=stdout,
+                                      error=stderr)
             current_app.logger.info(message)
             return result
 
@@ -67,12 +72,13 @@ class Waller(Connection):
             # return None
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
             error = e.result if 'result' in e else e.message
+            current_app.logger.info(e)
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                       task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
                                       command=command, success='', error=error)
             if hasattr(e, 'reason') and hasattr(e, 'result'):
-                message = 'task_id=%s, host:%s command:%s, status=1, reason:%s, result:%s' % (
-                    wenv['task_id'], self.host, command, e.reason, error
+                message = 'task_id=%s, host:%s command:%s, status=1, reason:%s, result:%s exception:%s' % (
+                    wenv['task_id'], self.host, command, e.reason, error, e.message
                 )
             else:
                 message = 'task_id=%s, host:%s command:%s, status=1, message:%s' % (

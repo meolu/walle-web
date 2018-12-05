@@ -52,9 +52,7 @@ class Permission():
         @wraps(func)
         @login_required
         def decorator(*args, **kwargs):
-            current_app.logger.info('============== gte_develop_or_uid.decorator ======')
             if self.is_gte_develop_or_uid(current_user.id):
-                current_app.logger.info('============== gte_develop_or_uid.if ======')
                 return func(*args, **kwargs)
 
             raise WalleError(Code.not_allow)
@@ -103,7 +101,6 @@ class Permission():
         :return:
         '''
         # TODO
-        current_app.logger.info('uid %s current_uid %s %s', uid, current_user.id, current_user.id==uid)
         return current_user.id == uid
 
     # @classmethod

@@ -79,7 +79,6 @@
         // 3.发送deploy命令之后, 将会收到console
         socket.on('console', function (data) {
             write(data)
-            console.log(data)
         });
 
         socket.on('close', function (data) {
@@ -95,6 +94,15 @@
             msg = JSON.stringify(data);
             solo.html(solo.html() + '<br>' + msg);
         }
+
+        window.setInterval(function() {
+            start_time = (new Date).getTime();
+            socket.emit('ping', {'start_time': start_time});
+        }, 10000);
+
+        socket.on('pong', function(data) {
+            write(data)
+        });
 
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {

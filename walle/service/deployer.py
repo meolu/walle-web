@@ -153,7 +153,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        # socketio.sleep(0.001)
+        socketio.sleep(0.001)
         self.stage = self.stage_deploy
         self.sequence = 2
 
@@ -217,7 +217,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        # socketio.sleep(0.001)
+        socketio.sleep(0.001)
         self.stage = self.stage_post_deploy
         self.sequence = 3
 
@@ -242,7 +242,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        # socketio.sleep(0.001)
+        socketio.sleep(0.001)
         self.stage = self.stage_prev_release
         self.sequence = 4
 
@@ -258,7 +258,7 @@ class Deployer:
         # 用户自定义命令
         command = self.project_info['prev_release']
         current_app.logger.info(command)
-        with self.local.cd(self.project_info['target_releases']):
+        with waller.cd(self.project_info['target_releases']):
             result = self.local.run(command, wenv=self.config())
 
 
@@ -281,7 +281,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        # socketio.sleep(0.001)
+        socketio.sleep(0.001)
         self.stage = self.stage_release
         self.sequence = 5
 
@@ -305,7 +305,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        # socketio.sleep(0.001)
+        socketio.sleep(0.001)
         with waller.cd(self.project_info['target_releases']):
             command = 'tar zxf %s' % (self.release_version_tar)
             result = waller.run(command, wenv=self.config())
@@ -323,7 +323,7 @@ class Deployer:
         # 用户自定义命令
         command = self.project_info['post_release']
         current_app.logger.info(command)
-        with self.local.cd(self.project_info['target_root']):
+        with waller.cd(self.project_info['target_root']):
             result = self.local.run(command, wenv=self.config())
 
         self.post_release_service(waller)
@@ -334,7 +334,7 @@ class Deployer:
         :param connection:
         :return:
         '''
-
+        current_app.logger.info('172.16.0.231')
         with waller.cd(self.project_info['target_root']):
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
@@ -444,3 +444,13 @@ class Deployer:
 
         self.end(all_servers_success)
         return {'success': self.success, 'errors': self.errors}
+
+    def test(self):
+        server = '172.20.95.43'
+        # server = '172.16.0.231'
+        try:
+            self.connections[server] = Waller(host=server, user='work')
+            self.post_release_service(self.connections[server])
+        except Exception as e:
+            current_app.logger.exception(e)
+            self.errors[server] = e.message
