@@ -119,10 +119,10 @@ class SpaceModel(SurrogatePK, Model):
 
     def enable(self):
         return {
-            'enable_update': permission.enable_uid(self.user_id) or permission.enable_role(OWNER),
-            'enable_delete': permission.enable_uid(self.user_id) or permission.enable_role(OWNER),
+            'enable_update': permission.enable_uid(self.user_id) or permission.role_upper_owner(),
+            'enable_delete': permission.enable_uid(self.user_id) or permission.role_upper_owner(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,
-            'enable_block': permission.enable_role(MASTER),
+            'enable_block': permission.role_upper_master(),
         }

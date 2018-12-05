@@ -126,10 +126,10 @@ class ServerModel(SurrogatePK, Model):
         # current_app.logger.info(dir(permission.app))
         # current_app.logger.info(permission.enable_uid(3))
         return {
-            'enable_update': permission.enable_role(DEVELOPER),
-            'enable_delete': permission.enable_role(DEVELOPER),
+            'enable_update': permission.role_upper_developer(),
+            'enable_delete': permission.role_upper_developer(),
             'enable_create': False,
             'enable_online': False,
-            'enable_audit': permission.enable_role(OWNER),
+            'enable_audit': permission.role_upper_owner(),
             'enable_block': False,
         }

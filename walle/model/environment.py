@@ -116,8 +116,8 @@ class EnvironmentModel(Model):
 
     def enable(self):
         return {
-            'enable_update': permission.enable_role(DEVELOPER),
-            'enable_delete': permission.enable_role(DEVELOPER),
+            'enable_update': permission.role_upper_developer(),
+            'enable_delete': permission.role_upper_developer(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,

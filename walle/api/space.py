@@ -53,7 +53,7 @@ class SpaceAPI(SecurityResource):
 
         space_model = SpaceModel()
         space_list, count = space_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=space_list, count=count, enable_create=permission.enable_role(OWNER))
+        return self.list_json(list=space_list, count=count, enable_create=permission.role_upper_owner())
 
     def item(self, space_id):
         """
@@ -170,4 +170,4 @@ class SpaceAPI(SecurityResource):
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
         members, count, user_ids = MemberModel(group_id=space_id).members(page=page, size=size, kw=kw)
-        return self.list_json(list=members, count=count, enable_create=permission.enable_role(MASTER))
+        return self.list_json(list=members, count=count, enable_create=permission.role_upper_master())

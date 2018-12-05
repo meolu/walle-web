@@ -189,7 +189,7 @@ class ProjectModel(SurrogatePK, Model):
     def enable(self):
         return {
             'enable_update': permission.is_gte_develop_or_uid(self.user_id),
-            'enable_delete': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
+            'enable_delete': permission.enable_uid(self.user_id) or permission.role_upper_developer(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,

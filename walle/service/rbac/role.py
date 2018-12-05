@@ -6,9 +6,10 @@
     :created time: 2018-11-04 22:08:28
     :author: wushuiyong@walle-web.io
 """
-from flask import current_app, session
-from flask_login import login_required, current_user
 from functools import wraps
+
+from flask import session
+from flask_login import login_required, current_user
 from walle.service.code import Code
 from walle.service.error import WalleError
 
@@ -37,8 +38,8 @@ ROLE_ACCESS = {
     'SUPER': '60',
 }
 
-class Permission():
 
+class Permission():
     app = None
 
     def __init__(self, app=None):
@@ -63,7 +64,7 @@ class Permission():
         if uid is None:
             uid = current_user.id
 
-        if self.enable_uid(uid) or self.enable_role(DEVELOPER):
+        if self.enable_uid(uid) or self.role_upper_developer():
             return True
 
         return False
@@ -103,26 +104,66 @@ class Permission():
         # TODO
         return current_user.id == uid
 
-    # @classmethod
-    def enable_role(self, role):
+    def role_upper_owner(self, role=None):
         '''
-        当前角色 >= 数据项角色
+        项目project的角色role比developer级别更高, 传参, 不传则
+        空间space的角色role比developer级别更高, 不用传, 默认从session中取
+        :param role:
+        :return:
+        '''
+        return self.role_upper(OWNER, role)
+
+    def role_upper_master(self, role=None):
+        '''
+        项目project的角色role比developer级别更高, 传参, 不传则
+        空间space的角色role比developer级别更高, 不用传, 默认从session中取
+        :param role:
+        :return:
+        '''
+        return self.role_upper(MASTER, role)
+
+    def role_upper_developer(self, role=None):
+        '''
+        项目project的角色role比developer级别更高, 传参, 不传则
+        空间space的角色role比developer级别更高, 不用传, 默认从session中取
+        :param role:
+        :return:
+        '''
+        return self.role_upper(DEVELOPER, role)
+
+    def role_upper_report(self, role=None):
+        '''
+        项目project的角色role比developer级别更高, 传参, 不传则
+        空间space的角色role比developer级别更高, 不用传, 默认从session中取
+        :param role:
+        :return:
+        '''
+        return self.role_upper(REPORT, role)
+
+    def role_upper(self, role_standard, role_upper=None):
+        '''
+        当前角色 > 数据项角色
         :param role:
         :return:
         '''
         if current_user.role == SUPER:
             return True
 
-        # TODO about project/task
         current_role = session['space_info']['role']
-        # current_app.logger.info(current_role)
-        # current_app.logger.info(role)
-        return self.compare_role(current_role, role)
+        return self.compare_role(role_standard, [current_role, role_upper])
 
-    # @classmethod
-    def compare_role(self, role_high, role_low):
-        if role_high not in ROLE_ACCESS or role_low not in ROLE_ACCESS:
-            # TODO 也可以抛出
+    def compare_role(self, role_low, role_high):
+        if not isinstance(role_high, (list, tuple)):
+            role_high = [role_high]
+
+        if role_low not in ROLE_ACCESS:
             return False
 
-        return ROLE_ACCESS[role_high] > ROLE_ACCESS[role_low]
+        for role in role_high:
+            if role not in ROLE_ACCESS:
+                continue
+
+            if ROLE_ACCESS[role] > ROLE_ACCESS[role_low]:
+                return True
+
+        return False
