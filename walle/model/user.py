@@ -13,7 +13,7 @@ from walle.model.database import SurrogatePK, db, Model
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 from werkzeug.security import check_password_hash, generate_password_hash
-
+from flask import current_app
 
 class UserModel(UserMixin, SurrogatePK, Model):
     # 表的名字:
@@ -253,8 +253,8 @@ class UserModel(UserMixin, SurrogatePK, Model):
 
     def enable(self):
         return {
-            'enable_update': permission.enable_role(DEVELOPER),
-            'enable_delete': permission.enable_role(DEVELOPER),
+            'enable_update': permission.role_upper_developer(),
+            'enable_delete': permission.role_upper_developer(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,

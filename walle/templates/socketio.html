@@ -79,7 +79,6 @@
         // 3.发送deploy命令之后, 将会收到console
         socket.on('console', function (data) {
             write(data)
-            console.log(data)
         });
 
         socket.on('close', function (data) {
@@ -96,6 +95,15 @@
             solo.html(solo.html() + '<br>' + msg);
         }
 
+        window.setInterval(function() {
+            start_time = (new Date).getTime();
+            socket.emit('ping', {'start_time': start_time});
+        }, 10000);
+
+        socket.on('pong', function(data) {
+            write(data)
+        });
+
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {
                 $("#send").trigger("click");
@@ -107,5 +115,15 @@
     });
 
 </script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?2ef62756e9f3268b17d316a6f6f5a4a0";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
 </body>
 </html>

@@ -48,7 +48,7 @@ class ProjectAPI(SecurityResource):
         project_list, count = project_model.list(page=page, size=size, kw=kw, environment_id=environment_id,
                                                  space_id=self.space_id)
         return self.list_json(list=project_list, count=count,
-                              enable_create=permission.enable_role(MASTER) and current_user.role != SUPER)
+                              enable_create=permission.role_upper_master() and current_user.role != SUPER)
 
     def item(self, project_id):
         """

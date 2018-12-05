@@ -44,7 +44,7 @@ class GroupAPI(SecurityResource):
         kw = request.values.get('kw', '')
         space_model = SpaceModel()
         space_list, count = space_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=space_list, count=count, enable_create=permission.enable_role(OWNER))
+        return self.list_json(list=space_list, count=count, enable_create=permission.role_upper_owner())
 
         group_model, count = SpaceModel().query_paginate(page=page, limit=size, filter_name_dict=filter)
         groups = []

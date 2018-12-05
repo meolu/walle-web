@@ -109,18 +109,14 @@ class ProjectModel(SurrogatePK, Model):
         """
         id = id if id else self.id
         data = self.query.filter(ProjectModel.status.notin_([self.status_remove])).filter_by(id=id).first()
-        current_app.logger.info(data)
         if not data:
             return []
 
         project_info = data.to_json()
-        current_app.logger.info(project_info)
-        current_app.logger.info(project_info)
 
         ServerModel = model.server.ServerModel
         server_ids = project_info['server_ids']
         project_info['servers_info'] = ServerModel.fetch_by_id(map(int, server_ids.split(',')))
-        current_app.logger.info(project_info)
         return project_info
 
     def add(self, *args, **kwargs):
@@ -155,8 +151,6 @@ class ProjectModel(SurrogatePK, Model):
         return ret
 
     def to_json(self):
-        current_app.logger.info(self.task_audit)
-        current_app.logger.info(self)
         item = {
             'id': self.id,
             'user_id': self.user_id,
@@ -193,10 +187,9 @@ class ProjectModel(SurrogatePK, Model):
         return item
 
     def enable(self):
-        current_app.logger.info(self.id)
         return {
             'enable_update': permission.is_gte_develop_or_uid(self.user_id),
-            'enable_delete': permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER),
+            'enable_delete': permission.enable_uid(self.user_id) or permission.role_upper_developer(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,

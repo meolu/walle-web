@@ -53,7 +53,7 @@ class EnvironmentAPI(SecurityResource):
         env_model = EnvironmentModel()
 
         env_list, count = env_model.list(page=page, size=size, kw=kw, space_id=self.space_id)
-        return self.list_json(list=env_list, count=count, table=table, enable_create=permission.enable_role(MASTER) and current_user.role != SUPER)
+        return self.list_json(list=env_list, count=count, table=table, enable_create=permission.role_upper_master() and current_user.role != SUPER)
 
     def item(self, env_id):
         """

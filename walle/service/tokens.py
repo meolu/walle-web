@@ -24,7 +24,7 @@ class TokenManager(object):
             key = secret + precursor
         else:
             key = secret.encode("utf-8") + precursor
-        self.cipher = AES.new(key[0:16], AES.MODE_ECB)
+        self.cipher = AES.new(key[0:16], AES.MODE_CBC)
 
         # Create signer to sign tokens
         self.signer = TimestampSigner(secret)

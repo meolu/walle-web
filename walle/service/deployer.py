@@ -255,6 +255,12 @@ class Deployer:
         # result = waller.run(command)
         # current_app.logger.info('command: %s', dir(result))
 
+        # 用户自定义命令
+        command = self.project_info['prev_release']
+        current_app.logger.info(command)
+        with waller.cd(self.project_info['target_releases']):
+            result = self.local.run(command, wenv=self.config())
+
 
         # TODO md5
         # 传送到版本库 release
@@ -314,6 +320,12 @@ class Deployer:
         self.stage = self.stage_post_release
         self.sequence = 6
 
+        # 用户自定义命令
+        command = self.project_info['post_release']
+        current_app.logger.info(command)
+        with waller.cd(self.project_info['target_root']):
+            result = self.local.run(command, wenv=self.config())
+
         self.post_release_service(waller)
 
     def post_release_service(self, waller):
@@ -322,7 +334,7 @@ class Deployer:
         :param connection:
         :return:
         '''
-
+        current_app.logger.info('172.16.0.231')
         with waller.cd(self.project_info['target_root']):
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
@@ -344,6 +356,10 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
+
+            from flask import current_app
+            from walle.service import utils
+            current_app.logger.info(utils.detailtrace())
             result = self.local.run(command, wenv=self.config())
 
             current_app.logger.info(self.dir_codebase_project)
@@ -414,16 +430,6 @@ class Deployer:
         self.deploy()
         self.post_deploy()
 
-        # server = '172.16.0.231'
-        # try:
-        #     self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-        #     self.prev_release(self.connections[server])
-        #     self.release(self.connections[server])
-        #     self.post_release(self.connections[server])
-        # except Exception as e:
-        #     current_app.logger.exception(e)
-        #     self.errors[server] = e.message
-
         all_servers_success = True
         for server_info in self.servers:
             server = server_info['host']
@@ -438,3 +444,13 @@ class Deployer:
 
         self.end(all_servers_success)
         return {'success': self.success, 'errors': self.errors}
+
+    def test(self):
+        server = '172.20.95.43'
+        # server = '172.16.0.231'
+        try:
+            self.connections[server] = Waller(host=server, user='work')
+            self.post_release_service(self.connections[server])
+        except Exception as e:
+            current_app.logger.exception(e)
+            self.errors[server] = e.message

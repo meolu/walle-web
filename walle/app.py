@@ -193,11 +193,7 @@ def register_logging(app):
 
 
 def register_socketio(app):
-    # activate eventlet
-    import eventlet
-    eventlet.monkey_patch()
-
-    socketio.init_app(app)
+    socketio.init_app(app, async_mode='gevent')
     socketio.on_namespace(WalleSocketIO(namespace='/walle'))
     socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
     return app

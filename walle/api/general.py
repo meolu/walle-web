@@ -49,7 +49,7 @@ class GeneralAPI(SecurityResource):
             return self.avater()
 
     def menu(self):
-        role = 10
+        role = ROLE_ACCESS[session['space_info']['role']]
         user = UserModel(id=current_user.id).item()
         menu = MenuModel().menu(role=role)
         space = {

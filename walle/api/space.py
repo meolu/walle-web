@@ -13,15 +13,15 @@ import json
 from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.form.space import SpaceForm
-from walle.model.space import SpaceModel
 from walle.model.member import MemberModel
+from walle.model.space import SpaceModel
 from walle.model.user import UserModel
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 
 
 class SpaceAPI(SecurityResource):
-    actions = ['members', 'item', 'list']
+    actions = ['members', 'item', 'list', 'member', 'switch']
 
     def get(self, space_id=None, action=None):
         """
@@ -53,7 +53,7 @@ class SpaceAPI(SecurityResource):
 
         space_model = SpaceModel()
         space_list, count = space_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=space_list, count=count, enable_create=permission.enable_role(OWNER))
+        return self.list_json(list=space_list, count=count, enable_create=permission.role_upper_owner())
 
     def item(self, space_id):
         """
@@ -105,9 +105,16 @@ class SpaceAPI(SecurityResource):
         :return:
         """
         super(SpaceAPI, self).put()
+        if action is None:
+            return self.update(space_id)
 
-        if action and action == 'switch':
-            return self.switch(space_id)
+        if action in self.actions:
+            self_action = getattr(self, action.lower(), None)
+            return self_action(space_id)
+        else:
+            abort(404)
+
+    def update(self, space_id):
         current_app.logger.info(json.loads(request.form['members']))
         form = SpaceForm(request.form, csrf_enabled=False)
         form.set_id(space_id)
@@ -148,10 +155,19 @@ class SpaceAPI(SecurityResource):
         UserModel.fresh_session()
         return self.render_json()
 
+    def member(self, space_id):
+        space_id = session['space_id']
+        user_id = request.form['user_id']
+        role = request.form['role']
+
+        members = MemberModel(group_id=space_id).member(user_id=user_id, role=role, group_id=space_id)
+        return self.render_json(data=members)
+
+
     def members(self, space_id):
         page = int(request.args.get('page', 1))
         page = page - 1 if page else 0
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
         members, count, user_ids = MemberModel(group_id=space_id).members(page=page, size=size, kw=kw)
-        return self.list_json(list=members, count=count, enable_create=permission.enable_role(MASTER))
+        return self.list_json(list=members, count=count, enable_create=permission.role_upper_master())

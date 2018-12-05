@@ -41,7 +41,7 @@ class ServerAPI(SecurityResource):
 
         server_model = ServerModel()
         server_list, count = server_model.list(page=page, size=size, kw=kw)
-        return self.list_json(list=server_list, count=count, enable_create=permission.enable_role(MASTER))
+        return self.list_json(list=server_list, count=count, enable_create=permission.role_upper_master())
 
     def item(self, id):
         """

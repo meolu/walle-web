@@ -27,6 +27,15 @@ class TaskModel(SurrogatePK, Model):
     status_success = 4
     status_fail = 5
 
+    status_memo = {
+        status_new: '新建提交',
+        status_pass: '审核通过',
+        status_reject: '审核拒绝',
+        status_doing: '上线中',
+        status_success: '上线完成',
+        status_fail: '上线失败',
+    }
+
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(String(100))
@@ -157,6 +166,7 @@ class TaskModel(SurrogatePK, Model):
         item = {
             'id': self.id,
             'name': self.name,
+            'user_name': self.name,
             'user_id': int(self.user_id),
             'project_id': int(self.project_id),
             'project_name': self.project_id if self.project_id else '',
@@ -180,10 +190,10 @@ class TaskModel(SurrogatePK, Model):
 
     def enable(self):
         return {
-            'enable_update': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new, self.status_reject]),
-            'enable_delete': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new]),
+            'enable_update': (permission.enable_uid(self.user_id) or permission.role_upper_developer()) and (self.status in [self.status_new, self.status_reject]),
+            'enable_delete': (permission.enable_uid(self.user_id) or permission.role_upper_developer()) and (self.status in [self.status_new, self.status_pass, self.status_reject]),
             'enable_create': False,
-            'enable_online': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_pass]),
-            'enable_audit': permission.enable_role(DEVELOPER) and (self.status in [self.status_new]),
+            'enable_online': (permission.enable_uid(self.user_id) or permission.role_upper_developer()) and (self.status in [self.status_pass, self.status_fail, self.status_doing]),
+            'enable_audit': permission.role_upper_developer() and (self.status in [self.status_new]),
             'enable_block': False,
         }

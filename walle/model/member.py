@@ -8,12 +8,14 @@
 """
 from datetime import datetime
 
+from flask import current_app
 from sqlalchemy import String, Integer, DateTime
 from walle import model
 from walle.model.database import SurrogatePK
 from walle.model.database import db, Model, or_
 from walle.model.user import UserModel
 from walle.service.rbac.role import *
+
 
 # 项目配置表
 class MemberModel(SurrogatePK, Model):
@@ -84,7 +86,6 @@ class MemberModel(SurrogatePK, Model):
         current_app.logger.info(projects)
 
         return projects
-
 
     def update_group(self, members, group_name=None):
         SpaceModel = model.space.SpaceModel
@@ -174,9 +175,9 @@ class MemberModel(SurrogatePK, Model):
         project_id = project_id if project_id else self.project_id
         source_id = group_id if group_id else project_id
         source_type = self.source_type_group if group_id else self.source_type_project
-        query = UserModel.query\
-            .filter(UserModel.status.notin_([self.status_remove]))\
-            .filter(MemberModel.source_id == source_id)\
+        query = UserModel.query \
+            .filter(UserModel.status.notin_([self.status_remove])) \
+            .filter(MemberModel.source_id == source_id) \
             .filter(MemberModel.source_type == source_type)
         query = query.join(MemberModel, UserModel.id == MemberModel.user_id)
         if kw:
@@ -198,6 +199,36 @@ class MemberModel(SurrogatePK, Model):
         current_app.logger.info(list)
 
         return list, count, user_ids
+
+    def member(self, user_id, role, group_id=None, project_id=None):
+        query = self.query
+        if group_id:
+            query = query.filter_by(source_id=group_id).filter_by(source_type=self.source_type_group)
+        elif project_id:
+            query = query.filter_by(project_id=project_id).filter_by(source_type=self.source_type_project)
+        if user_id:
+            query = query.filter_by(user_id=user_id)
+
+        if query.count():
+            query.update({'access_level': role})
+        else:
+            source_type = self.source_type_project if project_id else self.source_type_group
+            source_id = project_id if project_id else group_id
+
+            insert = {
+                'user_id': user_id,
+                'source_id': source_id,
+                'source_type': source_type,
+                'access_level': role.upper(),
+                'status': self.status_available,
+            }
+            current_app.logger.info(insert)
+            group = MemberModel(**insert)
+            db.session.add(group)
+
+        db.session.commit()
+
+        return self.members(group_id=group_id)
 
     def remove(self, group_id=None, user_id=None, project_id=None):
         """
@@ -227,4 +258,3 @@ class MemberModel(SurrogatePK, Model):
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
-
