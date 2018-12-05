@@ -157,6 +157,7 @@ class TaskModel(SurrogatePK, Model):
         item = {
             'id': self.id,
             'name': self.name,
+            'user_name': self.name,
             'user_id': int(self.user_id),
             'project_id': int(self.project_id),
             'project_name': self.project_id if self.project_id else '',
@@ -183,7 +184,7 @@ class TaskModel(SurrogatePK, Model):
             'enable_update': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new, self.status_reject]),
             'enable_delete': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_new, self.status_pass, self.status_reject]),
             'enable_create': False,
-            'enable_online': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_pass]),
+            'enable_online': (permission.enable_uid(self.user_id) or permission.enable_role(DEVELOPER)) and (self.status in [self.status_pass, self.status_fail]),
             'enable_audit': permission.enable_role(DEVELOPER) and (self.status in [self.status_new]),
             'enable_block': False,
         }

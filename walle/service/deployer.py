@@ -153,7 +153,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_deploy
         self.sequence = 2
 
@@ -217,7 +217,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_post_deploy
         self.sequence = 3
 
@@ -242,7 +242,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_prev_release
         self.sequence = 4
 
@@ -254,6 +254,12 @@ class Deployer:
         # command = 'mkdir -p %s' % (self.project_info['target_root'])
         # result = waller.run(command)
         # current_app.logger.info('command: %s', dir(result))
+
+        # 用户自定义命令
+        command = self.project_info['prev_release']
+        current_app.logger.info(command)
+        with self.local.cd(self.project_info['target_releases']):
+            result = self.local.run(command, wenv=self.config())
 
 
         # TODO md5
@@ -275,7 +281,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_release
         self.sequence = 5
 
@@ -299,7 +305,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         with waller.cd(self.project_info['target_releases']):
             command = 'tar zxf %s' % (self.release_version_tar)
             result = waller.run(command, wenv=self.config())
@@ -313,6 +319,12 @@ class Deployer:
         '''
         self.stage = self.stage_post_release
         self.sequence = 6
+
+        # 用户自定义命令
+        command = self.project_info['post_release']
+        current_app.logger.info(command)
+        with self.local.cd(self.project_info['target_root']):
+            result = self.local.run(command, wenv=self.config())
 
         self.post_release_service(waller)
 
@@ -417,16 +429,6 @@ class Deployer:
         self.prev_deploy()
         self.deploy()
         self.post_deploy()
-
-        # server = '172.16.0.231'
-        # try:
-        #     self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-        #     self.prev_release(self.connections[server])
-        #     self.release(self.connections[server])
-        #     self.post_release(self.connections[server])
-        # except Exception as e:
-        #     current_app.logger.exception(e)
-        #     self.errors[server] = e.message
 
         all_servers_success = True
         for server_info in self.servers:
