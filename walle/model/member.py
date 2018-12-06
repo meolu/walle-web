@@ -87,6 +87,18 @@ class MemberModel(SurrogatePK, Model):
 
         return projects
 
+    def project_master(self):
+        filters = {
+            MemberModel.status.notin_([self.status_remove]),
+            MemberModel.source_type == self.source_type_project,
+            MemberModel.user_id == current_user.id,
+            MemberModel.access_level == MASTER,
+        }
+        query = self.query.filter(*filters)
+        projects = query.with_entities(MemberModel.source_id).all()
+        current_app.logger.error(projects)
+        return [project[0] for project in projects]
+
     def update_group(self, members, group_name=None):
         SpaceModel = model.space.SpaceModel
 

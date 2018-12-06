@@ -368,11 +368,10 @@ class Deployer:
             result = self.local.run(command, wenv=self.config())
 
             # TODO 三种可能: false, error, success
-
             branches = result.stdout.strip().split('\n')
             # 去除 origin/HEAD -> 当前指向
             # 去除远端前缀
-            branches = [branch.strip().lstrip('origin/') for branch in branches if not branch.startswith('origin/HEAD')]
+            branches = [branch.strip().lstrip('origin/') for branch in branches if not branch.strip().startswith('origin/HEAD')]
             return branches
 
         return None
@@ -387,10 +386,12 @@ class Deployer:
             # TODO 10是需要前端传的
             command = 'git log -10 --pretty="%h #_# %an #_# %s"'
             result = self.local.run(command, wenv=self.config())
+            current_app.logger.info(result.stdout.strip())
             commit_list = result.stdout.strip().split('\n')
             commits = []
             for commit in commit_list:
                 commit_dict = commit.split(' #_# ')
+                current_app.logger.info(commit_dict)
                 commits.append({
                     'id': commit_dict[0],
                     'name': commit_dict[1],

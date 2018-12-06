@@ -189,11 +189,13 @@ class UserModel(UserMixin, SurrogatePK, Model):
         if current_user.last_space and current_user.last_space not in spaces.keys():
             raise WalleError(Code.space_error)
 
+        # 4.项目管理员
+        MemberModel = model.member.MemberModel()
+        session['project_master'] = MemberModel.project_master()
+
         session['space_id'] = current_user.last_space
         session['space_info'] = spaces[current_user.last_space]
         session['space_list'] = spaces.values()
-
-        current_app.logger.info('============ SecurityResource.__init__ ============')
 
     @classmethod
     def avatar_url(cls, avatar):

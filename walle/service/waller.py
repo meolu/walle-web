@@ -35,7 +35,9 @@ class Waller(Connection):
             if sudo:
                 result = super(Waller, self).sudo(command, pty=False, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=True, hide='both', warn=True, **kwargs)
+                result = super(Waller, self).run(command, pty=False, warn=True, **kwargs)
+            # import re
+            # result.stdout = re.sub('\x1B\[[0-9;]*[mGK]', '', result.stdout.strip())
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout
@@ -45,7 +47,8 @@ class Waller(Connection):
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
                 wenv['task_id'], self.host, command, exitcode, stdout, stderr
             )
-            current_app.logger.error(result)
+            current_app.logger.error(result.stdout.strip())
+            current_app.logger.error(result.stderr.strip())
             # TODO
             ws_dict = {
                 'user': self.user,
