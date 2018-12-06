@@ -36,13 +36,17 @@ class Waller(Connection):
                 result = super(Waller, self).sudo(command, pty=False, **kwargs)
             else:
                 result = super(Waller, self).run(command, pty=False, warn=True, **kwargs)
+
+            # pty=True
             # import re
             # result.stdout = re.sub('\x1B\[[0-9;]*[mGK]', '', result.stdout.strip())
+            # pty=True
+            # if result.failed:
+            #     exitcode, stdout, stderr = result.exited, '', result.stdout
+            # else:
+            #     exitcode, stdout, stderr = 0, result.stdout, ''
 
-            if result.failed:
-                exitcode, stdout, stderr = result.exited, '', result.stdout
-            else:
-                exitcode, stdout, stderr = 0, result.stdout, ''
+            exitcode, stdout, stderr = result.exited, result.stdout, result.stderr
 
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
                 wenv['task_id'], self.host, command, exitcode, stdout, stderr
