@@ -13,14 +13,17 @@ class Code():
     #: 未登录, 大概是永远不会变了
     unlogin = 1000
 
+    #: 账号密码错误
+    error_pwd = 1001
+
     #: 无此权限
-    not_allow = 1001
+    not_allow = 1002
 
     #: 尚未开通空间
-    space_empty = 1002
+    space_empty = 1003
 
     #: 无此空间权限
-    space_error = 1003
+    space_error = 1004
 
     #: 2xxx 表示参数错误
     params_error = 2000
@@ -30,6 +33,7 @@ class Code():
 
     code_msg = {
         unlogin: '未登录',
+        error_pwd: '账号密码错误',
         not_allow: '无此权限',
         params_error: '参数错误',
         space_empty: '尚未开通空间，请联系空间负责人加入空间',
