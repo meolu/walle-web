@@ -16,7 +16,7 @@ from wtforms import TextField, IntegerField
 from wtforms import validators
 from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
-
+from flask_login import current_user
 
 class TaskForm(Form):
     name = TextField('name', [validators.Length(min=1)])
@@ -41,7 +41,7 @@ class TaskForm(Form):
         return {
             'name': self.name.data if self.name.data else '',
             # todo
-            'user_id': 1,
+            'user_id': current_user.id,
             'project_id': self.project_id.data,
             # todo default value
             'action': 0,
