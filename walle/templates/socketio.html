@@ -72,8 +72,8 @@
         });
         // 2.返回construct, 初始化页面信息
         socket.on('construct', function (data) {
-            write(data)
-            socket.emit('logs', {'task': 12})
+{#            write(data)#}
+            // socket.emit('logs', {'task': 12})
         });
 
         // 3.发送deploy命令之后, 将会收到console
@@ -98,7 +98,7 @@
         window.setInterval(function() {
             start_time = (new Date).getTime();
             socket.emit('ping', {'start_time': start_time});
-        }, 10000);
+        }, 2000);
 
         socket.on('pong', function(data) {
             write(data)

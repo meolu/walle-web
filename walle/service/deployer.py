@@ -9,7 +9,6 @@ import time
 from datetime import datetime
 
 import os
-# from fabric import context_managers, colors
 from flask import current_app
 
 from walle.model.record import RecordModel
@@ -18,6 +17,7 @@ from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
 from flask_socketio import emit
 from walle.service.extensions import socketio
+from walle.service.utils import color_clean
 
 
 class Deployer:
@@ -115,20 +115,16 @@ class Deployer:
         # 检查 python 版本
         command = 'python --version'
         result = self.local.run(command, wenv=self.config())
-        current_app.logger.info(command)
 
         # 检查 git 版本
         command = 'git --version'
         result = self.local.run(command, wenv=self.config())
-        current_app.logger.info(command)
 
         # 检查 目录是否存在
         self.init_repo()
 
         # TODO to be removed
         command = 'mkdir -p %s' % (self.dir_codebase_project)
-        # TODO remove
-        current_app.logger.info(command)
         result = self.local.run(command, wenv=self.config())
 
         # 用户自定义命令
@@ -137,13 +133,6 @@ class Deployer:
         with self.local.cd(self.dir_codebase_project):
             result = self.local.run(command, wenv=self.config())
 
-            # SocketHandler.send_to_all({
-            #     'type': 'user',
-            #     'id': 33,
-            #     'host': env.host_string,
-            #     'command': command,
-            #     'message': result.stdout,
-            # })
 
     def deploy(self):
         '''
@@ -187,21 +176,6 @@ class Deployer:
             command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
             result = self.local.run(command, wenv=self.config())
 
-
-            # SocketHandler.send_to_all({
-            #     'type': 'user',
-            #     'id': 33,
-            #     'host': env.host_string,
-            #     'command': command,
-            #     'message': result.stdout,
-            # })
-
-            # 用户自定义命令
-            # command = self.project_info['deploy']
-            # current_app.logger.info(command)
-            # with self.local.cd(self.dir_codebase):
-            #     result = self.local.run(command)
-
         pass
 
     def post_deploy(self):
@@ -223,9 +197,6 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['post_deploy']
-        current_app.logger.info(command)
-        current_app.logger.info(self.dir_codebase)
-        current_app.logger.info(self.release_version)
         with self.local.cd(self.dir_codebase + self.release_version):
             result = self.local.run(command, wenv=self.config())
 
@@ -324,7 +295,7 @@ class Deployer:
         command = self.project_info['post_release']
         current_app.logger.info(command)
         with waller.cd(self.project_info['target_root']):
-            result = self.local.run(command, wenv=self.config())
+            result = waller.run(command, wenv=self.config())
 
         self.post_release_service(waller)
 
@@ -334,7 +305,6 @@ class Deployer:
         :param connection:
         :return:
         '''
-        current_app.logger.info('172.16.0.231')
         with waller.cd(self.project_info['target_root']):
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
@@ -368,7 +338,8 @@ class Deployer:
             result = self.local.run(command, wenv=self.config())
 
             # TODO 三种可能: false, error, success
-            branches = result.stdout.strip().split('\n')
+            branches = color_clean(result.stdout.strip())
+            branches = branches.split('\n')
             # 去除 origin/HEAD -> 当前指向
             # 去除远端前缀
             branches = [branch.strip().lstrip('origin/') for branch in branches if not branch.strip().startswith('origin/HEAD')]
@@ -381,13 +352,15 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
-            result = self.local.run(command, wenv=self.config())
+            # result = self.local.run(command, wenv=self.config())
 
             # TODO 10是需要前端传的
             command = 'git log -10 --pretty="%h #_# %an #_# %s"'
             result = self.local.run(command, wenv=self.config())
             current_app.logger.info(result.stdout.strip())
-            commit_list = result.stdout.strip().split('\n')
+            commit_log = color_clean(result.stdout.strip())
+            current_app.logger.info(commit_log)
+            commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
                 commit_dict = commit.split(' #_# ')
@@ -447,8 +420,43 @@ class Deployer:
         return {'success': self.success, 'errors': self.errors}
 
     def test(self):
-        server = '172.20.95.43'
-        # server = '172.16.0.231'
+        # server = '172.20.95.43'
+        server = '172.16.0.231'
+        ws_dict = {
+                'user': 'xx',
+                'host': 'ip',
+                'cmd': 'Going to sleep !!!!!',
+                'status': 0,
+                'stage': 1,
+                'sequence': 1,
+                'success': 'Going to sleep !!!!!',
+                'error': '',
+            }
+        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
+        socketio.sleep(60)
+        ws_dict = {
+                'user': 'xx',
+                'host': 'ip',
+                'cmd': 'sleep 60',
+                'status': 0,
+                'stage': 1,
+                'sequence': 1,
+                'success': 'sleep 60....',
+                'error': '',
+            }
+        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
+        socketio.sleep(10)
+        ws_dict = {
+                'user': 'xx',
+                'host': 'ip',
+                'cmd': 'sleep 10',
+                'status': 0,
+                'stage': 1,
+                'sequence': 1,
+                'success': 'sleep 10....',
+                'error': '',
+            }
+        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
         try:
             self.connections[server] = Waller(host=server, user='work')
             self.post_release_service(self.connections[server])

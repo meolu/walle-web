@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 
 import os
+import re
 from flask import flash
 
 
@@ -52,3 +53,17 @@ def detailtrace():
         f = f.f_back
     current_app.logger.info(retStr)
     print retStr
+
+
+def color_clean(text_with_color):
+    '''
+    e.g \x1b[?1h\x1b=
+    e.g \x1b[?1l\x1b>
+    @param text_with_color:
+    @return:
+    '''
+    pure_text = text_with_color.strip()
+    pure_text = re.sub('\x1B\[[0-9;]*[mGK]', '', pure_text, flags=re.I)
+    pure_text = re.sub('\x1B\[\?[0-9;]*[a-z]\x1B[=><]', '', pure_text, flags=re.I)
+    return pure_text.strip()
+

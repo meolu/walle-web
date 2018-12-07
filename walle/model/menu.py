@@ -50,7 +50,7 @@ class MenuModel(SurrogatePK, Model):
         }
         query = self.query \
             .filter(*filters) \
-            .order_by('sequence asc') \
+            .order_by(MenuModel.sequence.asc()) \
             .all()
         for item in query:
             if item.type == self.type_module:

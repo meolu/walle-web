@@ -48,14 +48,13 @@ def create_app(config_object=ProdConfig):
     @app.before_request
     def before_request():
         # TODO
-        app.logger.info('============ @app.before_request ============')
+        pass
 
     @app.teardown_request
     def shutdown_session(exception=None):
         # TODO
         from walle.model.database import db
         db.session.remove()
-        current_app.logger.info('============ @app.teardown_request ============')
 
     @app.route('/api/websocket')
     def index():
@@ -84,14 +83,12 @@ def register_extensions(app):
     @login_manager.user_loader
     def load_user(user_id):
         current_app.logger.info(user_id)
-        app.logger.info('============ @app.user_loader ============')
 
         return UserModel.query.get(user_id)
 
     @login_manager.unauthorized_handler
     def unauthorized():
         # TODO log
-        current_app.logger.info('============ @login_manager.unauthorized_handler ============')
         return BaseAPI.ApiResource.json(code=Code.unlogin)
 
     login_manager.init_app(app)
