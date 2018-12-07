@@ -230,7 +230,7 @@ class Deployer:
         command = self.project_info['prev_release']
         current_app.logger.info(command)
         with waller.cd(self.project_info['target_releases']):
-            result = self.local.run(command, wenv=self.config())
+            result = waller.run(command, wenv=self.config())
 
 
         # TODO md5
