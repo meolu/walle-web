@@ -185,9 +185,10 @@ class UserModel(UserMixin, SurrogatePK, Model):
             session['space_id'] = default_space
             session['space_info'] = spaces[session['space_id']]
 
-        # 3.空间权限有修改
-        if current_user.last_space and current_user.last_space not in spaces.keys():
-            raise WalleError(Code.space_error)
+        # 3.空间权限有修改（上次登录的空格没有权限了）
+        if current_user.last_space not in spaces.keys():
+            current_user.last_space = default_space
+
 
         # 4.项目管理员
         MemberModel = model.member.MemberModel()

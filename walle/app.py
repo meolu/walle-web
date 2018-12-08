@@ -190,6 +190,8 @@ def register_logging(app):
 
 
 def register_socketio(app):
+    if len(sys.argv) > 1 and sys.argv[1] == 'db':
+        return app
     socketio.init_app(app, async_mode='gevent')
     socketio.on_namespace(WalleSocketIO(namespace='/walle'))
     socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))

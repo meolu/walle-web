@@ -53,8 +53,8 @@ class MemberModel(SurrogatePK, Model):
             MemberModel.status.notin_([self.status_remove]),
             MemberModel.source_type == self.source_type_group
         }
-        query = self.query.filter(*filters).with_labels().with_entities(MemberModel.source_id, MemberModel.access_level,
-                                                                        SpaceModel.name)
+        query = self.query.filter(*filters).with_labels()\
+            .with_entities(MemberModel.source_id, MemberModel.access_level, SpaceModel.name)
         if user_id:
             query = query.filter_by(user_id=user_id)
 
