@@ -52,7 +52,6 @@ class EnvironmentModel(Model):
         count = query.count()
         data = query.order_by(EnvironmentModel.id.desc()).offset(int(size) * int(page)).limit(size).all()
 
-        current_app.logger.info(data)
         env_list = []
         for p in data:
             item = p[0].to_json()

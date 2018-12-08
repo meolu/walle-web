@@ -15,7 +15,7 @@ from flask_login import login_user, logout_user
 from walle.api.api import ApiResource
 from walle.form.user import LoginForm
 from walle.model.user import UserModel
-
+from walle.service.code import Code
 
 class PassportAPI(ApiResource):
     actions = ['login', 'logout']
@@ -50,7 +50,7 @@ class PassportAPI(ApiResource):
                 user.fresh_session()
                 return self.render_json(data=current_user.to_json())
 
-        return self.render_json(code=-1, data=form.errors)
+        return self.render_json(code=Code.error_pwd, data=form.errors)
 
     def logout(self):
         logout_user()

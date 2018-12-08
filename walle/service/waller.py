@@ -28,14 +28,10 @@ class Waller(Connection):
         message = 'deploying task_id=%s [%s@%s]$ %s ' % (wenv['task_id'], self.user, self.host, command)
         current_app.logger.info(message)
         try:
-            message = 'task_id=%s, host:%s command:%s' % (
-                wenv['task_id'], self.host, command
-            )
-            current_app.logger.info(message)
             if sudo:
                 result = super(Waller, self).sudo(command, pty=False, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=True, hide='both', warn=True, **kwargs)
+                result = super(Waller, self).run(command, pty=True, warn=True, **kwargs)
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout
@@ -45,7 +41,7 @@ class Waller(Connection):
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
                 wenv['task_id'], self.host, command, exitcode, stdout, stderr
             )
-            current_app.logger.error(result)
+            current_app.logger.error(result.stdout.strip())
             # TODO
             ws_dict = {
                 'user': self.user,
@@ -65,6 +61,9 @@ class Waller(Connection):
                                       command=result.command, success=stdout,
                                       error=stderr)
             current_app.logger.info(message)
+            if exitcode != 0:
+                # TODO
+                return result
             return result
 
         except Exception as e:
@@ -86,7 +85,6 @@ class Waller(Connection):
                 )
 
             # TODO
-
             ws_dict = {
                 'user': self.user,
                 'host': self.host,
@@ -113,8 +111,8 @@ class Waller(Connection):
         return self.sync(wtype='put', local=local, remote=remote, wenv=wenv, *args, **kwargs)
 
     def sync(self, wtype, remote=None, local=None, wenv=None):
-        command = 'put: scp %s %s@%s:%s' % (local, self.user, self.host, remote) if wtype == 'put' \
-            else 'get: scp %s@%s:%s %s' % (self.user, self.host, remote, local)
+        command = 'scp %s %s@%s:%s' % (local, self.user, self.host, remote) if wtype == 'put' \
+            else 'scp %s@%s:%s %s' % (self.user, self.host, remote, local)
         message = 'deploying task_id=%s [%s@%s]$ %s ' % (wenv['task_id'], self.user, self.host, command)
         current_app.logger.info(message)
 
@@ -122,26 +120,26 @@ class Waller(Connection):
             if wtype == 'put':
                 result = super(Waller, self).put(local=local, remote=remote)
                 current_app.logger.info('put: local %s, remote %s', local, remote)
+                op_user = current_app.config.get('LOCAL_SERVER_USER')
+                op_host = current_app.config.get('LOCAL_SERVER_HOST')
 
             else:
                 result = super(Waller, self).get(remote=remote, local=local)
                 current_app.logger.info('get: local %s, remote %s', local, remote)
                 current_app.logger.info('get: orig_local %s, local %s', result.orig_local, result.local)
+                op_user = self.user
+                op_host = self.host
 
             current_app.logger.info('put: %s, %s', result, dir(result))
             # TODO 可能会有非22端口的问题
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                       task_id=wenv['task_id'], status=0, host=self.host, user=self.user,
                                       command=command, )
-            message = 'task_id=%s, host:%s command:%s status:0, success:, error:' % (
-                wenv['task_id'], self.host, command)
-            current_app.logger.error(self)
-            current_app.logger.error(result)
 
             # TODO
             ws_dict = {
-                'user': self.user,
-                'host': self.host,
+                'user': op_user,
+                'host': op_host,
                 'cmd': command,
                 'status': 1,
                 'stage': wenv['stage'],

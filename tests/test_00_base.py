@@ -4,11 +4,12 @@
 from copy import deepcopy
 
 import pytest
-from .utils import *
+from flask import current_app
 from walle.model.menu import MenuModel
 from walle.model.user import UserModel
 from walle.service.rbac.role import *
 from werkzeug.security import generate_password_hash
+from .utils import *
 
 #: 1 创建 super, owner
 

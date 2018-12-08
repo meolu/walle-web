@@ -10,12 +10,12 @@ try:
     from flask_wtf import FlaskForm  # Try Flask-WTF v0.13+
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
+from flask_login import current_user
 from flask_wtf import Form
-from flask import current_app
-from wtforms import TextField, IntegerField
-from wtforms import validators
 from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
+from wtforms import TextField, IntegerField
+from wtforms import validators
 
 
 class TaskForm(Form):
@@ -41,7 +41,7 @@ class TaskForm(Form):
         return {
             'name': self.name.data if self.name.data else '',
             # todo
-            'user_id': 1,
+            'user_id': current_user.id,
             'project_id': self.project_id.data,
             # todo default value
             'action': 0,
