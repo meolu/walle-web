@@ -15,14 +15,14 @@ Flask-Mail==0.9.0
 flask-socketio==3.0.2
 
 # Database
-Flask-SQLAlchemy==2.2
+Flask-SQLAlchemy==2.3.2
 psycopg2==2.7.1
-SQLAlchemy==1.1.9
+SQLAlchemy==1.2.14
 mysqlclient==1.3.13
 marshmallow==2.13.5
 
 # Migrations
-Flask-Migrate==2.0.3
+Flask-Migrate==2.3.1
 
 # Forms
 Flask-WTF==0.14.2

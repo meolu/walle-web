@@ -10,6 +10,7 @@
 
 import json
 
+from flask import current_app
 from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.form.space import SpaceForm
@@ -162,7 +163,6 @@ class SpaceAPI(SecurityResource):
 
         members = MemberModel(group_id=space_id).member(user_id=user_id, role=role, group_id=space_id)
         return self.render_json(data=members)
-
 
     def members(self, space_id):
         page = int(request.args.get('page', 1))
