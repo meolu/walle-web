@@ -1,0 +1,449 @@
+-- MySQL dump 10.13  Distrib 5.7.4-m14, for osx10.7 (x86_64)
+--
+-- Host: localhost    Database: walle_python
+-- ------------------------------------------------------
+-- Server version	5.7.4-m14
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `walle_python`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `walle_python` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `walle_python`;
+
+--
+-- Table structure for table `alembic_version`
+--
+
+DROP TABLE IF EXISTS `alembic_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `alembic_version` (
+  `version_num` varchar(32) NOT NULL,
+  PRIMARY KEY (`version_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alembic_version`
+--
+
+LOCK TABLES `alembic_version` WRITE;
+/*!40000 ALTER TABLE `alembic_version` DISABLE KEYS */;
+/*!40000 ALTER TABLE `alembic_version` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `environments`
+--
+
+DROP TABLE IF EXISTS `environments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `environments` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(100) DEFAULT 'master' COMMENT '环境名称',
+  `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '空间id',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='项目环境配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `environments`
+--
+
+LOCK TABLES `environments` WRITE;
+/*!40000 ALTER TABLE `environments` DISABLE KEYS */;
+INSERT INTO `environments` VALUES (1,'开发环境',1,1,'2017-03-08 17:26:07','2018-11-26 15:38:14'),(2,'腾讯云测试联调',1,1,'2017-05-13 11:26:42','2018-11-26 15:38:14'),(3,'开发环境火起来',2,1,'2017-05-14 10:46:31','2018-11-26 17:10:02'),(4,'人之将死',2,-1,'2018-11-23 07:24:07','2018-11-26 15:38:14'),(11,'红红火火',2,1,'2018-11-26 18:07:21','2018-11-26 18:07:21'),(12,'测试环境',2,1,'2018-11-26 20:39:28','2018-11-26 20:39:28');
+/*!40000 ALTER TABLE `environments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `members`
+--
+
+DROP TABLE IF EXISTS `members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `members` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `user_id` int(10) DEFAULT '0' COMMENT '用户id',
+  `source_id` int(10) DEFAULT '0' COMMENT '归属资源id：space_id | project_id',
+  `source_type` varchar(10) DEFAULT '' COMMENT '归属资源类型：space | project',
+  `access_level` varchar(10) DEFAULT '10' COMMENT '权限值。10 => Guest access | 20 => Reporter access | 30 => Developer access | 40 => Master access | 50 => Owner access',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='用户组关联表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `members`
+--
+
+LOCK TABLES `members` WRITE;
+/*!40000 ALTER TABLE `members` DISABLE KEYS */;
+INSERT INTO `members` VALUES (2,2,1,'project','MASTER',1,'2018-11-04 20:09:59','2018-11-17 15:56:53'),(3,2,2,'project','MASTER',1,'2018-11-04 20:09:59','2018-11-17 15:56:53'),(5,2,2,'project','MASTER',1,'2018-11-04 20:11:35','2018-11-17 15:56:53'),(6,1,2,'project','MASTER',1,'2018-11-04 20:21:17','2018-11-17 15:56:53'),(7,2,24,'project','MASTER',1,'2018-11-04 20:21:17','2018-11-17 15:56:53'),(8,1,25,'project','10',1,'2018-11-04 20:21:47','2018-11-17 15:56:14'),(9,2,25,'project','10',1,'2018-11-04 20:21:47','2018-11-17 15:56:14'),(10,1,9,'project','DEVELOPER',1,'2018-11-04 20:28:20','2018-11-18 00:02:02'),(11,2,26,'group','OWNER',1,'2018-11-04 20:28:20','2018-11-13 15:15:34'),(22,1,1,'group','MASTER',1,'2018-11-07 11:13:05','2018-11-13 16:27:07'),(23,2,1,'group','OWNER',1,'2018-11-07 11:13:05','2018-12-04 23:15:22'),(24,1,30,'group','OWNER',1,'2018-11-07 14:51:43','2018-11-07 14:51:43'),(32,3,2,'project','MASTER',1,'2018-11-04 20:11:35','2018-11-17 15:56:53'),(42,1,3,'project','MASTER',1,'2018-11-27 17:17:59','2018-11-27 17:17:59'),(43,2,3,'project','DEVELOPER',1,'2018-11-27 17:17:59','2018-11-27 17:17:59'),(69,1,2,'group','DEVELOPER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(70,2,2,'group','OWNER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(71,3,2,'group','MASTER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(72,14,2,'group','DEVELOPER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(73,4,2,'group','DEVELOPER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(74,3,12,'project','DEVELOPER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(75,1,12,'project','REPORTER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(76,14,12,'project','DEVELOPER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(77,4,12,'project','MASTER',1,'2018-12-05 19:37:47','2018-12-05 19:37:47'),(78,4,4,'project','MASTER',1,'2018-12-06 16:24:17','2018-12-06 16:24:17');
+/*!40000 ALTER TABLE `members` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menus`
+--
+
+DROP TABLE IF EXISTS `menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus` (
+  `id` int(15) NOT NULL AUTO_INCREMENT,
+  `name_cn` varchar(30) NOT NULL COMMENT '模块中文名称',
+  `name_en` varchar(30) NOT NULL COMMENT '模块英文名称',
+  `pid` int(6) NOT NULL COMMENT '父模块id，顶级pid为0',
+  `type` enum('action','controller','module') DEFAULT 'action' COMMENT '类型',
+  `sequence` int(11) DEFAULT '0' COMMENT '排序序号sprintf("%2d%2d%2d", module_id, controller_id, 自增两位数)',
+  `role` varchar(10) NOT NULL DEFAULT '' COMMENT '访问的最低权限级别',
+  `archive` tinyint(1) DEFAULT '0' COMMENT '归档：0有效，1无效',
+  `icon` varchar(30) DEFAULT '' COMMENT '模块',
+  `url` varchar(100) DEFAULT '' COMMENT '前端url',
+  `visible` tinyint(1) DEFAULT '1' COMMENT '前端是否展示该模块 0不展示，1展示',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='权限表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menus`
+--
+
+LOCK TABLES `menus` WRITE;
+/*!40000 ALTER TABLE `menus` DISABLE KEYS */;
+INSERT INTO `menus` VALUES (1,'首页','index',0,'module',10000,'10',0,'wl-icon-main','/',1,'2017-06-11 23:11:38','2018-11-03 09:31:51'),(2,'空间管理','space',0,'module',10001,'50',0,'wl-icon-space-set','/space/index',1,'2017-06-11 23:11:38','2018-11-01 07:37:23'),(3,'用户管理','user',0,'module',10002,'40',0,'wl-icon-user-set','/user/index',1,'2017-06-11 23:11:52','2018-12-05 19:50:43'),(4,'项目中心','project',0,'module',10003,'30',0,'wl-icon-project-set','',1,'2017-06-11 23:12:45','2018-12-05 19:45:43'),(5,'部署管理','deploy',0,'module',10101,'10',0,'wl-icon-deploy-set','/deploy/index',1,'2017-06-11 23:13:51','2018-11-04 23:57:19'),(6,'环境管理','group',4,'controller',10102,'50',0,'leaf','/environment/index',1,'2017-06-11 23:14:11','2018-11-03 09:31:41'),(7,'服务器管理','role',4,'controller',10103,'40',0,'leaf','/server/index',1,'2017-06-11 23:14:44','2018-11-03 09:31:41'),(8,'项目管理','environment',4,'controller',10201,'30',0,'leaf','/project/index',1,'2017-06-11 23:15:30','2018-12-05 19:45:12');
+/*!40000 ALTER TABLE `menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `project_servers`
+--
+
+DROP TABLE IF EXISTS `project_servers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_servers` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `project_id` int(10) NOT NULL COMMENT '项目名字',
+  `server_id` int(10) NOT NULL COMMENT '被打标签的实物id： 如 server.id',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='项目与服务器关系表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project_servers`
+--
+
+LOCK TABLES `project_servers` WRITE;
+/*!40000 ALTER TABLE `project_servers` DISABLE KEYS */;
+INSERT INTO `project_servers` VALUES (1,1,1,'2017-03-11 23:37:50','2017-03-11 23:37:50'),(2,1,2,'2017-03-11 23:37:56','2017-03-11 23:37:56'),(3,1,3,'2017-03-11 23:38:03','2017-03-11 23:38:03');
+/*!40000 ALTER TABLE `project_servers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `projects` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `user_id` int(10) NOT NULL COMMENT '添加项目的用户id',
+  `name` varchar(100) DEFAULT 'master' COMMENT '项目名字',
+  `environment_id` int(1) NOT NULL COMMENT 'environment的id',
+  `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '空间id',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
+  `master` varchar(100) NOT NULL DEFAULT '' COMMENT '项目管理员：用户id,用户id',
+  `version` varchar(40) DEFAULT '' COMMENT '线上当前版本，用于快速回滚',
+  `excludes` text COMMENT '要排除的文件',
+  `target_user` varchar(50) NOT NULL COMMENT '目标机器的登录用户',
+  `target_port` int(3) NOT NULL DEFAULT '22' COMMENT '目标机器的登录端口',
+  `target_root` varchar(200) NOT NULL COMMENT '目标机器的 server 目录',
+  `target_releases` varchar(200) NOT NULL COMMENT '目标机器的版本库',
+  `server_ids` text COMMENT '目标机器列表',
+  `task_vars` text COMMENT '高级环境变量',
+  `prev_deploy` text COMMENT '部署前置任务',
+  `post_deploy` text COMMENT '同步之前任务',
+  `prev_release` text COMMENT '同步之前目标机器执行的任务',
+  `post_release` text COMMENT '同步之后目标机器执行的任务',
+  `keep_version_num` int(3) NOT NULL DEFAULT '20' COMMENT '线上版本保留数',
+  `repo_url` varchar(200) DEFAULT '' COMMENT 'git地址',
+  `repo_username` varchar(50) DEFAULT '' COMMENT '版本管理系统的用户名，一般为svn的用户名',
+  `repo_password` varchar(50) DEFAULT '' COMMENT '版本管理系统的密码，一般为svn的密码',
+  `repo_mode` varchar(50) DEFAULT 'branch' COMMENT '上线方式：branch/tag',
+  `repo_type` varchar(10) DEFAULT 'git' COMMENT '上线方式：git/svn',
+  `notice_type` varchar(10) NOT NULL DEFAULT '' COMMENT '通知方式：sms 短信、dingding 钉钉、email 邮件',
+  `notice_hook` text NOT NULL COMMENT '通知地址：sms 手机号(英文分号分割)、dingding webhook、email 邮箱 地址(英文分号分割)',
+  `task_audit` tinyint(1) DEFAULT '0' COMMENT '是否开启审核：0 不开启，1 开启',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='项目配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `projects`
+--
+
+LOCK TABLES `projects` WRITE;
+/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+INSERT INTO `projects` VALUES (1,1,'瓦力自部署',2,1,1,'1,2','12121','*.log','work',22,'/tmp/walle/root','/tmp/walle/library','1,4','debug=1;\\napp=auotapp.py','echo prev_deploy; pwd','echo post_deploy; pwd','echo prev_release; pwd','echo post_release; pwd',13,'git@github.com:meolu/walden.git','','','branch','git','dingding','ding:notice-wushuiyong',1,'2017-03-11 23:30:53','2018-11-04 23:19:27'),(2,1,'walden-瓦尔登02',1,2,1,'',NULL,'*.log','work',22,'/tmp/walle/root','/tmp/walle/library','1,3,2','debug=1;\\napp=auotapp.py','echo prev_deploy','echo post_deploy','echo prev_release','echo post_release',10,'git@github.com:meolu/walle-web.git','','','branch',NULL,'','',0,'2017-05-25 15:02:18','2018-11-23 14:28:36'),(3,1,'瓦力自部署01',1,1,-1,'',NULL,'*.log','work',22,'/tmp/walle/root','/tmp/walle/library','1,3,2','debug=1;\\napp=auotapp.py','echo prev_deploy','echo post_deploy','echo prev_release','echo post_release',10,'git@github.com:meolu/walle-web.git','','','branch',NULL,'','',0,'2017-05-25 23:48:06','2018-11-23 14:36:03'),(4,2,'瓦力自行部署',12,2,1,'',NULL,'*.log','work',22,'/tmp/walle/root','/tmp/walle/library','3,2,1','debug=1;\\napp=auotapp.py','echo prev_deploy','echo post_deploy','echo prev_release','echo post_release',10,'git@github.com:meolu/walle-web.git','','','branch',NULL,'dingding','webkhook/dingtalk',1,'2018-10-22 08:13:37','2018-11-28 17:47:26'),(5,1,'葫芦娃与蛇精',3,2,-1,'',NULL,'','fa',0,'/adf','/af','4,3','','','','','',0,'faf','','','branch',NULL,'','',0,'2018-11-03 15:37:24','2018-11-23 14:28:55'),(6,1,'瓦力自部署0923',4,2,1,'1,2',NULL,'*.log','work',22,'/tmp/walle/root','/tmp/walle/library','1,3,2','debug=1;\\napp=auotapp.py','echo prev_deploy','echo post_deploy','echo prev_release','echo post_release',10,'git@github.com:meolu/walle-web.git','','','branch',NULL,'dingding','webkhook/dingtalk',1,'2018-11-04 23:42:00','2018-11-23 14:29:00'),(12,1,'owner-测试',11,2,1,'',NULL,'','work',22,'/tmp/walle2.0/webroot','/tmp/walle2.0/release','10','','echo \'deploy prev\'\n','echo \'deploy post\'','echo \'release prev\'','echo \'release post\'',3,'git@github.com:meolu/github-traffic.git','','','branch',NULL,'','',1,'2018-11-26 18:40:38','2018-11-28 13:56:13');
+/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `records`
+--
+
+DROP TABLE IF EXISTS `records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `records` (
+  `id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `stage` varchar(20) DEFAULT NULL COMMENT '阶段',
+  `sequence` int(10) DEFAULT NULL COMMENT '序列号',
+  `user_id` int(21) unsigned NOT NULL COMMENT '用户id',
+  `task_id` bigint(11) NOT NULL COMMENT 'Task id',
+  `status` int(3) NOT NULL COMMENT '状态0：新建提交，1审核通过，2审核拒绝，3上线完成，4上线失败',
+  `host` varchar(200) DEFAULT '' COMMENT '命令执行所在机器',
+  `user` varchar(200) DEFAULT '' COMMENT '命令执行所在机器的登录用户',
+  `command` text COMMENT '命令与参数',
+  `success` text COMMENT '成功返回信息',
+  `error` text COMMENT '错误信息',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2714 DEFAULT CHARSET=utf8 COMMENT='任务执行记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `records`
+--
+
+LOCK TABLES `records` WRITE;
+/*!40000 ALTER TABLE `records` DISABLE KEYS */;
+INSERT INTO `records` VALUES (2691,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 17:54:52','2018-12-07 17:54:52'),(2692,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 17:54:52','2018-12-07 17:54:52'),(2693,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 17:54:52','2018-12-07 17:54:52'),(2694,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 17:54:52','2018-12-07 17:54:52'),(2695,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:09:27','2018-12-07 18:09:27'),(2696,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:25:32','2018-12-07 18:25:32'),(2697,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 18:25:32','2018-12-07 18:25:32'),(2698,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 18:28:09','2018-12-07 18:28:09'),(2699,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:28:09','2018-12-07 18:28:09'),(2700,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:28:09','2018-12-07 18:28:09'),(2701,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2702,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2703,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2704,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2705,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2706,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2707,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2708,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 18:30:20','2018-12-07 18:30:20'),(2709,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 20:28:47','2018-12-07 20:28:47'),(2710,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 20:28:47','2018-12-07 20:28:47'),(2711,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git pull','Already up to date.\r\n','','2018-12-07 20:34:16','2018-12-07 20:34:16'),(2712,'0',0,0,0,0,'127.0.0.1','wushuiyong','cd /tmp/walle/codebase/4 && git branch -r','  [31morigin/2.0/alpha/fe[m\r\n  [31morigin/2.0/alpha/permission[m\r\n  [31morigin/2.0/feature/permission[m\r\n  [31morigin/2.0/fix/console[m\r\n  [31morigin/2.0/fix/task_status[m\r\n  [31morigin/HEAD[m -> origin/master\r\n  [31morigin/master[m\r\n','','2018-12-07 20:34:16','2018-12-07 20:34:16'),(2713,'0',0,1,12,0,'172.16.0.231','work','cd /tmp/walle/root && sudo service nginx restart','nginx: the configuration file /etc/nginx/nginx.conf syntax is ok\r\nnginx: configuration file /etc/nginx/nginx.conf test is successful\r\nStopping nginx: [60G[[0;32m  OK  [0;39m]\r\r\nStarting nginx: [60G[[0;32m  OK  [0;39m]\r\r\n','','2018-12-07 20:34:16','2018-12-07 20:34:16');
+/*!40000 ALTER TABLE `records` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `roles` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL COMMENT '角色名称',
+  `access_ids` text COMMENT '权限id列表,逗号分隔',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='角色表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `roles`
+--
+
+LOCK TABLES `roles` WRITE;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'super','1,2,3,11,12,13,15,16,101,102,103,104,','2017-03-24 13:52:09','2018-09-16 20:24:34'),(2,'owner','1,2,3,11,12,13,15,16,101,102,103,104,','2017-03-26 13:23:44','2018-09-16 20:24:34'),(3,'master','1,2,3,11,12,13,15,16,101,102,103,104,','2017-05-14 16:44:41','2018-09-16 20:24:34'),(4,'developer','1,2,3,11,12,13,15,16,101,102,103,104,','2017-05-14 16:50:02','2018-09-16 20:24:34'),(5,'reporter','1,2,3,11,12,13,15,16,101,102,103,104,','2017-05-11 09:41:58','2018-09-16 20:24:34');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `servers`
+--
+
+DROP TABLE IF EXISTS `servers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `servers` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `name` varchar(100) DEFAULT '' COMMENT 'server name',
+  `host` varchar(100) NOT NULL COMMENT 'ip/host',
+  `port` int(1) DEFAULT '22' COMMENT 'ssh port',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='服务器记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `servers`
+--
+
+LOCK TABLES `servers` WRITE;
+/*!40000 ALTER TABLE `servers` DISABLE KEYS */;
+INSERT INTO `servers` VALUES (1,'dev-wushuiyong','172.16.0.231',22,1,'2017-03-11 23:34:27','2017-03-11 23:34:27'),(2,'dev-ky','172.16.0.194',22,1,'2017-03-11 23:35:12','2018-12-05 14:40:06'),(3,'dev-lizhijie','172.20.95.43',22,1,'2017-03-11 23:37:18','2018-11-27 21:07:15'),(4,'dev-songmeijing','172.16.0.52',22,1,'2018-08-24 11:54:04','2018-08-24 11:54:04'),(5,'美晶测试机','172.16.0.52',22,1,'2018-11-03 16:43:51','2018-12-05 14:40:06'),(6,'美晶测试机01','172.16.0.52',22,1,'2018-11-03 16:43:51','2018-12-05 14:40:06'),(7,'美晶测试机002','172.16.0.52',22,1,'2018-11-03 16:53:04','2018-12-05 14:40:06'),(8,'美晶测试机0020','172.16.0.52',22,1,'2018-11-03 16:55:16','2018-12-05 14:40:06'),(9,'美晶测试机00200','172.16.0.52',22,1,'2018-11-03 16:55:16','2018-12-05 14:40:06'),(10,'美晶测试机002000','172.16.0.52',22,1,'2018-11-03 16:58:43','2018-11-03 16:58:43');
+/*!40000 ALTER TABLE `servers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `spaces`
+--
+
+DROP TABLE IF EXISTS `spaces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `spaces` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `user_id` int(10) NOT NULL COMMENT '空间所有者uid',
+  `name` varchar(100) NOT NULL COMMENT '空间名字',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='空间配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `spaces`
+--
+
+LOCK TABLES `spaces` WRITE;
+/*!40000 ALTER TABLE `spaces` DISABLE KEYS */;
+INSERT INTO `spaces` VALUES (1,2,'瓦尔登湖-1',1,'2018-09-17 22:09:37','2018-11-18 00:09:58'),(2,2,'大数据-2',1,'2018-09-18 08:42:47','2018-12-05 19:37:47'),(3,1,'瓦尔登',1,'2018-10-29 16:36:05','2018-10-29 16:36:05'),(4,1,'瓦尔登00',1,'2018-10-29 16:38:20','2018-10-29 16:38:20'),(5,1,'瓦尔登001',1,'2018-10-29 16:40:59','2018-10-29 16:40:59'),(6,1,'瓦尔登002',1,'2018-10-29 16:43:38','2018-10-29 16:43:38'),(7,1,'瓦尔登003',1,'2018-10-29 16:46:03','2018-10-29 16:46:03'),(8,1,'瓦尔登004',1,'2018-10-29 16:48:52','2018-10-29 16:48:52'),(9,1,'瓦尔登009',1,'2018-10-30 17:32:20','2018-10-30 17:32:20'),(10,1,'瓦尔登010',-1,'2018-10-30 18:56:32','2018-11-04 20:35:52'),(11,1,'瓦尔登00a',NULL,'2018-11-04 20:01:23','2018-11-04 20:01:23'),(12,1,'瓦尔登00a1',NULL,'2018-11-04 20:02:43','2018-11-04 20:02:43'),(13,1,'瓦尔登00a2',NULL,'2018-11-04 20:03:25','2018-11-04 20:03:25'),(14,1,'瓦尔登00a3',NULL,'2018-11-04 20:03:47','2018-11-04 20:03:47'),(15,1,'瓦尔登00a4',NULL,'2018-11-04 20:04:55','2018-11-04 20:04:55'),(16,1,'瓦尔登00a5',NULL,'2018-11-04 20:05:55','2018-11-04 20:05:55'),(17,1,'瓦尔登00a6',NULL,'2018-11-04 20:06:17','2018-11-04 20:06:17'),(18,1,'瓦尔登00a7',NULL,'2018-11-04 20:06:35','2018-11-04 20:06:35'),(19,1,'瓦尔登00a8',NULL,'2018-11-04 20:07:52','2018-11-04 20:07:52'),(20,1,'瓦尔登00a9',NULL,'2018-11-04 20:08:20','2018-11-04 20:08:20'),(21,1,'瓦尔登00a10',NULL,'2018-11-04 20:08:44','2018-11-04 20:08:44'),(22,1,'瓦尔登00a11',NULL,'2018-11-04 20:09:59','2018-11-04 20:09:59'),(23,1,'瓦尔登00a12',NULL,'2018-11-04 20:11:35','2018-11-04 20:11:35'),(24,1,'瓦尔登00a13',NULL,'2018-11-04 20:21:17','2018-11-04 20:21:17'),(25,1,'瓦尔登00a14',NULL,'2018-11-04 20:21:47','2018-11-04 20:21:47'),(26,1,'瓦尔登0b1',NULL,'2018-11-04 20:28:20','2018-11-04 20:28:20'),(27,1,'瓦尔登000',NULL,'2018-11-07 14:39:23','2018-11-07 14:39:23'),(28,1,'瓦尔登0001',NULL,'2018-11-07 14:39:55','2018-11-07 14:39:55'),(29,1,'瓦尔登0002',NULL,'2018-11-07 14:48:03','2018-11-07 14:48:03'),(30,1,'瓦尔登0003',NULL,'2018-11-07 14:51:43','2018-11-07 14:51:43');
+/*!40000 ALTER TABLE `spaces` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `name` varchar(100) DEFAULT 'master' COMMENT '标签',
+  `label` varchar(20) NOT NULL COMMENT '标签类型：server, ',
+  `label_id` int(10) NOT NULL DEFAULT '0' COMMENT '被打标签的实物id： 如 server.id',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='tag 标签表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tags`
+--
+
+LOCK TABLES `tags` WRITE;
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES (1,'瓦尔登湖','user_group',0,'2018-09-17 22:09:37','2018-09-18 08:42:47'),(2,'大数据','user_group',0,'2018-09-18 08:42:47','2018-09-18 08:42:47'),(3,'瓦尔登','user_group',0,'2018-10-29 16:36:06','2018-10-29 16:36:06'),(4,'瓦尔登00','user_group',0,'2018-10-29 16:38:20','2018-10-29 16:38:20'),(5,'瓦尔登001','user_group',0,'2018-10-29 16:40:59','2018-10-29 16:40:59'),(6,'瓦尔登002','user_group',0,'2018-10-29 16:43:38','2018-10-29 16:43:38'),(7,'瓦尔登003','user_group',0,'2018-10-29 16:46:03','2018-10-29 16:46:03'),(8,'瓦尔登004','user_group',0,'2018-10-29 16:48:52','2018-10-29 16:48:52'),(9,'瓦尔登009','user_group',0,'2018-10-30 17:32:20','2018-10-30 17:32:20'),(10,'瓦尔登010','user_group',0,'2018-10-30 18:56:32','2018-10-30 18:56:32'),(11,'瓦尔登00a','user_group',0,'2018-11-04 19:54:23','2018-11-04 19:54:23');
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tasks`
+--
+
+DROP TABLE IF EXISTS `tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasks` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `name` varchar(100) NOT NULL COMMENT '上线单标题',
+  `user_id` bigint(21) unsigned NOT NULL COMMENT '用户id',
+  `project_id` int(11) NOT NULL COMMENT '项目id',
+  `action` int(1) DEFAULT '0' COMMENT '0全新上线，2回滚',
+  `status` tinyint(1) NOT NULL COMMENT '# 状态：0新建提交，1审核通过，2审核拒绝，3上线中，4上线完成，5上线失败',
+  `link_id` varchar(100) DEFAULT '' COMMENT '上线的软链号',
+  `ex_link_id` varchar(100) DEFAULT '' COMMENT '被替换的上次上线的软链号',
+  `servers` text COMMENT '上线的机器',
+  `commit_id` varchar(40) DEFAULT '' COMMENT 'git commit id',
+  `branch` varchar(100) DEFAULT 'master' COMMENT '选择上线的分支',
+  `tag` varchar(100) DEFAULT '' COMMENT '选择上线的tag',
+  `file_transmission_mode` smallint(3) NOT NULL DEFAULT '1' COMMENT '上线文件模式: 1.全量所有文件 2.指定文件列表',
+  `file_list` text COMMENT '文件列表，svn上线方式可能会产生',
+  `enable_rollback` int(1) NOT NULL DEFAULT '1' COMMENT '能否回滚此版本0：no 1：yes',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='上线单记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tasks`
+--
+
+LOCK TABLES `tasks` WRITE;
+/*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
+INSERT INTO `tasks` VALUES (1,'Demo 测试上线单',1,1,0,1,'prev_link_id_test','prev_link_id_test','172.16.0.231,172.16.0.177','5bf82db','master','',1,NULL,1,'2017-03-11 23:41:24','2018-12-07 16:18:24'),(2,'测试使用 vue 2.0',3,2,0,1,'vue_import','prev_link_id_test','172.16.0.231,172.16.0.177','5bf82db','master','',1,NULL,1,'2017-03-12 17:31:55','2018-12-07 16:18:24'),(3,'到底 vue2 与 jinja 2 会产生什么样的火花呢？',2,2,0,1,'vue_jinja','vue_import','172.16.0.231,172.16.0.177','5bf82db','master','',1,NULL,1,'2017-03-12 17:32:59','2018-12-07 16:18:24'),(6,'提交一个测试上线单',3,2,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','',0,'*.log',1,'2017-05-27 14:50:37','2018-12-07 16:18:24'),(7,'提交一个测试上线单',2,3,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','',0,'*.log',1,'2017-05-27 14:53:42','2018-12-07 16:18:24'),(8,'提交一个测试上线单',1,3,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','',0,'*.log',1,'2017-05-27 15:37:39','2018-12-07 16:18:24'),(9,'提交一个测试上线单',2,1,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','',0,'*.log',1,'2017-05-27 15:38:56','2018-12-07 16:18:24'),(10,'walle上线单01',1,1,0,1,'','','1,2','a89eb23c','master','',0,'*.log',1,'2017-05-27 15:40:04','2018-12-07 16:18:24'),(11,'提交一个测试上线单',2,1,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','',0,'*.log',1,'2017-05-27 16:48:38','2018-12-07 16:18:24'),(12,'walle上线单01',1,1,0,1,'','','1,2','a89eb23c','master','',0,'*.log',1,'2018-08-24 11:54:04','2018-12-07 16:18:24'),(13,'提交一个测试上线单',1,1,0,1,'','','127.0.0.1,192.168.0.1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-10-01 06:58:12','2018-12-07 16:18:24'),(14,'owner-开始上线了',1,12,0,1,'','','10','37fa8ce','master','',0,'*.log',1,'2018-11-26 19:14:38','2018-12-07 16:18:24'),(15,'owner-默认状态就是审核通过',1,12,0,1,'','','10','37fa8ce','master','',0,'*.log',1,'2018-11-27 19:31:53','2018-12-07 16:18:24'),(16,'owner-默认需要审核',1,12,0,1,'','','10','64fdc9f','master','',0,'*.log',1,'2018-11-27 19:31:53','2018-12-07 16:18:24'),(17,'owner-测试默认需要审核',1,12,0,1,'','','10','37fa8ce','master','',0,'*.log',1,'2018-11-27 19:42:13','2018-12-07 16:18:24'),(18,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 19:42:13','2018-12-07 16:18:24'),(19,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 19:47:47','2018-12-07 16:18:24'),(20,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 19:57:35','2018-12-07 16:18:24'),(21,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 20:03:05','2018-12-07 16:18:24'),(22,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 20:03:52','2018-12-07 16:18:24'),(23,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 20:04:24','2018-12-07 16:18:24'),(24,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-27 20:08:01','2018-12-07 16:18:24'),(25,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:05:09','2018-12-07 16:18:24'),(26,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:06:32','2018-12-07 16:18:24'),(27,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:08:22','2018-12-07 16:18:24'),(28,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:12:52','2018-12-07 16:18:24'),(29,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:13:28','2018-12-07 16:18:24'),(30,'提交一个测试上线单',1,12,0,1,'','','1','a89eb23c','master','v2.0.0',0,'*.log',1,'2018-11-28 14:21:57','2018-12-07 16:18:24'),(31,'2.0-alpha-fe',1,4,0,1,'','','3,2,1','f859880','2.0/alpha/fe','',0,'*.log',1,'2018-12-04 11:51:07','2018-12-07 16:18:24'),(32,'master上线单',1,4,0,1,'','','3,1','f6166d5','2.0/alpha/fe','',0,'*.log',1,'2018-12-05 06:35:36','2018-12-07 16:18:24'),(33,'秀',1,4,0,1,'','','3,1','a306f82','2.0/feature/permission','',0,'*.log',1,'2018-12-05 06:58:22','2018-12-06 21:27:56'),(34,'走一个',1,4,0,1,'','','3,2,1','4af82bd','2.0/fix/console','',0,'*.log',1,'2018-12-06 16:24:17','2018-12-07 17:36:16'),(35,'搞事情',2,12,0,1,'','','10','37fa8ce','master','',0,'*.log',1,'2018-12-07 15:53:26','2018-12-07 17:02:25');
+/*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL COMMENT '用户昵称',
+  `is_email_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否邮箱认证',
+  `email` varchar(50) NOT NULL COMMENT '邮箱',
+  `password` varchar(100) NOT NULL COMMENT '密码',
+  `password_hash` varchar(50) DEFAULT NULL COMMENT 'hash',
+  `avatar` varchar(100) DEFAULT 'default.jpg' COMMENT '头像图片地址',
+  `role` varchar(10) NOT NULL DEFAULT '' COMMENT '角色',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态: 0新建，1正常，2冻结',
+  `last_space` int(11) NOT NULL DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Super',1,'super@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','fc00575d7c.jpg','SUPER',1,0,'2017-03-17 09:03:09','2018-11-24 17:01:23'),(2,'Owner',1,'owner@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','de8f30cc65.jpg','2',1,2,'2017-03-20 19:05:44','2018-11-24 17:01:23'),(3,'Master',0,'master@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','',NULL,'1',1,2,'2017-04-13 15:03:57','2018-11-24 10:22:37'),(4,'Developer',0,'developer@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','',NULL,'1',1,2,'2017-05-11 22:33:35','2018-12-05 19:37:47'),(5,'Report',0,'report@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','',NULL,'2',1,0,'2017-05-11 23:39:11','2018-11-23 07:40:55'),(6,'吃瓜群演',0,'demo1@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b',NULL,NULL,'2',1,0,'2017-05-13 22:16:14','2018-11-23 07:40:55'),(7,'白居易',0,'demo2@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b',NULL,NULL,'1',1,0,'2017-05-13 23:12:44','2018-11-23 07:40:55'),(8,'余华',0,'demo3@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b',NULL,NULL,'0',1,0,'2018-10-27 15:44:49','2018-11-23 07:40:55'),(9,'海贼王',0,'demo4@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b',NULL,NULL,'0',1,0,'2018-11-08 23:17:12','2018-11-23 07:40:55'),(10,'我要在海边躺着晒太阳',0,'demo5@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b',NULL,NULL,'',1,0,'2018-11-23 07:24:07','2018-11-23 07:42:28'),(14,'super添加demo06',0,'demo06@walle-web.io','pbkdf2:sha256:50000$qZs8Wup8$c64bec2f9973c90594d0a3405c093a0846505daf3ad00b31251d2221b1f0d1fb',NULL,NULL,'',1,0,'2018-11-25 12:06:07','2018-11-26 15:24:13');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-12-08 17:11:29
