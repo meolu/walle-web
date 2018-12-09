@@ -69,7 +69,7 @@ Discussing
 
 新的惊喜
 =========================
-后续更新和解剖讨论将会放到公众号：walle-web，晨间除了写开源，也会写千字文，关注不迷路：）
+后续更新和解剖讨论、以及walle有趣的人和事，将会放到公众号：walle-web，晨间除了写开源，也会写千字文，关注不迷路：）
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/wechat-gzh.jpg" width="244" height="314" alt="公众号 walle-web" />
 
