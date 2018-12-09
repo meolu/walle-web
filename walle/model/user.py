@@ -200,7 +200,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
 
     @classmethod
     def avatar_url(cls, avatar):
-        avatar = avatar if avatar else 'default.jpg'
+        avatar = avatar if avatar else 'w.jpg'
         return '/' + current_app.config['AVATAR_PATH'] + avatar
 
     @classmethod
