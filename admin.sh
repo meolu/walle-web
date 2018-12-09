@@ -12,7 +12,8 @@ function start() {
     echo "start walle"
     echo "----------------"
     source ./venv/bin/activate
-    nohup python $APP &
+    mkdir -p logs
+    nohup python $APP >> logs/runtime.log 2>&1 &
 }
  
 function stop() {
