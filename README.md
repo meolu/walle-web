@@ -69,8 +69,9 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/wechat-gzh.jpg" width="244" height="314" alt="公众号 walle-web" />
 
+
 打赏作者杯咖啡
 =========================
 你也不一定要赞赏，芸芸众生，相遇相识是一种缘份。不过可以给点个star，或者关注公众号，哈哈
 
-<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/appreciation-wechat.jpg" alt="赞赏码" />
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/appreciation-wechat.jpg" width="220" height="220" alt="赞赏码" />
