@@ -24,7 +24,7 @@ Preview
 
 Installation
 =========================
-[快速安装](https://walle-web.io/docs/2/installation.html)
+[快速安装](https://walle-web.io/docs/2/installation.html) | [安装错误](https://walle-web.io/docs/2/install-error.html) | [常见错误排解](https://walle-web.io/docs/2/troubleshooting.html)
 
 Roadmap
 =========================
