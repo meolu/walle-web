@@ -24,10 +24,10 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
 
 Roadmap
 =========================
-- **预览版**  2018-12-02
-    - 安装文档、前后端代码、`Data Migration`
-- **Alpha** 2018-12-09
-    - 使用文档、`Trouble Shooting`、公众号更新
+- [x] **预览版**  2018-12-02
+    - ~~安装文档、前后端代码、Data Migration~~
+- [x] **Alpha** 2018-12-09
+    - ~~使用文档、Trouble Shooting、公众号更新~~
 - **Beta** 2018-12-23 :santa:圣诞夜前夕
     - `1.x`迁移到`2.0`脚本
     - 接受官网logo企业的`Trouble Shooting`
