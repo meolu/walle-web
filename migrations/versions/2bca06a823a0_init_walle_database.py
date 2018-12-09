@@ -221,7 +221,7 @@ def init_users():
             (2,'Owner',1,'owner@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-03-20 19:05:44','2018-11-24 17:01:23'),
             (3,'Master',1,'master@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-04-13 15:03:57','2018-11-24 10:22:37'),
             (4,'Developer',1,'developer@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-05-11 22:33:35','2018-12-05 19:37:47'),
-            (5,'Report',1,'report@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-05-11 23:39:11','2018-11-23 07:40:55')"""
+            (5,'Reporter',1,'reporter@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-05-11 23:39:11','2018-11-23 07:40:55')"""
     db.session.execute(sql)
 
 
