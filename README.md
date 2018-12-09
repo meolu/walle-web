@@ -4,11 +4,11 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
-功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0`了！占用了我几乎所有业余时间，精力与金钱付出换各位使用收益，望各位喜欢顺手 `star` 以示支持，项目更好亦反馈予你。目前 `2.0` 预览版尚未达到完全企业可用状态，请保持关注，我会在公众号更新（在最下面）。  
+功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0`了！占用了我几乎所有业余时间，精力与金钱付出换各位使用收益，望各位喜欢不吝顺手 `star` 以示支持，项目更好亦反馈予你。目前 `2.0` 预览版尚未达到完全企业可用状态，请保持关注，我会在公众号更新（在最下面）。  
 <br>
 老版本已迁移到 [walle 1.x](https://github.com/meolu/walle-web-v1.x) 的同学**务必不要再更新了**，两个版本不兼容，到时我会写个迁移助手，淡定。
 
-特性
+Feature
 =========================
 - 类`gitlab`的`RESTful API`，类`gitlab`的权限模型，将来打通`gitlab`，良心的惊喜
 - 空间管理。意味着有独立的空间资源：环境管理、用户组、项目、服务器等
@@ -17,10 +17,14 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
 - 完善的通知机制。邮件、钉钉
 - 全新的UI，我自己都被震憾到了，如丝般流畅
 
-预览
+Preview
 =========================
 ![](https://raw.github.com/meolu/walle-web/master/screenshot/projects.png)
 ![](https://raw.github.com/meolu/walle-web/master/screenshot/deploy.png)
+
+Installation
+=========================
+[<kbd>快速安装</kbd>](https://walle-web.io/docs/2/installation.html)
 
 Roadmap
 =========================
