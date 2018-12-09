@@ -36,7 +36,7 @@ before_script:
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
 script:
   - echo "#script#"
-  - export FLASK_APP=autoapp.py
+  - export FLASK_APP=waller.py
   - python -m flask test
 notifications:
     on_success: never
