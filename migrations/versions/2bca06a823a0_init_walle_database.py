@@ -2,6 +2,8 @@
 #  -*- coding: utf-8 -*-
 """init walle database
 
+此刻是walle 2.0 alpha准备工作收尾阶段中, 但内心非常孤独, 大多用户让人心寒, 缺乏基本的感恩之心
+
 Revision ID: 2bca06a823a0
 Revises: 
 Create Date: 2018-12-08 21:01:19.273412
@@ -36,29 +38,34 @@ def upgrade():
 
 def create_environments():
     sql = u"""CREATE TABLE `environments` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT 'id',
-              `name` varchar(100) DEFAULT 'master' COMMENT '环境名称',
-              `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '空间id',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `name` varchar(100) DEFAULT 'master' COMMENT '',
+              `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '',
+              `status` tinyint(1) DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='项目环境配置表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def create_menus():
-    sql = u"""CREATE TABLE `members` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `user_id` int(10) DEFAULT '0' COMMENT '用户id',
-              `source_id` int(10) DEFAULT '0' COMMENT '归属资源id：space_id | project_id',
-              `source_type` varchar(10) DEFAULT '' COMMENT '归属资源类型：space | project',
-              `access_level` varchar(10) DEFAULT '10' COMMENT '权限值。10 => Guest access | 20 => Reporter access | 30 => Developer access | 40 => Master access | 50 => Owner access',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+    sql = u"""CREATE TABLE `menus` (
+              `id` int(15) NOT NULL AUTO_INCREMENT,
+              `name_cn` varchar(30) NOT NULL COMMENT '',
+              `name_en` varchar(30) NOT NULL COMMENT '',
+              `pid` int(6) NOT NULL COMMENT '',
+              `type` enum('action','controller','module') DEFAULT 'action' COMMENT '',
+              `sequence` int(11) DEFAULT '0' COMMENT '',
+              `role` varchar(10) NOT NULL DEFAULT '' COMMENT '',
+              `archive` tinyint(1) DEFAULT '0' COMMENT '',
+              `icon` varchar(30) DEFAULT '' COMMENT '',
+              `url` varchar(100) DEFAULT '' COMMENT '',
+              `visible` tinyint(1) DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='用户组关联表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -77,160 +84,172 @@ def init_menus():
 
 def create_projects():
     sql = u"""CREATE TABLE `projects` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `user_id` int(10) NOT NULL COMMENT '添加项目的用户id',
-              `name` varchar(100) DEFAULT 'master' COMMENT '项目名字',
-              `environment_id` int(1) NOT NULL COMMENT 'environment的id',
-              `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '空间id',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `master` varchar(100) NOT NULL DEFAULT '' COMMENT '项目管理员：用户id,用户id',
-              `version` varchar(40) DEFAULT '' COMMENT '线上当前版本，用于快速回滚',
-              `excludes` text COMMENT '要排除的文件',
-              `target_user` varchar(50) NOT NULL COMMENT '目标机器的登录用户',
-              `target_port` int(3) NOT NULL DEFAULT '22' COMMENT '目标机器的登录端口',
-              `target_root` varchar(200) NOT NULL COMMENT '目标机器的 server 目录',
-              `target_releases` varchar(200) NOT NULL COMMENT '目标机器的版本库',
-              `server_ids` text COMMENT '目标机器列表',
-              `task_vars` text COMMENT '高级环境变量',
-              `prev_deploy` text COMMENT '部署前置任务',
-              `post_deploy` text COMMENT '同步之前任务',
-              `prev_release` text COMMENT '同步之前目标机器执行的任务',
-              `post_release` text COMMENT '同步之后目标机器执行的任务',
-              `keep_version_num` int(3) NOT NULL DEFAULT '20' COMMENT '线上版本保留数',
-              `repo_url` varchar(200) DEFAULT '' COMMENT 'git地址',
-              `repo_username` varchar(50) DEFAULT '' COMMENT '版本管理系统的用户名，一般为svn的用户名',
-              `repo_password` varchar(50) DEFAULT '' COMMENT '版本管理系统的密码，一般为svn的密码',
-              `repo_mode` varchar(50) DEFAULT 'branch' COMMENT '上线方式：branch/tag',
-              `repo_type` varchar(10) DEFAULT 'git' COMMENT '上线方式：git/svn',
-              `notice_type` varchar(10) NOT NULL DEFAULT '' COMMENT '通知方式：sms 短信、dingding 钉钉、email 邮件',
-              `notice_hook` text NOT NULL COMMENT '通知地址：sms 手机号(英文分号分割)、dingding webhook、email 邮箱 地址(英文分号分割)',
-              `task_audit` tinyint(1) DEFAULT '0' COMMENT '是否开启审核：0 不开启，1 开启',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `user_id` int(10) NOT NULL COMMENT '',
+              `name` varchar(100) DEFAULT 'master' COMMENT '',
+              `environment_id` int(1) NOT NULL COMMENT '',
+              `space_id` int(10) NOT NULL DEFAULT '0' COMMENT '',
+              `status` tinyint(1) DEFAULT '1' COMMENT '',
+              `master` varchar(100) NOT NULL DEFAULT '' COMMENT '',
+              `version` varchar(40) DEFAULT '' COMMENT '',
+              `excludes` text COMMENT '',
+              `target_user` varchar(50) NOT NULL COMMENT '',
+              `target_port` int(3) NOT NULL DEFAULT '22' COMMENT '',
+              `target_root` varchar(200) NOT NULL COMMENT '',
+              `target_releases` varchar(200) NOT NULL COMMENT '',
+              `server_ids` text COMMENT '',
+              `task_vars` text COMMENT '',
+              `prev_deploy` text COMMENT '',
+              `post_deploy` text COMMENT '',
+              `prev_release` text COMMENT '',
+              `post_release` text COMMENT '',
+              `keep_version_num` int(3) NOT NULL DEFAULT '20' COMMENT '',
+              `repo_url` varchar(200) DEFAULT '' COMMENT '',
+              `repo_username` varchar(50) DEFAULT '' COMMENT '',
+              `repo_password` varchar(50) DEFAULT '' COMMENT '',
+              `repo_mode` varchar(50) DEFAULT 'branch' COMMENT '',
+              `repo_type` varchar(10) DEFAULT 'git' COMMENT '',
+              `notice_type` varchar(10) NOT NULL DEFAULT '' COMMENT '',
+              `notice_hook` text NOT NULL COMMENT '',
+              `task_audit` tinyint(1) DEFAULT '0' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='项目配置表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def create_records():
     sql = u"""CREATE TABLE `records` (
-              `id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `stage` varchar(20) DEFAULT NULL COMMENT '阶段',
-              `sequence` int(10) DEFAULT NULL COMMENT '序列号',
-              `user_id` int(21) unsigned NOT NULL COMMENT '用户id',
-              `task_id` bigint(11) NOT NULL COMMENT 'Task id',
-              `status` int(3) NOT NULL COMMENT '状态0：新建提交，1审核通过，2审核拒绝，3上线完成，4上线失败',
-              `host` varchar(200) DEFAULT '' COMMENT '命令执行所在机器',
-              `user` varchar(200) DEFAULT '' COMMENT '命令执行所在机器的登录用户',
-              `command` text COMMENT '命令与参数',
-              `success` text COMMENT '成功返回信息',
-              `error` text COMMENT '错误信息',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `stage` varchar(20) DEFAULT NULL COMMENT '',
+              `sequence` int(10) DEFAULT NULL COMMENT '',
+              `user_id` int(21) unsigned NOT NULL COMMENT '',
+              `task_id` bigint(11) NOT NULL COMMENT '',
+              `status` int(3) NOT NULL COMMENT '',
+              `host` varchar(200) DEFAULT '' COMMENT '',
+              `user` varchar(200) DEFAULT '' COMMENT '',
+              `command` text COMMENT '',
+              `success` text COMMENT '',
+              `error` text COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2714 DEFAULT CHARSET=utf8 COMMENT='任务执行记录表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def create_servers():
     sql = u"""CREATE TABLE `servers` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `name` varchar(100) DEFAULT '' COMMENT 'server name',
-              `host` varchar(100) NOT NULL COMMENT 'ip/host',
-              `port` int(1) DEFAULT '22' COMMENT 'ssh port',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `name` varchar(100) DEFAULT '' COMMENT '',
+              `host` varchar(100) NOT NULL COMMENT '',
+              `port` int(1) DEFAULT '22' COMMENT '',
+              `status` tinyint(1) DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='服务器记录表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def create_spaces():
     sql = u"""CREATE TABLE `spaces` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `user_id` int(10) NOT NULL COMMENT '空间所有者uid',
-              `name` varchar(100) NOT NULL COMMENT '空间名字',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `user_id` int(10) NOT NULL COMMENT '',
+              `name` varchar(100) NOT NULL COMMENT '',
+              `status` tinyint(1) DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='空间配置表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def init_spaces():
-    pass
+    sql = u"""INSERT INTO `spaces` VALUES
+            (1,2,'demo',1,'2018-09-17 22:09:37','2018-11-18 00:09:58');"""
+    db.session.execute(sql)
 
 
 def create_tasks():
     sql = u"""CREATE TABLE `tasks` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `name` varchar(100) NOT NULL COMMENT '上线单标题',
-              `user_id` bigint(21) unsigned NOT NULL COMMENT '用户id',
-              `project_id` int(11) NOT NULL COMMENT '项目id',
-              `action` int(1) DEFAULT '0' COMMENT '0全新上线，2回滚',
-              `status` tinyint(1) NOT NULL COMMENT '# 状态：0新建提交，1审核通过，2审核拒绝，3上线中，4上线完成，5上线失败',
-              `link_id` varchar(100) DEFAULT '' COMMENT '上线的软链号',
-              `ex_link_id` varchar(100) DEFAULT '' COMMENT '被替换的上次上线的软链号',
-              `servers` text COMMENT '上线的机器',
-              `commit_id` varchar(40) DEFAULT '' COMMENT 'git commit id',
-              `branch` varchar(100) DEFAULT 'master' COMMENT '选择上线的分支',
-              `tag` varchar(100) DEFAULT '' COMMENT '选择上线的tag',
-              `file_transmission_mode` smallint(3) NOT NULL DEFAULT '1' COMMENT '上线文件模式: 1.全量所有文件 2.指定文件列表',
-              `file_list` text COMMENT '文件列表，svn上线方式可能会产生',
-              `enable_rollback` int(1) NOT NULL DEFAULT '1' COMMENT '能否回滚此版本0：no 1：yes',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `name` varchar(100) NOT NULL COMMENT '',
+              `user_id` bigint(21) unsigned NOT NULL COMMENT '',
+              `project_id` int(11) NOT NULL COMMENT '',
+              `action` int(1) DEFAULT '0' COMMENT '',
+              `status` tinyint(1) NOT NULL COMMENT '',
+              `link_id` varchar(100) DEFAULT '' COMMENT '',
+              `ex_link_id` varchar(100) DEFAULT '' COMMENT '',
+              `servers` text COMMENT '',
+              `commit_id` varchar(40) DEFAULT '' COMMENT '',
+              `branch` varchar(100) DEFAULT 'master' COMMENT '',
+              `tag` varchar(100) DEFAULT '' COMMENT '',
+              `file_transmission_mode` smallint(3) NOT NULL DEFAULT '1' COMMENT '',
+              `file_list` text COMMENT '',
+              `enable_rollback` int(1) NOT NULL DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='上线单记录表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def create_users():
     sql = u"""CREATE TABLE `users` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
-              `username` varchar(50) NOT NULL COMMENT '用户昵称',
-              `is_email_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否邮箱认证',
-              `email` varchar(50) NOT NULL COMMENT '邮箱',
-              `password` varchar(100) NOT NULL COMMENT '密码',
-              `password_hash` varchar(50) DEFAULT NULL COMMENT 'hash',
-              `avatar` varchar(100) DEFAULT 'default.jpg' COMMENT '头像图片地址',
-              `role` varchar(10) NOT NULL DEFAULT '' COMMENT '角色',
-              `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态: 0新建，1正常，2冻结',
+              `username` varchar(50) NOT NULL COMMENT '',
+              `is_email_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '',
+              `email` varchar(50) NOT NULL COMMENT '',
+              `password` varchar(100) NOT NULL COMMENT '',
+              `password_hash` varchar(50) DEFAULT NULL COMMENT '',
+              `avatar` varchar(100) DEFAULT 'default.jpg' COMMENT '',
+              `role` varchar(10) NOT NULL DEFAULT '' COMMENT '',
+              `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '',
               `last_space` int(11) NOT NULL DEFAULT '0',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def init_users():
-    pass
+    sql = u"""INSERT INTO `users` VALUES
+            (1,'Super',1,'super@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','SUPER',1,0,'2017-03-17 09:03:09','2018-11-24 17:01:23'),
+            (2,'Owner',1,'owner@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-03-20 19:05:44','2018-11-24 17:01:23'),
+            (3,'Master',1,'master@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-04-13 15:03:57','2018-11-24 10:22:37'),
+            (4,'Developer',1,'developer@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-05-11 22:33:35','2018-12-05 19:37:47'),
+            (5,'Report',1,'report@walle-web.io','pbkdf2:sha256:50000$AyRSJVSn$448c69b93158b30b9e3625d340b48dbdbce1186fcf30fc72663a9361ffec339b','','','',1,1,'2017-05-11 23:39:11','2018-11-23 07:40:55')"""
+    db.session.execute(sql)
 
 
 def create_members():
     sql = u"""CREATE TABLE `members` (
-              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-              `user_id` int(10) DEFAULT '0' COMMENT '用户id',
-              `source_id` int(10) DEFAULT '0' COMMENT '归属资源id：space_id | project_id',
-              `source_type` varchar(10) DEFAULT '' COMMENT '归属资源类型：space | project',
-              `access_level` varchar(10) DEFAULT '10' COMMENT '权限值。10 => Guest access | 20 => Reporter access | 30 => Developer access | 40 => Master access | 50 => Owner access',
-              `status` tinyint(1) DEFAULT '1' COMMENT '状态：0无效，1有效',
-              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+              `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '',
+              `user_id` int(10) DEFAULT '0' COMMENT '',
+              `source_id` int(10) DEFAULT '0' COMMENT '',
+              `source_type` varchar(10) DEFAULT '' COMMENT '',
+              `access_level` varchar(10) DEFAULT '10' COMMENT '',
+              `status` tinyint(1) DEFAULT '1' COMMENT '',
+              `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
+              `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8 COMMENT='用户组关联表';"""
+            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
 def init_members():
-    pass
+    sql = u"""INSERT INTO `members` VALUES
+            (16,2,1,'group','OWNER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (17,3,1,'group','MASTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (18,4,1,'group','DEVELOPER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (19,5,1,'group','REPORTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59');"""
+    db.session.execute(sql)
 
 
 def downgrade():
-    # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('members')
     op.drop_table('users')
     op.drop_table('tasks')
@@ -240,4 +259,3 @@ def downgrade():
     op.drop_table('projects')
     op.drop_table('menus')
     op.drop_table('environments')
-    # ### end Alembic commands ###
