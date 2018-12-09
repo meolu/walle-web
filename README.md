@@ -1,6 +1,6 @@
 ![](https://raw.github.com/meolu/walle-web/master/screenshot/logo.jpg)
 
-Walle 2.0 - [官方主页](https://www.walle-web.io) 
+Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
 
@@ -24,9 +24,9 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
 
 Roadmap
 =========================
-- **预览版**  2018-12-02 
+- **预览版**  2018-12-02
     - 安装文档、前后端代码、`Data Migration`
-- **Alpha** 2018-12-09 
+- **Alpha** 2018-12-09
     - 使用文档、`Trouble Shooting`、公众号更新
 - **Beta** 2018-12-23 :santa:圣诞夜前夕
     - `1.x`迁移到`2.0`脚本
@@ -69,3 +69,8 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/wechat-gzh.jpg" width="244" height="314" alt="公众号 walle-web" />
 
+打赏作者杯咖啡
+=========================
+你也不一定要赞赏，芸芸众生，相遇相识是一种缘份。不过可以给点个star，或者关注公众号，哈哈
+
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/appreciation-wechat.jpg" alt="赞赏码" />
