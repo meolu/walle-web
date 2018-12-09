@@ -24,7 +24,7 @@ Preview
 
 Installation
 =========================
-[<kbd>快速安装</kbd>](https://walle-web.io/docs/2/installation.html)
+[快速安装](https://walle-web.io/docs/2/installation.html)
 
 Roadmap
 =========================
