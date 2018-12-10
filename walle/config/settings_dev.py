@@ -1,23 +1,35 @@
 # -*- coding: utf-8 -*-
-"""Application configuration."""
+"""
+    walle-web
+    Application configuration.
+    注意: 带了 @TODO 的地方可能需要你的调整
+
+    :copyright: © 2015-2019 walle-web.io
+    :created time: 2018-11-24 07:05:35
+    :author: wushuiyong@walle-web.io
+"""
+from datetime import timedelta
+
 import os
 from walle.config.settings import Config
-from datetime import timedelta
+
 
 class DevConfig(Config):
     """Development configuration."""
 
+    # 服务启动 @TODO
+    # 跟hosts, nginx配置一致
     HOST = 'dev.admin.walle-web.io'
     PORT = 5000
-    # SERVER_NAME = 'dev.admin.walle-web.io:5000'
+
     ENV = 'dev'
     DEBUG = True
-    # Put the db file in project root
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle_python'
     DEBUG_TB_ENABLED = True
-    ASSETS_DEBUG = True  # Don't bundle/minify static assets
-    CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
+    CACHE_TYPE = 'simple'
+
+    # 数据库配置 @TODO
+    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost/walle_python'
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
 
     # 前端项目部署路径
@@ -25,7 +37,7 @@ class DevConfig(Config):
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
 
-    #email config
+    # 邮箱配置 @TODO
     MAIL_SERVER = 'smtp.exmail.qq.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
@@ -43,7 +55,6 @@ class DevConfig(Config):
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
-
 
     LOCAL_SERVER_HOST = '127.0.0.1'
     LOCAL_SERVER_USER = 'wushuiyong'

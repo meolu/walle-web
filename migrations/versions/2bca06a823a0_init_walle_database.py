@@ -168,7 +168,7 @@ def create_spaces():
 
 def init_spaces():
     sql = u"""INSERT INTO `spaces` VALUES
-            (1,2,'demo',1,'2018-09-17 22:09:37','2018-11-18 00:09:58');"""
+            (1,2,'Demo空间',1,'2018-09-17 22:09:37','2018-11-18 00:09:58');"""
     db.session.execute(sql)
 
 

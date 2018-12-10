@@ -1,33 +1,41 @@
 # -*- coding: utf-8 -*-
-"""Application configuration."""
+"""
+    walle-web
+    Application configuration.
+    注意: 带了 @TODO 的地方可能需要你的调整
+
+    :copyright: © 2015-2019 walle-web.io
+    :created time: 2018-11-24 07:05:35
+    :author: wushuiyong@walle-web.io
+"""
 import os
 from walle.config.settings import Config
+from datetime import timedelta
 
 class TestConfig(Config):
     """Test configuration."""
 
+    # 服务启动 @TODO
+    # 跟hosts, nginx配置一致
     HOST = 'admin.walle-web.io'
     PORT = 5000
-    TESTING = True
+
     ENV = 'test'
     DEBUG = True
-    DB_NAME = 'walle_python'
-    # Put the db file in project root
-    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
-    SQLALCHEMY_DATABASE_URI = 'sqlite://'
-    BCRYPT_LOG_ROUNDS = 4  # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
-    WTF_CSRF_ENABLED = False  # Allows form testing
+    WTF_CSRF_ENABLED = False
     DEBUG_TB_ENABLED = True
-    ASSETS_DEBUG = True  # Don't bundle/minify static assets
-    CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
+    CACHE_TYPE = 'simple'
+
+    # 数据库配置 @TODO
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
 
     # 前端项目部署路径
     FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/')
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
 
-    #email config
+    # 邮箱配置 @TODO
     MAIL_SERVER = 'smtp.exmail.qq.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
@@ -41,9 +49,11 @@ class TestConfig(Config):
     LOG_PATH_INFO = os.path.join(LOG_PATH, 'info.log')
     LOG_PATH_DEBUG = os.path.join(LOG_PATH, 'debug.log')
     LOG_FILE_MAX_BYTES = 100 * 1024 * 1024
+
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
+
 
     LOCAL_SERVER_HOST = '127.0.0.1'
     LOCAL_SERVER_USER = 'wushuiyong'
