@@ -14,7 +14,7 @@ from walle.config.settings import Config
 
 
 class ProdConfig(Config):
-    """Development configuration."""
+    """Production configuration."""
 
     HOST = 'admin.walle-web.io'
     PORT = 5000
@@ -26,7 +26,7 @@ class ProdConfig(Config):
     CACHE_TYPE = 'simple'
 
     # 数据库设置
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle'
+    SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{password}@localhost/walle'
 
     # 设置session的保存时间。
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
@@ -45,6 +45,7 @@ class ProdConfig(Config):
     MAIL_USERNAME = 'service@walle-web.io'
     MAIL_PASSWORD = 'Ki9y&3U82'
 
+    # 日志
     LOG_PATH = os.path.join(Config.PROJECT_ROOT, 'logs')
     LOG_PATH_ERROR = os.path.join(LOG_PATH, 'error.log')
     LOG_PATH_INFO = os.path.join(LOG_PATH, 'info.log')
@@ -55,6 +56,7 @@ class ProdConfig(Config):
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
 
+    # 宿主机（walle部署所在的机器以及用户）
     LOCAL_SERVER_HOST = '127.0.0.1'
     LOCAL_SERVER_USER = 'work'
     LOCAL_SERVER_PORT = 22
