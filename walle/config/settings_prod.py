@@ -21,12 +21,13 @@ class ProdConfig(Config):
     ENV = 'prod'
     DEBUG = False
     PROPAGATE_EXCEPTIONS = True
-    # Put the db file in project root
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle'
     DEBUG_TB_ENABLED = False
-    ASSETS_DEBUG = True  # Don't bundle/minify static assets
-    CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
+    CACHE_TYPE = 'simple'
+
+    # 数据库设置
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle'
+
     # 设置session的保存时间。
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
 
@@ -35,7 +36,7 @@ class ProdConfig(Config):
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
 
-    # email config
+    # 邮箱配置
     MAIL_SERVER = 'smtp.exmail.qq.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
