@@ -21,6 +21,7 @@ class TestConfig(Config):
     PORT = 5000
 
     ENV = 'test'
+    TESTING = True
     DEBUG = True
     WTF_CSRF_ENABLED = False
     DEBUG_TB_ENABLED = True
