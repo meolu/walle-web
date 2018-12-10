@@ -32,8 +32,8 @@ class ApiResource(Resource):
 
     @staticmethod
     def json(code=0, message=None, data=[]):
-        if code not in Code.code_msg:
-            current_app.logger.error('unkown code %s' % (code))
+        if code and code not in Code.code_msg:
+            current_app.logger.error('unknown code %s' % (code))
 
         if code in Code.code_msg and not message:
             message = Code.code_msg[code]

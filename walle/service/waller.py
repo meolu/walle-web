@@ -76,12 +76,12 @@ class Waller(Connection):
                                       task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
                                       command=command, success='', error=error)
             if hasattr(e, 'reason') and hasattr(e, 'result'):
-                message = 'task_id=%s, host:%s command:%s, status=1, reason:%s, result:%s exception:%s' % (
-                    wenv['task_id'], self.host, command, e.reason, error, e.message
+                message = 'task_id=%s, user:%s host:%s command:%s, status=1, reason:%s, result:%s exception:%s' % (
+                    wenv['task_id'], self.user, self.host, command, e.reason, error, e.message
                 )
             else:
-                message = 'task_id=%s, host:%s command:%s, status=1, message:%s' % (
-                    wenv['task_id'], self.host, command, e.message
+                message = 'task_id=%s, user:%s host:%s command:%s, status=1, message:%s' % (
+                    wenv['task_id'], self.user, self.host, command, e.message
                 )
 
             # TODO

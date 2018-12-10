@@ -14,6 +14,8 @@ function start() {
     source ./venv/bin/activate
     mkdir -p logs
     nohup python $APP >> logs/runtime.log 2>&1 &
+    echo -e "runtime: \033[32m logs/runtime.log \033[0m"
+    echo -e "error: \033[32m logs/error.log \033[0m"
 }
  
 function stop() {
@@ -31,7 +33,21 @@ function restart() {
     stop
     start
 }
- 
+
+function upgrade() {
+    echo "upgrade walle"
+    echo "----------------"
+    cd `dirname $0`
+    git pull
+}
+
+function migration() {
+    echo "migration walle"
+    echo "----------------"
+    export FLASK_APP=waller.py
+    flask db upgrade
+}
+
 case "$1" in
     start )
         echo "****************"
@@ -46,6 +62,17 @@ case "$1" in
     restart )
         echo "****************"
         restart
+        echo "****************"
+        ;;
+    upgrade )
+        echo "****************"
+        upgrade
+        migration
+        echo "****************"
+        ;;
+    migration )
+        echo "****************"
+        migration
         echo "****************"
         ;;
     * )
