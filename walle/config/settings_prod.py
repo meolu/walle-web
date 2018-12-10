@@ -18,15 +18,12 @@ class ProdConfig(Config):
 
     HOST = 'admin.walle-web.io'
     PORT = 5000
-    # SERVER_NAME = 'dev.admin.walle-web.io:5000'
     ENV = 'prod'
     DEBUG = False
     PROPAGATE_EXCEPTIONS = True
-    DB_NAME = 'walle_python'
     # Put the db file in project root
     WTF_CSRF_ENABLED = False
-    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle_python'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle'
     DEBUG_TB_ENABLED = False
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
