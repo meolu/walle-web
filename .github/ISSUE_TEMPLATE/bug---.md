@@ -1,5 +1,5 @@
 ---
-name: Bug 报告
+name: Bug-报告
 about: 更详细的描述更利用问题解决
 title: BUG
 labels: bug
