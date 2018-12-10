@@ -16,7 +16,8 @@ function init() {
         exit 1
     fi
     pip install virtualenv
-    virtualenv venv
+    rm -rf venv
+    virtualenv --no-site-packages venv # 注意:安装失败请指定python路径. mac 可能会有用anaconda的python
     source ./venv/bin/activate
     pip install -r ./requirements/prod.txt
     echo "****************"
@@ -30,7 +31,7 @@ function start() {
     source ./venv/bin/activate
     mkdir -p logs
     nohup python $APP >> logs/runtime.log 2>&1 &
-    echo -e "Starting walle:                 [\033[32m walle  \033[0m]"
+    echo -e "Starting walle:                 [\033[32m ok \033[0m]"
     echo -e "runtime: \033[32m logs/runtime.log \033[0m"
     echo -e "error: \033[32m logs/error.log \033[0m"
 }
