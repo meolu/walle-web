@@ -12,16 +12,13 @@ class DevConfig(Config):
     # SERVER_NAME = 'dev.admin.walle-web.io:5000'
     ENV = 'dev'
     DEBUG = True
-    DB_NAME = 'walle_python'
     # Put the db file in project root
     WTF_CSRF_ENABLED = False
-    DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:whoiam@localhost/walle_python'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/walle_python'
     DEBUG_TB_ENABLED = True
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
-    PERMANENT_SESSION_LIFETIME = timedelta(days=1) #设置session的保存时间。
+    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
 
     # 前端项目部署路径
     FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/')
@@ -42,6 +39,7 @@ class DevConfig(Config):
     LOG_PATH_INFO = os.path.join(LOG_PATH, 'info.log')
     LOG_PATH_DEBUG = os.path.join(LOG_PATH, 'debug.log')
     LOG_FILE_MAX_BYTES = 100 * 1024 * 1024
+
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"

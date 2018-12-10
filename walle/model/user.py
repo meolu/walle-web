@@ -76,9 +76,10 @@ class UserModel(UserMixin, SurrogatePK, Model):
     def update_name_pwd(self, username, password=None):
         # todo permission_ids need to be formated and checked
         user = self.query.filter_by(id=self.id).first()
-        user.username = username
+        if username:
+            user.username = username
         if password:
-            self.set_password(password)
+            user.password = self.get_password(password)
 
         db.session.commit()
         return user.to_json()
@@ -111,9 +112,9 @@ class UserModel(UserMixin, SurrogatePK, Model):
             return False
         return check_password_hash(self.password, password)
 
-    def set_password(self, password):
+    def get_password(self, password):
         """Set password."""
-        self.password = generate_password_hash(password)
+        return generate_password_hash(password)
 
     def general_password(self, password):
         """

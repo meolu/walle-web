@@ -49,7 +49,7 @@ class RegistrationForm(UserForm):
 
 class UserUpdateForm(Form):
     password = PasswordField('Password', [])
-    username = TextField('username', [validators.Length(min=1, max=50)])
+    username = TextField('username', [])
     def validate_password(self, field):
         if field.data and not re.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}", field.data):
             raise ValidationError('密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')
