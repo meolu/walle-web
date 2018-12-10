@@ -17,8 +17,11 @@ function init() {
     fi
     pip install virtualenv
     virtualenv venv
-    source venv/bin/activate
-    pip install -r requirements/prod.txt
+    source ./venv/bin/activate
+    pip install -r ./requirements/prod.txt
+    echo "****************"
+    echo -e "\033[32m init walle success \033[0m"
+    echo -e "\033[32m welcome to walle 2.0 \033[0m"
 }
 
 function start() {
@@ -27,6 +30,7 @@ function start() {
     source ./venv/bin/activate
     mkdir -p logs
     nohup python $APP >> logs/runtime.log 2>&1 &
+    echo -e "Starting walle:                 [\033[32m walle  \033[0m]"
     echo -e "runtime: \033[32m logs/runtime.log \033[0m"
     echo -e "error: \033[32m logs/error.log \033[0m"
 }
@@ -96,7 +100,7 @@ case "$1" in
         ;;
     * )
         echo "****************"
-        echo "no command"
+        echo "Usage: sh admin {init|start|stop|restart|upgrade|migration}"
         echo "****************"
         ;;
 esac
