@@ -7,7 +7,20 @@
 #!/bin/bash
 
 APP="waller.py"
- 
+
+function init() {
+    echo "init walle"
+    echo "----------------"
+    which pip
+    if [ $? != "0" ]; then
+        exit 1
+    fi
+    pip install virtualenv
+    virtualenv venv
+    source venv/bin/activate
+    pip install -r requirements/prod.txt
+}
+
 function start() {
     echo "start walle"
     echo "----------------"
@@ -44,11 +57,17 @@ function upgrade() {
 function migration() {
     echo "migration walle"
     echo "----------------"
+    source venv/bin/activate
     export FLASK_APP=waller.py
     flask db upgrade
 }
 
 case "$1" in
+    init )
+        echo "****************"
+        init
+        echo "****************"
+        ;;
     start )
         echo "****************"
         start
