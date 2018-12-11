@@ -52,7 +52,12 @@ class ProjectForm(Form):
         self.id = id
 
     def validate_name(self, field):
-        server = ProjectModel.query.filter_by(name=field.data).first()
+        filters = {
+            ProjectModel.status.notin_([ProjectModel.status_remove]),
+            ProjectModel.name == field.data,
+            ProjectModel.space_id == current_user.space_id(),
+        }
+        server = ProjectModel.query.filter(*filters).first()
         # 新建时,项目名不可与
         if server and server.id != self.id:
             raise ValidationError('该项目已重名')
@@ -62,10 +67,10 @@ class ProjectForm(Form):
             'name': self.name.data if self.name.data else '',
             'user_id': current_user.id,
 
-            'status': self.status.data if self.status.data else 0,
+            'status': self.status.data if self.status.data else 1,
             'master': self.master.data if self.master.data else '',
             'environment_id': self.environment_id.data if self.environment_id.data else '',
-            'space_id': self.space_id.data if self.space_id.data else '',
+            'space_id': self.space_id.data if self.space_id.data else current_user.space_id(),
             'excludes': self.excludes.data if self.excludes.data else '',
             'server_ids': self.server_ids.data if self.server_ids.data else '',
             'keep_version_num': self.keep_version_num.data if self.keep_version_num.data else 5,

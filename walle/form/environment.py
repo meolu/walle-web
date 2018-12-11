@@ -14,7 +14,7 @@ from flask_wtf import Form
 from walle.model.environment import EnvironmentModel
 from wtforms import TextField
 from wtforms import validators, ValidationError
-
+from flask_login import current_user
 
 class EnvironmentForm(Form):
     env_name = TextField('env_name', [validators.Length(min=1, max=100)])
@@ -25,7 +25,12 @@ class EnvironmentForm(Form):
         self.env_id = env_id
 
     def validate_env_name(self, field):
-        env = EnvironmentModel.query.filter_by(name=field.data).first()
+        filters = {
+            EnvironmentModel.status.notin_([EnvironmentModel.status_remove]),
+            EnvironmentModel.name == field.data,
+            EnvironmentModel.space_id == current_user.space_id(),
+        }
+        env = EnvironmentModel.query.filter(*filters).first()
         # 新建时,环境名不可与
         if env and env.id != self.env_id:
             raise ValidationError('该环境已经配置过')

@@ -27,7 +27,11 @@ class SpaceForm(Form):
         self.id = id
 
     def validate_name(self, field):
-        space = SpaceModel.query.filter_by(name=field.data).first()
+        filters = {
+            SpaceModel.status.notin_([SpaceModel.status_remove]),
+            SpaceModel.name == field.data
+        }
+        space = SpaceModel.query.filter(*filters).first()
         # 新建时,环境名不可与
         if space and space.id != self.id:
             raise ValidationError('该Space已重名')

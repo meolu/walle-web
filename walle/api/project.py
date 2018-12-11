@@ -78,9 +78,11 @@ class ProjectAPI(SecurityResource):
 
         form = ProjectForm(request.form, csrf_enabled=False)
         if form.validate_on_submit():
+            # add project
             project_new = ProjectModel()
             data = form.form2dict()
             id = project_new.add(data)
+            # TODO
             if not id:
                 return self.render_json(code=-1)
 
