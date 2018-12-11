@@ -25,3 +25,5 @@ class Config(object):
     LOCAL_SERVER_HOST = '127.0.0.1'
     LOCAL_SERVER_USER = 'wushuiyong'
     LOCAL_SERVER_PORT = 22
+
+    CODE_BASE = '/tmp/walle/codebase/'

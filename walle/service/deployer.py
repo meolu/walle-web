@@ -43,9 +43,10 @@ class Deployer:
 
     console = False
 
+    local_codebase = current_app.config.get('CODE_BASE')
+
     version = datetime.now().strftime('%Y%m%d%H%M%s')
     project_name = None
-    dir_codebase = '/tmp/walle/codebase/'
     dir_codebase_project = ''
 
     dir_release = None
@@ -76,7 +77,7 @@ class Deployer:
             self.project_info = ProjectModel(id=project_id).item()
 
         self.project_name = self.project_info['id']
-        self.dir_codebase_project = self.dir_codebase + str(self.project_name)
+        self.dir_codebase_project = self.local_codebase + str(self.project_name)
 
         # start to deploy
         self.console = console
@@ -172,7 +173,7 @@ class Deployer:
             result = self.local.run(command, wenv=self.config())
 
         # 更新到指定 commit_id
-        with self.local.cd(self.dir_codebase + self.release_version):
+        with self.local.cd(self.local_codebase + self.release_version):
             command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
             result = self.local.run(command, wenv=self.config())
 
@@ -197,7 +198,7 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['post_deploy']
-        with self.local.cd(self.dir_codebase + self.release_version):
+        with self.local.cd(self.local_codebase + self.release_version):
             result = self.local.run(command, wenv=self.config())
 
         # 压缩打包
