@@ -25,11 +25,16 @@ class Code():
     #: 无此空间权限
     space_error = 1004
 
-    #: 2xxx 表示参数错误
+    #: 用户不存在
+    user_not_in_space = 1005
+
+    #: 2xxx 前端相关错误
+    #: 参数错误
     params_error = 2000
 
-    #: 用户不存在
-    user_not_in_space = 2001
+    #: 表单错误
+    form_error = 2001
+
 
     code_msg = {
         unlogin: '未登录',
@@ -39,4 +44,5 @@ class Code():
         space_empty: '尚未开通空间，请联系空间负责人加入空间',
         space_error: '无此空间权限',
         user_not_in_space: '用户不存在此空间，请联系空间所有人添加此用户到用户组',
+        form_error: '表单错误',
     }

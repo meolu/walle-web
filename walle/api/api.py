@@ -16,6 +16,7 @@ from flask import current_app, session
 from flask_login import current_user
 from walle.service.rbac.role import *
 
+
 class ApiResource(Resource):
     module = None
     controller = None
@@ -29,6 +30,19 @@ class ApiResource(Resource):
     @staticmethod
     def render_json(code=0, message='', data=[]):
         return ApiResource.json(code=code, message=message, data=data)
+
+    @staticmethod
+    def render_error(code=0, message='', data=[]):
+        if code == Code.form_error:
+            msg = ''
+            for err_key in message:
+                current_app.logger.info(err_key)
+                current_app.logger.info('.'.join(message[err_key]))
+                msg = msg + "%s: %s。 " % (err_key, '.'.join(message[err_key]))
+            message = msg
+
+        return ApiResource.json(code=code, message=message, data=data)
+
 
     @staticmethod
     def json(code=0, message=None, data=[]):

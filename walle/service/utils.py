@@ -33,6 +33,8 @@ if PY2:
     string_types = (str, unicode)  # noqa
     unicode = unicode  # noqa
     basestring = basestring  # noqa
+    reload(sys)
+    sys.setdefaultencoding('utf8')
 else:
     text_type = str
     binary_type = bytes

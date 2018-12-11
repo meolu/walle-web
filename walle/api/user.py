@@ -97,7 +97,7 @@ class UserAPI(SecurityResource):
             emails.send_email(user.email, 'Welcome to walle', message, '')
 
             return self.render_json(data=user.item(user_id=user.id))
-        return self.render_json(code=-1, message=form.errors)
+        return self.render_error(code=Code.form_error, message=form.errors)
 
     def put(self, user_id, action=None):
         """
@@ -121,7 +121,7 @@ class UserAPI(SecurityResource):
             user.update_name_pwd(username=form.username.data, password=form.password.data)
             return self.render_json(data=user.item())
 
-        return self.render_json(code=-1, message=form.errors)
+        return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, user_id):
         """

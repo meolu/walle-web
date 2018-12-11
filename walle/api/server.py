@@ -75,7 +75,7 @@ class ServerAPI(SecurityResource):
 
             return self.render_json(data=server_new.item(id))
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_json(Code.form_error, message=form.errors)
 
     def put(self, id):
         """
@@ -94,7 +94,7 @@ class ServerAPI(SecurityResource):
             ret = server.update(name=form.name.data, host=form.host.data)
             return self.render_json(data=server.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, id):
         """

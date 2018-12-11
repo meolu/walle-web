@@ -87,7 +87,7 @@ class EnvironmentAPI(SecurityResource):
                 return self.render_json(code=-1)
             return self.render_json(data=env_new.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def put(self, env_id):
         """
@@ -105,7 +105,7 @@ class EnvironmentAPI(SecurityResource):
             ret = env.update(env_name=form.env_name.data, status=form.status.data)
             return self.render_json(data=env.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, env_id):
         """

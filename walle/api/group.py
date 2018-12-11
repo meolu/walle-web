@@ -9,7 +9,7 @@
 """
 import json
 
-from flask import request
+from flask import request, current_app
 from walle.api.api import SecurityResource
 from walle.form.group import GroupForm
 from walle.model.member import MemberModel
@@ -101,7 +101,7 @@ class GroupAPI(SecurityResource):
 
             return self.render_json(data=group_model.item())
 
-        return self.render_json(code=-1, message=form.errors)
+        return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, group_id):
         """

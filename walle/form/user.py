@@ -21,7 +21,7 @@ import re
 from werkzeug.security import generate_password_hash
 
 class UserForm(FlaskForm):
-    email = TextField('Email Address', [validators.email()])
+    email = TextField('email', [validators.email()])
     password = PasswordField('Password', [validators.Length(min=6, max=35),
                                           validators.Regexp(regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}",
                               message='密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')])
@@ -56,6 +56,6 @@ class UserUpdateForm(Form):
 
 
 class LoginForm(Form):
-    email = TextField('Email Address', [validators.Length(min=6, max=35),
+    email = TextField('email', [validators.Length(min=6, max=35),
                                         Regexp(r'^(.+)@(.+)\.(.+)', message='邮箱格式不正确')])
     password = PasswordField('Password', [validators.Length(min=6, max=35)])

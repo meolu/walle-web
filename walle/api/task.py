@@ -75,7 +75,7 @@ class TaskAPI(SecurityResource):
 
             return self.render_json(data=task_new.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def put(self, task_id, action=None):
         """
@@ -104,7 +104,7 @@ class TaskAPI(SecurityResource):
             ret = task.update(data)
             return self.render_json(data=task.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, task_id):
         """

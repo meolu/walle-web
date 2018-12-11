@@ -88,7 +88,7 @@ class ProjectAPI(SecurityResource):
 
             return self.render_json(data=project_new.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def put(self, project_id, action=None):
         """
@@ -111,7 +111,7 @@ class ProjectAPI(SecurityResource):
             ret = server.update(data)
             return self.render_json(data=server.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, project_id):
         """

@@ -96,7 +96,7 @@ class SpaceAPI(SecurityResource):
             MemberModel(group_id=id).update_group(members=members)
             return self.render_json(data=space_new.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def put(self, space_id, action=None):
         """
@@ -130,7 +130,7 @@ class SpaceAPI(SecurityResource):
                 MemberModel(group_id=space_id).update_group(members=json.loads(request.form['members']))
             return self.render_json(data=space.item())
         else:
-            return self.render_json(code=-1, message=form.errors)
+            return self.render_error(code=Code.form_error, message=form.errors)
 
     def delete(self, space_id):
         """
