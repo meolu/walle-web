@@ -24,6 +24,7 @@ from walle.service.rbac.role import *
 class SpaceAPI(SecurityResource):
     actions = ['members', 'item', 'list', 'member', 'switch']
 
+    @permission.upper_developer
     def get(self, space_id=None, action=None):
         """
         fetch space list or one item
@@ -70,6 +71,7 @@ class SpaceAPI(SecurityResource):
             return self.render_json(code=-1)
         return self.render_json(data=space_info)
 
+    @permission.upper_master
     def post(self):
         """
         create a space
@@ -115,6 +117,7 @@ class SpaceAPI(SecurityResource):
         else:
             abort(404)
 
+    @permission.upper_master
     def update(self, space_id):
         form = SpaceForm(request.form, csrf_enabled=False)
         form.set_id(space_id)
@@ -132,6 +135,7 @@ class SpaceAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_master
     def delete(self, space_id):
         """
         remove an environment
@@ -156,6 +160,11 @@ class SpaceAPI(SecurityResource):
         return self.render_json()
 
     def member(self, space_id):
+        '''
+        查看成员
+        @param space_id:
+        @return:
+        '''
         space_id = session['space_id']
         user_id = request.form['user_id']
         role = request.form['role']
@@ -163,7 +172,13 @@ class SpaceAPI(SecurityResource):
         members = MemberModel(group_id=space_id).member(user_id=user_id, role=role, group_id=space_id)
         return self.render_json(data=members)
 
+    @permission.upper_developer
     def members(self, space_id):
+        '''
+        更新组成员
+        @param space_id:
+        @return:
+        '''
         page = int(request.args.get('page', 1))
         page = page - 1 if page else 0
         size = int(request.args.get('size', 10))

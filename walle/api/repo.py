@@ -10,11 +10,13 @@
 from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.service.deployer import Deployer
+from walle.service.extensions import permission
 
 
 class RepoAPI(SecurityResource):
     actions = ['tags', 'branches', 'commits']
 
+    @permission.upper_reporter
     def get(self, action, commit=None):
         """
         fetch project list or one item

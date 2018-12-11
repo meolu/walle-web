@@ -9,16 +9,16 @@
 """
 
 from flask import request
+from walle.api.api import SecurityResource
 from walle.form.environment import EnvironmentForm
 from walle.model.environment import EnvironmentModel
-from walle.api.api import SecurityResource
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 
+
 class EnvironmentAPI(SecurityResource):
 
-    controller = 'environment'
-
+    @permission.upper_master
     def get(self, env_id=None):
         """
         fetch environment list or one item
@@ -53,7 +53,8 @@ class EnvironmentAPI(SecurityResource):
         env_model = EnvironmentModel()
 
         env_list, count = env_model.list(page=page, size=size, kw=kw, space_id=self.space_id)
-        return self.list_json(list=env_list, count=count, table=table, enable_create=permission.role_upper_master() and current_user.role != SUPER)
+        return self.list_json(list=env_list, count=count, table=table,
+                              enable_create=permission.role_upper_master() and current_user.role != SUPER)
 
     def item(self, env_id):
         """
@@ -69,6 +70,7 @@ class EnvironmentAPI(SecurityResource):
             return self.render_json(code=-1)
         return self.render_json(data=env_info)
 
+    @permission.upper_master
     def post(self):
         """
         create a environment
@@ -89,6 +91,7 @@ class EnvironmentAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_master
     def put(self, env_id):
         """
         update environment
@@ -107,6 +110,7 @@ class EnvironmentAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_master
     def delete(self, env_id):
         """
         remove an environment

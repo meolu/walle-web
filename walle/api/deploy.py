@@ -15,43 +15,13 @@ from walle.service.deployer import Deployer
 
 
 class DeployAPI(SecurityResource):
+
     def get(self, task_id=None):
         """
-        fetch environment list or one item
-        /environment/<int:env_id>
+        fetch deploy list or one item
+        /deploy/<int:env_id>
 
         :return:
         """
         super(DeployAPI, self).get()
 
-    # def get(self, method):
-    #     """
-    #     fetch role list or one role
-    #
-    #     :return:
-    #     """
-    #     if method == 'menu':
-    #         return self.menu()
-    #     elif method == 'mail':
-    #         return self.mail()
-    #     elif method == 'walle':
-    #         return self.walless()
-
-    def post(self):
-        """
-        fetch role list or one role
-
-        :return:
-        """
-        super(DeployAPI, self).post()
-
-        task_id = request.form['task_id']
-        if not task_id or not task_id.isdigit():
-            return self.render_json(code=-1)
-        wi = Deployer(task_id)
-        ret = wi.walle_deploy()
-        record = RecordModel().fetch(task_id)
-        return self.render_json(data={
-            'command': '',
-            'record': record,
-        })

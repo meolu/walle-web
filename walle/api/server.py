@@ -17,6 +17,8 @@ from walle.service.rbac.role import *
 
 
 class ServerAPI(SecurityResource):
+
+    @permission.upper_developer
     def get(self, id=None):
         """
         fetch environment list or one item
@@ -28,6 +30,7 @@ class ServerAPI(SecurityResource):
 
         return self.item(id) if id else self.list()
 
+    @permission.upper_developer
     def list(self):
         """
         fetch environment list
@@ -77,6 +80,7 @@ class ServerAPI(SecurityResource):
         else:
             return self.render_json(Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def put(self, id):
         """
         update environment
@@ -85,7 +89,6 @@ class ServerAPI(SecurityResource):
         :return:
         """
         super(ServerAPI, self).put()
-
 
         form = ServerForm(request.form, csrf_enabled=False)
         form.set_id(id)
@@ -96,6 +99,7 @@ class ServerAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def delete(self, id):
         """
         remove an environment

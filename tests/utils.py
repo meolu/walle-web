@@ -7,7 +7,7 @@
     :author: wushuiyong@walle-web.io
 """
 import json
-
+from flask import current_app
 
 def response_success(response):
     assert 200 <= response.status_code < 300, 'Received %d response: %s' % (response.status_code, response.data)

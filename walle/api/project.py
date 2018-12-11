@@ -20,7 +20,8 @@ from walle.service.rbac.role import *
 
 
 class ProjectAPI(SecurityResource):
-    @permission.gte_develop_or_uid
+
+    @permission.upper_reporter
     def get(self, action=None, project_id=None):
         """
         fetch project list or one item
@@ -67,6 +68,7 @@ class ProjectAPI(SecurityResource):
 
         return self.render_json(data=project_info)
 
+    @permission.upper_developer
     def post(self):
         """
         create a project
@@ -90,6 +92,7 @@ class ProjectAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def put(self, project_id, action=None):
         """
         update project
@@ -113,6 +116,7 @@ class ProjectAPI(SecurityResource):
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def delete(self, project_id):
         """
         remove an project

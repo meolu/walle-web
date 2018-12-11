@@ -22,6 +22,7 @@ from werkzeug.security import generate_password_hash
 class UserAPI(SecurityResource):
     actions = ['avatar', 'block', 'active']
 
+    @permission.upper_developer
     def get(self, user_id=None, method=None):
         """
         fetch user list or one user
@@ -84,6 +85,10 @@ class UserAPI(SecurityResource):
         if action and action == 'avatar':
             return self.avatar(user_id)
 
+        return self.create_user()
+
+    @permission.upper_developer
+    def create_user(self):
         form = RegistrationForm(request.form, csrf_enabled=False)
         if form.validate_on_submit():
             user_info = form.form2dict()
@@ -91,7 +96,7 @@ class UserAPI(SecurityResource):
             user = UserModel().add(user_info)
             # send an email
             message = u"""Hi, %s
-                    <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it.
+                    <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it : )
                     <br><br>name: %s<br>password: %s""" \
                               % (user.username, user.email, form.password.data)
             emails.send_email(user.email, 'Welcome to walle', message, '')
@@ -99,6 +104,7 @@ class UserAPI(SecurityResource):
             return self.render_json(data=user.item(user_id=user.id))
         return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def put(self, user_id, action=None):
         """
         edit user
@@ -123,6 +129,7 @@ class UserAPI(SecurityResource):
 
         return self.render_error(code=Code.form_error, message=form.errors)
 
+    @permission.upper_developer
     def delete(self, user_id):
         """
         remove a user with his group relation

@@ -25,7 +25,8 @@ from walle.service.extensions import permission
 class GeneralAPI(SecurityResource):
     actions = ['menu', 'websocket']
 
-    @permission.gte_develop_or_uid
+    # TODO 更细致的检查
+    @permission.upper_reporter
     def get(self, action):
         """
         fetch role list or one role

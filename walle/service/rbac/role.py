@@ -12,6 +12,7 @@ from flask import session
 from flask_login import login_required, current_user
 from walle.service.code import Code
 from walle.service.error import WalleError
+from flask import current_app
 
 GUEST = 'GUEST'
 REPORT = 'REPORT'
@@ -49,25 +50,69 @@ class Permission():
     def init_app(self, app):
         self.app = app
 
-    def gte_develop_or_uid(self, func):
+    def upper_owner(self, func):
+        '''
+        角色高于owner
+        @param func:
+        @return:
+        '''
         @wraps(func)
         @login_required
         def decorator(*args, **kwargs):
-            if self.is_gte_develop_or_uid(current_user.id):
+            if self.role_upper_owner():
                 return func(*args, **kwargs)
 
             raise WalleError(Code.not_allow)
 
         return decorator
 
-    def is_gte_develop_or_uid(self, uid=None):
-        if uid is None:
-            uid = current_user.id
+    def upper_master(self, func):
+        '''
+        角色高于master
+        @param func:
+        @return:
+        '''
+        @wraps(func)
+        @login_required
+        def decorator(*args, **kwargs):
+            if self.role_upper_master():
+                return func(*args, **kwargs)
 
-        if self.enable_uid(uid) or self.role_upper_developer():
-            return True
+            raise WalleError(Code.not_allow)
 
-        return False
+        return decorator
+
+    def upper_developer(self, func):
+        '''
+        角色高于developer
+        @param func:
+        @return:
+        '''
+        @wraps(func)
+        @login_required
+        def decorator(*args, **kwargs):
+            if self.role_upper_developer():
+                return func(*args, **kwargs)
+
+            raise WalleError(Code.not_allow)
+
+        return decorator
+
+    def upper_reporter(self, func):
+        '''
+        角色高于reporter
+        @param func:
+        @return:
+        '''
+        @wraps(func)
+        @login_required
+        def decorator(*args, **kwargs):
+            if self.role_upper_reporter():
+                return func(*args, **kwargs)
+
+            raise WalleError(Code.not_allow)
+
+        return decorator
 
     @staticmethod
     def list_enable(self, list, access_level):
@@ -131,7 +176,7 @@ class Permission():
         '''
         return self.role_upper(DEVELOPER, role)
 
-    def role_upper_report(self, role=None):
+    def role_upper_reporter(self, role=None):
         '''
         项目project的角色role比developer级别更高, 传参, 不传则
         空间space的角色role比developer级别更高, 不用传, 默认从session中取
