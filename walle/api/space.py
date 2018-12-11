@@ -116,7 +116,6 @@ class SpaceAPI(SecurityResource):
             abort(404)
 
     def update(self, space_id):
-        current_app.logger.info(json.loads(request.form['members']))
         form = SpaceForm(request.form, csrf_enabled=False)
         form.set_id(space_id)
         if form.validate_on_submit():
