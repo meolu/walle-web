@@ -65,6 +65,11 @@ function migration() {
     source venv/bin/activate
     export FLASK_APP=waller.py
     flask db upgrade
+    if [ $? == "0" ]; then
+        echo -e "Migration:                 [\033[32m ok \033[0m]"
+    else
+        echo -e "Migration:                 [\033[31m fail \033[0m]"
+    fi
 }
 
 case "$1" in
