@@ -43,20 +43,17 @@ class Deployer:
 
     console = False
 
-    local_codebase = current_app.config.get('CODE_BASE')
-
     version = datetime.now().strftime('%Y%m%d%H%M%s')
-    project_name = None
-    dir_codebase_project = ''
 
-    dir_release = None
-    dir_webroot = None
+    local_codebase, dir_codebase_project, project_name = None, None, None
+    dir_release, dir_webroot = None, None
 
     connections, success, errors = {}, {}, {}
     release_version_tar, release_version = None, None
     local = None
 
     def __init__(self, task_id=None, project_id=None, console=False):
+        self.local_codebase = current_app.config.get('CODE_BASE')
         self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
                             user=current_app.config.get('LOCAL_SERVER_USER'),
                             port=current_app.config.get('LOCAL_SERVER_PORT'))

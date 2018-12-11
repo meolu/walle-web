@@ -41,7 +41,7 @@ class ProdConfig(Config):
     AVATAR_PATH = 'avatar/'
     UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
 
-    # 本地代码检出路径（用户查询分支, 编译, 打包）
+    # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'
 
     # 邮箱配置 @TODO
