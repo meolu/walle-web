@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Helper utilities and decorators."""
+from __future__ import print_function
 import sys
 import time
 from datetime import datetime
@@ -52,7 +53,7 @@ def detailtrace():
                                     f.f_lineno) + retStr
         f = f.f_back
     current_app.logger.info(retStr)
-    print retStr
+    print(retStr)
 
 
 def color_clean(text_with_color):
