@@ -9,15 +9,14 @@
 """
 import os
 from flask import request, current_app, abort
-from flask_login import current_user
 from walle.api.api import SecurityResource
 from walle.form.user import UserUpdateForm, RegistrationForm
-from walle.model.database import db
 from walle.model.member import MemberModel
 from walle.model.user import UserModel
-from werkzeug.security import generate_password_hash
-from walle.service.rbac.role import *
+from walle.service import emails
 from walle.service.extensions import permission
+from walle.service.rbac.role import *
+from werkzeug.security import generate_password_hash
 
 
 class UserAPI(SecurityResource):
@@ -57,7 +56,8 @@ class UserAPI(SecurityResource):
             'username': ['线上', '线下'],
             'status': ['正常', '禁用']
         }
-        return self.list_json(list=user_list, count=count, table=self.table(filters), enable_create=permission.role_upper_master())
+        return self.list_json(list=user_list, count=count, table=self.table(filters),
+                              enable_create=permission.role_upper_master())
 
     def item(self, user_id):
         """
@@ -86,7 +86,16 @@ class UserAPI(SecurityResource):
 
         form = RegistrationForm(request.form, csrf_enabled=False)
         if form.validate_on_submit():
-            user = UserModel().add(form.form2dict())
+            user_info = form.form2dict()
+            # add user
+            user = UserModel().add(user_info)
+            # send an email
+            message = u"""Hi, %s
+                    <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it.
+                    <br><br>name: %s<br>password: %s""" \
+                              % (user.username, user.email, form.password.data)
+            emails.send_email(user.email, 'Welcome to walle', message, '')
+
             return self.render_json(data=user.item(user_id=user.id))
         return self.render_json(code=-1, message=form.errors)
 
