@@ -34,11 +34,11 @@ class WalleSocketIO(Namespace):
         current_app.logger.info(message)
         self.room = message['task']
         if not current_user.is_authenticated:
-            emit('close', {'event': 'pusher:disconnect', 'data': {}}, room=self.room)
+            emit('close', {'event': 'disconnect', 'data': {}}, room=self.room)
         join_room(room=self.room)
 
         self.task_info = TaskModel(id=self.room).item()
-        emit('construct', {'event': 'pusher:connect', 'data': self.task_info}, room=self.room)
+        emit('construct', {'event': 'connect', 'data': self.task_info}, room=self.room)
 
     def on_deploy(self, message):
         self.task_info = TaskModel(id=self.room).item()
@@ -46,25 +46,34 @@ class WalleSocketIO(Namespace):
             wi = Deployer(task_id=self.room, console=True)
             ret = wi.walle_deploy()
         else:
-            emit('console', {'event': 'task:forbidden', 'data': self.task_info}, room=self.room)
+            emit('console', {'event': 'forbidden', 'data': self.task_info}, room=self.room)
 
     def on_branches(self, message):
         wi = Deployer(task_id=self.room)
-        branches = wi.list_branch()
-        emit('branches', {'event': 'repo:branches', 'data': branches}, room=self.room)
+        try:
+            branches = wi.list_branch()
+            emit('branches', {'event': 'branches', 'data': branches}, room=self.room)
+        except Exception as e:
+            emit('branches', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
     def on_tags(self, message):
         wi = Deployer(task_id=self.room)
-        tags = wi.list_tag()
-        emit('tags', {'event': 'repo:tags', 'data': tags}, room=self.room)
+        try:
+            tags = wi.list_tag()
+            emit('tags', {'event': 'tags', 'data': tags}, room=self.room)
+        except Exception as e:
+            emit('tags', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
     def on_commits(self, message):
         wi = Deployer(task_id=self.room)
         if 'branch' not in message:
-            emit('commits', {'event': 'error:commits', 'data': {'message': 'invalid branch'}}, room=self.room)
+            emit('commits', {'event': 'error', 'data': {'message': 'invalid branch'}}, room=self.room)
         else:
-            commits = wi.list_commit(message['branch'])
-            emit('repo', {'event': 'repo:branches', 'data': commits}, room=self.room)
+            try:
+                commits = wi.list_commit(message['branch'])
+                emit('commits', {'event': 'commits', 'data': commits}, room=self.room)
+            except Exception as e:
+                emit('commits', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
     def on_ping(self, message):
         current_app.logger.info(message)
@@ -78,8 +87,8 @@ class WalleSocketIO(Namespace):
         self.logs(task=self.room)
 
     def logs(self, task):
-        emit('console', {'event': 'task:console', 'data': {'task': task}}, room=task)
+        emit('console', {'event': 'console', 'data': {'task': task}}, room=task)
         logs = RecordModel().fetch(task_id=task)
         for log in logs:
             log = RecordModel.logs(**log)
-            emit('console', {'event': 'task:console', 'data': log}, room=self.room)
+            emit('console', {'event': 'console', 'data': log}, room=self.room)
