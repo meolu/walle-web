@@ -18,6 +18,7 @@ from walle.model.task import TaskModel
 from flask_socketio import emit
 from walle.service.extensions import socketio
 from walle.service.utils import color_clean
+import re
 
 
 class Deployer:
@@ -321,6 +322,7 @@ class Deployer:
 
     def list_branch(self):
         self.init_repo()
+        socketio.sleep(61)
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
@@ -350,7 +352,7 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
-            # result = self.local.run(command, wenv=self.config())
+            result = self.local.run(command, wenv=self.config())
 
             # TODO 10是需要前端传的
             command = 'git log -10 --pretty="%h #_# %an #_# %s"'
@@ -361,6 +363,9 @@ class Deployer:
             commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
+                if not re.search('^.+ #_# .+ #_# .*$', commit):
+                    continue
+
                 commit_dict = commit.split(' #_# ')
                 current_app.logger.info(commit_dict)
                 commits.append({
@@ -370,6 +375,7 @@ class Deployer:
                 })
             return commits
 
+        # TODO
         return None
 
     def init_repo(self):

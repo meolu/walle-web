@@ -11,6 +11,7 @@ from flask_login import current_user
 from flask_socketio import emit, join_room, Namespace
 from walle.model.record import RecordModel
 from walle.model.task import TaskModel
+from walle.service.deployer import Deployer
 
 
 class WalleSocketIO(Namespace):
@@ -40,21 +41,37 @@ class WalleSocketIO(Namespace):
         emit('construct', {'event': 'pusher:connect', 'data': self.task_info}, room=self.room)
 
     def on_deploy(self, message):
-        emit('console', {'event': 'task:console', 'data': {}}, room=self.room)
-        from walle.service.deployer import Deployer
         self.task_info = TaskModel(id=self.room).item()
-        # wi = Deployer(task_id=self.room, console=True)
-        # ret = wi.test()
         if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
             wi = Deployer(task_id=self.room, console=True)
             ret = wi.walle_deploy()
         else:
             emit('console', {'event': 'task:forbidden', 'data': self.task_info}, room=self.room)
 
+    def on_branches(self, message):
+        wi = Deployer(task_id=self.room)
+        branches = wi.list_branch()
+        emit('console', {'event': 'repo:branches', 'data': branches}, room=self.room)
+
+    def on_tags(self, message):
+        wi = Deployer(task_id=self.room)
+        tags = wi.list_tag()
+        emit('console', {'event': 'repo:branches', 'data': tags}, room=self.room)
+
+    def on_commits(self, message):
+        wi = Deployer(task_id=self.room)
+        if 'branch' not in message:
+            emit('console', {'event': 'error:branches', 'data': {'message': 'invalid branch'}}, room=self.room)
+        else:
+            commits = wi.list_commit(message['branch'])
+            emit('console', {'event': 'repo:branches', 'data': commits}, room=self.room)
+
     def on_ping(self, message):
         current_app.logger.info(message)
         import time
-        emit('pong', {'event': 'ping:pong', 'data': {'time':  time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}}, room=self.room)
+        emit('pong',
+             {'event': 'ping:pong', 'data': {'time': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}},
+             room=self.room)
 
     def on_logs(self, message):
         current_app.logger.info(message)
