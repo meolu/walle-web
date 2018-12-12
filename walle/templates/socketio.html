@@ -113,6 +113,16 @@
         socket.on('pong', function(data) {
             write(data)
         });
+        socket.on('branches', function(data) {
+            write(data)
+        });
+        socket.on('tags', function(data) {
+            write(data)
+        });
+        socket.on('commits', function(data) {
+            write(data)
+        });
+
 
         $('#branch').click(function(e) {
             socket.emit('branches', {});
