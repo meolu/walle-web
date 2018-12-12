@@ -51,20 +51,20 @@ class WalleSocketIO(Namespace):
     def on_branches(self, message):
         wi = Deployer(task_id=self.room)
         branches = wi.list_branch()
-        emit('console', {'event': 'repo:branches', 'data': branches}, room=self.room)
+        emit('repo', {'event': 'repo:branches', 'data': branches}, room=self.room)
 
     def on_tags(self, message):
         wi = Deployer(task_id=self.room)
         tags = wi.list_tag()
-        emit('console', {'event': 'repo:branches', 'data': tags}, room=self.room)
+        emit('repo', {'event': 'repo:branches', 'data': tags}, room=self.room)
 
     def on_commits(self, message):
         wi = Deployer(task_id=self.room)
         if 'branch' not in message:
-            emit('console', {'event': 'error:branches', 'data': {'message': 'invalid branch'}}, room=self.room)
+            emit('repo', {'event': 'error:branches', 'data': {'message': 'invalid branch'}}, room=self.room)
         else:
             commits = wi.list_commit(message['branch'])
-            emit('console', {'event': 'repo:branches', 'data': commits}, room=self.room)
+            emit('repo', {'event': 'repo:branches', 'data': commits}, room=self.room)
 
     def on_ping(self, message):
         current_app.logger.info(message)
