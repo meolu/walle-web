@@ -19,4 +19,4 @@ login_manager = LoginManager()
 mail = Mail()
 
 permission = Permission()
-socketio = SocketIO()
+socketio = SocketIO(engineio_logger=True, logger=True)

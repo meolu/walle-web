@@ -30,6 +30,7 @@ class WalleError(Exception):
         if self.code not in Code.code_msg:
             current_app.logger.error('unkown code %s' % (self.code))
 
+        current_app.logger.error(self, exc_info=1)
         if self.code in Code.code_msg:
             self.message = Code.code_msg[self.code]
 

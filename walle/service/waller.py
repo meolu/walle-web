@@ -8,7 +8,8 @@ from fabric2 import Connection
 from flask import current_app
 from flask_socketio import emit
 from walle.model.record import RecordModel
-
+from invoke import Result
+from walle.service.code import Code
 
 class Waller(Connection):
     connections, success, errors = {}, {}, {}
@@ -41,7 +42,6 @@ class Waller(Connection):
             message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
                 wenv['task_id'], self.host, command, exitcode, stdout, stderr
             )
-            current_app.logger.error(result.stdout.strip())
             # TODO
             ws_dict = {
                 'user': self.user,
@@ -60,18 +60,17 @@ class Waller(Connection):
                                       task_id=wenv['task_id'], status=exitcode, host=self.host, user=self.user,
                                       command=result.command, success=stdout,
                                       error=stderr)
-            current_app.logger.info(message)
-            if exitcode != 0:
-                # TODO
+            current_app.logger.info(result)
+            if exitcode != Code.Ok:
+                current_app.logger.exception(result.stdout.strip())
                 return result
             return result
 
         except Exception as e:
-            # current_app.logger.exception(e)
-            # return None
+            current_app.logger.exception(e)
+
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
             error = e.result if 'result' in e else e.message
-            current_app.logger.error(e)
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                       task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
                                       command=command, success='', error=error)
@@ -83,6 +82,7 @@ class Waller(Connection):
                 message = 'task_id=%s, user:%s host:%s command:%s, status=1, message:%s' % (
                     wenv['task_id'], self.user, self.host, command, e.message
                 )
+            current_app.logger.error(message, exc_info=1)
 
             # TODO
             ws_dict = {
@@ -93,13 +93,13 @@ class Waller(Connection):
                 'stage': wenv['stage'],
                 'sequence': wenv['sequence'],
                 'success': '',
-                'error': e.message,
+                'error': error,
             }
             if wenv['console']:
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
-            current_app.logger.error(message)
 
-            return False
+            return Result(exited=-1, stderr=error)
+
 
     def sudo(self, command, wenv=None, **kwargs):
         return self.run(command, wenv=wenv, sudo=True, **kwargs)

@@ -9,20 +9,19 @@ import time
 from datetime import datetime
 
 import os
+import re
 from flask import current_app
-
-from walle.model.record import RecordModel
-from walle.service.waller import Waller
-from walle.model.project import ProjectModel
-from walle.model.task import TaskModel
 from flask_socketio import emit
+from walle.model.project import ProjectModel
+from walle.model.record import RecordModel
+from walle.model.task import TaskModel
 from walle.service.extensions import socketio
 from walle.service.utils import color_clean
-import re
-
+from walle.service.waller import Waller
+from walle.service.code import Code
+from walle.service.error import WalleError
 
 class Deployer:
-
     '''
     序列号
     '''
@@ -80,9 +79,9 @@ class Deployer:
         # start to deploy
         self.console = console
 
-
     def config(self):
-        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence, 'console': self.console}
+        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence,
+                'console': self.console}
 
     def start(self):
         TaskModel().get_by_id(self.task_id).update({'status': TaskModel.status_doing})
@@ -131,7 +130,6 @@ class Deployer:
         current_app.logger.info(command)
         with self.local.cd(self.dir_codebase_project):
             result = self.local.run(command, wenv=self.config())
-
 
     def deploy(self):
         '''
@@ -231,7 +229,6 @@ class Deployer:
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
 
-
         # TODO md5
         # 传送到版本库 release
         current_app.logger.info('/tmp/walle/codebase/' + self.release_version_tar)
@@ -313,36 +310,36 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
-            current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
             result = self.local.run(command, wenv=self.config())
-            current_app.logger.info(dir(result))
             return result
 
         return None
 
     def list_branch(self):
         self.init_repo()
-        socketio.sleep(61)
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
-
-            from flask import current_app
-            from walle.service import utils
-            current_app.logger.info(utils.detailtrace())
             result = self.local.run(command, wenv=self.config())
+
+            if result.exited != Code.Ok:
+                raise WalleError(Code.shell_git_pull_fail)
 
             current_app.logger.info(self.dir_codebase_project)
 
             command = 'git branch -r'
             result = self.local.run(command, wenv=self.config())
 
+            if result.exited != Code.Ok:
+                raise WalleError(Code.shell_run_fail)
+
             # TODO 三种可能: false, error, success
             branches = color_clean(result.stdout.strip())
             branches = branches.split('\n')
             # 去除 origin/HEAD -> 当前指向
             # 去除远端前缀
-            branches = [branch.strip().lstrip('origin/') for branch in branches if not branch.strip().startswith('origin/HEAD')]
+            branches = [branch.strip().lstrip('origin/') for branch in branches if
+                        not branch.strip().startswith('origin/HEAD')]
             return branches
 
         return None
@@ -355,11 +352,10 @@ class Deployer:
             result = self.local.run(command, wenv=self.config())
 
             # TODO 10是需要前端传的
-            command = 'git log -10 --pretty="%h #_# %an #_# %s"'
+            command = 'git log -50 --pretty="%h #_# %an #_# %s"'
             result = self.local.run(command, wenv=self.config())
-            current_app.logger.info(result.stdout.strip())
+
             commit_log = color_clean(result.stdout.strip())
-            current_app.logger.info(commit_log)
             commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
@@ -379,24 +375,23 @@ class Deployer:
         return None
 
     def init_repo(self):
-
-        current_app.logger.info('git dir: %s', self.dir_codebase_project + '/.git')
-        # 如果项目底下有 .git 目录则认为项目完整,可以直接检出代码
-        # TODO 不标准
         if not os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
             command = 'mkdir -p %s' % (self.dir_codebase_project)
             # TODO remove
             current_app.logger.info(command)
-            result = self.local.run(command, wenv=self.config())
+            self.local.run(command, wenv=self.config())
 
-        if not os.path.exists(self.dir_codebase_project + '/.git'):
+        is_git_dir = self.local.run('git status', wenv=self.config())
+        if is_git_dir.exited != Code.Ok:
             # 否则当作新项目检出完整代码
             with self.local.cd(self.dir_codebase_project):
-                command = 'pwd && git clone %s .' % (self.project_info['repo_url'])
+                command = 'pwd && rm -rf .* .git && git clone %s .' % (self.project_info['repo_url'])
                 current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
                 result = self.local.run(command, wenv=self.config())
+                if result.exited != Code.Ok:
+                    raise WalleError(Code.shell_git_init_fail)
 
     def end(self, success=True):
         status = TaskModel.status_success if success else TaskModel.status_fail
@@ -417,53 +412,9 @@ class Deployer:
                 self.release(self.connections[server])
                 self.post_release(self.connections[server])
             except Exception as e:
+                current_app.logger.error(e)
                 all_servers_success = False
                 self.errors[server] = e.message
 
         self.end(all_servers_success)
         return {'success': self.success, 'errors': self.errors}
-
-    def test(self):
-        # server = '172.20.95.43'
-        server = '172.16.0.231'
-        ws_dict = {
-                'user': 'xx',
-                'host': 'ip',
-                'cmd': 'Going to sleep !!!!!',
-                'status': 0,
-                'stage': 1,
-                'sequence': 1,
-                'success': 'Going to sleep !!!!!',
-                'error': '',
-            }
-        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
-        socketio.sleep(60)
-        ws_dict = {
-                'user': 'xx',
-                'host': 'ip',
-                'cmd': 'sleep 60',
-                'status': 0,
-                'stage': 1,
-                'sequence': 1,
-                'success': 'sleep 60....',
-                'error': '',
-            }
-        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
-        socketio.sleep(10)
-        ws_dict = {
-                'user': 'xx',
-                'host': 'ip',
-                'cmd': 'sleep 10',
-                'status': 0,
-                'stage': 1,
-                'sequence': 1,
-                'success': 'sleep 10....',
-                'error': '',
-            }
-        emit('console', {'event': 'task:console', 'data': ws_dict}, room=self.task_id)
-        try:
-            self.connections[server] = Waller(host=server, user='work')
-            self.post_release_service(self.connections[server])
-        except Exception as e:
-            current_app.logger.exception(e)
-            self.errors[server] = e.message

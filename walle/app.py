@@ -126,18 +126,9 @@ def register_errorhandlers(app):
 
     @app.errorhandler(WalleError)
     def render_error(error):
-        app.logger.info('============ register_errorhandlers ============')
         # response 的 json 内容为自定义错误代码和错误信息
+        app.logger.error(error, exc_info=1)
         return error.render_error()
-
-    def render_errors():
-        """Render error template."""
-        app.logger.info('============ render_errors ============')
-        # If a HTTPException, pull the `code` attribute; default to 500
-        return ApiResource.render_json(code=Code.space_error)
-        #
-        #     error_code = getattr(error, 'code', 500)
-        #     return render_template('{0}.html'.format(error_code)), error_code
 
 
 def register_shellcontext(app):

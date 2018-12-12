@@ -13,8 +13,18 @@
     welcome to walle 2.0
 </div>
 <br>
-<input id="say" type="text">
-<button id="send" type="button">Send!</button>
+
+<button id="branch" type="button">Branch</button>
+<br>
+
+<button id="tag" type="button">Tag</button>
+<br>
+
+<button id="commit" type="button">Commit</button>
+<br>
+
+<input id="say" type="text"><button id="send" type="button">Send!</button>
+
 <body>
 <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 <script type="text/javascript" src="/socket.io.min.js"></script>
@@ -95,14 +105,26 @@
             solo.html(solo.html() + '<br>' + msg);
         }
 
-        window.setInterval(function() {
-            start_time = (new Date).getTime();
-            socket.emit('ping', {'start_time': start_time});
-        }, 2000);
+{#        window.setInterval(function() {#}
+{#            start_time = (new Date).getTime();#}
+{#            socket.emit('ping', {'start_time': start_time});#}
+{#        }, 10000);#}
 
         socket.on('pong', function(data) {
             write(data)
         });
+
+        $('#branch').click(function(e) {
+            socket.emit('branches', {});
+        })
+
+        $('#tag').click(function(e) {
+            socket.emit('tags', {});
+        })
+
+        $('#commit').click(function(e) {
+            socket.emit('commits', {'branch': 'master'});
+        })
 
         $(document).keyup(function (event) {
             if (event.keyCode == 13) {
