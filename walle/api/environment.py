@@ -18,7 +18,6 @@ from walle.service.rbac.role import *
 
 class EnvironmentAPI(SecurityResource):
 
-    @permission.upper_master
     def get(self, env_id=None):
         """
         fetch environment list or one item
