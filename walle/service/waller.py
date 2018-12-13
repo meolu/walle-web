@@ -15,14 +15,16 @@ class Waller(Connection):
     connections, success, errors = {}, {}, {}
     release_version_tar, release_version = None, None
 
-    def run(self, command, wenv=None, sudo=False, **kwargs):
+    def run(self, command, wenv=None, sudo=False, exception=True, **kwargs):
         '''
-        # TODO
         pty=True/False是直接影响到输出.False较适合在获取文本,True更适合websocket
 
         :param command:
         :param wenv:
-        :param sudo:
+        :param sudo:      False/True default False
+        :param exception: False/True default True
+                          False return Result(exited=xx, stderr=xx, stdout=xx) for process to raise custom exception by exited code
+                          True raise Exception
         :param kwargs:
         :return:
         '''
@@ -39,8 +41,8 @@ class Waller(Connection):
             else:
                 exitcode, stdout, stderr = 0, result.stdout, ''
 
-            message = 'task_id=%s, host:%s command:%s status:%s, success:%s, error:%s' % (
-                wenv['task_id'], self.host, command, exitcode, stdout, stderr
+            message = 'task_id=%s, user:%s host:%s command:%s status:%s, success:%s, error:%s' % (
+                wenv['task_id'], self.user, self.host, command, exitcode, stdout, stderr
             )
             # TODO
             ws_dict = {
@@ -62,7 +64,8 @@ class Waller(Connection):
                                       error=stderr)
             current_app.logger.info(result)
             if exitcode != Code.Ok:
-                current_app.logger.exception(result.stdout.strip())
+                current_app.logger.error(message, exc_info=1)
+                current_app.logger.exception(result.stdout.strip(), exc_info=1)
                 return result
             return result
 
@@ -96,10 +99,11 @@ class Waller(Connection):
                 'error': error,
             }
             if wenv['console']:
-                emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+                emit('console', {'event': 'console', 'data': ws_dict}, room=wenv['task_id'])
 
-            return Result(exited=-1, stderr=error)
-
+            if exception:
+                raise e
+            return Result(exited=-1, stderr=error, stdout=error)
 
     def sudo(self, command, wenv=None, **kwargs):
         return self.run(command, wenv=wenv, sudo=True, **kwargs)
@@ -151,6 +155,7 @@ class Waller(Connection):
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
 
             return result
+
         except Exception as e:
             # TODO 收尾下
             current_app.logger.info('put: %s, %s', e, dir(e))

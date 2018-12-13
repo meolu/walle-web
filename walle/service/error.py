@@ -20,7 +20,6 @@ class WalleError(Exception):
     def __init__(self, code, message=None):
         Exception.__init__(self)
 
-        current_app.logger.info('======= CustomError ======')
         if code is not None:
             self.code = code
         if message is not None:
@@ -28,7 +27,7 @@ class WalleError(Exception):
 
     def render_error(self):
         if self.code not in Code.code_msg:
-            current_app.logger.error('unkown code %s' % (self.code))
+            current_app.logger.error('unknown code %s' % (self.code))
 
         current_app.logger.error(self, exc_info=1)
         if self.code in Code.code_msg:

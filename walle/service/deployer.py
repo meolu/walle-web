@@ -311,7 +311,9 @@ class Deployer:
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
             result = self.local.run(command, wenv=self.config())
-            return result
+            tags = color_clean(result.stdout.strip())
+            tags = tags.split('\n')
+            return [color_clean(tag.strip()) for tag in tags]
 
         return None
 
@@ -330,8 +332,8 @@ class Deployer:
             command = 'git branch -r'
             result = self.local.run(command, wenv=self.config())
 
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_run_fail)
+            # if result.exited != Code.Ok:
+            #     raise WalleError(Code.shell_run_fail)
 
             # TODO 三种可能: false, error, success
             branches = color_clean(result.stdout.strip())
@@ -352,10 +354,12 @@ class Deployer:
             result = self.local.run(command, wenv=self.config())
 
             # TODO 10是需要前端传的
-            command = 'git log -50 --pretty="%h #_# %an #_# %s"'
+            command = 'git log -35 --pretty="%h #_# %an #_# %s"'
             result = self.local.run(command, wenv=self.config())
+            current_app.logger.info(result.stdout)
 
             commit_log = color_clean(result.stdout.strip())
+            current_app.logger.info(commit_log)
             commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
@@ -369,29 +373,34 @@ class Deployer:
                     'name': commit_dict[1],
                     'message': commit_dict[2],
                 })
+
             return commits
 
         # TODO
         return None
 
     def init_repo(self):
-        if not os.path.exists(self.dir_codebase_project):
+        if os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
             command = 'mkdir -p %s' % (self.dir_codebase_project)
             # TODO remove
             current_app.logger.info(command)
             self.local.run(command, wenv=self.config())
 
-        is_git_dir = self.local.run('git status', wenv=self.config())
+        with self.local.cd(self.dir_codebase_project):
+            is_git_dir = self.local.run('git status', wenv=self.config())
         if is_git_dir.exited != Code.Ok:
             # 否则当作新项目检出完整代码
-            with self.local.cd(self.dir_codebase_project):
-                command = 'pwd && rm -rf .* .git && git clone %s .' % (self.project_info['repo_url'])
-                current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
+            # 检查 目录是否存在
+            command = 'rm -rf %s' % (self.dir_codebase_project)
+            self.local.run(command, wenv=self.config())
 
-                result = self.local.run(command, wenv=self.config())
-                if result.exited != Code.Ok:
-                    raise WalleError(Code.shell_git_init_fail)
+            command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
+            current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
+
+            result = self.local.run(command, wenv=self.config())
+            if result.exited != Code.Ok:
+                raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
     def end(self, success=True):
         status = TaskModel.status_success if success else TaskModel.status_fail
