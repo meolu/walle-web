@@ -10,6 +10,7 @@ from flask_socketio import emit
 from walle.model.record import RecordModel
 from invoke import Result
 from walle.service.code import Code
+from walle.service.utils import say_yes
 
 class Waller(Connection):
     connections, success, errors = {}, {}, {}
@@ -34,7 +35,7 @@ class Waller(Connection):
             if sudo:
                 result = super(Waller, self).sudo(command, pty=False, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=True, warn=True, **kwargs)
+                result = super(Waller, self).run(command, pty=True, warn=True, watchers=[say_yes()], **kwargs)
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout

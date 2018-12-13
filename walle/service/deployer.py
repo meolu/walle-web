@@ -17,7 +17,7 @@ from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.extensions import socketio
-from walle.service.utils import color_clean, say_yes
+from walle.service.utils import color_clean
 from walle.service.waller import Waller
 
 
@@ -398,7 +398,7 @@ class Deployer:
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
-            result = self.local.run(command, wenv=self.config(), watchers=[say_yes()])
+            result = self.local.run(command, wenv=self.config())
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
