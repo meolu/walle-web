@@ -1,0 +1,16 @@
+Dockerfile*
+docker-compose*
+
+.dockerignore
+.git
+.github
+.gitignore
+.vscode
+
+test
+screenshot
+migrations
+requirements
+
+README.md
+LICENSE

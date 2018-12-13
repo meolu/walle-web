@@ -1,0 +1,29 @@
+version: "3.6"
+
+services:
+
+  mysql:
+    image: mysql
+    container_name: inspector-mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: walle
+      MYSQL_DATABASE: walle
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ${HOME}/.walle/mysql:/var/lib/mysql
+      - ./walle.sql:/docker-entrypoint-initdb.d/walle.sql
+    network_mode: host
+    restart: always
+
+  web:
+    build: .
+    depends_on:
+      - mysql
+    ports:
+      - 0.0.0.0:5000:5000
+    network_mode: host
+    restart: always
+
