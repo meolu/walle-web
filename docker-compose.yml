@@ -14,7 +14,6 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
-      - ./walle.sql:/docker-entrypoint-initdb.d/walle.sql
     network_mode: host
     restart: always
 
