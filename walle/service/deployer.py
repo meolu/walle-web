@@ -380,7 +380,7 @@ class Deployer:
         return None
 
     def init_repo(self):
-        if os.path.exists(self.dir_codebase_project):
+        if not os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
             command = 'mkdir -p %s' % (self.dir_codebase_project)
             # TODO remove
@@ -388,7 +388,8 @@ class Deployer:
             self.local.run(command, wenv=self.config())
 
         with self.local.cd(self.dir_codebase_project):
-            is_git_dir = self.local.run('git status', wenv=self.config())
+            is_git_dir = self.local.run('git status', exception=False, wenv=self.config())
+
         if is_git_dir.exited != Code.Ok:
             # 否则当作新项目检出完整代码
             # 检查 目录是否存在
