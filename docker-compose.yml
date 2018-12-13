@@ -13,7 +13,6 @@ services:
       MYSQL_DATABASE: walle
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
-#      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
   web:
