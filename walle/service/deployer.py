@@ -163,7 +163,8 @@ class Deployer:
         # copy to a local version
         self.release_version = '%s_%s_%s' % (
             self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
-        with self.local.cd(self.dir_codebase):
+
+        with self.local.cd(self.local_codebase):
             command = 'cp -rf %s %s' % (self.dir_codebase_project, self.release_version)
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
@@ -200,7 +201,7 @@ class Deployer:
 
         # 压缩打包
         self.release_version_tar = '%s.tgz' % (self.release_version)
-        with self.local.cd(self.dir_codebase):
+        with self.local.cd(self.local_codebase):
             command = 'tar zcvf %s %s' % (self.release_version_tar, self.release_version)
             result = self.local.run(command, wenv=self.config())
 
