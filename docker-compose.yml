@@ -12,10 +12,10 @@ services:
       MYSQL_DATABASE: walle
       MYSQL_USER: walle
       MYSQL_PASSWORD: walle
-    command: --default-authentication-plugin=mysql_native_password
+#    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
   web:
