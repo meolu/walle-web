@@ -1,5 +1,7 @@
 FROM python:2.7
 
+ENV FLASK_APP waller.py
+
 WORKDIR /usr/app/
 
 COPY ./requirements/prod.txt .
@@ -8,6 +10,6 @@ RUN pip install futures
 RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
 COPY . .
-RUN python waller.py db upgrade
+RUN flask db upgrade
 
 CMD python waller.py start

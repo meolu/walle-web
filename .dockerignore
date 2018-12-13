@@ -10,8 +10,6 @@ docker-compose*
 .idea/
 .travis.yml
 
-admin.sh
-
 test
 screenshot
 migrations
