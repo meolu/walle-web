@@ -16,9 +16,9 @@ from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
-from walle.service.extensions import socketio
 from walle.service.utils import color_clean
 from walle.service.waller import Waller
+from flask_socketio import emit
 
 
 class Deployer:
@@ -142,7 +142,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_deploy
         self.sequence = 2
 
@@ -177,7 +177,8 @@ class Deployer:
             command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
             result = self.local.run(command, wenv=self.config())
 
-        pass
+            if result.exited != Code.Ok:
+                raise WalleError(Code.shell_git_fail, message=result.stdout)
 
     def post_deploy(self):
 
@@ -192,7 +193,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_post_deploy
         self.sequence = 3
 
@@ -214,7 +215,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_prev_release
         self.sequence = 4
 
@@ -252,7 +253,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         self.stage = self.stage_release
         self.sequence = 5
 
@@ -276,7 +277,7 @@ class Deployer:
         :return:
         '''
         # TODO
-        socketio.sleep(0.001)
+        # socketio.sleep(0.001)
         with waller.cd(self.project_info['target_releases']):
             command = 'tar zxf %s' % (self.release_version_tar)
             result = waller.run(command, wenv=self.config())
@@ -402,26 +403,33 @@ class Deployer:
 
     def end(self, success=True):
         status = TaskModel.status_success if success else TaskModel.status_fail
+        current_app.logger.info('success:%s, status:%s' % (success, status))
         TaskModel().get_by_id(self.task_id).update({'status': status})
 
     def walle_deploy(self):
         self.start()
-        self.prev_deploy()
-        self.deploy()
-        self.post_deploy()
 
-        all_servers_success = True
-        for server_info in self.servers:
-            server = server_info['host']
-            try:
-                self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-                self.prev_release(self.connections[server])
-                self.release(self.connections[server])
-                self.post_release(self.connections[server])
-            except Exception as e:
-                current_app.logger.error(e)
-                all_servers_success = False
-                self.errors[server] = e.message
+        try:
+            self.prev_deploy()
+            self.deploy()
+            self.post_deploy()
 
-        self.end(all_servers_success)
+            is_all_servers_success = True
+            for server_info in self.servers:
+                server = server_info['host']
+                try:
+                    self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
+                    self.prev_release(self.connections[server])
+                    self.release(self.connections[server])
+                    self.post_release(self.connections[server])
+                except Exception as e:
+                    is_all_servers_success = False
+                    current_app.logger.error(e)
+                    self.errors[server] = e.message
+            self.end(is_all_servers_success)
+
+        except Exception as e:
+            self.end(False)
+            emit('fail', {'event': 'console', 'data': {'message': e.message}}, room=self.task_id)
+
         return {'success': self.success, 'errors': self.errors}

@@ -51,6 +51,9 @@ class Code():
 
     #: ----------------------- 4xxx git 相关错误 -----------------
     #: 3xxx shell相关错误
+    #: git操作失败
+    shell_git_fail = 4000
+
     #: git尚未初始化
     shell_git_init_fail = 4001
 
@@ -71,6 +74,7 @@ class Code():
         shell_run_fail: '命令运行错误，请联系管理员',
         shell_dir_not_exists: '路径不存在，请联系管理员',
 
+        shell_git_fail: 'git 操作失败，请联系管理员',
         shell_git_init_fail: '项目git初始化失败，请联系管理员',
         shell_git_pull_fail: 'git pull 失败，请联系管理员',
     }
