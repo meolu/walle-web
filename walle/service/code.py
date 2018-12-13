@@ -60,6 +60,11 @@ class Code():
     #: git pull 失败
     shell_git_pull_fail = 4002
 
+    #: ----------------------- 5xxx 部署相关错误 -----------------
+    #: 5xxx 部署相关错误
+    #: 任务部署失败，已终止。请修复错误后，重新部署。
+    deploy_fail = 5001
+
     code_msg = {
         unlogin: '未登录',
         error_pwd: '账号密码错误',
@@ -77,4 +82,6 @@ class Code():
         shell_git_fail: 'git 操作失败，请联系管理员',
         shell_git_init_fail: '项目git初始化失败，请联系管理员',
         shell_git_pull_fail: 'git pull 失败，请联系管理员',
+
+        deploy_fail: '任务部署失败，已终止。请修复错误后，重新部署。',
     }

@@ -141,8 +141,6 @@ class Deployer:
         :param project_name:
         :return:
         '''
-        # TODO
-        # socketio.sleep(0.001)
         self.stage = self.stage_deploy
         self.sequence = 2
 
@@ -192,8 +190,6 @@ class Deployer:
         - 传送到版本库 release
         :return:
         '''
-        # TODO
-        # socketio.sleep(0.001)
         self.stage = self.stage_post_deploy
         self.sequence = 3
 
@@ -214,8 +210,6 @@ class Deployer:
         - 检查 webroot 父目录是否存在
         :return:
         '''
-        # TODO
-        # socketio.sleep(0.001)
         self.stage = self.stage_prev_release
         self.sequence = 4
 
@@ -252,8 +246,6 @@ class Deployer:
         - 解压 remote
         :return:
         '''
-        # TODO
-        # socketio.sleep(0.001)
         self.stage = self.stage_release
         self.sequence = 5
 
@@ -276,8 +268,6 @@ class Deployer:
         解压版本包
         :return:
         '''
-        # TODO
-        # socketio.sleep(0.001)
         with waller.cd(self.project_info['target_releases']):
             command = 'tar zxf %s' % (self.release_version_tar)
             result = waller.run(command, wenv=self.config())
@@ -430,6 +420,6 @@ class Deployer:
 
         except Exception as e:
             self.end(False)
-            emit('fail', {'event': 'console', 'data': {'message': e.message}}, room=self.task_id)
+            emit('fail', {'event': 'console', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
 
         return {'success': self.success, 'errors': self.errors}
