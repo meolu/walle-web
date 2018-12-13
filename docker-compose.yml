@@ -5,15 +5,20 @@ services:
   mysql:
     image: mysql
     ports:
-      - 3306:3306
+      - 0.0.0.0:3306:3306
+    expose:
+      - 3306
     environment:
       MYSQL_ROOT_PASSWORD: walle
 
       MYSQL_DATABASE: walle
+
       MYSQL_USER: walle
       MYSQL_PASSWORD: walle
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
   web:
@@ -21,13 +26,18 @@ services:
     links:
       - mysql
     ports:
-      - 0.0.0.0:8000:5000
+      - 0.0.0.0:5000:5000
+    expose:
+      - 5000
     environment:
       - WALLE_SECRET="guess me out"
     restart: always
 
   gateway:
     image: nginx
+    links:
+      - mysql
+      - web
     ports:
       - 0.0.0.0:80:80
     volumes:
