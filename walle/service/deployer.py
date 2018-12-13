@@ -77,6 +77,8 @@ class Deployer:
         self.project_name = self.project_info['id']
         self.dir_codebase_project = self.local_codebase + str(self.project_name)
 
+        self.init_repo()
+
         # start to deploy
         self.console = console
 
@@ -308,8 +310,6 @@ class Deployer:
             result = waller.run(command, wenv=self.config())
 
     def list_tag(self):
-        self.init_repo()
-
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
             result = self.local.run(command, wenv=self.config())
@@ -320,14 +320,12 @@ class Deployer:
         return None
 
     def list_branch(self):
-        self.init_repo()
-
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
             result = self.local.run(command, wenv=self.config())
 
             if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_pull_fail)
+                raise WalleError(Code.shell_git_pull_fail, message=result.stdout)
 
             current_app.logger.info(self.dir_codebase_project)
 
@@ -349,8 +347,6 @@ class Deployer:
         return None
 
     def list_commit(self, branch):
-        self.init_repo()
-
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
             self.local.run(command, wenv=self.config())
