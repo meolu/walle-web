@@ -4,25 +4,33 @@ services:
 
   mysql:
     image: mysql
-    container_name: inspector-mysql
     ports:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: walle
+
       MYSQL_DATABASE: walle
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_USER: walle
+      MYSQL_PASSWORD: walle
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
-    network_mode: host
     restart: always
 
   web:
-    build: .
-    depends_on:
+    build: ./
+    links:
       - mysql
     ports:
-      - 0.0.0.0:5000:5000
-    network_mode: host
+      - 0.0.0.0:8000:5000
+    environment:
+      - WALLE_SECRET="guess me out"
     restart: always
 
+  gateway:
+    image: nginx
+    ports:
+      - 0.0.0.0:80:80
+    volumes:
+      - ./fe/:/data/web/:ro
+      - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
