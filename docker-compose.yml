@@ -3,19 +3,17 @@ version: "3.6"
 services:
 
   mysql:
-    image: mysql
+    image: mysql:5.7
     ports:
       - 0.0.0.0:3306:3306
     expose:
       - 3306
     environment:
+      MYSQL_ROOT_PASSWORD: walle
       MYSQL_DATABASE: walle
-      MYSQL_USER: walle
-      MYSQL_PASSWORD: walle
-#    command: --default-authentication-plugin=mysql_native_password
     volumes:
       - ${HOME}/.walle/mysql:/var/lib/mysql
-      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
   web:
