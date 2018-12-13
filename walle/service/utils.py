@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Helper utilities and decorators."""
 from __future__ import print_function
+
 import sys
 import time
 from datetime import datetime
@@ -8,6 +9,7 @@ from datetime import datetime
 import os
 import re
 from flask import flash
+from invoke import Responder
 
 
 def flash_errors(form, category='warning'):
@@ -70,3 +72,9 @@ def color_clean(text_with_color):
     pure_text = re.sub('\x1B\[\?[0-9;]*[a-z]\x1B[=><]', '', pure_text, flags=re.I)
     return pure_text.strip()
 
+
+def say_yes():
+    return Responder(
+        pattern=r'yes/no',
+        response='yes\n',
+    )

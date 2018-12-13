@@ -11,15 +11,15 @@ from datetime import datetime
 import os
 import re
 from flask import current_app
-from flask_socketio import emit
 from walle.model.project import ProjectModel
 from walle.model.record import RecordModel
 from walle.model.task import TaskModel
-from walle.service.extensions import socketio
-from walle.service.utils import color_clean
-from walle.service.waller import Waller
 from walle.service.code import Code
 from walle.service.error import WalleError
+from walle.service.extensions import socketio
+from walle.service.utils import color_clean, say_yes
+from walle.service.waller import Waller
+
 
 class Deployer:
     '''
@@ -56,7 +56,8 @@ class Deployer:
         self.local_codebase = current_app.config.get('CODE_BASE')
         self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
                             user=current_app.config.get('LOCAL_SERVER_USER'),
-                            port=current_app.config.get('LOCAL_SERVER_PORT'))
+                            port=current_app.config.get('LOCAL_SERVER_PORT'),
+                            )
         self.TaskRecord = RecordModel()
 
         if task_id:
@@ -351,9 +352,8 @@ class Deployer:
 
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
-            result = self.local.run(command, wenv=self.config())
+            self.local.run(command, wenv=self.config())
 
-            # TODO 10是需要前端传的
             command = 'git log -35 --pretty="%h #_# %an #_# %s"'
             result = self.local.run(command, wenv=self.config())
             current_app.logger.info(result.stdout)
@@ -398,7 +398,7 @@ class Deployer:
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
-            result = self.local.run(command, wenv=self.config())
+            result = self.local.run(command, wenv=self.config(), watchers=[say_yes()])
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 

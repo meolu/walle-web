@@ -7,12 +7,11 @@
     :author: wushuiyong@walle-web.io
 """
 from flask import current_app
-from flask_login import current_user
+from flask_login import current_user, login_required
 from flask_socketio import emit, join_room, Namespace
 from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.deployer import Deployer
-
 
 class WalleSocketIO(Namespace):
     namespace, room, app = None, None, None
