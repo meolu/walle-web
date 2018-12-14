@@ -342,7 +342,7 @@ class Deployer:
             command = 'git checkout %s && git pull' % (branch)
             self.local.run(command, wenv=self.config())
 
-            command = 'git log -50 --pretty="%h #+_+# %an #+_+# %s"'
+            command = 'git log -50 --pretty="%h #@_@# %an #@_@# %s"'
             result = self.local.run(command, pty=False, wenv=self.config())
             current_app.logger.info(result.stdout)
 
@@ -351,10 +351,10 @@ class Deployer:
             commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
-                if not re.search('^.+ #+_+# .+ #+_+# .*$', commit):
+                if not re.search('^.+ #@_@# .+ #@_@# .*$', commit):
                     continue
 
-                commit_dict = commit.split(' #+_+# ')
+                commit_dict = commit.split(' #@_@# ')
                 current_app.logger.info(commit_dict)
                 commits.append({
                     'id': commit_dict[0],
