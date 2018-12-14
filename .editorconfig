@@ -1,7 +1,7 @@
 # Editor configuration, see http://editorconfig.org
 root = true
 
-[*]
+[*.py]
 charset = utf-8
 indent_style = space
 indent_size = 4
