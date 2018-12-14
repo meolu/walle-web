@@ -20,7 +20,8 @@ class ProdConfig(Config):
 
     # 服务启动 @TODO
     # 跟hosts, nginx配置一致
-    HOST = 'admin.walle-web.io'
+    # 这里设置成域名模式没有什么大的作用，反倒很麻烦
+    HOST = '0.0.0.0'
     PORT = 5000
 
     ENV = 'prod'
@@ -31,7 +32,7 @@ class ProdConfig(Config):
     CACHE_TYPE = 'simple'
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost/walle'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:walle@mysql/walle'
 
     # 设置session的保存时间。
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)

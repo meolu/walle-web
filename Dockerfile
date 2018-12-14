@@ -1,10 +1,15 @@
-FROM python:2.7.1
+FROM python:2.7
 
-WORKDIR /usr/app
-COPY ./requirements/prod.txt ./requirements.txt
-RUN pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
+ENV FLASK_APP waller.py
+
+WORKDIR /usr/app/
+
+COPY ./requirements/prod.txt .
+RUN pip install futures
+
+RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
 COPY . .
-RUN sh admin.sh migration
+RUN flask db upgrade
 
-CMD python waller.py
+CMD python waller.py start

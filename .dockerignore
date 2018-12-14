@@ -1,16 +1,18 @@
 Dockerfile*
 docker-compose*
 
-.dockerignore
 .git
 .github
 .gitignore
 .vscode
+.dockerignore
+.editorconfig
+.idea/
+.travis.yml
 
 test
 screenshot
 migrations
-requirements
 
 README.md
 LICENSE
