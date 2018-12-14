@@ -303,8 +303,9 @@ class Deployer:
     def list_tag(self):
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
-            result = self.local.run(command, wenv=self.config())
-            tags = color_clean(result.stdout.strip())
+            result = self.local.run(command, pty=False, wenv=self.config())
+            # tags = color_clean(result.stdout.strip())
+            tags = result.stdout.strip()
             tags = tags.split('\n')
             return [color_clean(tag.strip()) for tag in tags]
 
@@ -321,13 +322,14 @@ class Deployer:
             current_app.logger.info(self.dir_codebase_project)
 
             command = 'git branch -r'
-            result = self.local.run(command, wenv=self.config())
+            result = self.local.run(command, pty=False, wenv=self.config())
 
             # if result.exited != Code.Ok:
             #     raise WalleError(Code.shell_run_fail)
 
             # TODO 三种可能: false, error, success
-            branches = color_clean(result.stdout.strip())
+            # branches = color_clean(result.stdout.strip())
+            branches = result.stdout.strip()
             branches = branches.split('\n')
             # 去除 origin/HEAD -> 当前指向
             # 去除远端前缀
@@ -343,10 +345,11 @@ class Deployer:
             self.local.run(command, wenv=self.config())
 
             command = 'git log -35 --pretty="%h #_# %an #_# %s"'
-            result = self.local.run(command, wenv=self.config())
+            result = self.local.run(command, pty=False, wenv=self.config())
             current_app.logger.info(result.stdout)
 
-            commit_log = color_clean(result.stdout.strip())
+            # commit_log = color_clean(result.stdout.strip())
+            commit_log = result.stdout.strip()
             current_app.logger.info(commit_log)
             commit_list = commit_log.split('\n')
             commits = []

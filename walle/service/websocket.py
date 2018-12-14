@@ -50,13 +50,13 @@ class WalleSocketIO(Namespace):
     def on_deploy(self, message):
         self.task_info = TaskModel(id=self.room).item()
         if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
-            wi = Deployer(task_id=self.room, console=True)
+            wi = Deployer(project_id=self.room, console=True)
             ret = wi.walle_deploy()
         else:
             emit('console', {'event': 'forbidden', 'data': self.task_info}, room=self.room)
 
     def on_branches(self, message=None):
-        wi = Deployer(task_id=self.room)
+        wi = Deployer(project_id=self.room)
         try:
             branches = wi.list_branch()
             emit('branches', {'event': 'branches', 'data': branches}, room=self.room)
@@ -64,7 +64,7 @@ class WalleSocketIO(Namespace):
             emit('branches', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
     def on_tags(self, message=None):
-        wi = Deployer(task_id=self.room)
+        wi = Deployer(project_id=self.room)
         try:
             tags = wi.list_tag()
             emit('tags', {'event': 'tags', 'data': tags}, room=self.room)
@@ -72,7 +72,7 @@ class WalleSocketIO(Namespace):
             emit('tags', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
     def on_commits(self, message=None):
-        wi = Deployer(task_id=self.room)
+        wi = Deployer(project_id=self.room)
         if 'branch' not in message:
             emit('commits', {'event': 'error', 'data': {'message': 'invalid branch'}}, room=self.room)
         else:
