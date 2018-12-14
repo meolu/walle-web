@@ -50,7 +50,7 @@ class WalleSocketIO(Namespace):
     def on_deploy(self, message):
         self.task_info = TaskModel(id=self.room).item()
         if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
-            wi = Deployer(project_id=self.room, console=True)
+            wi = Deployer(task_id=self.room, console=True)
             ret = wi.walle_deploy()
         else:
             emit('console', {'event': 'forbidden', 'data': self.task_info}, room=self.room)
