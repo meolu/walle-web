@@ -201,7 +201,7 @@ class Deployer:
         # 压缩打包
         self.release_version_tar = '%s.tgz' % (self.release_version)
         with self.local.cd(self.local_codebase):
-            command = 'tar zcvf %s %s' % (self.release_version_tar, self.release_version)
+            command = 'tar zcf %s %s' % (self.release_version_tar, self.release_version)
             result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
