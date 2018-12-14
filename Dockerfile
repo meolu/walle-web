@@ -13,4 +13,4 @@ RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
 COPY . .
 RUN flask db upgrade
 
-CMD python waller.py start
+CMD python waller.py
