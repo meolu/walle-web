@@ -6,6 +6,7 @@ WORKDIR /usr/app/
 
 COPY ./requirements/prod.txt .
 RUN pip install futures
+RUN mkdir logs
 
 RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
