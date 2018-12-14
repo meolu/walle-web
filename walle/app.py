@@ -185,7 +185,7 @@ def register_socketio(app):
         return app
     socketio.init_app(app, async_mode='gevent')
     socketio.on_namespace(WalleSocketIO(namespace='/walle'))
-    socketio.run(app, host=app.config.get('HOST'), port=app.config.get('PORT'))
+    socketio.run(app, debug=True, host=app.config.get('HOST'), port=app.config.get('PORT'))
     return app
 
 

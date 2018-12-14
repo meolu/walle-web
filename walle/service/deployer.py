@@ -304,7 +304,6 @@ class Deployer:
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
             result = self.local.run(command, pty=False, wenv=self.config())
-            # tags = color_clean(result.stdout.strip())
             tags = result.stdout.strip()
             tags = tags.split('\n')
             return [color_clean(tag.strip()) for tag in tags]
@@ -328,7 +327,6 @@ class Deployer:
             #     raise WalleError(Code.shell_run_fail)
 
             # TODO 三种可能: false, error, success
-            # branches = color_clean(result.stdout.strip())
             branches = result.stdout.strip()
             branches = branches.split('\n')
             # 去除 origin/HEAD -> 当前指向
@@ -344,20 +342,19 @@ class Deployer:
             command = 'git checkout %s && git pull' % (branch)
             self.local.run(command, wenv=self.config())
 
-            command = 'git log -35 --pretty="%h #_# %an #_# %s"'
+            command = 'git log -50 --pretty="%h #+_+# %an #+_+# %s"'
             result = self.local.run(command, pty=False, wenv=self.config())
             current_app.logger.info(result.stdout)
 
-            # commit_log = color_clean(result.stdout.strip())
             commit_log = result.stdout.strip()
             current_app.logger.info(commit_log)
             commit_list = commit_log.split('\n')
             commits = []
             for commit in commit_list:
-                if not re.search('^.+ #_# .+ #_# .*$', commit):
+                if not re.search('^.+ #+_+# .+ #+_+# .*$', commit):
                     continue
 
-                commit_dict = commit.split(' #_# ')
+                commit_dict = commit.split(' #+_+# ')
                 current_app.logger.info(commit_dict)
                 commits.append({
                     'id': commit_dict[0],
