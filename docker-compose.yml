@@ -1,0 +1,38 @@
+version: "3.6"
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 0.0.0.0:3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: walle
+      MYSQL_DATABASE: walle
+    volumes:
+      - ${HOME}/.walle/mysql:/var/lib/mysql
+    restart: always
+
+  web:
+    build: ./
+    links:
+      - mysql
+    expose:
+      - 5000
+    environment:
+      - WALLE_SECRET="guess me out"
+    restart: always
+
+  gateway:
+    image: nginx
+    links:
+      - mysql
+      - web
+    ports:
+      - 0.0.0.0:80:80
+    volumes:
+      - ./fe/:/data/web/:ro
+      - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always

@@ -20,7 +20,8 @@ class ProdConfig(Config):
 
     # 服务启动 @TODO
     # 跟hosts, nginx配置一致
-    HOST = 'admin.walle-web.io'
+    # HOST = 'admin.walle-web.io'
+    HOST = '0.0.0.0'
     PORT = 5000
 
     ENV = 'prod'
