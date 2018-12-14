@@ -20,8 +20,7 @@ class ProdConfig(Config):
 
     # 服务启动 @TODO
     # 跟hosts, nginx配置一致
-    # 这里设置成域名模式没有什么大的作用，反倒很麻烦
-    HOST = '0.0.0.0'
+    HOST = 'admin.walle-web.io'
     PORT = 5000
 
     ENV = 'prod'
