@@ -13,7 +13,7 @@ services:
       MYSQL_ROOT_PASSWORD: walle
       MYSQL_DATABASE: walle
     volumes:
-      - ${HOME}/.walle/mysql:/var/lib/mysql
+      - /data/walle/mysql:/var/lib/mysql
     networks:
       - walle-net
     restart: always
@@ -21,7 +21,7 @@ services:
   adminer:
     image: adminer
     ports:
-      - 8080:8080
+      - 8888:8080
     networks:
       - walle-net
     restart: always
