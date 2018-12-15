@@ -16,7 +16,7 @@ class Waller(Connection):
     connections, success, errors = {}, {}, {}
     release_version_tar, release_version = None, None
 
-    def run(self, command, wenv=None, sudo=False, exception=True, **kwargs):
+    def run(self, command, wenv=None, sudo=False, pty=True, exception=True, **kwargs):
         '''
         pty=True/False是直接影响到输出.False较适合在获取文本,True更适合websocket
 
@@ -33,9 +33,9 @@ class Waller(Connection):
         current_app.logger.info(message)
         try:
             if sudo:
-                result = super(Waller, self).sudo(command, pty=False, **kwargs)
+                result = super(Waller, self).sudo(command, pty=pty, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=True, warn=True, watchers=[say_yes()], **kwargs)
+                result = super(Waller, self).run(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout

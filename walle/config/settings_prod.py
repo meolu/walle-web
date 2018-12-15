@@ -19,20 +19,18 @@ class ProdConfig(Config):
     """Production configuration."""
 
     # 服务启动 @TODO
-    # 跟hosts, nginx配置一致
-    # HOST = 'admin.walle-web.io'
     HOST = '0.0.0.0'
     PORT = 5000
 
     ENV = 'prod'
     DEBUG = False
-    PROPAGATE_EXCEPTIONS = True
+    # PROPAGATE_EXCEPTIONS = True
     WTF_CSRF_ENABLED = False
     DEBUG_TB_ENABLED = False
     CACHE_TYPE = 'simple'
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost/walle'
+    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle_python'
 
     # 设置session的保存时间。
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)
@@ -56,9 +54,9 @@ class ProdConfig(Config):
 
     # 日志 @TODO
     LOG_PATH = os.path.join(Config.PROJECT_ROOT, 'logs')
+    LOG_PATH_EXCEPTION = os.path.join(LOG_PATH, 'exception.log')
     LOG_PATH_ERROR = os.path.join(LOG_PATH, 'error.log')
     LOG_PATH_INFO = os.path.join(LOG_PATH, 'info.log')
-    LOG_PATH_DEBUG = os.path.join(LOG_PATH, 'debug.log')
     LOG_FILE_MAX_BYTES = 100 * 1024 * 1024
 
     # 轮转数量是 10 个
@@ -66,6 +64,7 @@ class ProdConfig(Config):
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
 
     # 宿主机（walle部署所在的机器以及用户） @TODO
+    # 启动walle服务的用户A, LOCAL_SERVER_USER == B
     LOCAL_SERVER_HOST = '127.0.0.1'
     LOCAL_SERVER_USER = 'work'
     LOCAL_SERVER_PORT = 22

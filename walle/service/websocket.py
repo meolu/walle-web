@@ -16,6 +16,8 @@ from walle.service.deployer import Deployer
 class WalleSocketIO(Namespace):
     namespace, room, app = None, None, None
 
+    task_id, project_id = None, None
+
     task_info = None
 
     def __init__(self, namespace, room=None, app=None):
@@ -31,7 +33,13 @@ class WalleSocketIO(Namespace):
 
     def on_open(self, message):
         current_app.logger.info(message)
-        self.room = message['task']
+        if 'task' in message:
+            self.task_id = message['task']
+            self.room = self.task_id
+        if 'project_id' in message:
+            self.project_id = message['project_id']
+            self.room = self.project_id
+
         if not current_user.is_authenticated:
             emit('close', {'event': 'disconnect', 'data': {}}, room=self.room)
         join_room(room=self.room)
@@ -47,24 +55,24 @@ class WalleSocketIO(Namespace):
         else:
             emit('console', {'event': 'forbidden', 'data': self.task_info}, room=self.room)
 
-    def on_branches(self, message):
-        wi = Deployer(task_id=self.room)
+    def on_branches(self, message=None):
+        wi = Deployer(project_id=self.room)
         try:
             branches = wi.list_branch()
             emit('branches', {'event': 'branches', 'data': branches}, room=self.room)
         except Exception as e:
             emit('branches', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
-    def on_tags(self, message):
-        wi = Deployer(task_id=self.room)
+    def on_tags(self, message=None):
+        wi = Deployer(project_id=self.room)
         try:
             tags = wi.list_tag()
             emit('tags', {'event': 'tags', 'data': tags}, room=self.room)
         except Exception as e:
             emit('tags', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
-    def on_commits(self, message):
-        wi = Deployer(task_id=self.room)
+    def on_commits(self, message=None):
+        wi = Deployer(project_id=self.room)
         if 'branch' not in message:
             emit('commits', {'event': 'error', 'data': {'message': 'invalid branch'}}, room=self.room)
         else:
