@@ -1,7 +1,5 @@
 FROM python:2.7
 
-ENV FLASK_APP waller.py
-
 WORKDIR /usr/app/
 
 COPY ./requirements/prod.txt .
@@ -10,6 +8,7 @@ RUN mkdir logs
 
 RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
+ENV FLASK_APP waller.py
 COPY . .
 RUN flask db upgrade
 
