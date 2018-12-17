@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+#
+# 发布镜像脚本
+#
+
+version='release-v1.0.0'
+
+# cwd
+cwd=$(pwd)
+
+#
+# Set Colors
+#
+bold=$(tput bold)
+underline=$(tput sgr 0 1)
+reset=$(tput sgr0)
+
+red=$(tput setaf 1)
+green=$(tput setaf 76)
+white=$(tput setaf 7)
+tan=$(tput setaf 202)
+blue=$(tput setaf 25)
+
+#
+# Headers and Logging
+#
+info() {
+    printf "${white}➜ %s${reset}\n" "$@"
+}
+success() {
+    printf "${green}✔ %s${reset}\n" "$@"
+}
+error() {
+    printf "${red}✖ %s${reset}\n" "$@"
+}
+warn() {
+    printf "${tan}➜ %s${reset}\n" "$@"
+}
+
+goBack(){
+  cd ${cwd}
+}
+
+buildUi(){
+ goBack
+ cd fe
+ walleUi="walle-ui:${version}"
+ info "开始构建:${walleUi}"
+ docker build --tag walle/${walleUi} .
+ success "开始上传:${walleUi}"
+ docker push walle/${walleUi}
+ success "上传成功:${walleUi}"
+}
+
+buildApiServer(){
+ goBack
+ walleApi="walle-api:${version}"
+ info "开始构建:${walleApi}"
+ docker build --tag walle/${walleApi} .
+ success "开始上传:${walleApi}"
+ docker push walle/${walleApi}
+ success "上传成功:${walleApi}"
+}
+
+buildGateway(){
+ goBack
+ cd gateway
+ walleGateway="walle-gateway:${version}"
+ info "开始构建:${walleGateway}"
+ docker build --tag "walle/${walleGateway}" .
+ success "开始上传:${walleGateway}"
+ docker push walle/${walleGateway}
+ success "上传成功:${walleGateway}"
+}
+
+buildImage(){
+ buildUi
+ buildApiServer
+ buildGateway
+}
+
+
+bootstrap(){
+ info "开始构建"
+ h1 "请输入仓库密码："
+ docker login --username=walle@qq.com
+ buildImage
+ success '构建成功'
+}
+
+bootstrap

@@ -30,7 +30,7 @@ class ProdConfig(Config):
     CACHE_TYPE = 'simple'
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle_python'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:walle@db:3306/walle'
 
     # 设置session的保存时间。
     PERMANENT_SESSION_LIFETIME = timedelta(days=1)

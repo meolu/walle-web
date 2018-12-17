@@ -1,3 +1,5 @@
+# 用户使用，最终镜像
+
 version: "3.7"
 
 services:
@@ -26,8 +28,17 @@ services:
       - walle-net
     restart: always
 
+
+  ui:
+    image: walle/walle-ui:latest
+    expose:
+      - 8000
+    networks:
+      - walle-net
+    restart: always
+
   web:
-    build: ./
+    image: walle/walle-api:latest
     depends_on:
       - db
     expose:
@@ -38,14 +49,12 @@ services:
       - walle-net
     restart: always
 
-
   gateway:
-    image: nginx
+    image: walle/walle-gateway:latest
     ports:
       - 0.0.0.0:80:80
     volumes:
       - ./fe/:/data/web/:ro
-      - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       walle-net:
     restart: always
