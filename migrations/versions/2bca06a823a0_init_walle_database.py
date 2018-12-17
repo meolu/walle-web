@@ -5,7 +5,7 @@
 此刻是walle 2.0 alpha准备工作收尾阶段中, 但内心非常孤独, 大多用户让人心寒, 缺乏基本的感恩之心
 
 Revision ID: 2bca06a823a0
-Revises: 
+Revises:
 Create Date: 2018-12-08 21:01:19.273412
 
 """
@@ -22,6 +22,7 @@ def upgrade():
     # Don't ask why, you are not me, and you will never understand
     # who care about you ?
     create_environments()
+    init_environments()
     create_menus()
     init_menus()
     create_projects()
@@ -35,6 +36,9 @@ def upgrade():
     create_members()
     init_members()
 
+    # commit
+    db.session.commit()
+
 
 def create_environments():
     sql = u"""CREATE TABLE `environments` (
@@ -46,6 +50,14 @@ def create_environments():
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+    db.session.execute(sql)
+
+
+def init_environments():
+    sql = u"""INSERT INTO `environments` VALUES
+            (1,'开发环境', 1, 1, '2017-03-08 17:26:07', '2018-11-26 15:38:14'),
+            (2,'测试环境', 1, 1, '2017-05-13 11:26:42', '2018-11-26 15:38:14'),
+            (3,'生产环境', 1, 1, '2017-05-14 10:46:31', '2018-11-26 17:10:02');"""
     db.session.execute(sql)
 
 
@@ -242,10 +254,10 @@ def create_members():
 
 def init_members():
     sql = u"""INSERT INTO `members` VALUES
-            (16,2,1,'group','OWNER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
-            (17,3,1,'group','MASTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
-            (18,4,1,'group','DEVELOPER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
-            (19,5,1,'group','REPORTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59');"""
+            (null,2,1,'group','OWNER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (null,3,1,'group','MASTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (null,4,1,'group','DEVELOPER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59'),
+            (null,5,1,'group','REPORTER',1,'2018-12-09 00:35:59','2018-12-09 00:35:59');"""
     db.session.execute(sql)
 
 
