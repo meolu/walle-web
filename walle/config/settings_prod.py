@@ -18,27 +18,21 @@ from walle.config.settings import Config
 class ProdConfig(Config):
     """Production configuration."""
 
-    # 服务启动 @TODO
+    # 服务启动
     HOST = '0.0.0.0'
     PORT = 5000
-
     ENV = 'prod'
     DEBUG = False
-    # PROPAGATE_EXCEPTIONS = True
-    WTF_CSRF_ENABLED = False
-    DEBUG_TB_ENABLED = False
-    CACHE_TYPE = 'simple'
+
+    # 宿主机（walle部署所在的机器以及用户） @TODO
+    # 建议启动walle服务用户与LOCAL_SERVER_USER一致. 并且做该用户的免密码登录
+    # https://walle-web.io/docs/troubleshooting.html#Authentication-failed
+    LOCAL_SERVER_HOST = '127.0.0.1'
+    LOCAL_SERVER_USER = 'work'
+    LOCAL_SERVER_PORT = 22
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:walle@db:3306/walle'
-
-    # 设置session的保存时间。
-    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
-
-    # 前端项目部署路径
-    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/') + '/'
-    AVATAR_PATH = 'avatar/'
-    UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
+    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle?charset=utf8'
 
     # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'
@@ -54,19 +48,24 @@ class ProdConfig(Config):
 
     # 日志 @TODO
     LOG_PATH = os.path.join(Config.PROJECT_ROOT, 'logs')
-    LOG_PATH_EXCEPTION = os.path.join(LOG_PATH, 'exception.log')
     LOG_PATH_ERROR = os.path.join(LOG_PATH, 'error.log')
     LOG_PATH_INFO = os.path.join(LOG_PATH, 'info.log')
     LOG_FILE_MAX_BYTES = 100 * 1024 * 1024
+
+    WTF_CSRF_ENABLED = False
+    DEBUG_TB_ENABLED = False
+    CACHE_TYPE = 'simple'
 
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
 
-    # 宿主机（walle部署所在的机器以及用户） @TODO
-    # 启动walle服务的用户A, LOCAL_SERVER_USER == B
-    LOCAL_SERVER_HOST = '127.0.0.1'
-    LOCAL_SERVER_USER = 'work'
-    LOCAL_SERVER_PORT = 22
+    # 设置session的保存时间。
+    PERMANENT_SESSION_LIFETIME = timedelta(days=1)
+
+    # 前端项目部署路径
+    FE_PATH = os.path.abspath(Config.PROJECT_ROOT + '/../walle-fe/') + '/'
+    AVATAR_PATH = 'avatar/'
+    UPLOAD_AVATAR = FE_PATH + '/dist/' + AVATAR_PATH
 
     SQLALCHEMY_ECHO = False
