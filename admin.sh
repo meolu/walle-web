@@ -16,8 +16,9 @@ function init() {
         exit 1
     fi
     pip install virtualenv
-    rm -rf venv
-    virtualenv --no-site-packages venv # 注意:安装失败请指定python路径. mac 可能会有用anaconda的python
+    if [ ! -d "venv" ]; then
+        virtualenv --no-site-packages venv # 注意:安装失败请指定python路径. mac 可能会有用anaconda的python. 请不要mac试用, 麻烦多多
+    fi
     source ./venv/bin/activate
     pip install -r ./requirements/prod.txt
     echo "************************************************"
