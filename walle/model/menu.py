@@ -69,7 +69,7 @@ class MenuModel(SurrogatePK, Model):
                     'url': RoleModel.menu_url(item.url),
                 })
 
-        return data.values()
+        return list(data.values())
 
     def to_json(self):
         return {

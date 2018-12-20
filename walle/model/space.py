@@ -106,7 +106,7 @@ class SpaceModel(SurrogatePK, Model):
         item = {
             'id': self.id,
             'user_id': self.user_id,
-            'user_name': uid2name[self.user_id] if uid2name and uid2name.has_key(self.user_id) else '',
+            'user_name': uid2name[self.user_id] if uid2name and self.user_id in uid2name else '',
             # TODO
             'group_id': 'self.group_id',
             'name': self.name,
