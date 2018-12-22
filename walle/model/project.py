@@ -109,6 +109,7 @@ class ProjectModel(SurrogatePK, Model):
         """
         id = id if id else self.id
         data = self.query.filter(ProjectModel.status.notin_([self.status_remove])).filter_by(id=id).first()
+        current_app.logger.info(data)
         if not data:
             return []
 
@@ -120,13 +121,14 @@ class ProjectModel(SurrogatePK, Model):
         return project_info
 
     def add(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
         data = dict(*args)
+        current_app.logger.info(data)
         project = ProjectModel(**data)
 
         db.session.add(project)
         db.session.commit()
 
+        return project.to_json()
         self.id = project.id
         return self.id
 
