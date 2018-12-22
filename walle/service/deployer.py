@@ -130,9 +130,10 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['prev_deploy']
-        current_app.logger.info(command)
-        with self.local.cd(self.dir_codebase_project):
-            result = self.local.run(command, wenv=self.config())
+        if command:
+            current_app.logger.info(command)
+            with self.local.cd(self.dir_codebase_project):
+                result = self.local.run(command, wenv=self.config())
 
     def deploy(self):
         '''
@@ -195,8 +196,9 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['post_deploy']
-        with self.local.cd(self.local_codebase + self.release_version):
-            result = self.local.run(command, wenv=self.config())
+        if command:
+            with self.local.cd(self.local_codebase + self.release_version):
+                result = self.local.run(command, wenv=self.config())
 
         # 压缩打包
         self.release_version_tar = '%s.tgz' % (self.release_version)
@@ -224,9 +226,10 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['prev_release']
-        current_app.logger.info(command)
-        with waller.cd(self.project_info['target_releases']):
-            result = waller.run(command, wenv=self.config())
+        if command:
+            current_app.logger.info(command)
+            with waller.cd(self.project_info['target_releases']):
+                result = waller.run(command, wenv=self.config())
 
         # TODO md5
         # 传送到版本库 release
@@ -284,6 +287,9 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['post_release']
+        if not command:
+            return None
+
         current_app.logger.info(command)
         with waller.cd(self.project_info['target_root']):
             result = waller.run(command, wenv=self.config())
