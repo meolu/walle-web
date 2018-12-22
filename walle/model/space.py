@@ -119,6 +119,7 @@ class SpaceModel(SurrogatePK, Model):
 
     def enable(self):
         return {
+            'enable_view': True,
             'enable_update': permission.enable_uid(self.user_id) or permission.role_upper_owner(),
             'enable_delete': permission.enable_uid(self.user_id) or permission.role_upper_owner(),
             'enable_create': False,
