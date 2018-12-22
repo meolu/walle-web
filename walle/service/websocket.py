@@ -94,8 +94,11 @@ class WalleSocketIO(Namespace):
         self.logs(task=self.room)
 
     def logs(self, task):
-        emit('console', {'event': 'console', 'data': {'task': task}}, room=task)
-        logs = RecordModel().fetch(task_id=task)
-        for log in logs:
+        deployer = Deployer(task_id=self.room)
+        for log in deployer.logs():
             log = RecordModel.logs(**log)
             emit('console', {'event': 'console', 'data': log}, room=self.room)
+
+        task_info = TaskModel().get_by_id(self.task_id)
+        deployer.end(success=task_info.status == TaskModel.status_success, update_status=False)
+

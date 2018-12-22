@@ -11,6 +11,7 @@ from datetime import datetime
 import os
 import re
 from flask import current_app
+from flask_socketio import emit
 from walle.model.project import ProjectModel
 from walle.model.record import RecordModel
 from walle.model.task import TaskModel
@@ -18,7 +19,6 @@ from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.utils import color_clean
 from walle.service.waller import Waller
-from flask_socketio import emit
 
 
 class Deployer:
@@ -391,10 +391,19 @@ class Deployer:
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
-    def end(self, success=True):
-        status = TaskModel.status_success if success else TaskModel.status_fail
-        current_app.logger.info('success:%s, status:%s' % (success, status))
-        TaskModel().get_by_id(self.task_id).update({'status': status})
+    def logs(self):
+        return RecordModel().fetch(task_id=self.task_id)
+
+    def end(self, success=True, update_status=True):
+        if update_status:
+            status = TaskModel.status_success if success else TaskModel.status_fail
+            current_app.logger.info('success:%s, status:%s' % (success, status))
+            TaskModel().get_by_id(self.task_id).update({'status': status})
+
+        if success:
+            emit('success', {'event': 'finish', 'data': {'message': '部署完成，辛苦了，为你的努力喝彩！'}}, room=self.task_id)
+        else:
+            emit('fail', {'event': 'finish', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
 
     def walle_deploy(self):
         self.start()
