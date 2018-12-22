@@ -10,7 +10,7 @@
 
 import json
 
-from flask import request
+from flask import request, abort
 from walle.api.api import SecurityResource
 from walle.form.project import ProjectForm
 from walle.model.member import MemberModel
@@ -20,6 +20,7 @@ from walle.service.rbac.role import *
 
 
 class ProjectAPI(SecurityResource):
+    actions = ['members', 'copy']
 
     @permission.upper_reporter
     def get(self, action=None, project_id=None):
@@ -60,7 +61,9 @@ class ProjectAPI(SecurityResource):
         """
 
         project_model = ProjectModel(id=project_id)
-        project_info = project_model.item()
+        current_app.logger.info(project_id)
+        project_info = project_model.item(id=project_id)
+        current_app.logger.info(project_info)
         if not project_info:
             return self.render_json(code=-1)
 
@@ -69,7 +72,7 @@ class ProjectAPI(SecurityResource):
         return self.render_json(data=project_info)
 
     @permission.upper_developer
-    def post(self):
+    def post(self, action=None, project_id=None):
         """
         create a project
         /environment/
@@ -77,18 +80,26 @@ class ProjectAPI(SecurityResource):
         :return:
         """
         super(ProjectAPI, self).post()
+        if action is None:
+            return self.create()
 
+        if action in self.actions:
+            self_action = getattr(self, action.lower(), None)
+            return self_action(project_id)
+        else:
+            abort(404)
+
+    def create(self):
         form = ProjectForm(request.form, csrf_enabled=False)
         if form.validate_on_submit():
             # add project
-            project_new = ProjectModel()
+            project = ProjectModel()
             data = form.form2dict()
-            id = project_new.add(data)
-            # TODO
-            if not id:
+            project_new = project.add(data)
+            if not project_new:
                 return self.render_json(code=-1)
 
-            return self.render_json(data=project_new.item())
+            return self.render_json(data=project_new)
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
@@ -146,3 +157,17 @@ class ProjectAPI(SecurityResource):
         item, count, user_ids = group_model.members()
 
         return self.render_json(data=item)
+
+    def copy(self, project_id):
+        """
+
+        :param project_id:
+        :return:
+        """
+        project = ProjectModel.get_by_id(project_id).to_dict()
+        project['id'] = None
+        project['name'] = project['name'] + '-copy'
+        project_new = ProjectModel()
+        project_new_info = project_new.add(dict(project))
+
+        return self.render_json(data=project_new_info)
