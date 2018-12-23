@@ -8,7 +8,7 @@
 import time
 from datetime import datetime
 
-import os
+import os, pwd
 import re
 from flask import current_app
 from flask_socketio import emit
@@ -107,11 +107,6 @@ class Deployer:
         '''
         self.stage = self.stage_prev_deploy
         self.sequence = 1
-
-        # 检查 当前用户
-        command = 'whoami'
-        current_app.logger.info(command)
-        result = self.local.run(command, wenv=self.config())
 
         # 检查 python 版本
         command = 'python --version'
@@ -308,6 +303,31 @@ class Deployer:
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
 
+    def project_detection(self):
+        errors = []
+        #  walle user => walle LOCAL_SERVER_USER
+        # show ssh_rsa.pub （maybe not necessary）
+        command = 'whoami'
+        current_app.logger.info(command)
+        result = self.local.run(command, exception=False, wenv=self.config())
+        if result.failed:
+            errors.append({
+                'title': '本地免密码登录',
+                'why': result.stdout,
+                'how': '在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
+            })
+
+        # LOCAL_SERVER_USER => git
+
+        # LOCAL_SERVER_USER => target_servers
+
+
+        # webroot is directory
+
+        # remote release directory
+        return errors
+
+
     def list_tag(self):
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
@@ -440,3 +460,5 @@ class Deployer:
             emit('fail', {'event': 'console', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
 
         return {'success': self.success, 'errors': self.errors}
+
+

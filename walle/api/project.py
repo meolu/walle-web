@@ -17,10 +17,11 @@ from walle.model.member import MemberModel
 from walle.model.project import ProjectModel
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
+from walle.service.deployer import Deployer
 
 
 class ProjectAPI(SecurityResource):
-    actions = ['members', 'copy']
+    actions = ['members', 'copy', 'detection']
 
     @permission.upper_reporter
     def get(self, action=None, project_id=None):
@@ -171,3 +172,24 @@ class ProjectAPI(SecurityResource):
         project_new_info = project_new.add(dict(project))
 
         return self.render_json(data=project_new_info)
+
+    def detection(self, project_id):
+        """
+
+        :param project_id:
+        :return:
+        """
+        # walle LOCAL_SERVER_USER => walle user
+        # show ssh_rsa.pub
+
+        # LOCAL_SERVER_USER => git
+
+        # LOCAL_SERVER_USER => target_servers
+
+
+        # webroot is directory
+
+        # remote release directory
+
+        errors = Deployer(project_id=project_id).project_detection()
+        return self.render_json(data=errors)
