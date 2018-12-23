@@ -97,6 +97,7 @@ class WalleSocketIO(Namespace):
         task_info = TaskModel().get_by_id(self.task_id)
         if task_info.status not in [TaskModel.status_doing, TaskModel.status_success, TaskModel.status_fail]:
             emit('console', {'event': 'console', 'data': ''}, room=self.room)
+            return True
 
         deployer = Deployer(task_id=self.room)
         for log in deployer.logs():
