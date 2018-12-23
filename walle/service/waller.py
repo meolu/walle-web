@@ -39,6 +39,8 @@ class Waller(Connection):
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout
+                if exception:
+                    raise Exception(stderr)
             else:
                 exitcode, stdout, stderr = 0, result.stdout, ''
 
