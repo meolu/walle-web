@@ -83,7 +83,7 @@
         // 2.返回construct, 初始化页面信息
         socket.on('construct', function (data) {
 {#            write(data)#}
-            // socket.emit('logs', {'task': 12})
+            socket.emit('logs', {'task': 12})
         });
 
         // 3.发送deploy命令之后, 将会收到console
