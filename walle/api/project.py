@@ -192,4 +192,7 @@ class ProjectAPI(SecurityResource):
         # remote release directory
 
         errors = Deployer(project_id=project_id).project_detection()
-        return self.render_json(data=errors)
+        message = ''
+        if not errors:
+            message = '配置检测通过，恭喜：）开始你的上线之旅吧'
+        return self.render_json(data=errors, message=message)

@@ -321,7 +321,7 @@ class Deployer:
             if result.failed:
                 errors.append({
                     'title': u'远程目标机器免密码登录失败',
-                    'why': u'远程目标机器:%s 错误:%s' % (server_info['host'], result.stdout),
+                    'why': u'远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
                     'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (current_app.config.get('LOCAL_SERVER_USER'), server_info['host']),
                 })
 
@@ -331,7 +331,7 @@ class Deployer:
             if result.stdout == 'false':
                 errors.append({
                     'title': u'远程目标机器webroot不能是已建好的目录',
-                    'why': u'远程目标机器%s webroot不能是已建好的目录，必须为软链接，你不必新建，walle会自行创建。' % (server_info['host']),
+                    'why': u'远程目标机器%s webroot不能是已存在的目录，必须为软链接，你不必新建，walle会自行创建。' % (server_info['host']),
                     'how': u'手工删除远程目标机器：%s webroot目录：%s' % (server_info['host'], self.project_info['target_root']),
                 })
 
