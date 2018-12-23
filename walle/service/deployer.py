@@ -25,7 +25,7 @@ class Deployer:
     '''
     序列号
     '''
-    stage = '0'
+    stage = 'init'
 
     sequence = 0
     stage_prev_deploy = 'prev_deploy'
@@ -77,7 +77,7 @@ class Deployer:
         self.project_name = self.project_info['id']
         self.dir_codebase_project = self.local_codebase + str(self.project_name)
 
-        self.init_repo()
+        # self.init_repo()
 
         # start to deploy
         self.console = console
