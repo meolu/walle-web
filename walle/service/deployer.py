@@ -216,11 +216,6 @@ class Deployer:
         command = 'mkdir -p %s' % (self.project_info['target_releases'])
         result = waller.run(command, wenv=self.config())
 
-        # TODO 检查 webroot 父目录是否存在,是否为软链
-        # command = 'mkdir -p %s' % (self.project_info['target_root'])
-        # result = waller.run(command)
-        # current_app.logger.info('command: %s', dir(result))
-
         # 用户自定义命令
         command = self.project_info['prev_release']
         if command:
@@ -312,17 +307,33 @@ class Deployer:
         result = self.local.run(command, exception=False, wenv=self.config())
         if result.failed:
             errors.append({
-                'title': '本地免密码登录',
+                'title': u'本地免密码登录失败',
                 'why': result.stdout,
-                'how': '在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
+                'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
             })
 
         # LOCAL_SERVER_USER => git
 
         # LOCAL_SERVER_USER => target_servers
+        for server_info in self.servers:
+            waller = Waller(host=server_info['host'], user=self.project_info['target_user'])
+            result = waller.run('id', exception=False, wenv=self.config())
+            if result.failed:
+                errors.append({
+                    'title': u'远程目标机器免密码登录失败',
+                    'why': u'远程目标机器:%s 错误:%s' % (server_info['host'], result.stdout),
+                    'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (current_app.config.get('LOCAL_SERVER_USER'), server_info['host']),
+                })
 
-
-        # webroot is directory
+        # 检查 webroot 父目录是否存在,是否为软链
+            command = '[ -L "%s" ] && echo "true" || echo "false"' % (self.project_info['target_root'])
+            result = waller.run(command, exception=False, wenv=self.config())
+            if result.stdout == 'false':
+                errors.append({
+                    'title': u'远程目标机器webroot不能是已建好的目录',
+                    'why': u'远程目标机器%s webroot不能是已建好的目录，必须为软链接，你不必新建，walle会自行创建。' % (server_info['host']),
+                    'how': u'手工删除远程目标机器：%s webroot目录：%s' % (server_info['host'], self.project_info['target_root']),
+                })
 
         # remote release directory
         return errors
