@@ -94,11 +94,14 @@ class WalleSocketIO(Namespace):
         self.logs(task=self.room)
 
     def logs(self, task):
+        task_info = TaskModel().get_by_id(self.task_id)
+        if task_info.status not in [TaskModel.status_doing, TaskModel.status_success, TaskModel.status_fail]:
+            emit('console', {'event': 'console', 'data': ''}, room=self.room)
+
         deployer = Deployer(task_id=self.room)
         for log in deployer.logs():
             log = RecordModel.logs(**log)
             emit('console', {'event': 'console', 'data': log}, room=self.room)
 
-        task_info = TaskModel().get_by_id(self.task_id)
         deployer.end(success=task_info.status == TaskModel.status_success, update_status=False)
 
