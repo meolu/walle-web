@@ -47,9 +47,10 @@ class RecordModel(Model):
         return [p.to_json() for p in data]
 
     @classmethod
-    def logs(cls, host, command, status, stage, sequence, success, error, *args, **kwargs):
+    def logs(cls, host, user, command, status, stage, sequence, success, error, *args, **kwargs):
         return {
             'host': host,
+            'user': user,
             'cmd': command,
             'status': status,
             'stage': stage,

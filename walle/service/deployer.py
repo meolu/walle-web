@@ -88,6 +88,7 @@ class Deployer:
                 'console': self.console}
 
     def start(self):
+        RecordModel().query.filter_by(task_id=self.task_id).delete()
         TaskModel().get_by_id(self.task_id).update({'status': TaskModel.status_doing})
         self.taskMdl = TaskModel().item(self.task_id)
 
@@ -317,7 +318,7 @@ class Deployer:
 
         # LOCAL_SERVER_USER => target_servers
         for server_info in self.servers:
-            waller = Waller(host=server_info['host'], user=self.project_info['target_user'])
+            waller = Waller(host=server_info['host'], user=server_info['user'], port=server_info['port'])
             result = waller.run('id', exception=False, wenv=self.config())
             if result.failed:
                 errors.append({
@@ -455,16 +456,16 @@ class Deployer:
 
             is_all_servers_success = True
             for server_info in self.servers:
-                server = server_info['host']
+                host = server_info['host']
                 try:
-                    self.connections[server] = Waller(host=server, user=self.project_info['target_user'])
-                    self.prev_release(self.connections[server])
-                    self.release(self.connections[server])
-                    self.post_release(self.connections[server])
+                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    self.prev_release(self.connections[host])
+                    self.release(self.connections[host])
+                    self.post_release(self.connections[host])
                 except Exception as e:
                     is_all_servers_success = False
                     current_app.logger.error(e)
-                    self.errors[server] = e.message
+                    self.errors[host] = e.message
             self.end(is_all_servers_success)
 
         except Exception as e:
