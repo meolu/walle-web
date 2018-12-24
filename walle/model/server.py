@@ -24,6 +24,8 @@ class ServerModel(SurrogatePK, Model):
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(String(100))
     host = db.Column(String(100))
+    user = db.Column(String(100))
+    port = db.Column(Integer)
     status = db.Column(Integer)
     created_at = db.Column(DateTime, default=current_time)
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
@@ -57,9 +59,9 @@ class ServerModel(SurrogatePK, Model):
         data = self.query.filter(ServerModel.status.notin_([self.status_remove])).filter_by(id=id).first()
         return data.to_json() if data else []
 
-    def add(self, name, host):
-        # todo permission_ids need to be formated and checked
-        server = ServerModel(name=name, host=host, status=self.status_available)
+    def add(self, *args, **kwargs):
+        data = dict(*args)
+        server = ServerModel(**data)
 
         db.session.add(server)
         db.session.commit()
@@ -69,20 +71,11 @@ class ServerModel(SurrogatePK, Model):
 
         return server.id
 
-    def update(self, name, host, id=None):
-        # todo permission_ids need to be formated and checked
+    def update(self, *args, **kwargs):
         id = id if id else self.id
-        role = ServerModel.query.filter_by(id=id).first()
 
-        if not role:
-            return False
-
-        role.name = name
-        role.host = host
-
-        ret = db.session.commit()
-
-        return ret
+        update_data = dict(*args)
+        return super(ServerModel, self).update(**update_data)
 
     def remove(self, id=None):
         """

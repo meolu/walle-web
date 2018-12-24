@@ -20,6 +20,8 @@ from walle.model.server import ServerModel
 class ServerForm(Form):
     name = TextField('name', [validators.Length(min=1, max=100)])
     host = TextField('host', [validators.Length(min=1, max=100)])
+    user = TextField('user', [validators.Length(min=1, max=100)])
+    port = TextField('port', [validators.Length(min=1, max=100)])
     id = None
 
     def set_id(self, id):
@@ -30,3 +32,12 @@ class ServerForm(Form):
         # 新建时,环境名不可与
         if server and server.id != self.id:
             raise ValidationError('该Server已重名')
+
+    def form2dict(self):
+        return {
+            'name': self.name.data if self.name.data else '',
+            'host': self.host.data,
+            'user': self.user.data,
+            'port': self.port.data if self.port.data else 22,
+            'status': 1,
+        }
