@@ -73,6 +73,7 @@ class Deployer:
         if project_id:
             self.project_id = project_id
             self.project_info = ProjectModel(id=project_id).item()
+            self.servers = self.project_info['servers_info']
 
         self.project_name = self.project_info['id']
         self.dir_codebase_project = self.local_codebase + str(self.project_name)
