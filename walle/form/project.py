@@ -27,8 +27,6 @@ class ProjectForm(Form):
     server_ids = TextField('server_ids', [validators.Length(min=1)])
     keep_version_num = TextField('keep_version_num', [])
 
-    target_user = TextField('target_user', [validators.Length(min=1, max=50)])
-    target_port = TextField('target_port', [validators.Length(min=1, max=50)])
     target_root = TextField('target_root', [validators.Length(min=1, max=200)])
     target_releases = TextField('target_releases', [validators.Length(min=1, max=200)])
 
@@ -75,8 +73,6 @@ class ProjectForm(Form):
             'server_ids': self.server_ids.data if self.server_ids.data else '',
             'keep_version_num': self.keep_version_num.data if self.keep_version_num.data else 5,
 
-            'target_user': self.target_user.data if self.target_user.data else '',
-            'target_port': self.target_port.data if self.target_port.data else '',
             'target_root': self.target_root.data if self.target_root.data else '',
             'target_releases': self.target_releases.data if self.target_releases.data else '',
 

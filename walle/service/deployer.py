@@ -69,7 +69,6 @@ class Deployer:
             self.taskMdl = TaskModel().item(self.task_id)
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
-            self.task = self.taskMdl.get('target_user')
             self.project_info = self.taskMdl.get('project_info')
 
         if project_id:
