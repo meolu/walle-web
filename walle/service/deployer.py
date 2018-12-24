@@ -8,7 +8,8 @@
 import time
 from datetime import datetime
 
-import os, pwd
+import os
+import pwd
 import re
 from flask import current_app
 from flask_socketio import emit
@@ -18,6 +19,7 @@ from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.utils import color_clean
+from walle.service.utils import excludes_format
 from walle.service.waller import Waller
 
 
@@ -200,9 +202,8 @@ class Deployer:
         # 压缩打包
         self.release_version_tar = '%s.tgz' % (self.release_version)
         with self.local.cd(self.local_codebase):
-            excludes = [i for i in self.project_info['excludes'].split('\n') if i.strip()]
-            excludes = ' --exclude='.join(excludes)
-            command = 'tar zcf  %s --exclude=%s %s' % (self.release_version_tar, excludes, self.release_version)
+            excludes = excludes_format(self.project_info['excludes'])
+            command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
             result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
@@ -311,7 +312,8 @@ class Deployer:
             errors.append({
                 'title': u'本地免密码登录失败',
                 'why': result.stdout,
-                'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
+                'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
+                pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
             })
 
         # LOCAL_SERVER_USER => git
@@ -324,10 +326,11 @@ class Deployer:
                 errors.append({
                     'title': u'远程目标机器免密码登录失败',
                     'why': u'远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
-                    'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (current_app.config.get('LOCAL_SERVER_USER'), server_info['host']),
+                    'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
+                    current_app.config.get('LOCAL_SERVER_USER'), server_info['host']),
                 })
 
-        # 检查 webroot 父目录是否存在,是否为软链
+                # 检查 webroot 父目录是否存在,是否为软链
             command = '[ -L "%s" ] && echo "true" || echo "false"' % (self.project_info['target_root'])
             result = waller.run(command, exception=False, wenv=self.config())
             if result.stdout == 'false':
@@ -339,7 +342,6 @@ class Deployer:
 
         # remote release directory
         return errors
-
 
     def list_tag(self):
         with self.local.cd(self.dir_codebase_project):
@@ -473,5 +475,3 @@ class Deployer:
             emit('fail', {'event': 'console', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
 
         return {'success': self.success, 'errors': self.errors}
-
-

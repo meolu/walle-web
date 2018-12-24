@@ -78,3 +78,11 @@ def say_yes():
         pattern=r'yes/no',
         response='yes\n',
     )
+
+
+def excludes_format(excludes_string):
+    excludes = [i for i in excludes_string.split('\n') if i.strip()]
+    if not excludes:
+        return ''
+    excludes = ' --exclude='.join(excludes)
+    return ' --exclude=' + excludes
