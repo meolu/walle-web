@@ -18,7 +18,7 @@ class TestApiServer(TestApiBase):
         'name': u'开发机01',
         'host': u'127.0.0.1',
         'user': u'work',
-        'port': u'22',
+        'port': 22,
     }
 
     # should be equal to server_data_2.name
@@ -28,14 +28,14 @@ class TestApiServer(TestApiBase):
         'name': u'test02',
         'host': u'192.168.0.1',
         'user': u'work',
-        'port': u'22',
+        'port': 22,
     }
 
     server_data_remove = {
         'name': u'this server will be deleted soon',
         'host': u'11.22.33.44',
         'user': u'work',
-        'port': u'22',
+        'port': 22,
     }
 
     def test_create(self, user, testapp, client, db):

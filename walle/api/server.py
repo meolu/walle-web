@@ -94,7 +94,7 @@ class ServerAPI(SecurityResource):
         form = ServerForm(request.form, csrf_enabled=False)
         form.set_id(id)
         if form.validate_on_submit():
-            server = ServerModel(id=id)
+            server = ServerModel().get_by_id(id)
             data = form.form2dict()
             ret = server.update(data)
             return self.render_json(data=server.item())

@@ -72,8 +72,6 @@ class ServerModel(SurrogatePK, Model):
         return server.id
 
     def update(self, *args, **kwargs):
-        id = id if id else self.id
-
         update_data = dict(*args)
         return super(ServerModel, self).update(**update_data)
 
@@ -109,6 +107,8 @@ class ServerModel(SurrogatePK, Model):
             'id': self.id,
             'name': self.name,
             'host': self.host,
+            'user': self.user,
+            'port': self.port,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
