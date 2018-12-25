@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  web:
+    image: nginx
+    container_name: walle-nginx
+    hostname: nginx-web
+    ports:
+      - "80:80"
+    volumes:
+      - ./fe/:/data/web/:ro
+      - ./gateway/nginx/:/etc/nginx/conf.d/:ro
+
+  python:
+    image: ./
+    container_name: walle-python
+    depends_on:
+      - db
+    links:
+      - db
+    expose:
+      - "5000"
+    networks:
+      - walle-net
+    restart: always
+
+  db:
+    image: mysql
+    container_name: walle-mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: Walle2099.
+      MYSQL_DATABASE: walle
+    volumes:
+      - /data/walle/mysql:/var/lib/mysql
+    networks:
+      - walle-net
+    restart: always
+
+  adminer:
+    image: adminer
+    container_name: walle-adminer
+    ports:
+      - "8888:8080"
+    networks:
+      - walle-net
+    restart: always
+
+networks:
+  walle-net:
+    driver: bridge

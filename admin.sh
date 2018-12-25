@@ -31,7 +31,7 @@ function start() {
     echo "----------------"
     source ./venv/bin/activate
     mkdir -p logs
-    nohup python $APP >> logs/runtime.log 2>&1 &
+    nohup python ${APP} >> logs/runtime.log 2>&1 &
     echo -e "Starting walle:                 [\033[32m ok \033[0m]"
     echo -e "runtime: \033[32m logs/runtime.log \033[0m"
     echo -e "error: \033[32m logs/error.log \033[0m"
@@ -43,7 +43,7 @@ function stop() {
     # 获取进程 PID
     PID=$(ps -ef | grep $APP | grep -v grep | awk '{print $2}') 
     # 杀死进程
-    kill -9 $PID
+    kill -9 ${PID}
 }
  
 function restart() {
@@ -56,8 +56,8 @@ function restart() {
 function upgrade() {
     echo "upgrade walle"
     echo "----------------"
-    cd `dirname $0`
-    git pull
+    cd $(dirname $0)
+    git fetch && git pull
 }
 
 function migration() {

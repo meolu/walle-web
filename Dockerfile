@@ -1,12 +1,9 @@
 FROM python:2.7
 
-WORKDIR /usr/app/
+COPY ./requirements/prod.txt /usr/app/
 
-COPY ./requirements/prod.txt .
-RUN pip install futures
+RUN pip install futures && pip install -r /usr/app/prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
-RUN pip install -r prod.txt -i https://mirrors.aliyun.com/pypi/simple
+EXPOSE 5000
 
-COPY . .
-
-CMD python waller.py
+CMD python /opt/walle/waller.py
