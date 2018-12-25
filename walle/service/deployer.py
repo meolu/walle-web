@@ -45,7 +45,7 @@ class Deployer:
 
     console = False
 
-    version = datetime.now().strftime('%Y%m%d%H%M%s')
+    version = datetime.now().strftime('%Y%m%d%H%M%S')
 
     local_codebase, dir_codebase_project, project_name = None, None, None
     dir_release, dir_webroot = None, None
@@ -215,8 +215,9 @@ class Deployer:
         self.sequence = 4
 
         # 检查 target_releases 父目录是否存在
-        command = 'mkdir -p %s' % (self.project_info['target_releases'])
-        result = waller.run(command, wenv=self.config())
+        if not os.path.exists(self.project_info['target_releases']):
+            command = 'mkdir -p %s' % (self.project_info['target_releases'])
+            result = waller.run(command, wenv=self.config())
 
         # 用户自定义命令
         command = self.project_info['prev_release']
@@ -288,7 +289,8 @@ class Deployer:
         with waller.cd(self.project_info['target_root']):
             result = waller.run(command, wenv=self.config())
 
-        self.post_release_service(waller)
+        # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
+        # self.post_release_service(waller)
 
     def post_release_service(self, waller):
         '''
