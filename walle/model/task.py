@@ -40,6 +40,7 @@ class TaskModel(SurrogatePK, Model):
     id = db.Column(Integer, primary_key=True, autoincrement=True)
     name = db.Column(String(100))
     user_id = db.Column(Integer)
+    user_name = db.Column(String(10))
     project_id = db.Column(Integer)
     action = db.Column(Integer)
     status = db.Column(Integer)
@@ -166,8 +167,8 @@ class TaskModel(SurrogatePK, Model):
         item = {
             'id': self.id,
             'name': self.name,
-            'user_name': self.name,
             'user_id': int(self.user_id),
+            'user_name': self.user_name,
             'project_id': int(self.project_id),
             'project_name': self.project_id if self.project_id else '',
             'action': self.action,

@@ -42,6 +42,7 @@ class TaskForm(Form):
             'name': self.name.data if self.name.data else '',
             # todo
             'user_id': current_user.id,
+            'user_name': current_user.username,
             'project_id': self.project_id.data,
             # todo default value
             'action': 0,
