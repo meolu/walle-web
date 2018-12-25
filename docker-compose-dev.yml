@@ -19,6 +19,8 @@ services:
       - db
     expose:
       - "5000"
+    volumes:
+      - /opt/walle:/opt/walle
     networks:
       - walle-net
     restart: always
