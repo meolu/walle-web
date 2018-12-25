@@ -343,6 +343,8 @@ class Deployer:
         return errors
 
     def list_tag(self):
+        self.init_repo()
+
         with self.local.cd(self.dir_codebase_project):
             command = 'git tag -l'
             result = self.local.run(command, pty=False, wenv=self.config())
@@ -353,6 +355,8 @@ class Deployer:
         return None
 
     def list_branch(self):
+        self.init_repo()
+
         with self.local.cd(self.dir_codebase_project):
             command = 'git pull'
             result = self.local.run(command, wenv=self.config())
@@ -380,6 +384,7 @@ class Deployer:
         return None
 
     def list_commit(self, branch):
+        self.init_repo()
         with self.local.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
             self.local.run(command, wenv=self.config())
@@ -471,6 +476,5 @@ class Deployer:
 
         except Exception as e:
             self.end(False)
-            emit('fail', {'event': 'console', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
 
         return {'success': self.success, 'errors': self.errors}
