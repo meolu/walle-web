@@ -4,15 +4,11 @@ services:
     image: nginx
     container_name: walle-nginx
     hostname: nginx-web
-    depends_on:
-      - python
-    links:
-      - python
     ports:
       - "80:80"
     volumes:
       - ./fe/:/data/web/:ro
-      - ./gateway/nginx/:/etc/nginx/conf.d/:ro
+      - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   python:
     build: ./
@@ -21,8 +17,8 @@ services:
       - db
     links:
       - db
-    expose:
-      - "5000"
+    ports:
+      - "5000:5000"
     volumes:
       - /opt/walle:/opt/walle
     networks:
@@ -41,7 +37,8 @@ services:
       MYSQL_ROOT_PASSWORD: walle
       MYSQL_DATABASE: walle
     volumes:
-      - /data/walle/mysql:/var/lib/mysql
+      - /tmp/mysql:/var/lib/mysql
+#      - /data/walle/mysql:/var/lib/mysql
     networks:
       - walle-net
     restart: always
