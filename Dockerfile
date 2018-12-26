@@ -8,4 +8,4 @@ RUN pip install futures && pip install -r /usr/app/prod.txt -i https://mirrors.a
 
 EXPOSE 5000
 
-CMD python /opt/walle/waller.py
+ENTRYPOINT python /opt/walle/waller.py

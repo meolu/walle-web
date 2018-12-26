@@ -4,6 +4,8 @@ services:
     image: nginx
     container_name: walle-nginx
     hostname: nginx-web
+    links:
+      - python
     ports:
       - "80:80"
     volumes:
