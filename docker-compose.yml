@@ -23,9 +23,7 @@ services:
     hostname: walle-python
     volumes:
       - $PWD/:/opt/walle-web/
-    command: >
-      bash -c "sed -i \n 's/user/walle/g;s/password/walle/g;s/localhost/db/g' /opt/walle-web/walle/config/settings_prod.py
-      && python /opt/walle-web/waller.py"
+    command: bash -c "/bin/bash /opt/walle-web/admin.sh upgrade && python /opt/walle-web/waller.py"
     expose:
       - "5000"
     links:
@@ -49,19 +47,7 @@ services:
       MYSQL_ROOT_PASSWORD: walle
       MYSQL_DATABASE: walle
     volumes:
-      - /tmp/mysql:/var/lib/mysql
-#      - /data/walle/mysql:/var/lib/mysql
-    networks:
-      - walle-net
-    restart: always
-
-  adminer:
-    image: adminer
-    container_name: walle-adminer
-    links:
-      - db
-    ports:
-      - "8888:8080"
+      - /data/walle/mysql:/var/lib/mysql
     networks:
       - walle-net
     restart: always
