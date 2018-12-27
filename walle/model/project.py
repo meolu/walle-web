@@ -127,8 +127,6 @@ class ProjectModel(SurrogatePK, Model):
         db.session.commit()
 
         return project.to_json()
-        self.id = project.id
-        return self.id
 
     def update(self, *args, **kwargs):
         # todo permission_ids need to be formated and checked

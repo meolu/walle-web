@@ -202,7 +202,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
     @classmethod
     def avatar_url(cls, avatar):
         avatar = avatar if avatar else 'default.jpg'
-        return '/' + current_app.config['AVATAR_PATH'] + avatar
+        return current_app.config['AVATAR_PATH'] + avatar
 
     @classmethod
     def fetch_by_uid(cls, uids=None):
