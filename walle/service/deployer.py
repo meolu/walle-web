@@ -18,7 +18,7 @@ from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
-from walle.service.utils import color_clean
+from walle.service.utils import color_clean, suffix_format
 from walle.service.utils import excludes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
@@ -196,12 +196,20 @@ class Deployer:
             with self.localhost.cd(self.local_codebase + self.release_version):
                 result = self.localhost.local(command, wenv=self.config())
 
-        # 压缩打包
+        # # 压缩打包
+        # # 排除文件发布
+        # self.release_version_tar = '%s.tgz' % (self.release_version)
+        # with self.localhost.cd(self.local_codebase):
+        #     excludes = excludes_format(self.project_info['excludes'])
+        #     command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
+        #     result = self.localhost.local(command, wenv=self.config())
+
+        # 指定文件发布
         self.release_version_tar = '%s.tgz' % (self.release_version)
-        with self.localhost.cd(self.local_codebase):
-            excludes = excludes_format(self.project_info['excludes'])
+        with self.local.cd(self.local_codebase):
+            excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
             command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-            result = self.localhost.local(command, wenv=self.config())
+            result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''
