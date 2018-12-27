@@ -7,20 +7,31 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./fe/:/data/web/:ro
+      - ./fe/:/opt/walle-web/:ro
       - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - python
+    depends_on:
+      - python
+    networks:
+      - walle-net
+    restart: always
 
   python:
-    build: ./
+    image: alenx/walle-web
     container_name: walle-python
-    depends_on:
-      - db
+    hostname: walle-python
+    volumes:
+      - $PWD/:/opt/walle-web/
+    command: >
+      bash -c "sed -i \n 's/user/walle/g;s/password/walle/g;s/localhost/db/g' /opt/walle-web/walle/config/settings_prod.py
+      && python /opt/walle-web/waller.py"
+    expose:
+      - "5000"
     links:
       - db
-    ports:
-      - "5000:5000"
-    volumes:
-      - /opt/walle:/opt/walle
+    depends_on:
+      - db
     networks:
       - walle-net
     restart: always
@@ -28,6 +39,7 @@ services:
   db:
     image: mysql
     container_name: walle-mysql
+    hostname: walle-mysql
     ports:
       - "3306:3306"
     expose:

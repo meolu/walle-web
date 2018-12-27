@@ -1,11 +1,11 @@
 FROM python:2.7
 
-RUN mkdir /opt/walle
+RUN mkdir /opt/walle-web && mkdir -p /data/walle
 
-COPY ./requirements/prod.txt /usr/app/
+ADD ./requirements/prod.txt /usr/app/
 
 RUN pip install futures && pip install -r /usr/app/prod.txt -i https://mirrors.aliyun.com/pypi/simple
 
 EXPOSE 5000
 
-ENTRYPOINT python /opt/walle/waller.py
+CMD ["/bin/bash"]

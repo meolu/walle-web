@@ -21,6 +21,9 @@ function init() {
     fi
     source ./venv/bin/activate
     pip install -r ./requirements/prod.txt
+    if [ $? != "0"  ]; then
+            exit 1
+    fi
     echo "************************************************"
     echo -e "\033[32m init walle success \033[0m"
     echo -e "\033[32m welcome to walle 2.0 \033[0m"
