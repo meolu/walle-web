@@ -49,7 +49,7 @@ def create_environments():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -77,7 +77,7 @@ def create_menus():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -127,7 +127,7 @@ def create_projects():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -147,7 +147,7 @@ def create_records():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -161,7 +161,7 @@ def create_servers():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -174,7 +174,7 @@ def create_spaces():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -204,7 +204,7 @@ def create_tasks():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -223,7 +223,7 @@ def create_users():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 
@@ -248,7 +248,7 @@ def create_members():
               `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '',
               `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '',
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='';"""
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';"""
     db.session.execute(sql)
 
 

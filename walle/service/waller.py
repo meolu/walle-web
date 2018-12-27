@@ -4,6 +4,8 @@
 # @Created Time : 日  1/ 1 23:43:12 2017
 # @Description:
 
+import os
+import pwd
 from fabric2 import Connection
 from flask import current_app
 from flask_socketio import emit
@@ -13,10 +15,15 @@ from walle.service.code import Code
 from walle.service.utils import say_yes
 
 class Waller(Connection):
+
+    run_mode_sudo = 'sudo'
+    run_mode_remote = 'remote'
+    run_mode_local = 'local'
+
     connections, success, errors = {}, {}, {}
     release_version_tar, release_version = None, None
 
-    def run(self, command, wenv=None, sudo=False, pty=True, exception=True, **kwargs):
+    def run(self, command, wenv=None, run_mode=run_mode_remote, pty=True, exception=True, **kwargs):
         '''
         pty=True/False是直接影响到输出.False较适合在获取文本,True更适合websocket
 
@@ -32,10 +39,13 @@ class Waller(Connection):
         message = 'deploying task_id=%s [%s@%s]$ %s ' % (wenv['task_id'], self.user, self.host, command)
         current_app.logger.info(message)
         try:
-            if sudo:
+            if run_mode == self.run_mode_sudo:
                 result = super(Waller, self).sudo(command, pty=pty, **kwargs)
+            elif run_mode == self.run_mode_local:
+                result = super(Waller, self).local(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
             else:
                 result = super(Waller, self).run(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
+
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout
@@ -109,13 +119,16 @@ class Waller(Connection):
             return Result(exited=-1, stderr=error, stdout=error)
 
     def sudo(self, command, wenv=None, **kwargs):
-        return self.run(command, wenv=wenv, sudo=True, **kwargs)
+        return self.run(command, wenv=wenv, run_mode=self.run_mode_sudo, **kwargs)
 
     def get(self, remote, local=None, wenv=None):
         return self.sync(wtype='get', remote=remote, local=local, wenv=wenv)
 
     def put(self, local, remote=None, wenv=None, *args, **kwargs):
         return self.sync(wtype='put', local=local, remote=remote, wenv=wenv, *args, **kwargs)
+
+    def local(self, command, wenv=None, **kwargs):
+        return self.run(command, wenv=wenv, run_mode=self.run_mode_local, **kwargs)
 
     def sync(self, wtype, remote=None, local=None, wenv=None):
         command = 'scp %s %s@%s:%s' % (local, self.user, self.host, remote) if wtype == 'put' \
@@ -127,8 +140,8 @@ class Waller(Connection):
             if wtype == 'put':
                 result = super(Waller, self).put(local=local, remote=remote)
                 current_app.logger.info('put: local %s, remote %s', local, remote)
-                op_user = current_app.config.get('LOCAL_SERVER_USER')
-                op_host = current_app.config.get('LOCAL_SERVER_HOST')
+                op_user = pwd.getpwuid(os.getuid())[0]
+                op_host = '127.0.0.1'
 
             else:
                 result = super(Waller, self).get(remote=remote, local=local)

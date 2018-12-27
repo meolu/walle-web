@@ -20,8 +20,9 @@ from walle.service.code import Code
 from walle.service.error import WalleError
 from walle.service.utils import color_clean
 from walle.service.utils import excludes_format
+from walle.service.notice import Notice
 from walle.service.waller import Waller
-
+from flask_login import current_user
 
 class Deployer:
     '''
@@ -56,10 +57,7 @@ class Deployer:
 
     def __init__(self, task_id=None, project_id=None, console=False):
         self.local_codebase = current_app.config.get('CODE_BASE')
-        self.local = Waller(host=current_app.config.get('LOCAL_SERVER_HOST'),
-                            user=current_app.config.get('LOCAL_SERVER_USER'),
-                            port=current_app.config.get('LOCAL_SERVER_PORT'),
-                            )
+        self.localhost = Waller(host='127.0.0.1')
         self.TaskRecord = RecordModel()
 
         if task_id:
@@ -113,25 +111,25 @@ class Deployer:
 
         # 检查 python 版本
         command = 'python --version'
-        result = self.local.run(command, wenv=self.config())
+        result = self.localhost.local(command, wenv=self.config())
 
         # 检查 git 版本
         command = 'git --version'
-        result = self.local.run(command, wenv=self.config())
+        result = self.localhost.local(command, wenv=self.config())
 
         # 检查 目录是否存在
         self.init_repo()
 
         # TODO to be removed
         command = 'mkdir -p %s' % (self.dir_codebase_project)
-        result = self.local.run(command, wenv=self.config())
+        result = self.localhost.local(command, wenv=self.config())
 
         # 用户自定义命令
         command = self.project_info['prev_deploy']
         if command:
             current_app.logger.info(command)
-            with self.local.cd(self.dir_codebase_project):
-                result = self.local.run(command, wenv=self.config())
+            with self.localhost.cd(self.dir_codebase_project):
+                result = self.localhost.local(command, wenv=self.config())
 
     def deploy(self):
         '''
@@ -147,32 +145,32 @@ class Deployer:
         # 如果项目底下有 .git 目录则认为项目完整,可以直接检出代码
         # TODO 不标准
         if os.path.exists(self.dir_codebase_project + '/.git'):
-            with self.local.cd(self.dir_codebase_project):
+            with self.localhost.cd(self.dir_codebase_project):
                 command = 'pwd && git pull'
-                result = self.local.run(command, wenv=self.config())
+                result = self.localhost.local(command, wenv=self.config())
 
         else:
             # 否则当作新项目检出完整代码
-            with self.local.cd(self.dir_codebase_project):
+            with self.localhost.cd(self.dir_codebase_project):
                 command = 'pwd && git clone %s .' % (self.project_info['repo_url'])
                 current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
-                result = self.local.run(command, wenv=self.config())
+                result = self.localhost.local(command, wenv=self.config())
 
         # copy to a local version
         self.release_version = '%s_%s_%s' % (
             self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
 
-        with self.local.cd(self.local_codebase):
+        with self.localhost.cd(self.local_codebase):
             command = 'cp -rf %s %s' % (self.dir_codebase_project, self.release_version)
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
-            result = self.local.run(command, wenv=self.config())
+            result = self.localhost.local(command, wenv=self.config())
 
         # 更新到指定 commit_id
-        with self.local.cd(self.local_codebase + self.release_version):
+        with self.localhost.cd(self.local_codebase + self.release_version):
             command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
-            result = self.local.run(command, wenv=self.config())
+            result = self.localhost.local(command, wenv=self.config())
 
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_fail, message=result.stdout)
@@ -195,15 +193,15 @@ class Deployer:
         # 用户自定义命令
         command = self.project_info['post_deploy']
         if command:
-            with self.local.cd(self.local_codebase + self.release_version):
-                result = self.local.run(command, wenv=self.config())
+            with self.localhost.cd(self.local_codebase + self.release_version):
+                result = self.localhost.local(command, wenv=self.config())
 
         # 压缩打包
         self.release_version_tar = '%s.tgz' % (self.release_version)
-        with self.local.cd(self.local_codebase):
+        with self.localhost.cd(self.local_codebase):
             excludes = excludes_format(self.project_info['excludes'])
             command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-            result = self.local.run(command, wenv=self.config())
+            result = self.localhost.local(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''
@@ -306,16 +304,16 @@ class Deployer:
         errors = []
         #  walle user => walle LOCAL_SERVER_USER
         # show ssh_rsa.pub （maybe not necessary）
-        command = 'whoami'
-        current_app.logger.info(command)
-        result = self.local.run(command, exception=False, wenv=self.config())
-        if result.failed:
-            errors.append({
-                'title': u'本地免密码登录失败',
-                'why': result.stdout,
-                'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
-                pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
-            })
+        # command = 'whoami'
+        # current_app.logger.info(command)
+        # result = self.localhost.local(command, exception=False, wenv=self.config())
+        # if result.failed:
+        #     errors.append({
+        #         'title': u'本地免密码登录失败',
+        #         'why': result.stdout,
+        #         'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
+        #         pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
+        #     })
 
         # LOCAL_SERVER_USER => git
 
@@ -328,7 +326,7 @@ class Deployer:
                     'title': u'远程目标机器免密码登录失败',
                     'why': u'远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
                     'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
-                    current_app.config.get('LOCAL_SERVER_USER'), server_info['host']),
+                    pwd.getpwuid(os.getuid())[0], server_info['host']),
                 })
 
                 # 检查 webroot 父目录是否存在,是否为软链
@@ -347,9 +345,9 @@ class Deployer:
     def list_tag(self):
         self.init_repo()
 
-        with self.local.cd(self.dir_codebase_project):
+        with self.localhost.cd(self.dir_codebase_project):
             command = 'git tag -l'
-            result = self.local.run(command, pty=False, wenv=self.config())
+            result = self.localhost.local(command, pty=False, wenv=self.config())
             tags = result.stdout.strip()
             tags = tags.split('\n')
             return [color_clean(tag.strip()) for tag in tags]
@@ -359,9 +357,9 @@ class Deployer:
     def list_branch(self):
         self.init_repo()
 
-        with self.local.cd(self.dir_codebase_project):
+        with self.localhost.cd(self.dir_codebase_project):
             command = 'git pull'
-            result = self.local.run(command, wenv=self.config())
+            result = self.localhost.local(command, wenv=self.config())
 
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_pull_fail, message=result.stdout)
@@ -369,7 +367,7 @@ class Deployer:
             current_app.logger.info(self.dir_codebase_project)
 
             command = 'git branch -r'
-            result = self.local.run(command, pty=False, wenv=self.config())
+            result = self.localhost.local(command, pty=False, wenv=self.config())
 
             # if result.exited != Code.Ok:
             #     raise WalleError(Code.shell_run_fail)
@@ -387,12 +385,12 @@ class Deployer:
 
     def list_commit(self, branch):
         self.init_repo()
-        with self.local.cd(self.dir_codebase_project):
+        with self.localhost.cd(self.dir_codebase_project):
             command = 'git checkout %s && git pull' % (branch)
-            self.local.run(command, wenv=self.config())
+            self.localhost.local(command, wenv=self.config())
 
             command = 'git log -50 --pretty="%h #@_@# %an #@_@# %s"'
-            result = self.local.run(command, pty=False, wenv=self.config())
+            result = self.localhost.local(command, pty=False, wenv=self.config())
             current_app.logger.info(result.stdout)
 
             commit_log = result.stdout.strip()
@@ -422,21 +420,21 @@ class Deployer:
             command = 'mkdir -p %s' % (self.dir_codebase_project)
             # TODO remove
             current_app.logger.info(command)
-            self.local.run(command, wenv=self.config())
+            self.localhost.local(command, wenv=self.config())
 
-        with self.local.cd(self.dir_codebase_project):
-            is_git_dir = self.local.run('git status', exception=False, wenv=self.config())
+        with self.localhost.cd(self.dir_codebase_project):
+            is_git_dir = self.localhost.local('git status', exception=False, wenv=self.config())
 
         if is_git_dir.exited != Code.Ok:
             # 否则当作新项目检出完整代码
             # 检查 目录是否存在
             command = 'rm -rf %s' % (self.dir_codebase_project)
-            self.local.run(command, wenv=self.config())
+            self.localhost.local(command, wenv=self.config())
 
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
             current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
 
-            result = self.local.run(command, wenv=self.config())
+            result = self.localhost.local(command, wenv=self.config())
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
@@ -449,10 +447,24 @@ class Deployer:
             current_app.logger.info('success:%s, status:%s' % (success, status))
             TaskModel().get_by_id(self.task_id).update({'status': status})
 
+        notice_info = {
+            'title': '',
+            'username': current_user.username,
+            'project_name': self.project_info['name'],
+            'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
+            'branch': self.taskMdl.get('branch'),
+            'commit': self.taskMdl.get('commit_id'),
+            'is_branch': self.project_info['repo_mode'],
+        }
+        notice = Notice.create(self.project_info['notice_type'])
         if success:
             emit('success', {'event': 'finish', 'data': {'message': '部署完成，辛苦了，为你的努力喝彩！'}}, room=self.task_id)
+            notice_info['title'] = '上线部署成功'
+            notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
         else:
             emit('fail', {'event': 'finish', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
+            notice_info['title'] = '上线部署失败'
+            notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
 
     def walle_deploy(self):
         self.start()

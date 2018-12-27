@@ -15,6 +15,7 @@ from wtforms import TextField
 from wtforms import validators, ValidationError
 from flask_login import current_user
 from walle.model.project import ProjectModel
+from walle.service.notice import Notice
 
 
 class ProjectForm(Form):
@@ -87,7 +88,7 @@ class ProjectForm(Form):
             'repo_password': self.repo_password.data if self.repo_password.data else '',
             'repo_mode': self.repo_mode.data if self.repo_mode.data else '',
 
-            'notice_type': self.notice_type.data if self.notice_type.data else '',
+            'notice_type': self.notice_type.data if self.notice_type.data in [Notice.by_email, Notice.by_dingding] else '',
             'notice_hook': self.notice_hook.data if self.notice_hook.data else '',
             'task_audit': self.task_audit.data if self.task_audit.data else 0,
         }
