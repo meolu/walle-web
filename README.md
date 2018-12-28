@@ -3,6 +3,7 @@
 Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
 [![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+walle 让用户代码发布终于可以不只能选择 jenkins！支持各种web代码发布，php、java、python、go等代码的发布、回滚可以通过web来一键完成。walle 一个可自由配置项目，更人性化，高颜值，支持git、多用户、多语言、多项目、多环境同时部署的开源上线部署系统。
 
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0`了！占用了我几乎所有业余时间，精力与金钱付出换各位使用收益，望各位喜欢不吝顺手 `star` 以示支持，项目更好亦反馈予你。目前 `2.0` 预览版尚未达到完全企业可用状态，请保持关注，我会在公众号更新（在最下面）。  
 <br>
@@ -34,18 +35,25 @@ Roadmap
     - ~~使用文档、Trouble Shooting、公众号更新~~
 - **Beta** 2018-12-23 :santa:圣诞夜前夕
     - `1.x`迁移到`2.0`脚本
+    - ~~钉钉/邮件消息通知~~
     - 接受官网logo企业的`Trouble Shooting`
 - **2.0.0**  2018-12-30 :one:元旦前夕
     - `released tag`、使用文档
-    - 冲刺`github` 5000 `star`（靠你们了）
+    - `Docker` 镜像
+    - 项目配置添加自定义变量
+    - ~~`github` 5000 `star`~~
 - **2.0.1**  2019-01-13
-    - 项目检测、复制
+    - ~~项目检测、复制~~
     - 任务的回滚
+    - Java配置模板
+    - PHP配置模板
+    - Python 3.7+兼容
 - **2.0.2**  2019-01-20
     - `Dashboard`（全新的玩法，欢迎提issue）
+    - 在线PPT介绍
 - **2.1.0**  2019-01-27 :new:新年版
     - `CAS`
-    - 冲刺`github` 6000 `star`（靠你们和你们的同事们了）
+    - 冲刺`github` 7000 `star`（靠你们和你们的同事们了）
 
 
 Discussing

@@ -286,7 +286,7 @@ class Deployer:
         with waller.cd(self.project_info['target_root']):
             result = waller.run(command, wenv=self.config())
 
-        self.post_release_service(waller)
+        # self.post_release_service(waller)
 
     def post_release_service(self, waller):
         '''
