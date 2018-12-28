@@ -120,9 +120,10 @@ class Deployer:
         # 检查 目录是否存在
         self.init_repo()
 
+        # self.init_repo() 函数中已经操作了
         # TODO to be removed
-        command = 'mkdir -p %s' % (self.dir_codebase_project)
-        result = self.localhost.local(command, wenv=self.config())
+        # command = 'mkdir -p %s' % (self.dir_codebase_project)
+        # result = self.localhost.local(command, wenv=self.config())
 
         # 用户自定义命令
         command = self.project_info['prev_deploy']
@@ -196,20 +197,20 @@ class Deployer:
             with self.localhost.cd(self.local_codebase + self.release_version):
                 result = self.localhost.local(command, wenv=self.config())
 
-        # # 压缩打包
-        # # 排除文件发布
+        # 压缩打包
+        # 排除文件发布
+        self.release_version_tar = '%s.tgz' % (self.release_version)
+        with self.localhost.cd(self.local_codebase):
+            excludes = excludes_format(self.project_info['excludes'])
+            command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
+            result = self.localhost.local(command, wenv=self.config())
+
+        # # 指定文件发布
         # self.release_version_tar = '%s.tgz' % (self.release_version)
         # with self.localhost.cd(self.local_codebase):
-        #     excludes = excludes_format(self.project_info['excludes'])
+        #     excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
         #     command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-        #     result = self.localhost.local(command, wenv=self.config())
-
-        # 指定文件发布
-        self.release_version_tar = '%s.tgz' % (self.release_version)
-        with self.local.cd(self.local_codebase):
-            excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
-            command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-            result = self.local.run(command, wenv=self.config())
+        #     result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''

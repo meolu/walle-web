@@ -22,7 +22,6 @@ services:
     container_name: walle-python
     hostname: walle-python
     volumes:
-      - root/.ssh/:/root/.ssh/
       - $PWD/:/opt/walle-web/
       - /tmp/walle/codebase/:/tmp/walle/codebase/
     environment:
