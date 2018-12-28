@@ -192,7 +192,7 @@ class TaskModel(SurrogatePK, Model):
     def enable(self):
         is_project_master = self.project_id in session['project_master']
         return {
-            'enable_view': True,
+            'enable_view': True if self.status in [self.status_doing, self.status_fail, self.status_success] else False,
             'enable_update': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_reject]),
             'enable_delete': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_pass, self.status_reject]),
             'enable_create': False,

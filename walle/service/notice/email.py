@@ -28,10 +28,10 @@ class Email(Notice):
         @return:
         '''
         message = u""" %s %s 
-                <br><br> **项目**：%s
-                <br><br> **任务**：%s
-                <br><br> **分支**：%s
-                <br><br> **版本**：%s
+                <br><br> <strong>项目</strong>：%s
+                <br><br> <strong>任务</strong>：%s
+                <br><br> <strong>分支</strong>：%s
+                <br><br> <strong>版本</strong>：%s
                 <br><br><br><img src='http://walle-web.io/dingding.jpg'> """ % (
                 notice_info['username'], notice_info['title'], notice_info['project_name'], notice_info['task_name'],
                 notice_info['branch'], notice_info['commit'])

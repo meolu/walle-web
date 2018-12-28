@@ -65,7 +65,6 @@ class TaskAPI(SecurityResource):
         super(TaskAPI, self).post()
 
         form = TaskForm(request.form, csrf_enabled=False)
-        # return self.render_json(code=-1, data = form.form2dict())
         if form.validate_on_submit():
             task_new = TaskModel()
             data = form.form2dict()
