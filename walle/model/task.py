@@ -140,7 +140,7 @@ class TaskModel(SurrogatePK, Model):
         if project.id:
             self.id = project.id
 
-        return project.id
+        return project.to_json()
 
     def update(self, *args, **kwargs):
         # todo permission_ids need to be formated and checked

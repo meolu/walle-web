@@ -17,7 +17,7 @@ from walle.service.rbac.role import *
 
 
 class TaskAPI(SecurityResource):
-    actions = ['audit', 'reject']
+    actions = ['audit', 'reject', 'rollback']
 
     def get(self, task_id=None):
         """
@@ -68,11 +68,11 @@ class TaskAPI(SecurityResource):
         if form.validate_on_submit():
             task_new = TaskModel()
             data = form.form2dict()
-            id = task_new.add(data)
-            if not id:
+            task_new_info = task_new.add(data)
+            if not task_new_info:
                 return self.render_json(code=-1)
 
-            return self.render_json(data=task_new.item())
+            return self.render_json(data=task_new_info)
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
 
@@ -137,3 +137,28 @@ class TaskAPI(SecurityResource):
         task = TaskModel().get_by_id(task_id)
         ret = task.update({'status': TaskModel.status_reject})
         return self.render_json(data=task.item(task_id))
+
+    def rollback(self, task_id):
+        """
+        回滚任务
+        :param task_id:
+        :return:
+        """
+
+        task = TaskModel.get_by_id(task_id).to_dict()
+        ex_task = TaskModel().query.filter_by(link_id=task['ex_link_id']).first().to_dict()
+
+        task['id'] = None
+        task['name'] = task['name'] + u' - 回滚此次上线'
+        task['link_id'] = task['ex_link_id']
+        task['ex_link_id'] = ''
+
+        # rewrite commit/tag/branch
+        task['commit_id'] = ex_task['commit_id']
+        task['branch'] = ex_task['branch']
+        task['tag'] = ex_task['tag']
+
+        task_new = TaskModel()
+        task_new_info = task_new.add(dict(task))
+
+        return self.render_json(data=task_new_info)
