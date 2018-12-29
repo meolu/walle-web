@@ -225,8 +225,7 @@ class Deployer:
 
         # TODO md5
         # 传送到版本库 release
-        current_app.logger.info('/tmp/walle/codebase/' + self.release_version_tar)
-        result = waller.put('/tmp/walle/codebase/' + self.release_version_tar,
+        result = waller.put(self.local_codebase + self.release_version_tar,
                             remote=self.project_info['target_releases'], wenv=self.config())
         current_app.logger.info('command: %s', dir(result))
 
