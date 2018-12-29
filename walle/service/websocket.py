@@ -28,9 +28,6 @@ class WalleSocketIO(Namespace):
     def init_app(self, app):
         self.app = app
 
-    def on_connect(self):
-        pass
-
     def on_open(self, message):
         current_app.logger.info(message)
         if 'task' in message:
@@ -48,7 +45,6 @@ class WalleSocketIO(Namespace):
         emit('construct', {'event': 'connect', 'data': self.task_info}, room=self.room)
 
     def on_deploy(self, message):
-        self.task_info = TaskModel(id=self.room).item()
         if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
             wi = Deployer(task_id=self.room, console=True)
             ret = wi.walle_deploy()
