@@ -142,22 +142,6 @@ class Deployer:
         self.stage = self.stage_deploy
         self.sequence = 2
 
-        current_app.logger.info('git dir: %s', self.dir_codebase_project + '/.git')
-        # 如果项目底下有 .git 目录则认为项目完整,可以直接检出代码
-        # TODO 不标准
-        if os.path.exists(self.dir_codebase_project + '/.git'):
-            with self.localhost.cd(self.dir_codebase_project):
-                command = 'pwd && git pull'
-                result = self.localhost.local(command, wenv=self.config())
-
-        else:
-            # 否则当作新项目检出完整代码
-            with self.localhost.cd(self.dir_codebase_project):
-                command = 'pwd && git clone %s .' % (self.project_info['repo_url'])
-                current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
-
-                result = self.localhost.local(command, wenv=self.config())
-
         # copy to a local version
         self.release_version = '%s_%s_%s' % (
             self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
@@ -235,8 +219,7 @@ class Deployer:
 
         # TODO md5
         # 传送到版本库 release
-        current_app.logger.info('/tmp/walle/codebase/' + self.release_version_tar)
-        result = waller.put('/tmp/walle/codebase/' + self.release_version_tar,
+        result = waller.put(self.local_codebase + self.release_version_tar,
                             remote=self.project_info['target_releases'], wenv=self.config())
         current_app.logger.info('command: %s', dir(result))
 
@@ -432,7 +415,7 @@ class Deployer:
             self.localhost.local(command, wenv=self.config())
 
         with self.localhost.cd(self.dir_codebase_project):
-            is_git_dir = self.localhost.local('git status', exception=False, wenv=self.config())
+            is_git_dir = self.localhost.local('[ -d ".git" ] && git status', exception=False, wenv=self.config())
 
         if is_git_dir.exited != Code.Ok:
             # 否则当作新项目检出完整代码
