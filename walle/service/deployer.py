@@ -292,6 +292,7 @@ class Deployer:
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
 
+
     def project_detection(self):
         errors = []
         #  walle user => walle LOCAL_SERVER_USER
@@ -424,7 +425,7 @@ class Deployer:
             self.localhost.local(command, wenv=self.config())
 
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
-            current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
+            current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
 
             result = self.localhost.local(command, wenv=self.config())
             if result.exited != Code.Ok:
