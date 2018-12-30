@@ -107,7 +107,6 @@ class ProjectModel(SurrogatePK, Model):
         """
         id = id if id else self.id
         data = self.query.filter(ProjectModel.status.notin_([self.status_remove])).filter_by(id=id).first()
-        current_app.logger.info(data)
         if not data:
             return []
 
@@ -120,7 +119,6 @@ class ProjectModel(SurrogatePK, Model):
 
     def add(self, *args, **kwargs):
         data = dict(*args)
-        current_app.logger.info(data)
         project = ProjectModel(**data)
 
         db.session.add(project)
