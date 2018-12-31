@@ -134,7 +134,6 @@ class TaskModel(SurrogatePK, Model):
         return task
 
     def add(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
         data = dict(*args)
         project = TaskModel(**data)
 
@@ -147,9 +146,6 @@ class TaskModel(SurrogatePK, Model):
         return project.to_json()
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(TaskModel, self).update(**update_data)
 

@@ -150,8 +150,6 @@ class ProjectAPI(SecurityResource):
         :param members:
         :return:
         """
-        # TODO login for group id
-
         group_model = MemberModel(project_id=project_id)
         ret = group_model.update_project(project_id=project_id, members=members)
 

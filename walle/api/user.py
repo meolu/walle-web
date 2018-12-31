@@ -171,8 +171,6 @@ class UserAPI(SecurityResource):
         return ret
 
     def avatar(self, user_id):
-        # TODO uid
-        # fname = current_user.id + '.jpg'
         random = generate_password_hash(str(user_id))
         fname = random[-10:] + '.jpg'
         current_app.logger.info(fname)

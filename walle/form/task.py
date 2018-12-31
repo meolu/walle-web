@@ -14,21 +14,21 @@ from flask_login import current_user
 from flask_wtf import Form
 from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
-from wtforms import TextField, IntegerField
+from wtforms import StringField, IntegerField, StringField
 from wtforms import validators
 
 
 class TaskForm(Form):
-    name = TextField('name', [validators.Length(min=1)])
+    name = StringField('name', [validators.Length(min=1)])
     project_id = IntegerField('project_id', [validators.NumberRange(min=1)])
-    servers = TextField('servers', [validators.Length(min=1)])
-    commit_id = TextField('commit_id', [])
+    servers = StringField('servers', [validators.Length(min=1)])
+    commit_id = StringField('commit_id', [])
     status = IntegerField('status', [])
     # TODO 应该增加一个tag/branch其一必填
-    tag = TextField('tag', [])
-    branch = TextField('branch', [])
+    tag = StringField('tag', [])
+    branch = StringField('branch', [])
     file_transmission_mode = IntegerField('file_transmission_mode', [])
-    file_list = TextField('file_list', [])
+    file_list = StringField('file_list', [])
 
     id = None
 
@@ -37,7 +37,8 @@ class TaskForm(Form):
 
     def form2dict(self):
         project_info = ProjectModel(id=self.project_id.data).item()
-        task_status = TaskModel.status_new if project_info['task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
+        task_status = TaskModel.status_new if project_info[
+                                                  'task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
         return {
             'name': self.name.data if self.name.data else '',
             'user_id': current_user.id,

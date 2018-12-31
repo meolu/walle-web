@@ -114,13 +114,13 @@ class Deployer:
         self.stage = self.stage_prev_deploy
         self.sequence = 1
 
-        # 检查 python 版本
-        command = 'python --version'
-        result = self.localhost.local(command, wenv=self.config())
-
-        # 检查 git 版本
-        command = 'git --version'
-        result = self.localhost.local(command, wenv=self.config())
+        # # 检查 python 版本
+        # command = 'python --version'
+        # result = self.localhost.local(command, wenv=self.config())
+        #
+        # # 检查 git 版本
+        # command = 'git --version'
+        # result = self.localhost.local(command, wenv=self.config())
 
         # 检查 目录是否存在
         self.init_repo()
@@ -424,8 +424,6 @@ class Deployer:
         if not os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
             command = 'mkdir -p %s' % (self.dir_codebase_project)
-            # TODO remove
-            current_app.logger.info(command)
             self.localhost.local(command, wenv=self.config())
 
         with self.localhost.cd(self.dir_codebase_project):

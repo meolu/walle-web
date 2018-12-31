@@ -127,9 +127,6 @@ class ProjectModel(SurrogatePK, Model):
         return project.to_json()
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(ProjectModel, self).update(**update_data)
 

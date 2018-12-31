@@ -62,9 +62,6 @@ class UserModel(UserMixin, SurrogatePK, Model):
         return data.to_json() if data else []
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(UserModel, self).update(**update_data)
 
@@ -74,7 +71,6 @@ class UserModel(UserMixin, SurrogatePK, Model):
         current_app.logger.info(user)
 
     def update_name_pwd(self, username, password=None):
-        # todo permission_ids need to be formated and checked
         user = self.query.filter_by(id=self.id).first()
         if username:
             user.username = username
@@ -243,8 +239,6 @@ class UserModel(UserMixin, SurrogatePK, Model):
             'is_email_verified': self.is_email_verified,
             'email': self.email,
             'avatar': self.avatar_url(self.avatar),
-            # TODO 当前登录用户的空间
-            # 'role_id': self.role_id,
             'status': self.status_mapping[self.status],
             'last_space': self.last_space,
             # 'status': self.status,

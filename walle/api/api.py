@@ -23,7 +23,6 @@ class ApiResource(Resource):
     actions = None
     action = None
 
-    # TODO 权限验证
     def __init__(self):
         pass
 

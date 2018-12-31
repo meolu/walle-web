@@ -82,7 +82,6 @@ class EnvironmentAPI(SecurityResource):
         form = EnvironmentForm(request.form, csrf_enabled=False)
         if form.validate_on_submit():
             env_new = EnvironmentModel()
-            # TODO space_id
             env_id = env_new.add(env_name=form.env_name.data, space_id=self.space_id)
             if not env_id:
                 return self.render_json(code=-1)
