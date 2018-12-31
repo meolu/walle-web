@@ -52,7 +52,7 @@ class Deployer:
     dir_release, dir_webroot = None, None
 
     connections, success, errors = {}, {}, {}
-    release_version_tar, release_version = None, None
+    release_version_tar, previous_release_version, release_version = None, None, None
     local = None
 
     def __init__(self, task_id=None, project_id=None, console=False):
@@ -228,6 +228,14 @@ class Deployer:
         self.sequence = 5
 
         with waller.cd(self.project_info['target_releases']):
+            # 0. get previous link
+            command = 'readlink ' + self.project_info['target_root']
+            result = waller.run(command, wenv=self.config())
+            self.previous_release_version = os.path.basename(result.stdout)
+            current_app.logger.info(command)
+            current_app.logger.info(self.previous_release_version)
+            current_app.logger.info(result.stdout)
+
             # 1. create a tmp link dir
             current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
             command = 'ln -sfn %s/%s %s' % (
@@ -426,7 +434,11 @@ class Deployer:
         if update_status:
             status = TaskModel.status_success if success else TaskModel.status_fail
             current_app.logger.info('success:%s, status:%s' % (success, status))
-            TaskModel().get_by_id(self.task_id).update({'status': status})
+            TaskModel().get_by_id(self.task_id).update({
+                'status': status,
+                'link_id': self.release_version,
+                'ex_link_id': self.previous_release_version,
+            })
 
         notice_info = {
             'title': '',

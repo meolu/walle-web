@@ -35,6 +35,8 @@ class TaskModel(SurrogatePK, Model):
         status_success: '上线完成',
         status_fail: '上线失败',
     }
+    rollback_count = {}
+    keep_version_num = 3
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
@@ -96,7 +98,7 @@ class TaskModel(SurrogatePK, Model):
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
 
-        query = query.add_columns(ProjectModel.name, EnvironmentModel.name)
+        query = query.add_columns(ProjectModel.name, EnvironmentModel.name, ProjectModel.keep_version_num)
         count = query.count()
 
         data = query.order_by(TaskModel.id.desc()) \
@@ -104,9 +106,11 @@ class TaskModel(SurrogatePK, Model):
             .all()
         task_list = []
         for p in data:
+            p[0].keep_version_num = p[3]
             item = p[0].to_json()
             item['project_name'] = p[1]
             item['environment_name'] = p[2]
+            # self.keep_version_num = p[3]
             task_list.append(item)
 
         return task_list, count
@@ -191,6 +195,12 @@ class TaskModel(SurrogatePK, Model):
 
     def enable(self):
         is_project_master = self.project_id in session['project_master']
+
+        if self.project_id not in self.rollback_count:
+            self.rollback_count[self.project_id] = 0
+        if self.status in [self.status_doing, self.status_fail, self.status_success]:
+            self.rollback_count[self.project_id] += 1
+
         return {
             'enable_view': True if self.status in [self.status_doing, self.status_fail, self.status_success] else False,
             'enable_update': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_reject]),
@@ -198,5 +208,5 @@ class TaskModel(SurrogatePK, Model):
             'enable_create': False,
             'enable_online': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_pass, self.status_fail, self.status_doing]),
             'enable_audit': (permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new]),
-            'enable_block': False,
+            'enable_rollback': True if self.rollback_count[self.project_id] <= self.keep_version_num and self.status in [self.status_doing, self.status_fail, self.status_success] else False
         }
