@@ -95,7 +95,7 @@ class UserAPI(SecurityResource):
             # add user
             user = UserModel().add(user_info)
             # send an email
-            message = u"""Hi, %s
+            message = """Hi, %s
                     <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it : )
                     <br><br>name: %s<br>password: %s""" \
                               % (user.username, user.email, form.password.data)
@@ -161,7 +161,7 @@ class UserAPI(SecurityResource):
             },
         }
         ret = []
-        for (key, value) in table.items():
+        for (key, value) in list(table.items()):
             value['key'] = key
             if key in filter:
                 value['value'] = filter[key]

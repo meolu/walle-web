@@ -33,7 +33,7 @@ class Dingding(Notice):
             "msgtype": "markdown",
             "markdown": {
                 "title": "上线单通知",
-                "text": u"""#### ![screenshot](http://walle-web.io/dingding.jpg) %s %s  \n> **项目**：%s \n
+                "text": """#### ![screenshot](http://walle-web.io/dingding.jpg) %s %s  \n> **项目**：%s \n
                 > **任务**：%s \n
                 > **分支**：%s \n
                 > **版本**：%s \n """ % (

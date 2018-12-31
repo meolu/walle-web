@@ -114,7 +114,7 @@ class ProjectModel(SurrogatePK, Model):
 
         ServerModel = model.server.ServerModel
         server_ids = project_info['server_ids']
-        project_info['servers_info'] = ServerModel.fetch_by_id(map(int, server_ids.split(',')))
+        project_info['servers_info'] = ServerModel.fetch_by_id(list(map(int, server_ids.split(','))))
         return project_info
 
     def add(self, *args, **kwargs):

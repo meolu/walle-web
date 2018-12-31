@@ -173,7 +173,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
         if not spaces and current_user.role != SUPER:
             raise WalleError(Code.space_empty)
 
-        default_space = spaces.keys()[0]
+        default_space = list(spaces.keys())[0]
 
         # 2.第一次登录无空间
         if not current_user.last_space:
@@ -183,7 +183,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
             session['space_info'] = spaces[session['space_id']]
 
         # 3.空间权限有修改（上次登录的空格没有权限了）
-        if current_user.last_space not in spaces.keys():
+        if current_user.last_space not in list(spaces.keys()):
             current_user.last_space = default_space
 
 
@@ -193,7 +193,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
 
         session['space_id'] = current_user.last_space
         session['space_info'] = spaces[current_user.last_space]
-        session['space_list'] = spaces.values()
+        session['space_list'] = list(spaces.values())
 
     @classmethod
     def avatar_url(cls, avatar):
