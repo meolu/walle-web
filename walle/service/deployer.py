@@ -490,10 +490,12 @@ class Deployer:
                     self.prev_release(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
+                    emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
                     current_app.logger.error(e)
                     self.errors[host] = e.message
+                    emit('fail', {'event': 'finish', 'data': {'host': host, 'message': host + Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
             self.end(is_all_servers_success)
 
         except Exception as e:
