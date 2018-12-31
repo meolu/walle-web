@@ -115,7 +115,7 @@ class ProjectAPI(SecurityResource):
         super(ProjectAPI, self).put()
 
         if action and action == 'members':
-            return self.members(project_id, members=json.loads(request.data))
+            return self.members(project_id, members=json.loads(request.data.decode('utf-8')))
 
         form = ProjectForm(request.form, csrf=False)
         form.set_id(project_id)

@@ -32,7 +32,7 @@ class TestApiPassport:
         response = {
             'count': 1,
         }
-        resp = client.get('/api/user/?%s' % (urllib.urlencode(query)))
+        resp = client.get('/api/user/?%s' % (urlencode(query)))
         response_success(resp)
         compare_req_resp(response, resp)
 
