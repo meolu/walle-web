@@ -11,14 +11,13 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 from flask_login import current_user
-from flask_wtf import Form
 from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
-from wtforms import StringField, IntegerField, StringField
+from wtforms import IntegerField, StringField
 from wtforms import validators
 
 
-class TaskForm(Form):
+class TaskForm(FlaskForm):
     name = StringField('name', [validators.Length(min=1)])
     project_id = IntegerField('project_id', [validators.NumberRange(min=1)])
     servers = StringField('servers', [validators.Length(min=1)])

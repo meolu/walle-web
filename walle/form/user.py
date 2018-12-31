@@ -11,7 +11,6 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 import re
-from flask_wtf import Form
 from walle.model.user import UserModel
 from werkzeug.security import generate_password_hash
 from wtforms import PasswordField, StringField
@@ -45,7 +44,7 @@ class RegistrationForm(UserForm):
     pass
 
 
-class UserUpdateForm(Form):
+class UserUpdateForm(FlaskForm):
     password = PasswordField('Password', [])
     username = StringField('username', [])
 
@@ -54,7 +53,7 @@ class UserUpdateForm(Form):
             raise ValidationError('密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     email = StringField('email', [validators.Length(min=6, max=35),
                                   Regexp(r'^(.+)@(.+)\.(.+)', message='邮箱格式不正确')])
     password = PasswordField('Password', [validators.Length(min=6, max=35)])

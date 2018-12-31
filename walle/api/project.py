@@ -91,7 +91,7 @@ class ProjectAPI(SecurityResource):
             abort(404)
 
     def create(self):
-        form = ProjectForm(request.form, csrf_enabled=False)
+        form = ProjectForm(request.form, csrf=False)
         if form.validate_on_submit():
             # add project
             project = ProjectModel()
@@ -117,7 +117,7 @@ class ProjectAPI(SecurityResource):
         if action and action == 'members':
             return self.members(project_id, members=json.loads(request.data))
 
-        form = ProjectForm(request.form, csrf_enabled=False)
+        form = ProjectForm(request.form, csrf=False)
         form.set_id(project_id)
         if form.validate_on_submit():
             server = ProjectModel().get_by_id(project_id)

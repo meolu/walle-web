@@ -81,7 +81,7 @@ class SpaceAPI(SecurityResource):
         """
         super(SpaceAPI, self).post()
 
-        form = SpaceForm(request.form, csrf_enabled=False)
+        form = SpaceForm(request.form, csrf=False)
         # return self.render_json(code=-1, data = form.form2dict())
         if form.validate_on_submit():
             # create space
@@ -119,7 +119,7 @@ class SpaceAPI(SecurityResource):
 
     @permission.upper_master
     def update(self, space_id):
-        form = SpaceForm(request.form, csrf_enabled=False)
+        form = SpaceForm(request.form, csrf=False)
         form.set_id(space_id)
         if form.validate_on_submit():
             space = SpaceModel().get_by_id(space_id)

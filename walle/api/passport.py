@@ -41,7 +41,7 @@ class PassportAPI(ApiResource):
 
         :return:
         """
-        form = LoginForm(request.form, csrf_enabled=False)
+        form = LoginForm(request.form, csrf=False)
         if form.validate_on_submit():
             user = UserModel.query.filter_by(email=form.email.data).first()
 

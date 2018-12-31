@@ -11,13 +11,12 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 from flask_login import current_user
-from flask_wtf import Form
 from walle.model.environment import EnvironmentModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
 
 
-class EnvironmentForm(Form):
+class EnvironmentForm(FlaskForm):
     env_name = StringField('env_name', [validators.Length(min=1, max=100)])
     status = StringField('status', [validators.Length(min=0, max=10)])
     env_id = None

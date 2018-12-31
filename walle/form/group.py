@@ -13,14 +13,13 @@ except ImportError:
 import json
 
 from flask import current_app
-from flask_wtf import Form
 from walle.model.tag import TagModel
 from walle.model.user import UserModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
 
 
-class GroupForm(Form):
+class GroupForm(FlaskForm):
     group_name = StringField('group_name', [validators.Length(min=1, max=100)])
     uid_roles = StringField('uid_roles', [validators.Length(min=1)])
     group_id = None

@@ -11,14 +11,13 @@ try:
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
 from flask_login import current_user
-from flask_wtf import Form
 from walle.model.project import ProjectModel
 from walle.service.notice import Notice
 from wtforms import StringField
 from wtforms import validators, ValidationError
 
 
-class ProjectForm(Form):
+class ProjectForm(FlaskForm):
     name = StringField('name', [validators.Length(min=1, max=100)])
     environment_id = StringField('environment_id', [validators.Length(min=1, max=10)])
     space_id = StringField('space_id', [validators.Length(min=1, max=10)])

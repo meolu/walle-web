@@ -89,7 +89,7 @@ class UserAPI(SecurityResource):
 
     @permission.upper_developer
     def create_user(self):
-        form = RegistrationForm(request.form, csrf_enabled=False)
+        form = RegistrationForm(request.form, csrf=False)
         if form.validate_on_submit():
             user_info = form.form2dict()
             # add user
@@ -121,7 +121,7 @@ class UserAPI(SecurityResource):
             else:
                 abort(404)
 
-        form = UserUpdateForm(request.form, csrf_enabled=False)
+        form = UserUpdateForm(request.form, csrf=False)
         if form.validate_on_submit():
             user = UserModel(id=user_id)
             user.update_name_pwd(username=form.username.data, password=form.password.data)

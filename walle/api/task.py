@@ -64,7 +64,7 @@ class TaskAPI(SecurityResource):
         """
         super(TaskAPI, self).post()
 
-        form = TaskForm(request.form, csrf_enabled=False)
+        form = TaskForm(request.form, csrf=False)
         if form.validate_on_submit():
             task_new = TaskModel()
             data = form.form2dict()
@@ -94,7 +94,7 @@ class TaskAPI(SecurityResource):
             return self.update(task_id=task_id)
 
     def update(self, task_id):
-        form = TaskForm(request.form, csrf_enabled=False)
+        form = TaskForm(request.form, csrf=False)
         form.set_id(task_id)
         if form.validate_on_submit():
             task = TaskModel().get_by_id(task_id)
