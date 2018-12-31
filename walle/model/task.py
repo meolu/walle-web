@@ -54,7 +54,7 @@ class TaskModel(SurrogatePK, Model):
     tag = db.Column(String(100))
     file_transmission_mode = db.Column(Integer)
     file_list = db.Column(Text)
-    enable_rollback = db.Column(Integer)
+    is_rollback = db.Column(Integer)
     created_at = db.Column(DateTime, default=current_time)
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
 
@@ -186,7 +186,7 @@ class TaskModel(SurrogatePK, Model):
             'tag': self.tag,
             'file_transmission_mode': self.file_transmission_mode,
             'file_list': self.file_list,
-            'enable_rollback': self.enable_rollback,
+            'is_rollback': self.is_rollback,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
@@ -200,6 +200,12 @@ class TaskModel(SurrogatePK, Model):
             self.rollback_count[self.project_id] = 0
         if self.status in [self.status_doing, self.status_fail, self.status_success]:
             self.rollback_count[self.project_id] += 1
+        if self.rollback_count[self.project_id] <= self.keep_version_num \
+            and self.status in [self.status_doing, self.status_fail, self.status_success] \
+            and self.ex_link_id:
+            enable_rollback = True
+        else:
+            enable_rollback = False
 
         return {
             'enable_view': True if self.status in [self.status_doing, self.status_fail, self.status_success] else False,
@@ -208,5 +214,14 @@ class TaskModel(SurrogatePK, Model):
             'enable_create': False,
             'enable_online': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_pass, self.status_fail, self.status_doing]),
             'enable_audit': (permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new]),
-            'enable_rollback': True if self.rollback_count[self.project_id] <= self.keep_version_num and self.status in [self.status_doing, self.status_fail, self.status_success] else False
+            'enable_rollback': enable_rollback
         }
+
+    @classmethod
+    def task_default_status(cls, project_id):
+        ProjectModel = model.project.ProjectModel
+        project_info = ProjectModel.query.filter_by(id=project_id).first()
+        if project_info.task_audit == ProjectModel.task_audit_true:
+            return TaskModel.status_new
+        else:
+            return TaskModel.status_pass

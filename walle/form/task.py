@@ -40,7 +40,6 @@ class TaskForm(Form):
         task_status = TaskModel.status_new if project_info['task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
         return {
             'name': self.name.data if self.name.data else '',
-            # todo
             'user_id': current_user.id,
             'user_name': current_user.username,
             'project_id': self.project_id.data,
@@ -55,6 +54,5 @@ class TaskForm(Form):
             'branch': self.branch.data if self.branch.data else '',
             'file_transmission_mode': self.file_transmission_mode.data if self.file_transmission_mode.data else 0,
             'file_list': self.file_list.data if self.file_list.data else '',
-            'enable_rollback': 1,
-
+            'is_rollback': 0,
         }

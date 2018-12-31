@@ -47,7 +47,10 @@ class WalleSocketIO(Namespace):
     def on_deploy(self, message):
         if self.task_info['status'] in [TaskModel.status_pass, TaskModel.status_fail]:
             wi = Deployer(task_id=self.room, console=True)
-            ret = wi.walle_deploy()
+            if self.task_info['is_rollback']:
+                wi.walle_rollback()
+            else:
+                wi.walle_deploy()
         else:
             emit('console', {'event': 'forbidden', 'data': self.task_info}, room=self.room)
 

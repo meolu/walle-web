@@ -46,7 +46,6 @@ class Waller(Connection):
             else:
                 result = super(Waller, self).run(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
 
-
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout
                 if exception:

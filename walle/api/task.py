@@ -146,14 +146,24 @@ class TaskAPI(SecurityResource):
         """
 
         task = TaskModel.get_by_id(task_id).to_dict()
-        ex_task = TaskModel().query.filter_by(link_id=task['ex_link_id']).first().to_dict()
+        filters = {
+            TaskModel.link_id == task['ex_link_id'],
+            TaskModel.id < task_id,
+        }
+        ex_task = TaskModel().query.filter(*filters).first()
+
+        if not ex_task:
+            raise WalleError(code=Code.rollback_error)
 
         task['id'] = None
         task['name'] = task['name'] + u' - 回滚此次上线'
         task['link_id'] = task['ex_link_id']
         task['ex_link_id'] = ''
+        task['is_rollback'] = 1
+        task['status'] = TaskModel.task_default_status(task['project_id'])
 
         # rewrite commit/tag/branch
+        ex_task = ex_task.to_dict()
         task['commit_id'] = ex_task['commit_id']
         task['branch'] = ex_task['branch']
         task['tag'] = ex_task['tag']

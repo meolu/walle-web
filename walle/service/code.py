@@ -41,6 +41,9 @@ class Code():
     #: 表单错误
     form_error = 2001
 
+    #: 不能生成回滚上线单，可能是第一上线，或目标机器上版本库里已失去该版本备份
+    rollback_error = 2002
+
     #: ----------------------- 3xxx shell 相关错误 -----------------
     #: 3xxx shell相关错误
     #: 不知道怎么归类的错误
@@ -80,6 +83,7 @@ class Code():
 
         params_error: '参数错误',
         form_error: '表单错误',
+        rollback_error: '不能生成回滚上线单，可能是第一上线，或目标机器上版本库里已失去该版本备份',
 
         shell_run_fail: '命令运行错误，请联系管理员',
         shell_dir_not_exists: '路径不存在，请联系管理员',
