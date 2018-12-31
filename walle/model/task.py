@@ -129,7 +129,7 @@ class TaskModel(SurrogatePK, Model):
         task = data.to_json()
         ProjectModel = model.project.ProjectModel
         project = ProjectModel().item(task['project_id'])
-        task['project_name'] = project['name'] if project else u'未知项目'
+        task['project_name'] = project['name'] if project else '未知项目'
         task['project_info'] = project
         return task
 

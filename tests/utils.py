@@ -7,7 +7,16 @@
     :author: wushuiyong@walle-web.io
 """
 import json
+import sys
 from flask import current_app
+
+PY2 = int(sys.version[0]) == 2
+
+if PY2:
+    from urllib import urlencode
+else:
+    from urllib.parse import urlencode
+
 
 def response_success(response):
     assert 200 <= response.status_code < 300, 'Received %d response: %s' % (response.status_code, response.data)

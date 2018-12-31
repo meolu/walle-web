@@ -27,7 +27,7 @@ class Email(Notice):
             'is_branch',
         @return:
         '''
-        message = u""" %s %s 
+        message = """ %s %s 
                 <br><br> <strong>项目</strong>：%s
                 <br><br> <strong>任务</strong>：%s
                 <br><br> <strong>分支</strong>：%s
