@@ -12,6 +12,8 @@ from flask_socketio import emit, join_room, Namespace
 from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.deployer import Deployer
+from walle.service.error import Code
+
 
 class WalleSocketIO(Namespace):
     namespace, room, app = None, None, None
@@ -101,7 +103,12 @@ class WalleSocketIO(Namespace):
         deployer = Deployer(task_id=self.room)
         for log in deployer.logs():
             log = RecordModel.logs(**log)
-            emit('console', {'event': 'console', 'data': log}, room=self.room)
+            if log['stage'] == RecordModel.stage_end:
+                cmd = 'success' if log['status'] == RecordModel.status_success else 'fail'
+                msg = log['host'] + ' 部署完成！' if log['status'] == RecordModel.status_success else log['host'] + Code.code_msg[Code.deploy_fail]
+                emit(cmd, {'event': 'finish', 'data': {'host': log['host'], 'message': msg}}, room=self.room)
+            else:
+                emit('console', {'event': 'console', 'data': log}, room=self.room)
 
         deployer.end(success=task_info.status == TaskModel.status_success, update_status=False)
 
