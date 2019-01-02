@@ -20,23 +20,23 @@ function init() {
         virtualenv --no-site-packages venv # 注意:安装失败请指定python路径. mac 可能会有用anaconda的python. 请不要mac试用, 麻烦多多
     fi
     echo "安装/更新可能缺少的依赖: mysql-community-devel gcc gcc-c++ python-devel"
-    sudo yum install -y mysql-community-devel gcc gcc-c++ python-devel git
-    source ./venv/bin/activate
-    pip install -r ./requirements/prod.txt
-    if [ $? != "0"  ]; then
-            exit 1
-    fi
+    sudo yum install -y mysql-community-devel gcc gcc-c++ python-devel
+    requirement
     echo "************************************************"
     echo -e "\033[32m init walle success \033[0m"
     echo -e "\033[32m welcome to walle 2.0 \033[0m"
 }
 
+function requirement() {
+    source ./venv/bin/activate
+    pip install -r ./requirements/prod.txt
+}
 function start() {
     echo "start walle"
     echo "----------------"
     source ./venv/bin/activate
     mkdir -p logs
-    nohup python ${APP} >> logs/runtime.log 2>&1 &
+    nohup python $APP >> logs/runtime.log 2>&1 &
     echo -e "Starting walle:                 [\033[32m ok \033[0m]"
     echo -e "runtime: \033[32m logs/runtime.log \033[0m"
     echo -e "error: \033[32m logs/error.log \033[0m"
@@ -46,9 +46,9 @@ function stop() {
     echo "stop walle"
     echo "----------------"
     # 获取进程 PID
-    PID=$(ps -ef | grep ${APP} | grep -v grep | awk '{print $2}')
+    PID=$(ps -ef | grep $APP | grep -v grep | awk '{print $2}') 
     # 杀死进程
-    kill -9 ${PID}
+    kill -9 $PID
 }
  
 function restart() {
@@ -61,8 +61,9 @@ function restart() {
 function upgrade() {
     echo "upgrade walle"
     echo "----------------"
-    cd $(dirname $0)
-    git fetch && git pull
+    cd `dirname $0`
+    echo -e "建议先暂存本地修改\033[33m git stash\033[0m，更新后再弹出\033[33m git stash pop\033[0m，处理冲突。"
+    git pull
 }
 
 function migration() {
@@ -102,7 +103,9 @@ case "$1" in
     upgrade )
         echo "************************************************"
         upgrade
+        requirement
         migration
+        echo -e "\033[32m walle 更新成功. \033[0m \033[33m 建议重启服务 sh admin.sh restart\033[0m"
         echo "************************************************"
         ;;
     migration )

@@ -6,6 +6,7 @@ from datetime import timedelta
 
 class Config(object):
     """Base configuration."""
+    VERSION = '2.0.0'
 
     SECRET_KEY = os.environ.get('WALLE_SECRET', 'secret-key')
     APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))

@@ -14,6 +14,12 @@ from walle.service.extensions import permission
 from walle.service.rbac.role import *
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import current_app
+from flask_login import AnonymousUserMixin
+
+class AnonymousUser(AnonymousUserMixin):
+    @property
+    def role(self):
+        return None
 
 class UserModel(UserMixin, SurrogatePK, Model):
     # 表的名字:

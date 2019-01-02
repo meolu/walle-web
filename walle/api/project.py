@@ -9,6 +9,7 @@
 """
 
 import json
+import os, shutil
 
 from flask import request, abort
 from walle.api.api import SecurityResource
@@ -121,9 +122,16 @@ class ProjectAPI(SecurityResource):
         form.set_id(project_id)
         if form.validate_on_submit():
             server = ProjectModel().get_by_id(project_id)
+            repo_url_origin = server.repo_url
             data = form.form2dict()
             # a new type to update a model
             ret = server.update(data)
+            # maybe sth changed by git
+            if repo_url_origin != data['repo_url']:
+                dir_codebase_project = current_app.config.get('CODE_BASE') + str(project_id)
+                if os.path.exists(dir_codebase_project):
+                    shutil.rmtree(dir_codebase_project)
+
             return self.render_json(data=server.item())
         else:
             return self.render_error(code=Code.form_error, message=form.errors)

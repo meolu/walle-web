@@ -9,21 +9,22 @@
 """
 
 import os
-from flask import request, abort, session, current_app
-from flask_login import current_user, login_required
+import platform
+
+from flask import abort
+from git import Repo
 from walle.api.api import SecurityResource
-from walle.model.record import RecordModel
 from walle.model.menu import MenuModel
+from walle.model.record import RecordModel
 from walle.model.user import UserModel
 from walle.service import emails
 from walle.service.deployer import Deployer
-from walle.service.rbac.role import *
-from werkzeug.utils import secure_filename
 from walle.service.extensions import permission
+from walle.service.rbac.role import *
 
 
 class GeneralAPI(SecurityResource):
-    actions = ['menu', 'websocket']
+    actions = ['menu', 'websocket', 'info']
 
     # TODO 更细致的检查
     @permission.upper_reporter
@@ -86,4 +87,23 @@ class GeneralAPI(SecurityResource):
         return self.render_json(data={
             'command': ret,
             'record': record,
+        })
+
+    def info(self):
+        try:
+            repo = Repo(current_app.config.get('PROJECT_ROOT'))
+            branch = str(repo.active_branch)
+            heads = os.path.join(current_app.config.get('PROJECT_ROOT'), '.git/refs/heads/', branch)
+            commit = ''
+            with open(heads) as f:
+                commit = f.read().strip()[0:8]
+        except Exception as e:
+            branch, commit = ''
+
+        return self.render_json(data={
+            'version': current_app.config.get('VERSION'),
+            'branch': branch,
+            'commit': commit,
+            'server': platform.platform(),
+            'python': platform.python_version(),
         })
