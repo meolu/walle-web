@@ -62,7 +62,7 @@ function upgrade() {
     echo "upgrade walle"
     echo "----------------"
     cd `dirname $0`
-     echo -e "建议先暂存本地修改[\033[33m git stash\033[0m]，更新后再弹出[\033[33m git stash pop\033[0m]，处理冲突。"
+    echo -e "建议先暂存本地修改[\033[33m git stash\033[0m]，更新后再弹出[\033[33m git stash pop\033[0m]，处理冲突。"
     git pull
 }
 
@@ -105,6 +105,7 @@ case "$1" in
         upgrade
         requirement
         migration
+        echo -e "[\033[32m 更新成功. \033[0m] [\033[33m 建议重启服务 sh admin.sh restart\033[0m]"
         echo "************************************************"
         ;;
     migration )
