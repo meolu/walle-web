@@ -19,10 +19,16 @@ Feature
 - 完善的通知机制。邮件、钉钉
 - 全新的UI，我自己都被震憾到了，如丝般流畅
 
+Architecture
+=========================
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/walle-flow-relation.jpg)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/permission.png)
+
 Preview
 =========================
-![](https://raw.github.com/meolu/walle-web/master/screenshot/projects.png)
-![](https://raw.github.com/meolu/walle-web/master/screenshot/deploy.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/user-list.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/project-list.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/task-list.png)
 ![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/deploy-console.png)
 
 Installation
