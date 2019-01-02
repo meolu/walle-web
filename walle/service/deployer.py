@@ -236,7 +236,7 @@ class Deployer:
 
         with waller.cd(self.project_info['target_releases']):
             # 0. get previous link
-            command = 'readlink ' + self.project_info['target_root']
+            command = '[ -L %s ] && readlink %s || echo ""' % (self.project_info['target_root'], self.project_info['target_root'])
             result = waller.run(command, wenv=self.config(console=False))
             self.previous_release_version = os.path.basename(result.stdout).strip()
 
@@ -264,7 +264,7 @@ class Deployer:
 
         with waller.cd(self.project_info['target_releases']):
             # 0. get previous link
-            command = 'readlink ' + self.project_info['target_root']
+            command = '[ -L %s ] && readlink %s || echo ""' % (self.project_info['target_root'], self.project_info['target_root'])
             result = waller.run(command, wenv=self.config(console=False))
             self.previous_release_version = os.path.basename(result.stdout)
 

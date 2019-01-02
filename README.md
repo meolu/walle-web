@@ -23,7 +23,7 @@ Preview
 =========================
 ![](https://raw.github.com/meolu/walle-web/master/screenshot/projects.png)
 ![](https://raw.github.com/meolu/walle-web/master/screenshot/deploy.png)
-![](https://raw.github.com/meolu/walle-web/master/walle-web.io/docs/2/zh-cn/static/deploy-console.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/deploy-console.png)
 
 Installation
 =========================
