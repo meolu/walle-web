@@ -8,6 +8,7 @@
     :author: wushuiyong@walle-web.io
 """
 
+import os
 import platform
 
 from flask import abort
@@ -92,7 +93,10 @@ class GeneralAPI(SecurityResource):
         try:
             repo = Repo(current_app.config.get('PROJECT_ROOT'))
             branch = str(repo.active_branch)
-            commit = 'ba4ca13d'
+            heads = os.path.join(current_app.config.get('PROJECT_ROOT'), '.git/refs/heads/', branch)
+            commit = ''
+            with open(heads) as f:
+                commit = f.read().strip()[0:8]
         except Exception as e:
             branch, commit = ''
 
