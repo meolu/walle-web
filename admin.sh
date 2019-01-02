@@ -46,7 +46,7 @@ function stop() {
     echo "stop walle"
     echo "----------------"
     # 获取进程 PID
-    PID=$(ps -ef | grep $APP | grep -v grep | awk '{print $2}') 
+    PID=$(ps -ef | grep ${APP} | grep -v grep | awk '{print $2}')
     # 杀死进程
     kill -9 ${PID}
 }
