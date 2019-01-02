@@ -39,8 +39,7 @@ class TaskAPI(SecurityResource):
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
 
-        task_model = TaskModel()
-        task_list, count = task_model.list(page=page, size=size, kw=kw, space_id=self.space_id)
+        task_list, count = TaskModel().list(page=page, size=size, kw=kw, space_id=self.space_id)
         return self.list_json(list=task_list, count=count, enable_create=permission.role_upper_reporter() and current_user.role != SUPER)
 
     def item(self, task_id):
@@ -64,7 +63,7 @@ class TaskAPI(SecurityResource):
         """
         super(TaskAPI, self).post()
 
-        form = TaskForm(request.form, csrf_enabled=False)
+        form = TaskForm(request.form, csrf=False)
         if form.validate_on_submit():
             task_new = TaskModel()
             data = form.form2dict()
@@ -94,7 +93,7 @@ class TaskAPI(SecurityResource):
             return self.update(task_id=task_id)
 
     def update(self, task_id):
-        form = TaskForm(request.form, csrf_enabled=False)
+        form = TaskForm(request.form, csrf=False)
         form.set_id(task_id)
         if form.validate_on_submit():
             task = TaskModel().get_by_id(task_id)
@@ -146,14 +145,24 @@ class TaskAPI(SecurityResource):
         """
 
         task = TaskModel.get_by_id(task_id).to_dict()
-        ex_task = TaskModel().query.filter_by(link_id=task['ex_link_id']).first().to_dict()
+        filters = {
+            TaskModel.link_id == task['ex_link_id'],
+            TaskModel.id < task_id,
+        }
+        ex_task = TaskModel().query.filter(*filters).first()
+
+        if not ex_task:
+            raise WalleError(code=Code.rollback_error)
 
         task['id'] = None
-        task['name'] = task['name'] + u' - 回滚此次上线'
+        task['name'] = task['name'] + ' - 回滚此次上线'
         task['link_id'] = task['ex_link_id']
         task['ex_link_id'] = ''
+        task['is_rollback'] = 1
+        task['status'] = TaskModel.task_default_status(task['project_id'])
 
         # rewrite commit/tag/branch
+        ex_task = ex_task.to_dict()
         task['commit_id'] = ex_task['commit_id']
         task['branch'] = ex_task['branch']
         task['tag'] = ex_task['tag']

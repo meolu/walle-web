@@ -72,7 +72,7 @@ class TestApiRole(TestApiBase):
         #     response = {
         #         'count': 1,
         #     }
-        #     resp = client.get('%s/?%s' % (self.uri_prefix, urllib.urlencode(query)))
+        #     resp = client.get('%s/?%s' % (self.uri_prefix, urlencode(query)))
         #     response_success(resp)
         #     resp_dict = resp_json(resp)
         #

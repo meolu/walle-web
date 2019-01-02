@@ -39,8 +39,6 @@ class MemberModel(SurrogatePK, Model):
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
     group_name = None
 
-    # TODO group id全局化
-
     def spaces(self, user_id=None):
         """
         获取分页列表
@@ -78,9 +76,6 @@ class MemberModel(SurrogatePK, Model):
         query = self.query.filter(*filters)
         if user_id:
             query = query.filter_by(user_id=user_id)
-
-        # if project_id:
-        #     query = query.filter_by(source_id=project_id)
 
         projects = query.all()
         current_app.logger.info(projects)

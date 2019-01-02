@@ -10,40 +10,39 @@ try:
     from flask_wtf import FlaskForm  # Try Flask-WTF v0.13+
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
-from flask_wtf import Form
-from wtforms import TextField
-from wtforms import validators, ValidationError
 from flask_login import current_user
 from walle.model.project import ProjectModel
 from walle.service.notice import Notice
+from wtforms import StringField
+from wtforms import validators, ValidationError
 
 
-class ProjectForm(Form):
-    name = TextField('name', [validators.Length(min=1, max=100)])
-    environment_id = TextField('environment_id', [validators.Length(min=1, max=10)])
-    space_id = TextField('space_id', [validators.Length(min=1, max=10)])
-    status = TextField('status', [])
-    excludes = TextField('excludes', [])
-    master = TextField('master', [])
-    server_ids = TextField('server_ids', [validators.Length(min=1)])
-    keep_version_num = TextField('keep_version_num', [])
+class ProjectForm(FlaskForm):
+    name = StringField('name', [validators.Length(min=1, max=100)])
+    environment_id = StringField('environment_id', [validators.Length(min=1, max=10)])
+    space_id = StringField('space_id', [validators.Length(min=1, max=10)])
+    status = StringField('status', [])
+    excludes = StringField('excludes', [])
+    master = StringField('master', [])
+    server_ids = StringField('server_ids', [validators.Length(min=1)])
+    keep_version_num = StringField('keep_version_num', [])
 
-    target_root = TextField('target_root', [validators.Length(min=1, max=200)])
-    target_releases = TextField('target_releases', [validators.Length(min=1, max=200)])
+    target_root = StringField('target_root', [validators.Length(min=1, max=200)])
+    target_releases = StringField('target_releases', [validators.Length(min=1, max=200)])
 
-    task_vars = TextField('task_vars', [])
-    prev_deploy = TextField('prev_deploy', [])
-    post_deploy = TextField('post_deploy', [])
-    prev_release = TextField('prev_release', [])
-    post_release = TextField('post_release', [])
+    task_vars = StringField('task_vars', [])
+    prev_deploy = StringField('prev_deploy', [])
+    post_deploy = StringField('post_deploy', [])
+    prev_release = StringField('prev_release', [])
+    post_release = StringField('post_release', [])
 
-    repo_url = TextField('repo_url', [validators.Length(min=1, max=200)])
-    repo_username = TextField('repo_username', [])
-    repo_password = TextField('repo_password', [])
-    repo_mode = TextField('repo_mode', [validators.Length(min=1, max=50)])
-    notice_type = TextField('notice_type', [])
-    notice_hook = TextField('notice_hook', [])
-    task_audit = TextField('task_audit', [])
+    repo_url = StringField('repo_url', [validators.Length(min=1, max=200)])
+    repo_username = StringField('repo_username', [])
+    repo_password = StringField('repo_password', [])
+    repo_mode = StringField('repo_mode', [validators.Length(min=1, max=50)])
+    notice_type = StringField('notice_type', [])
+    notice_hook = StringField('notice_hook', [])
+    task_audit = StringField('task_audit', [])
 
     id = None
 
@@ -88,7 +87,8 @@ class ProjectForm(Form):
             'repo_password': self.repo_password.data if self.repo_password.data else '',
             'repo_mode': self.repo_mode.data if self.repo_mode.data else '',
 
-            'notice_type': self.notice_type.data if self.notice_type.data in [Notice.by_email, Notice.by_dingding] else '',
+            'notice_type': self.notice_type.data if self.notice_type.data in [Notice.by_email,
+                                                                              Notice.by_dingding] else '',
             'notice_hook': self.notice_hook.data if self.notice_hook.data else '',
             'task_audit': self.task_audit.data if self.task_audit.data else 0,
         }

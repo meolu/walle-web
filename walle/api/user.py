@@ -89,13 +89,13 @@ class UserAPI(SecurityResource):
 
     @permission.upper_developer
     def create_user(self):
-        form = RegistrationForm(request.form, csrf_enabled=False)
+        form = RegistrationForm(request.form, csrf=False)
         if form.validate_on_submit():
             user_info = form.form2dict()
             # add user
             user = UserModel().add(user_info)
             # send an email
-            message = u"""Hi, %s
+            message = """Hi, %s
                     <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it : )
                     <br><br>name: %s<br>password: %s""" \
                               % (user.username, user.email, form.password.data)
@@ -121,7 +121,7 @@ class UserAPI(SecurityResource):
             else:
                 abort(404)
 
-        form = UserUpdateForm(request.form, csrf_enabled=False)
+        form = UserUpdateForm(request.form, csrf=False)
         if form.validate_on_submit():
             user = UserModel(id=user_id)
             user.update_name_pwd(username=form.username.data, password=form.password.data)
@@ -161,7 +161,7 @@ class UserAPI(SecurityResource):
             },
         }
         ret = []
-        for (key, value) in table.items():
+        for (key, value) in list(table.items()):
             value['key'] = key
             if key in filter:
                 value['value'] = filter[key]
@@ -171,8 +171,6 @@ class UserAPI(SecurityResource):
         return ret
 
     def avatar(self, user_id):
-        # TODO uid
-        # fname = current_user.id + '.jpg'
         random = generate_password_hash(str(user_id))
         fname = random[-10:] + '.jpg'
         current_app.logger.info(fname)

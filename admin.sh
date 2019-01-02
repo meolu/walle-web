@@ -20,7 +20,7 @@ function init() {
         virtualenv --no-site-packages venv # 注意:安装失败请指定python路径. mac 可能会有用anaconda的python. 请不要mac试用, 麻烦多多
     fi
     echo "安装/更新可能缺少的依赖: mysql-community-devel gcc gcc-c++ python-devel"
-    sudo yum install -y mysql-community-devel gcc gcc-c++ python-devel
+    sudo yum install -y mysql-community-devel gcc gcc-c++ python-devel git
     source ./venv/bin/activate
     pip install -r ./requirements/prod.txt
     if [ $? != "0"  ]; then

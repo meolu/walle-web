@@ -52,7 +52,7 @@ class Deployer:
     dir_release, dir_webroot = None, None
 
     connections, success, errors = {}, {}, {}
-    release_version_tar, release_version = None, None
+    release_version_tar, previous_release_version, release_version = None, None, None
     local = None
 
     def __init__(self, task_id=None, project_id=None, console=False):
@@ -82,9 +82,14 @@ class Deployer:
         # start to deploy
         self.console = console
 
-    def config(self):
-        return {'task_id': self.task_id, 'user_id': self.user_id, 'stage': self.stage, 'sequence': self.sequence,
-                'console': self.console}
+    def config(self, console=None):
+        return {
+            'task_id': self.task_id,
+            'user_id': self.user_id,
+            'stage': self.stage,
+            'sequence': self.sequence,
+            'console': console if console is not None else self.console
+        }
 
     def start(self):
         RecordModel().query.filter_by(task_id=self.task_id).delete()
@@ -109,21 +114,8 @@ class Deployer:
         self.stage = self.stage_prev_deploy
         self.sequence = 1
 
-        # 检查 python 版本
-        command = 'python --version'
-        result = self.localhost.local(command, wenv=self.config())
-
-        # 检查 git 版本
-        command = 'git --version'
-        result = self.localhost.local(command, wenv=self.config())
-
         # 检查 目录是否存在
         self.init_repo()
-
-        # self.init_repo() 函数中已经操作了
-        # TODO to be removed
-        # command = 'mkdir -p %s' % (self.dir_codebase_project)
-        # result = self.localhost.local(command, wenv=self.config())
 
         # 用户自定义命令
         command = self.project_info['prev_deploy']
@@ -210,13 +202,6 @@ class Deployer:
             command = 'mkdir -p %s' % (self.project_info['target_releases'])
             result = waller.run(command, wenv=self.config())
 
-        # 用户自定义命令
-        command = self.project_info['prev_release']
-        if command:
-            current_app.logger.info(command)
-            with waller.cd(self.project_info['target_releases']):
-                result = waller.run(command, wenv=self.config())
-
         # TODO md5
         # 传送到版本库 release
         result = waller.put(self.local_codebase + self.release_version_tar,
@@ -225,6 +210,19 @@ class Deployer:
 
         # 解压
         self.release_untar(waller)
+
+        # 用户自定义命令
+        self.prev_release_custom(waller)
+
+    def prev_release_custom(self, waller):
+        # 用户自定义命令
+        command = self.project_info['prev_release']
+        if command:
+            current_app.logger.info(command)
+            # TODO
+            target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
+            with waller.cd(target_release_version):
+                result = waller.run(command, wenv=self.config())
 
     def release(self, waller):
         '''
@@ -238,6 +236,39 @@ class Deployer:
         self.sequence = 5
 
         with waller.cd(self.project_info['target_releases']):
+            # 0. get previous link
+            command = '[ -L %s ] && readlink %s || echo ""' % (self.project_info['target_root'], self.project_info['target_root'])
+            result = waller.run(command, wenv=self.config(console=False))
+            self.previous_release_version = os.path.basename(result.stdout).strip()
+
+            # 1. create a tmp link dir
+            current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
+            command = 'ln -sfn %s/%s %s' % (
+                self.project_info['target_releases'], self.release_version, current_link_tmp_dir)
+            result = waller.run(command, wenv=self.config())
+
+            # 2. make a soft link from release to tmp link
+
+            # 3. move tmp link to webroot
+            current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
+            command = 'mv -fT %s %s' % (current_link_tmp_dir, self.project_info['target_root'])
+            result = waller.run(command, wenv=self.config())
+
+    def rollback(self, waller):
+        '''
+        5.部署代码到目标机器做的任务
+        - 恢复旧版本
+        :return:
+        '''
+        self.stage = self.stage_release
+        self.sequence = 5
+
+        with waller.cd(self.project_info['target_releases']):
+            # 0. get previous link
+            command = '[ -L %s ] && readlink %s || echo ""' % (self.project_info['target_root'], self.project_info['target_root'])
+            result = waller.run(command, wenv=self.config(console=False))
+            self.previous_release_version = os.path.basename(result.stdout)
+
             # 1. create a tmp link dir
             current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
             command = 'ln -sfn %s/%s %s' % (
@@ -272,12 +303,10 @@ class Deployer:
 
         # 用户自定义命令
         command = self.project_info['post_release']
-        if not command:
-            return None
-
-        current_app.logger.info(command)
-        with waller.cd(self.project_info['target_root']):
-            result = waller.run(command, wenv=self.config())
+        if command:
+            current_app.logger.info(command)
+            with waller.cd(self.project_info['target_root']):
+                result = waller.run(command, wenv=self.config())
 
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
@@ -295,19 +324,6 @@ class Deployer:
 
     def project_detection(self):
         errors = []
-        #  walle user => walle LOCAL_SERVER_USER
-        # show ssh_rsa.pub （maybe not necessary）
-        # command = 'whoami'
-        # current_app.logger.info(command)
-        # result = self.localhost.local(command, exception=False, wenv=self.config())
-        # if result.failed:
-        #     errors.append({
-        #         'title': u'本地免密码登录失败',
-        #         'why': result.stdout,
-        #         'how': u'在宿主机中配置免密码登录，把walle启动用户%s的~/.ssh/ssh_rsa.pub添加到LOCAL_SERVER_USER用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
-        #         pwd.getpwuid(os.getuid())[0], current_app.config.get('LOCAL_SERVER_USER')),
-        #     })
-
         # LOCAL_SERVER_USER => git
 
         # LOCAL_SERVER_USER => target_servers
@@ -316,9 +332,9 @@ class Deployer:
             result = waller.run('id', exception=False, wenv=self.config())
             if result.failed:
                 errors.append({
-                    'title': u'远程目标机器免密码登录失败',
-                    'why': u'远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
-                    'how': u'在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
+                    'title': '远程目标机器免密码登录失败',
+                    'why': '远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
+                    'how': '在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
                     pwd.getpwuid(os.getuid())[0], server_info['host']),
                 })
 
@@ -327,9 +343,9 @@ class Deployer:
             result = waller.run(command, exception=False, wenv=self.config())
             if result.stdout == 'false':
                 errors.append({
-                    'title': u'远程目标机器webroot不能是已建好的目录',
-                    'why': u'远程目标机器%s webroot不能是已存在的目录，必须为软链接，你不必新建，walle会自行创建。' % (server_info['host']),
-                    'how': u'手工删除远程目标机器：%s webroot目录：%s' % (server_info['host'], self.project_info['target_root']),
+                    'title': '远程目标机器webroot不能是已建好的目录',
+                    'why': '远程目标机器%s webroot不能是已存在的目录，必须为软链接，你不必新建，walle会自行创建。' % (server_info['host']),
+                    'how': '手工删除远程目标机器：%s webroot目录：%s' % (server_info['host'], self.project_info['target_root']),
                 })
 
         # remote release directory
@@ -411,8 +427,6 @@ class Deployer:
         if not os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
             command = 'mkdir -p %s' % (self.dir_codebase_project)
-            # TODO remove
-            current_app.logger.info(command)
             self.localhost.local(command, wenv=self.config())
 
         with self.localhost.cd(self.dir_codebase_project):
@@ -438,7 +452,11 @@ class Deployer:
         if update_status:
             status = TaskModel.status_success if success else TaskModel.status_fail
             current_app.logger.info('success:%s, status:%s' % (success, status))
-            TaskModel().get_by_id(self.task_id).update({'status': status})
+            TaskModel().get_by_id(self.task_id).update({
+                'status': status,
+                'link_id': self.release_version,
+                'ex_link_id': self.previous_release_version,
+            })
 
         notice_info = {
             'title': '',
@@ -475,10 +493,50 @@ class Deployer:
                     self.prev_release(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_success, host=host,
+                                              user=server_info['user'], command='')
+                    emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
                     current_app.logger.error(e)
                     self.errors[host] = e.message
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_fail, host=host,
+                                              user=server_info['user'], command='')
+                    emit('fail', {'event': 'finish', 'data': {'host': host, 'message': host + Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
+            self.end(is_all_servers_success)
+
+        except Exception as e:
+            self.end(False)
+
+        return {'success': self.success, 'errors': self.errors}
+
+    def walle_rollback(self):
+        self.start()
+
+        try:
+            is_all_servers_success = True
+            self.release_version = self.taskMdl.get('link_id')
+            for server_info in self.servers:
+                host = server_info['host']
+                try:
+                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    self.prev_release_custom(self.connections[host])
+                    self.release(self.connections[host])
+                    self.post_release(self.connections[host])
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_success, host=host,
+                                              user=server_info['user'], command='')
+                    emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
+                except Exception as e:
+                    is_all_servers_success = False
+                    current_app.logger.error(e)
+                    self.errors[host] = e.message
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_fail, host=host,
+                                              user=server_info['user'], command='')
+                    emit('fail', {'event': 'finish', 'data': {'host': host, 'message': host + Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
             self.end(is_all_servers_success)
 
         except Exception as e:

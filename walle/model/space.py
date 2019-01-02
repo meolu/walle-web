@@ -72,8 +72,6 @@ class SpaceModel(SurrogatePK, Model):
         return data
 
     def add(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-
         data = dict(*args)
         space = SpaceModel(**data)
         db.session.add(space)
@@ -83,9 +81,6 @@ class SpaceModel(SurrogatePK, Model):
         return self.id
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(SpaceModel, self).update(**update_data)
 
@@ -107,8 +102,6 @@ class SpaceModel(SurrogatePK, Model):
             'id': self.id,
             'user_id': self.user_id,
             'user_name': uid2name[self.user_id] if uid2name and self.user_id in uid2name else '',
-            # TODO
-            'group_id': 'self.group_id',
             'name': self.name,
             'status': self.status,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),

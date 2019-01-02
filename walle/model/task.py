@@ -35,6 +35,8 @@ class TaskModel(SurrogatePK, Model):
         status_success: '上线完成',
         status_fail: '上线失败',
     }
+    rollback_count = {}
+    keep_version_num = 3
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
@@ -52,7 +54,7 @@ class TaskModel(SurrogatePK, Model):
     tag = db.Column(String(100))
     file_transmission_mode = db.Column(Integer)
     file_list = db.Column(Text)
-    enable_rollback = db.Column(Integer)
+    is_rollback = db.Column(Integer)
     created_at = db.Column(DateTime, default=current_time)
     updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
 
@@ -79,6 +81,7 @@ class TaskModel(SurrogatePK, Model):
         :param kw:
         :return:
         """
+        self.rollback_count.clear()
         query = TaskModel.query.filter(TaskModel.status.notin_([self.status_remove]))
         if kw:
             query = query.filter(TaskModel.name.like('%' + kw + '%'))
@@ -96,7 +99,7 @@ class TaskModel(SurrogatePK, Model):
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
 
-        query = query.add_columns(ProjectModel.name, EnvironmentModel.name)
+        query = query.add_columns(ProjectModel.name, EnvironmentModel.name, ProjectModel.keep_version_num)
         count = query.count()
 
         data = query.order_by(TaskModel.id.desc()) \
@@ -104,9 +107,11 @@ class TaskModel(SurrogatePK, Model):
             .all()
         task_list = []
         for p in data:
+            p[0].keep_version_num = p[3]
             item = p[0].to_json()
             item['project_name'] = p[1]
             item['environment_name'] = p[2]
+            # self.keep_version_num = p[3]
             task_list.append(item)
 
         return task_list, count
@@ -125,12 +130,11 @@ class TaskModel(SurrogatePK, Model):
         task = data.to_json()
         ProjectModel = model.project.ProjectModel
         project = ProjectModel().item(task['project_id'])
-        task['project_name'] = project['name'] if project else u'未知项目'
+        task['project_name'] = project['name'] if project else '未知项目'
         task['project_info'] = project
         return task
 
     def add(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
         data = dict(*args)
         project = TaskModel(**data)
 
@@ -143,9 +147,6 @@ class TaskModel(SurrogatePK, Model):
         return project.to_json()
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(TaskModel, self).update(**update_data)
 
@@ -182,7 +183,7 @@ class TaskModel(SurrogatePK, Model):
             'tag': self.tag,
             'file_transmission_mode': self.file_transmission_mode,
             'file_list': self.file_list,
-            'enable_rollback': self.enable_rollback,
+            'is_rollback': self.is_rollback,
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
@@ -191,6 +192,21 @@ class TaskModel(SurrogatePK, Model):
 
     def enable(self):
         is_project_master = self.project_id in session['project_master']
+
+        if self.project_id not in self.rollback_count:
+            self.rollback_count[self.project_id] = 0
+        if self.status in [self.status_doing, self.status_fail, self.status_success]:
+            self.rollback_count[self.project_id] += 1
+
+        current_app.logger.error(self.rollback_count[self.project_id])
+        current_app.logger.error(self.keep_version_num)
+        if self.rollback_count[self.project_id] <= self.keep_version_num \
+            and self.status in [self.status_doing, self.status_fail, self.status_success] \
+            and self.ex_link_id:
+            enable_rollback = True
+        else:
+            enable_rollback = False
+
         return {
             'enable_view': True if self.status in [self.status_doing, self.status_fail, self.status_success] else False,
             'enable_update': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_reject]),
@@ -198,5 +214,14 @@ class TaskModel(SurrogatePK, Model):
             'enable_create': False,
             'enable_online': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_pass, self.status_fail, self.status_doing]),
             'enable_audit': (permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new]),
-            'enable_block': False,
+            'enable_rollback': enable_rollback
         }
+
+    @classmethod
+    def task_default_status(cls, project_id):
+        ProjectModel = model.project.ProjectModel
+        project_info = ProjectModel.query.filter_by(id=project_id).first()
+        if project_info.task_audit == ProjectModel.task_audit_true:
+            return TaskModel.status_new
+        else:
+            return TaskModel.status_pass

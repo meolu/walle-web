@@ -10,12 +10,11 @@ try:
     from flask_wtf import FlaskForm  # Try Flask-WTF v0.13+
 except ImportError:
     from flask_wtf import Form as FlaskForm  # Fallback to Flask-WTF v0.12 or older
-from flask_wtf import Form
 
-from wtforms import TextField
+from wtforms import StringField
 from wtforms import validators
 
 
-class RoleAdd(Form):
-    name = TextField('Email Address', [validators.Length(min=6, max=35), validators.InputRequired()])
+class RoleAdd(FlaskForm):
+    name = StringField('Email Address', [validators.Length(min=6, max=35), validators.InputRequired()])
     # password = SelectField('Password', [validators.Length(min=6, max=35))

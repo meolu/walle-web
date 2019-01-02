@@ -84,7 +84,7 @@ class GroupAPI(SecurityResource):
         """
         super(GroupAPI, self).put()
 
-        form = GroupForm(request.form, csrf_enabled=False)
+        form = GroupForm(request.form, csrf=False)
         form.set_group_id(group_id)
         if form.validate_on_submit():
             # pass

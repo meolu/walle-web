@@ -79,10 +79,9 @@ class EnvironmentAPI(SecurityResource):
         """
         super(EnvironmentAPI, self).post()
 
-        form = EnvironmentForm(request.form, csrf_enabled=False)
+        form = EnvironmentForm(request.form, csrf=False)
         if form.validate_on_submit():
             env_new = EnvironmentModel()
-            # TODO space_id
             env_id = env_new.add(env_name=form.env_name.data, space_id=self.space_id)
             if not env_id:
                 return self.render_json(code=-1)
@@ -100,7 +99,7 @@ class EnvironmentAPI(SecurityResource):
         """
         super(EnvironmentAPI, self).put()
 
-        form = EnvironmentForm(request.form, csrf_enabled=False)
+        form = EnvironmentForm(request.form, csrf=False)
         form.set_env_id(env_id)
         if form.validate_on_submit():
             env = EnvironmentModel(id=env_id)

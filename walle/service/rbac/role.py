@@ -146,7 +146,6 @@ class Permission():
         :param uid:
         :return:
         '''
-        # TODO
         return current_user.id == uid
 
     def role_upper_owner(self, role=None):

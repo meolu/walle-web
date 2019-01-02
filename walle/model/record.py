@@ -17,6 +17,12 @@ class RecordModel(Model):
     # 表的名字:
     __tablename__ = 'records'
     current_time = datetime.now()
+    #
+    stage_end = 'end'
+    #
+    status_success = 0
+    #
+    status_fail = 1
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)

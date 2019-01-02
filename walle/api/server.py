@@ -69,7 +69,7 @@ class ServerAPI(SecurityResource):
         """
         super(ServerAPI, self).post()
 
-        form = ServerForm(request.form, csrf_enabled=False)
+        form = ServerForm(request.form, csrf=False)
         if form.validate_on_submit():
             server_new = ServerModel()
             data = form.form2dict()
@@ -91,7 +91,7 @@ class ServerAPI(SecurityResource):
         """
         super(ServerAPI, self).put()
 
-        form = ServerForm(request.form, csrf_enabled=False)
+        form = ServerForm(request.form, csrf=False)
         form.set_id(id)
         if form.validate_on_submit():
             server = ServerModel().get_by_id(id)

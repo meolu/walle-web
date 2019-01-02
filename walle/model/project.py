@@ -114,7 +114,7 @@ class ProjectModel(SurrogatePK, Model):
 
         ServerModel = model.server.ServerModel
         server_ids = project_info['server_ids']
-        project_info['servers_info'] = ServerModel.fetch_by_id(map(int, server_ids.split(',')))
+        project_info['servers_info'] = ServerModel.fetch_by_id(list(map(int, server_ids.split(','))))
         return project_info
 
     def add(self, *args, **kwargs):
@@ -127,9 +127,6 @@ class ProjectModel(SurrogatePK, Model):
         return project.to_json()
 
     def update(self, *args, **kwargs):
-        # todo permission_ids need to be formated and checked
-        # a new type to update a model
-
         update_data = dict(*args)
         return super(ProjectModel, self).update(**update_data)
 

@@ -23,7 +23,6 @@ class ApiResource(Resource):
     actions = None
     action = None
 
-    # TODO 权限验证
     def __init__(self):
         pass
 
@@ -87,7 +86,7 @@ class SecurityResource(ApiResource):
         self.action = 'delete'
         is_allow = AccessRbac.is_allow(action=self.action, controller=self.controller)
         if not is_allow:
-            self.render_json(code=403, message=u'无操作权限')
+            self.render_json(code=403, message='无操作权限')
             # abort(403)
             pass
         pass
@@ -97,7 +96,7 @@ class SecurityResource(ApiResource):
         self.action = 'put'
         is_allow = AccessRbac.is_allow(action=self.action, controller=self.controller)
         if not is_allow:
-            self.render_json(code=403, message=u'无操作权限')
+            self.render_json(code=403, message='无操作权限')
             # abort(403)
             pass
         pass
@@ -115,10 +114,10 @@ class SecurityResource(ApiResource):
 
     def validator(self):
         if not AccessRbac.is_login():
-            return self.render_json(code=1000, message=u'请先登录')
+            return self.render_json(code=1000, message='请先登录')
 
         if not AccessRbac.is_allow(action=self.action, controller=self.controller):
-            return self.render_json(code=1001, message=u'无操作权限')
+            return self.render_json(code=1001, message='无操作权限')
 
 
     @staticmethod
@@ -126,7 +125,7 @@ class SecurityResource(ApiResource):
         @wraps(func)
         def is_enable(*args, **kwargs):
             if current_user.role_info.name != 'super':
-                return ApiResource.render_json(code=403, message=u'无操作权限')
+                return ApiResource.render_json(code=403, message='无操作权限')
             current_app.logger.info("user is login: %s" % (current_user.is_authenticated))
             current_app.logger.info("args: %s kwargs: %s" % (args, kwargs))
             return func(*args, **kwargs)
@@ -138,7 +137,7 @@ class SecurityResource(ApiResource):
         @wraps(func)
         def is_enable(*args, **kwargs):
             if current_user.role_info.name not in ['super', 'master']:
-                return ApiResource.render_json(code=403, message=u'无操作权限')
+                return ApiResource.render_json(code=403, message='无操作权限')
             current_app.logger.info("user is login: %s" % (current_user.is_authenticated))
             current_app.logger.info("args: %s kwargs: %s" % (args, kwargs))
             return func(*args, **kwargs)
