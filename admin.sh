@@ -21,13 +21,16 @@ function init() {
     fi
     echo "安装/更新可能缺少的依赖: mysql-community-devel gcc gcc-c++ python-devel"
     sudo yum install -y mysql-community-devel gcc gcc-c++ python-devel
-    source ./venv/bin/activate
-    pip install -r ./requirements/prod.txt
+    requirement
     echo "************************************************"
     echo -e "\033[32m init walle success \033[0m"
     echo -e "\033[32m welcome to walle 2.0 \033[0m"
 }
 
+function requirement() {
+    source ./venv/bin/activate
+    pip install -r ./requirements/prod.txt
+}
 function start() {
     echo "start walle"
     echo "----------------"
@@ -59,6 +62,7 @@ function upgrade() {
     echo "upgrade walle"
     echo "----------------"
     cd `dirname $0`
+     echo -e "建议先暂存本地修改[\033[33m git stash\033[0m]，更新后再弹出[\033[33m git stash pop\033[0m]，处理冲突。"
     git pull
 }
 
@@ -99,6 +103,7 @@ case "$1" in
     upgrade )
         echo "************************************************"
         upgrade
+        requirement
         migration
         echo "************************************************"
         ;;
