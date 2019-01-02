@@ -490,11 +490,17 @@ class Deployer:
                     self.prev_release(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_success, host=host,
+                                              user=server_info['user'], command='')
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
                     current_app.logger.error(e)
                     self.errors[host] = e.message
+                    RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
+                                              task_id=self.task_id, status=RecordModel.status_fail, host=host,
+                                              user=server_info['user'], command='')
                     emit('fail', {'event': 'finish', 'data': {'host': host, 'message': host + Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
             self.end(is_all_servers_success)
 
@@ -517,16 +523,16 @@ class Deployer:
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
-                                      task_id=self.task_id, status=RecordModel.status_success, host=host, user=server_info['user'],
-                                      command='')
+                                              task_id=self.task_id, status=RecordModel.status_success, host=host,
+                                              user=server_info['user'], command='')
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
                     current_app.logger.error(e)
                     self.errors[host] = e.message
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
-                                      task_id=self.task_id, status=RecordModel.status_fail, host=host, user=server_info['user'],
-                                      command='')
+                                              task_id=self.task_id, status=RecordModel.status_fail, host=host,
+                                              user=server_info['user'], command='')
                     emit('fail', {'event': 'finish', 'data': {'host': host, 'message': host + Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
             self.end(is_all_servers_success)
 
