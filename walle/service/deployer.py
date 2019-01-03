@@ -458,24 +458,27 @@ class Deployer:
                 'ex_link_id': self.previous_release_version,
             })
 
-        notice_info = {
-            'title': '',
-            'username': current_user.username,
-            'project_name': self.project_info['name'],
-            'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
-            'branch': self.taskMdl.get('branch'),
-            'commit': self.taskMdl.get('commit_id'),
-            'is_branch': self.project_info['repo_mode'],
-        }
-        notice = Notice.create(self.project_info['notice_type'])
+            notice_info = {
+                'title': '',
+                'username': current_user.username,
+                'project_name': self.project_info['name'],
+                'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
+                'branch': self.taskMdl.get('branch'),
+                'commit': self.taskMdl.get('commit_id'),
+                'is_branch': self.project_info['repo_mode'],
+            }
+            notice = Notice.create(self.project_info['notice_type'])
+            if success:
+                notice_info['title'] = '上线部署成功'
+                notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
+            else:
+                notice_info['title'] = '上线部署失败'
+                notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
+
         if success:
             emit('success', {'event': 'finish', 'data': {'message': '部署完成，辛苦了，为你的努力喝彩！'}}, room=self.task_id)
-            notice_info['title'] = '上线部署成功'
-            notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
         else:
             emit('fail', {'event': 'finish', 'data': {'message': Code.code_msg[Code.deploy_fail]}}, room=self.task_id)
-            notice_info['title'] = '上线部署失败'
-            notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
 
     def walle_deploy(self):
         self.start()
