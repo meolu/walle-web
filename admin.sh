@@ -13,7 +13,8 @@ function init() {
     echo "----------------"
     which pip
     if [ $? != "0" ]; then
-        exit 1
+        wget https://bootstrap.pypa.io/3.3/get-pip.py
+        python get-pip.py
     fi
     pip install virtualenv
     if [ ! -d "venv" ]; then
@@ -61,15 +62,15 @@ function restart() {
 function upgrade() {
     echo "upgrade walle"
     echo "----------------"
-    cd `dirname $0`
+    cd $(dirname $0)
     echo -e "建议先暂存本地修改\033[33m git stash\033[0m，更新后再弹出\033[33m git stash pop\033[0m，处理冲突。"
+    source venv/bin/activate
     git pull
 }
 
 function migration() {
     echo "migration walle"
     echo "----------------"
-    source venv/bin/activate
     export FLASK_APP=waller.py
     flask db upgrade
     if [ $? == "0" ]; then
