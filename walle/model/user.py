@@ -258,8 +258,8 @@ class UserModel(UserMixin, SurrogatePK, Model):
     def enable(self):
         return {
             'enable_view': True,
-            'enable_update': permission.role_upper_developer(),
-            'enable_delete': permission.role_upper_developer(),
+            'enable_update': permission.role_upper_master(),
+            'enable_delete': permission.role_upper_master(),
             'enable_create': False,
             'enable_online': False,
             'enable_audit': False,
