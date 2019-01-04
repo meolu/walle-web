@@ -106,4 +106,5 @@ class GeneralAPI(SecurityResource):
             'commit': commit,
             'server': platform.platform(),
             'python': platform.python_version(),
+            'error': '',
         })
