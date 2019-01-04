@@ -37,6 +37,7 @@ class ProjectModel(SurrogatePK, Model):
     master = db.Column(String(100))
     version = db.Column(String(40))
     excludes = db.Column(Text)
+    is_include = db.Column(Integer)
     target_root = db.Column(String(200))
     target_releases = db.Column(String(200))
     server_ids = db.Column(Text)
@@ -154,6 +155,7 @@ class ProjectModel(SurrogatePK, Model):
             'master': UserModel.fetch_by_uid(self.master.split(',')) if self.master else '',
             'version': self.version,
             'excludes': self.excludes,
+            'is_include': self.is_include,
             'target_root': self.target_root,
             'target_releases': self.target_releases,
             'server_ids': self.server_ids,

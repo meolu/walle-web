@@ -23,6 +23,7 @@ class ProjectForm(FlaskForm):
     space_id = StringField('space_id', [validators.Length(min=1, max=10)])
     status = StringField('status', [])
     excludes = StringField('excludes', [])
+    is_include = StringField('excludes', [])
     master = StringField('master', [])
     server_ids = StringField('server_ids', [validators.Length(min=1)])
     keep_version_num = StringField('keep_version_num', [])
@@ -70,6 +71,7 @@ class ProjectForm(FlaskForm):
             'environment_id': self.environment_id.data if self.environment_id.data else '',
             'space_id': self.space_id.data if self.space_id.data else current_user.space_id(),
             'excludes': self.excludes.data if self.excludes.data else '',
+            'is_include': self.is_include.data,
             'server_ids': self.server_ids.data if self.server_ids.data else '',
             'keep_version_num': self.keep_version_num.data if self.keep_version_num.data else 5,
 
