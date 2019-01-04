@@ -198,9 +198,8 @@ class Deployer:
         self.sequence = 4
 
         # 检查 target_releases 父目录是否存在
-        if not os.path.exists(self.project_info['target_releases']):
-            command = 'mkdir -p %s' % (self.project_info['target_releases'])
-            result = waller.run(command, wenv=self.config())
+        command = 'mkdir -p %s' % (self.project_info['target_releases'])
+        result = waller.run(command, wenv=self.config())
 
         # TODO md5
         # 传送到版本库 release
@@ -337,6 +336,10 @@ class Deployer:
                     'how': '在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
                     pwd.getpwuid(os.getuid())[0], server_info['host']),
                 })
+
+            # maybe this is no webroot's parent dir
+            command = '[ -d %s ] || mkdir -p %s' % (os.path.basename(self.project_info['target_root']))
+            result = waller.run(command, wenv=self.config(console=False))
 
                 # 检查 webroot 父目录是否存在,是否为软链
             command = '[ -L "%s" ] && echo "true" || echo "false"' % (self.project_info['target_root'])
