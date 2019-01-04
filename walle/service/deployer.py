@@ -18,7 +18,7 @@ from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
-from walle.service.utils import color_clean
+from walle.service.utils import color_clean, suffix_format
 from walle.service.utils import excludes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
@@ -46,7 +46,7 @@ class Deployer:
 
     console = False
 
-    version = datetime.now().strftime('%Y%m%d%H%M%s')
+    version = datetime.now().strftime('%Y%m%d%H%M%S')
 
     local_codebase, dir_codebase_project, project_name = None, None, None
     dir_release, dir_webroot = None, None
@@ -114,14 +114,6 @@ class Deployer:
         self.stage = self.stage_prev_deploy
         self.sequence = 1
 
-        # # 检查 python 版本
-        # command = 'python --version'
-        # result = self.localhost.local(command, wenv=self.config())
-        #
-        # # 检查 git 版本
-        # command = 'git --version'
-        # result = self.localhost.local(command, wenv=self.config())
-
         # 检查 目录是否存在
         self.init_repo()
 
@@ -182,11 +174,19 @@ class Deployer:
                 result = self.localhost.local(command, wenv=self.config())
 
         # 压缩打包
+        # 排除文件发布
         self.release_version_tar = '%s.tgz' % (self.release_version)
         with self.localhost.cd(self.local_codebase):
             excludes = excludes_format(self.project_info['excludes'])
             command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
             result = self.localhost.local(command, wenv=self.config())
+
+        # # 指定文件发布
+        # self.release_version_tar = '%s.tgz' % (self.release_version)
+        # with self.localhost.cd(self.local_codebase):
+        #     excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
+        #     command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
+        #     result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''
@@ -198,8 +198,9 @@ class Deployer:
         self.sequence = 4
 
         # 检查 target_releases 父目录是否存在
-        command = 'mkdir -p %s' % (self.project_info['target_releases'])
-        result = waller.run(command, wenv=self.config())
+        if not os.path.exists(self.project_info['target_releases']):
+            command = 'mkdir -p %s' % (self.project_info['target_releases'])
+            result = waller.run(command, wenv=self.config())
 
         # TODO md5
         # 传送到版本库 release
@@ -307,6 +308,7 @@ class Deployer:
             with waller.cd(self.project_info['target_root']):
                 result = waller.run(command, wenv=self.config())
 
+        # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 
     def post_release_service(self, waller):
@@ -318,6 +320,7 @@ class Deployer:
         with waller.cd(self.project_info['target_root']):
             command = 'sudo service nginx restart'
             result = waller.run(command, wenv=self.config())
+
 
     def project_detection(self):
         errors = []
@@ -436,7 +439,7 @@ class Deployer:
             self.localhost.local(command, wenv=self.config())
 
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
-            current_app.logger.info('cd %s  command: %s  ', self.dir_codebase_project, command)
+            current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
 
             result = self.localhost.local(command, wenv=self.config())
             if result.exited != Code.Ok:

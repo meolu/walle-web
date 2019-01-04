@@ -2,6 +2,7 @@
 """Helper utilities and decorators."""
 
 
+import fnmatch
 import sys
 import time
 from datetime import datetime
@@ -86,3 +87,10 @@ def excludes_format(excludes_string):
         return ''
     excludes = ' --exclude='.join(excludes)
     return ' --exclude=' + excludes
+
+
+# 指定发布文件，支持模糊匹配，如：*.war
+def suffix_format(path, suffix_file):
+    for suffix_file in os.listdir('%s' % path):
+        if fnmatch.fnmatch(suffix_file, '%s' % suffix_file):
+            return suffix_file

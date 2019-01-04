@@ -1,13 +1,46 @@
-version: "3.7"
-
+version: '3.7'
 services:
+  web:
+    image: alenx/walle-web:2.0
+    container_name: walle-nginx
+    hostname: nginx-web
+    ports:
+    # 如果宿主机80端口被占用，可自行修改为其他port(>=1024)
+    # 0.0.0.0:要绑定的宿主机端口:docker容器内端口80
+      - "80:80"
+    links:
+      - python
+    depends_on:
+      - python
+    networks:
+      - walle-net
+    restart: always
+
+  python:
+    image: alenx/walle-python:2.0
+    container_name: walle-python
+    hostname: walle-python
+    volumes:
+      - /tmp/walle/codebase/:/tmp/walle/codebase/
+    command: bash -c "/bin/bash /opt/walle-web/admin.sh migration && python /opt/walle-web/waller.py"
+    expose:
+      - "5000"
+    links: 
+      - db
+    depends_on:
+      - db
+    networks:
+      - walle-net
+    restart: always
 
   db:
     image: mysql
+    container_name: walle-mysql
+    hostname: walle-mysql
     ports:
-      - 0.0.0.0:3306:3306
+      - "3306:3306"
     expose:
-      - 3306
+      - "3306"
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: walle
@@ -18,37 +51,6 @@ services:
       - walle-net
     restart: always
 
-  adminer:
-    image: adminer
-    ports:
-      - 8888:8080
-    networks:
-      - walle-net
-    restart: always
-
-  web:
-    build: ./
-    depends_on:
-      - db
-    expose:
-      - 5000
-    environment:
-      - WALLE_SECRET="guess me out"
-    networks:
-      - walle-net
-    restart: always
-
-
-  gateway:
-    image: nginx
-    ports:
-      - 0.0.0.0:80:80
-    volumes:
-      - ./fe/:/data/web/:ro
-      - ./gateway/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    networks:
-      walle-net:
-    restart: always
-
 networks:
-  walle-net: ~
+  walle-net:
+    driver: bridge
