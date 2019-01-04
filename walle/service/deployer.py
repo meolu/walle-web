@@ -338,8 +338,8 @@ class Deployer:
                 })
 
             # maybe this is no webroot's parent dir
-            command = '[ -d %s ] || mkdir -p %s' % (os.path.basename(self.project_info['target_root']))
-            result = waller.run(command, wenv=self.config(console=False))
+            command = '[ -d {webroot} ] || mkdir -p {webroot}'.format(webroot=os.path.basename(self.project_info['target_root']))
+            result = waller.run(command, exception=False, wenv=self.config(console=False))
 
                 # 检查 webroot 父目录是否存在,是否为软链
             command = '[ -L "%s" ] && echo "true" || echo "false"' % (self.project_info['target_root'])
