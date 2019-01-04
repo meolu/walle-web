@@ -73,7 +73,7 @@ class ProjectForm(FlaskForm):
             'server_ids': self.server_ids.data if self.server_ids.data else '',
             'keep_version_num': self.keep_version_num.data if self.keep_version_num.data else 5,
 
-            'target_root': self.target_root.data if self.target_root.data else '',
+            'target_root': self.target_root.data.rstrip('/') if self.target_root.data else '',
             'target_releases': self.target_releases.data if self.target_releases.data else '',
 
             'task_vars': self.task_vars.data if self.task_vars.data else '',
