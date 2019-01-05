@@ -118,11 +118,13 @@ class Deployer:
         self.init_repo()
 
         # 用户自定义命令
-        command = self.project_info['prev_deploy']
-        if command:
-            current_app.logger.info(command)
-            with self.localhost.cd(self.dir_codebase_project):
-                result = self.localhost.local(command, wenv=self.config())
+        commands = self.project_info['prev_deploy']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#'):
+                    continue
+                with self.localhost.cd(self.dir_codebase_project):
+                    result = self.localhost.local(command, wenv=self.config())
 
     def deploy(self):
         '''
@@ -168,10 +170,13 @@ class Deployer:
         self.sequence = 3
 
         # 用户自定义命令
-        command = self.project_info['post_deploy']
-        if command:
-            with self.localhost.cd(self.local_codebase + self.release_version):
-                result = self.localhost.local(command, wenv=self.config())
+        commands = self.project_info['post_deploy']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#'):
+                    continue
+                with self.localhost.cd(self.local_codebase + self.release_version):
+                    result = self.localhost.local(command, wenv=self.config())
 
         # 压缩打包
         # 排除文件发布
