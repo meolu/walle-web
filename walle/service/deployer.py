@@ -18,8 +18,8 @@ from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
-from walle.service.utils import color_clean, suffix_format
-from walle.service.utils import excludes_format
+from walle.service.utils import color_clean
+from walle.service.utils import excludes_format, includes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
 from flask_login import current_user
@@ -56,7 +56,7 @@ class Deployer:
     local = None
 
     def __init__(self, task_id=None, project_id=None, console=False):
-        self.local_codebase = current_app.config.get('CODE_BASE')
+        self.local_codebase = current_app.config.get('CODE_BASE').rstrip('/') + '/'
         self.localhost = Waller(host='127.0.0.1')
         self.TaskRecord = RecordModel()
 
@@ -182,8 +182,11 @@ class Deployer:
         # 排除文件发布
         self.release_version_tar = '%s.tgz' % (self.release_version)
         with self.localhost.cd(self.local_codebase):
-            excludes = excludes_format(self.project_info['excludes'])
-            command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
+            if self.project_info['is_include']:
+                files = includes_format(self.release_version, self.project_info['excludes'])
+            else:
+                files = excludes_format(self.release_version, self.project_info['excludes'])
+            command = 'tar zcf %s/%s %s' % (self.local_codebase.rstrip('/'), self.release_version_tar, files)
             result = self.localhost.local(command, wenv=self.config())
 
         # # 指定文件发布
@@ -220,13 +223,15 @@ class Deployer:
 
     def prev_release_custom(self, waller):
         # 用户自定义命令
-        command = self.project_info['prev_release']
-        if command:
-            current_app.logger.info(command)
-            # TODO
-            target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
-            with waller.cd(target_release_version):
-                result = waller.run(command, wenv=self.config())
+        commands = self.project_info['prev_release']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#'):
+                    continue
+                # TODO
+                target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
+                with waller.cd(target_release_version):
+                    result = waller.run(command, wenv=self.config())
 
     def release(self, waller):
         '''
@@ -304,14 +309,15 @@ class Deployer:
         '''
         self.stage = self.stage_post_release
         self.sequence = 6
-
         # 用户自定义命令
-        command = self.project_info['post_release']
-        if command:
-            current_app.logger.info(command)
-            with waller.cd(self.project_info['target_root']):
-                result = waller.run(command, wenv=self.config())
-
+        commands = self.project_info['post_release']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#'):
+                    continue
+                # TODO
+                with waller.cd(self.project_info['target_root']):
+                    result = waller.run(command, wenv=self.config())
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 

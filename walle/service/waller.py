@@ -174,17 +174,24 @@ class Waller(Connection):
         except Exception as e:
             # TODO 收尾下
             current_app.logger.info('put: %s, %s', e, dir(e))
+            if wtype == 'put':
+                op_user = pwd.getpwuid(os.getuid())[0]
+                op_host = '127.0.0.1'
+            else:
+                op_user = self.user
+                op_host = self.host
 
             # TODO command
             ws_dict = {
-                'user': self.user,
-                'host': self.host,
+                'user': op_user,
+                'host': op_host,
                 'cmd': command,
                 'status': 1,
                 'stage': wenv['stage'],
                 'sequence': wenv['sequence'],
                 'success': '',
-                'error': e.message,
+                'error': str(e),
             }
+            current_app.logger.info(ws_dict)
             if wenv['console']:
                 emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
