@@ -23,6 +23,11 @@ class Waller(Connection):
     connections, success, errors = {}, {}, {}
     release_version_tar, release_version = None, None
 
+    custom_global_env = {}
+
+    def init_env(self, env):
+        self.custom_global_env = env
+
     def run(self, command, wenv=None, run_mode=run_mode_remote, pty=True, exception=True, **kwargs):
         '''
         pty=True/False是直接影响到输出.False较适合在获取文本,True更适合websocket
@@ -40,11 +45,12 @@ class Waller(Connection):
         current_app.logger.info(message)
         try:
             if run_mode == self.run_mode_sudo:
-                result = super(Waller, self).sudo(command, pty=pty, **kwargs)
+                result = super(Waller, self).sudo(command, pty=pty, env=self.custom_global_env, **kwargs)
             elif run_mode == self.run_mode_local:
-                result = super(Waller, self).local(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
+                current_app.logger.info(self.custom_global_env)
+                result = super(Waller, self).local(command, pty=pty, warn=True, watchers=[say_yes()], env=self.custom_global_env, **kwargs)
             else:
-                result = super(Waller, self).run(command, pty=pty, warn=True, watchers=[say_yes()], **kwargs)
+                result = super(Waller, self).run(command, pty=pty, warn=True, watchers=[say_yes()], env=self.custom_global_env, **kwargs)
 
             if result.failed:
                 exitcode, stdout, stderr = result.exited, '', result.stdout

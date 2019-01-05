@@ -45,6 +45,7 @@ class Deployer:
     TaskRecord = None
 
     console = False
+    custom_global_env = {}
 
     version = datetime.now().strftime('%Y%m%d%H%M%S')
 
@@ -68,6 +69,29 @@ class Deployer:
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
             self.project_info = self.taskMdl.get('project_info')
+
+            # copy to a local version
+            self.release_version = '{project_id}_{task_id}_{timestamp}'.format(
+                project_id=self.project_info['id'],
+                task_id=self.task_id,
+                timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())),
+            )
+            current_app.logger.info(self.taskMdl)
+
+            self.custom_global_env = {
+                'WEBROOT': self.project_info['target_root'],
+                'CURRENT_RELEASE': self.release_version,
+                'BRANCH': self.taskMdl.get('branch'),
+                'TAG': self.taskMdl.get('tag'),
+                'COMMIT_ID': self.taskMdl.get('commit_id'),
+                'PROJECT_NAME': self.project_info['name'],
+                'PROJECT_ID': str(self.project_info['id']),
+                'TASK_NAME': self.taskMdl.get('name'),
+                'TASK_ID': str(self.task_id),
+                'DEPLOY_USER': self.taskMdl.get('user_name'),
+                'DEPLOY_TIME': time.strftime('%Y%m%d %H%M%S', time.localtime(time.time())),
+            }
+            self.localhost.init_env(env=self.custom_global_env)
 
         if project_id:
             self.project_id = project_id
@@ -121,7 +145,7 @@ class Deployer:
         commands = self.project_info['prev_deploy']
         if commands:
             for command in commands.split('\n'):
-                if command.strip().startswith('#'):
+                if command.strip().startswith('#') or not command.strip():
                     continue
                 with self.localhost.cd(self.dir_codebase_project):
                     result = self.localhost.local(command, wenv=self.config())
@@ -135,10 +159,10 @@ class Deployer:
         '''
         self.stage = self.stage_deploy
         self.sequence = 2
-
-        # copy to a local version
-        self.release_version = '%s_%s_%s' % (
-            self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
+#
+#        # copy to a local version
+#        self.release_version = '%s_%s_%s' % (
+#            self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
 
         with self.localhost.cd(self.local_codebase):
             command = 'cp -rf %s %s' % (self.dir_codebase_project, self.release_version)
@@ -173,7 +197,7 @@ class Deployer:
         commands = self.project_info['post_deploy']
         if commands:
             for command in commands.split('\n'):
-                if command.strip().startswith('#'):
+                if command.strip().startswith('#') or not command.strip():
                     continue
                 with self.localhost.cd(self.local_codebase + self.release_version):
                     result = self.localhost.local(command, wenv=self.config())
@@ -188,13 +212,6 @@ class Deployer:
                 files = excludes_format(self.release_version, self.project_info['excludes'])
             command = 'tar zcf %s/%s %s' % (self.local_codebase.rstrip('/'), self.release_version_tar, files)
             result = self.localhost.local(command, wenv=self.config())
-
-        # # 指定文件发布
-        # self.release_version_tar = '%s.tgz' % (self.release_version)
-        # with self.localhost.cd(self.local_codebase):
-        #     excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
-        #     command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-        #     result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''
@@ -226,7 +243,7 @@ class Deployer:
         commands = self.project_info['prev_release']
         if commands:
             for command in commands.split('\n'):
-                if command.strip().startswith('#'):
+                if command.strip().startswith('#') or not command.strip():
                     continue
                 # TODO
                 target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
@@ -313,7 +330,7 @@ class Deployer:
         commands = self.project_info['post_release']
         if commands:
             for command in commands.split('\n'):
-                if command.strip().startswith('#'):
+                if command.strip().startswith('#') or not command.strip():
                     continue
                 # TODO
                 with waller.cd(self.project_info['target_root']):
@@ -506,7 +523,11 @@ class Deployer:
             for server_info in self.servers:
                 host = server_info['host']
                 try:
-                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller.init_env(env=self.custom_global_env)
+                    current_app.logger.info(self.custom_global_env)
+
+                    self.connections[host] = waller
                     self.prev_release(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
