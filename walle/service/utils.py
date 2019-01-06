@@ -81,16 +81,39 @@ def say_yes():
     )
 
 
-def excludes_format(excludes_string):
-    excludes = [i for i in excludes_string.split('\n') if i.strip()]
-    if not excludes:
-        return ''
-    excludes = ' --exclude='.join(excludes)
-    return ' --exclude=' + excludes
+def excludes_format(path, excludes_string=None):
+    '''
+    排除文件，支持正则匹配，支持多选字符串
+    @param path:
+    @param excludes_string:
+    @return:
+    '''
+    path = os.path.basename(path) + '/'
+    if not excludes_string:
+        return path
+
+    prefix = '--exclude='
+    excludes = [prefix + i for i in excludes_string.split('\n') if i.strip()]
+
+    return ' {excludes} {path} '.format(excludes=' '.join(excludes), path=path)
 
 
-# 指定发布文件，支持模糊匹配，如：*.war
-def suffix_format(path, suffix_file):
-    for suffix_file in os.listdir('%s' % path):
-        if fnmatch.fnmatch(suffix_file, '%s' % suffix_file):
-            return suffix_file
+def includes_format(path, includes_string=None):
+    '''
+    指定发布文件，支持正则匹配，如：*.war。支持多行字符串。
+
+    @param path: release目录，非路径
+    @param includes_string:
+    @return:
+    '''
+    path = os.path.basename(path) + '/'
+    if not includes_string:
+        return path
+
+    prefix = path
+    includes = [prefix + i for i in includes_string.split('\n') if i.strip()]
+
+    if not includes:
+        return path
+
+    return ' '.join(includes)

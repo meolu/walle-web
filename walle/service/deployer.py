@@ -18,8 +18,8 @@ from walle.model.record import RecordModel
 from walle.model.task import TaskModel
 from walle.service.code import Code
 from walle.service.error import WalleError
-from walle.service.utils import color_clean, suffix_format
-from walle.service.utils import excludes_format
+from walle.service.utils import color_clean
+from walle.service.utils import excludes_format, includes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
 from flask_login import current_user
@@ -45,6 +45,7 @@ class Deployer:
     TaskRecord = None
 
     console = False
+    custom_global_env = {}
 
     version = datetime.now().strftime('%Y%m%d%H%M%S')
 
@@ -56,7 +57,7 @@ class Deployer:
     local = None
 
     def __init__(self, task_id=None, project_id=None, console=False):
-        self.local_codebase = current_app.config.get('CODE_BASE')
+        self.local_codebase = current_app.config.get('CODE_BASE').rstrip('/') + '/'
         self.localhost = Waller(host='127.0.0.1')
         self.TaskRecord = RecordModel()
 
@@ -68,6 +69,37 @@ class Deployer:
             self.user_id = self.taskMdl.get('user_id')
             self.servers = self.taskMdl.get('servers_info')
             self.project_info = self.taskMdl.get('project_info')
+
+            # copy to a local version
+            self.release_version = '{project_id}_{task_id}_{timestamp}'.format(
+                project_id=self.project_info['id'],
+                task_id=self.task_id,
+                timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())),
+            )
+            current_app.logger.info(self.taskMdl)
+
+            self.custom_global_env = {
+                'WEBROOT': '"{}"'.format(self.project_info['target_root']),
+                'CURRENT_RELEASE': '"{}"'.format(self.release_version),
+                'BRANCH': '"{}"'.format(self.taskMdl.get('branch')),
+                'TAG': '"{}"'.format(self.taskMdl.get('tag')),
+                'COMMIT_ID': '"{}"'.format(self.taskMdl.get('commit_id')),
+                'PROJECT_NAME': '"{}"'.format(self.project_info['name']),
+                'PROJECT_ID': '"{}"'.format(self.project_info['id']),
+                'TASK_NAME': '"{}"'.format(self.taskMdl.get('name')),
+                'TASK_ID': '"{}"'.format(self.task_id),
+                'DEPLOY_USER': '"{}"'.format(self.taskMdl.get('user_name')),
+                'DEPLOY_TIME': '"{}"'.format(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
+            }
+            if self.project_info['task_vars']:
+                task_vars = [i.strip() for i in self.project_info['task_vars'].split('\n') if i.strip() and not i.strip().startswith('#')]
+                for var in task_vars:
+                    var_list = var.split('=', 1)
+                    if len(var_list) != 2:
+                        continue
+                    self.custom_global_env[var_list[0]] = var_list[1]
+
+            self.localhost.init_env(env=self.custom_global_env)
 
         if project_id:
             self.project_id = project_id
@@ -118,11 +150,13 @@ class Deployer:
         self.init_repo()
 
         # 用户自定义命令
-        command = self.project_info['prev_deploy']
-        if command:
-            current_app.logger.info(command)
-            with self.localhost.cd(self.dir_codebase_project):
-                result = self.localhost.local(command, wenv=self.config())
+        commands = self.project_info['prev_deploy']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#') or not command.strip():
+                    continue
+                with self.localhost.cd(self.dir_codebase_project):
+                    result = self.localhost.local(command, wenv=self.config())
 
     def deploy(self):
         '''
@@ -133,10 +167,10 @@ class Deployer:
         '''
         self.stage = self.stage_deploy
         self.sequence = 2
-
-        # copy to a local version
-        self.release_version = '%s_%s_%s' % (
-            self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
+#
+#        # copy to a local version
+#        self.release_version = '%s_%s_%s' % (
+#            self.project_name, self.task_id, time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())))
 
         with self.localhost.cd(self.local_codebase):
             command = 'cp -rf %s %s' % (self.dir_codebase_project, self.release_version)
@@ -168,25 +202,24 @@ class Deployer:
         self.sequence = 3
 
         # 用户自定义命令
-        command = self.project_info['post_deploy']
-        if command:
-            with self.localhost.cd(self.local_codebase + self.release_version):
-                result = self.localhost.local(command, wenv=self.config())
+        commands = self.project_info['post_deploy']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#') or not command.strip():
+                    continue
+                with self.localhost.cd(self.local_codebase + self.release_version):
+                    result = self.localhost.local(command, wenv=self.config())
 
         # 压缩打包
         # 排除文件发布
         self.release_version_tar = '%s.tgz' % (self.release_version)
         with self.localhost.cd(self.local_codebase):
-            excludes = excludes_format(self.project_info['excludes'])
-            command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
+            if self.project_info['is_include']:
+                files = includes_format(self.release_version, self.project_info['excludes'])
+            else:
+                files = excludes_format(self.release_version, self.project_info['excludes'])
+            command = 'tar zcf %s/%s %s' % (self.local_codebase.rstrip('/'), self.release_version_tar, files)
             result = self.localhost.local(command, wenv=self.config())
-
-        # # 指定文件发布
-        # self.release_version_tar = '%s.tgz' % (self.release_version)
-        # with self.localhost.cd(self.local_codebase):
-        #     excludes = suffix_format(self.dir_codebase_project, self.project_info['excludes'])
-        #     command = 'tar zcf  %s %s %s' % (self.release_version_tar, excludes, self.release_version)
-        #     result = self.local.run(command, wenv=self.config())
 
     def prev_release(self, waller):
         '''
@@ -215,13 +248,15 @@ class Deployer:
 
     def prev_release_custom(self, waller):
         # 用户自定义命令
-        command = self.project_info['prev_release']
-        if command:
-            current_app.logger.info(command)
-            # TODO
-            target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
-            with waller.cd(target_release_version):
-                result = waller.run(command, wenv=self.config())
+        commands = self.project_info['prev_release']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#') or not command.strip():
+                    continue
+                # TODO
+                target_release_version = "%s/%s" % (self.project_info['target_releases'], self.release_version)
+                with waller.cd(target_release_version):
+                    result = waller.run(command, wenv=self.config())
 
     def release(self, waller):
         '''
@@ -299,14 +334,16 @@ class Deployer:
         '''
         self.stage = self.stage_post_release
         self.sequence = 6
-
         # 用户自定义命令
-        command = self.project_info['post_release']
-        if command:
-            current_app.logger.info(command)
-            with waller.cd(self.project_info['target_root']):
-                result = waller.run(command, wenv=self.config())
-
+        commands = self.project_info['post_release']
+        if commands:
+            for command in commands.split('\n'):
+                if command.strip().startswith('#') or not command.strip():
+                    continue
+                # TODO
+                with waller.cd(self.project_info['target_root']):
+                    pty = False if command.find('nohup') >= 0 else True
+                    result = waller.run(command, wenv=self.config(), pty=pty)
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 
@@ -495,7 +532,10 @@ class Deployer:
             for server_info in self.servers:
                 host = server_info['host']
                 try:
-                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
+                    waller.init_env(env=self.custom_global_env)
+
+                    self.connections[host] = waller
                     self.prev_release(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
@@ -527,7 +567,10 @@ class Deployer:
             for server_info in self.servers:
                 host = server_info['host']
                 try:
-                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
+                    waller.init_env(env=self.custom_global_env)
+
+                    self.connections[host] = waller                   
                     self.prev_release_custom(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
