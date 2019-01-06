@@ -79,18 +79,26 @@ class Deployer:
             current_app.logger.info(self.taskMdl)
 
             self.custom_global_env = {
-                'WEBROOT': self.project_info['target_root'],
-                'CURRENT_RELEASE': self.release_version,
-                'BRANCH': self.taskMdl.get('branch'),
-                'TAG': self.taskMdl.get('tag'),
-                'COMMIT_ID': self.taskMdl.get('commit_id'),
-                'PROJECT_NAME': self.project_info['name'],
-                'PROJECT_ID': str(self.project_info['id']),
-                'TASK_NAME': self.taskMdl.get('name'),
-                'TASK_ID': str(self.task_id),
-                'DEPLOY_USER': self.taskMdl.get('user_name'),
-                'DEPLOY_TIME': time.strftime('%Y%m%d %H%M%S', time.localtime(time.time())),
+                'WEBROOT': '"{}"'.format(self.project_info['target_root']),
+                'CURRENT_RELEASE': '"{}"'.format(self.release_version),
+                'BRANCH': '"{}"'.format(self.taskMdl.get('branch')),
+                'TAG': '"{}"'.format(self.taskMdl.get('tag')),
+                'COMMIT_ID': '"{}"'.format(self.taskMdl.get('commit_id')),
+                'PROJECT_NAME': '"{}"'.format(self.project_info['name']),
+                'PROJECT_ID': '"{}"'.format(self.project_info['id']),
+                'TASK_NAME': '"{}"'.format(self.taskMdl.get('name')),
+                'TASK_ID': '"{}"'.format(self.task_id),
+                'DEPLOY_USER': '"{}"'.format(self.taskMdl.get('user_name')),
+                'DEPLOY_TIME': '"{}"'.format(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
             }
+            if self.project_info['task_vars']:
+                task_vars = [i.strip() for i in self.project_info['task_vars'].split('\n') if i.strip() and not i.strip().startswith('#')]
+                for var in task_vars:
+                    var_list = var.split('=', 1)
+                    if len(var_list) != 2:
+                        continue
+                    self.custom_global_env[var_list[0]] = var_list[1]
+
             self.localhost.init_env(env=self.custom_global_env)
 
         if project_id:
@@ -334,7 +342,8 @@ class Deployer:
                     continue
                 # TODO
                 with waller.cd(self.project_info['target_root']):
-                    result = waller.run(command, wenv=self.config())
+                    pty = False if command.find('nohup') >= 0 else True
+                    result = waller.run(command, wenv=self.config(), pty=pty)
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 
@@ -523,9 +532,8 @@ class Deployer:
             for server_info in self.servers:
                 host = server_info['host']
                 try:
-                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
                     waller.init_env(env=self.custom_global_env)
-                    current_app.logger.info(self.custom_global_env)
 
                     self.connections[host] = waller
                     self.prev_release(self.connections[host])
@@ -559,7 +567,10 @@ class Deployer:
             for server_info in self.servers:
                 host = server_info['host']
                 try:
-                    self.connections[host] = Waller(host=host, user=server_info['user'], port=server_info['port'])
+                    waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
+                    waller.init_env(env=self.custom_global_env)
+
+                    self.connections[host] = waller                   
                     self.prev_release_custom(self.connections[host])
                     self.release(self.connections[host])
                     self.post_release(self.connections[host])
