@@ -15,10 +15,11 @@ walle 让用户代码发布终于可以不只能选择 jenkins！支持各种web
 
 Feature
 =========================
-- 类`gitlab`的`RESTful API`，类`gitlab`的权限模型，将来打通`gitlab`，良心的惊喜
+- 类`gitlab`的`RESTful API`，类`gitlab`的权限模型。将来打通`gitlab`，良心的惊喜
 - 空间管理。意味着有独立的空间资源：环境管理、用户组、项目、服务器等
 - 灰度发布。呼声不断，终于来了
-- `websocket` 实时展示部署中的 `shell console`
+- 项目管理。Deploy、Release的前置及后置hook，自定义全局变量；自带检测、复制功能，都贴心到这种程度了
+- `websocket` 实时展示部署中的 `shell console`，跟真的终端长得一样。
 - 完善的通知机制。邮件、钉钉
 - 全新的UI，我自己都被震憾到了，如丝般流畅
 
@@ -33,6 +34,7 @@ Preview
 ![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/project-list.png)
 ![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/task-list.png)
 ![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/deploy-console.png)
+![](https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/project_java_tomcat.png)
 
 Installation
 =========================
@@ -53,10 +55,10 @@ Roadmap
     - ~~`released tag`、使用文档~~
     - ~~`Docker` 镜像~~
     - ~~Java配置模板~~
-    - PHP配置模板
+    - ~~PHP配置模板~~
     - ~~`github` 5000 `star`~~
-- **2.0.1**  2019-01-13
-    - 项目配置添加自定义变量
+- [x] **2.0.1**  2019-01-13
+    - ~~项目配置添加自定义变量~~
     - ~~Python 3.7+兼容~~
 - **2.0.2**  2019-01-20
     - `Dashboard`（全新的玩法，欢迎提issue）
