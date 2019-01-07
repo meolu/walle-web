@@ -79,17 +79,17 @@ class Deployer:
             current_app.logger.info(self.taskMdl)
 
             self.custom_global_env = {
-                'WEBROOT': '"{}"'.format(self.project_info['target_root']),
-                'CURRENT_RELEASE': '"{}"'.format(self.release_version),
-                'BRANCH': '"{}"'.format(self.taskMdl.get('branch')),
-                'TAG': '"{}"'.format(self.taskMdl.get('tag')),
-                'COMMIT_ID': '"{}"'.format(self.taskMdl.get('commit_id')),
+                'WEBROOT': str(self.project_info['target_root']),
+                'CURRENT_RELEASE': str(self.release_version),
+                'BRANCH': str(self.taskMdl.get('branch')),
+                'TAG': str(self.taskMdl.get('tag')),
+                'COMMIT_ID': str(self.taskMdl.get('commit_id')),
                 'PROJECT_NAME': '"{}"'.format(self.project_info['name']),
-                'PROJECT_ID': '"{}"'.format(self.project_info['id']),
+                'PROJECT_ID': str(self.project_info['id']),
                 'TASK_NAME': '"{}"'.format(self.taskMdl.get('name')),
-                'TASK_ID': '"{}"'.format(self.task_id),
-                'DEPLOY_USER': '"{}"'.format(self.taskMdl.get('user_name')),
-                'DEPLOY_TIME': '"{}"'.format(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
+                'TASK_ID': str(self.task_id),
+                'DEPLOY_USER': str(self.taskMdl.get('user_name')),
+                'DEPLOY_TIME': str(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
             }
             if self.project_info['task_vars']:
                 task_vars = [i.strip() for i in self.project_info['task_vars'].split('\n') if i.strip() and not i.strip().startswith('#')]
