@@ -22,7 +22,9 @@ services:
     hostname: walle-python
     volumes:
       - /tmp/walle/codebase/:/tmp/walle/codebase/
-    command: bash -c "/bin/bash /opt/walle-web/admin.sh migration && python /opt/walle-web/waller.py"
+      - /tmp/walle/logs/:/opt/walle-web/logs/
+      - /root/.ssh:/root/.ssh/
+    command: bash -c "cd /opt/walle-web/ && /bin/bash admin.sh migration && python /opt/walle-web/waller.py"
     expose:
       - "5000"
     links: 
