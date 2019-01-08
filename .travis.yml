@@ -29,13 +29,13 @@ install:
 before_script:
   - echo "#before_script#"
   # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
-  - flake8 .f* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .g* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .m* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .r* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .s* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .t* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  - flake8 .w* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./f* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./g* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./m* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./r* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./s* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./t* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+  - flake8 ./w* --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   # stop the build if there are Python syntax errors or undefined names
   - flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
