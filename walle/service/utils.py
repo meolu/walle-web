@@ -36,7 +36,7 @@ if PY2:
     string_types = (str, unicode)  # noqa
     unicode = unicode  # noqa
     basestring = basestring  # noqa
-    reload(sys)
+    reload(sys)  # noqa
     sys.setdefaultencoding('utf8')
 else:
     text_type = str
