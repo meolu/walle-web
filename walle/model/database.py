@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """Database module, including the SQLAlchemy database object and DB-related utilities."""
+
+# flake8: noqa  # flake8 has real problems linting this file on Python 2
+
 from pprint import pformat
 
 from sqlalchemy import desc, or_
