@@ -17,11 +17,13 @@ from wtforms import PasswordField, StringField
 from wtforms import validators, ValidationError
 from wtforms.validators import Regexp
 
+validator_regx_password = "^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}"
+
 
 class UserForm(FlaskForm):
     email = StringField('email', [validators.email()])
     password = PasswordField('Password', [validators.Length(min=6, max=35),
-                                          validators.Regexp(regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}",
+                                          validators.Regexp(regex=validator_regx_password,
                                                             message='密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')])
 
     username = StringField('Username', [validators.Length(min=1, max=50)])
@@ -45,12 +47,10 @@ class RegistrationForm(UserForm):
 
 
 class UserUpdateForm(FlaskForm):
-    password = PasswordField('Password', [])
     username = StringField('username', [])
-
-    def validate_password(self, field):
-        if field.data and not re.match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}", field.data):
-            raise ValidationError('密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')
+    password = PasswordField('Password', [validators.Length(min=6, max=35),
+                                          validators.Regexp(regex=validator_regx_password,
+                                                            message='密码至少6个字符，至少1个大写字母，1个小写字母，1个数字')])
 
 
 class LoginForm(FlaskForm):
