@@ -98,7 +98,7 @@ class GeneralAPI(SecurityResource):
             with open(heads) as f:
                 commit = f.read().strip()[0:8]
         except Exception as e:
-            branch, commit = '', ''
+            branch, commit = '获取不到git信息', '获取不到git信息'
 
         return self.render_json(data={
             'version': current_app.config.get('VERSION'),
