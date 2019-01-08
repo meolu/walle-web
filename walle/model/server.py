@@ -98,7 +98,8 @@ class ServerModel(SurrogatePK, Model):
         if not ids:
             return None
 
-        query = ServerModel.query.filter(ServerModel.id.in_(ids))
+        query = ServerModel.query.filter(ServerModel.id.in_(ids))\
+            .filter(ServerModel.status.notin_([cls.status_remove]))
         data = query.order_by(ServerModel.id.desc()).all()
         return [p.to_json() for p in data]
 
