@@ -1,7 +1,6 @@
 Dockerfile*
 docker-compose*
 
-.git
 .github
 .gitignore
 .vscode
@@ -9,8 +8,9 @@ docker-compose*
 .editorconfig
 .idea/
 .travis.yml
+__pycache__/
 
-test
+tests/
 screenshot
 
 README.md
