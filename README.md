@@ -100,8 +100,6 @@ Discussing
 
 <img src="https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/appreciation-wechat.jpg" width="220" height="220" alt="赞赏码" style="float: left;"/>
 
-<img src="https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/hongbao.jpg" width="220" height="220" alt="赞赏码" style="float: left;margin-left: 80px;" />
-
 Code Visualization
 =========================
 感谢`gitviscode`组织制作的`commit history`视频，记录从15年萌芽发展，有那么多开发者加入完善。1'50的时候，以为项目都停止更新了，然后突然如烟花绽放的感觉，我他妈都感动得要哭了
