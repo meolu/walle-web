@@ -96,15 +96,14 @@ Discussing
 
 打赏作者杯咖啡
 =========================
-你也不一定要赞赏，芸芸众生，相遇相识是一种缘份。不过可以给点个star，或者关注公众号，哈哈
+你也不一定要赞赏，芸芸众生，相遇相识是一种缘份。不过可以给点个star，或者关注公众号，哈
 
-<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/appreciation-wechat.jpg" width="220" height="220" alt="赞赏码" />
+<img src="https://raw.github.com/meolu/docs/master/walle-web.io/docs/2/zh-cn/static/appreciation-wechat.jpg" width="220" height="220" alt="赞赏码" style="float: left;"/>
 
-### Code Visualization:
-
-Here is a cool visualization of the code evolution
+Code Visualization
+=========================
+感谢`gitviscode`组织制作的`commit history`视频，记录从15年萌芽发展，有那么多开发者加入完善。1'50的时候，以为项目都停止更新了，然后突然如烟花绽放的感觉，我他妈都感动得要哭了
 
  [![Watch the video](https://img.youtube.com/vi/AIir52mETMY/0.jpg)](https://www.youtube.com/watch?v=AIir52mETMY)
 
  [https://www.youtube.com/watch?v=AIir52mETMY](https://www.youtube.com/watch?v=AIir52mETMY)
-
