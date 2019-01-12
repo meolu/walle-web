@@ -58,6 +58,7 @@ class GeneralAPI(SecurityResource):
             'current': '',
             'available': '',
         }
+        UserModel.fresh_session()
         # TODO
         # 超管不需要展示空间列表
         if current_user.role != SUPER:
