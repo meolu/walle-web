@@ -46,6 +46,7 @@ flask
 nosetests.xml
 coverage.xml
 venv
+venv3
 
 ############################# 保留文件 #############################
 !requirements.txt
