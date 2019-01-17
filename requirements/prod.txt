@@ -20,7 +20,6 @@ psycopg2==2.7.1
 SQLAlchemy==1.2.14
 mysqlclient==1.3.13
 marshmallow==2.15.1
-environs==4.1.0
 
 # Migrations
 Flask-Migrate==2.3.1
@@ -42,3 +41,4 @@ pycrypto==2.6.1
 pytz==2015.6
 requests==2.20.0
 GitPython==2.1.11
+environs==4.1.0

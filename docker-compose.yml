@@ -21,14 +21,15 @@ services:
     container_name: walle-python
     hostname: walle-python
     env_file:
-      - variables.env
+      # walle.env需和docker-compose在同级目录
+      - walle.env
     command: bash -c "cd /opt/walle-web/ && /bin/bash admin.sh migration && python waller.py"
     expose:
       - "5000"
     volumes:
       - /tmp/walle/codebase/:/tmp/walle/codebase/
       - /tmp/walle/logs/:/opt/walle-web/logs/
-      #- /root/.ssh:/root/.ssh/
+      - /root/.ssh:/root/.ssh/
     links: 
       - db
     depends_on:
@@ -42,7 +43,7 @@ services:
     container_name: walle-mysql
     hostname: walle-mysql
     env_file:
-      - variables.env
+      - walle.env
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3306:3306"

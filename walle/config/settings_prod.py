@@ -28,8 +28,9 @@ class ProdConfig(Config):
     SSL = False
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://%s:%s@db:3306/%s?charset=utf8' \
-                              % (Config.MYSQL_USER, Config.MYSQL_PASSWORD, Config.MYSQL_DATABASE)
+    SQLALCHEMY_DATABASE_URI = 'mysql://%s:%s@%s:%s/%s?charset=utf8' \
+                              % (Config.MYSQL_USER, Config.MYSQL_PASSWORD, Config.MYSQL_HOST, Config.MYSQL_PORT,
+                                 Config.MYSQL_DATABASE)
 
     # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'

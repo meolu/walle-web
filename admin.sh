@@ -71,6 +71,7 @@ function upgrade() {
 function migration() {
     echo "migration walle"
     echo "----------------"
+    source venv/bin/activate
     export FLASK_APP=waller.py
     flask db upgrade
     if [ $? == "0" ]; then

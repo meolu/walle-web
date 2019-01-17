@@ -38,6 +38,8 @@ class Config(object):
         MYSQL_USER = env('MYSQL_USER')
         MYSQL_PASSWORD = env('MYSQL_PASSWORD')
         MYSQL_DATABASE = env('MYSQL_DATABASE')
+        MYSQL_HOST = env('MYSQL_HOST')
+        MYSQL_PORT = env('MYSQL_PORT')
     except EnvError as e:
         exit(e)
 
