@@ -29,6 +29,7 @@ before_script:
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
 script:
   - echo "#script#"
+  - source .env
   - export FLASK_APP=waller.py
   - python -m flask test
 notifications:
