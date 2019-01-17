@@ -17,7 +17,7 @@ services:
     restart: always
 
   python:
-    image: alenx/walle-python:2.1
+    image: alenx/walle-python:2.0
     container_name: walle-python
     hostname: walle-python
     env_file:
