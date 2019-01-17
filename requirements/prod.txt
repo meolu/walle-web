@@ -20,6 +20,7 @@ psycopg2==2.7.1
 SQLAlchemy==1.2.14
 mysqlclient==1.3.13
 marshmallow==2.15.1
+environs==4.1.0
 
 # Migrations
 Flask-Migrate==2.3.1

@@ -1,3 +1,4 @@
+docker.sh
 Dockerfile*
 docker-compose*
 
@@ -9,6 +10,7 @@ docker-compose*
 .idea/
 .travis.yml
 __pycache__/
+*.env
 
 tests/
 screenshot

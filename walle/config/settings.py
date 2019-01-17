@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Application configuration."""
 import os
+from environs import Env, EnvError
 from datetime import timedelta
 
 
@@ -30,6 +31,15 @@ class Config(object):
     FE_PATH = os.path.abspath(PROJECT_ROOT + '/fe/') + '/'
     AVATAR_PATH = '/avatar/'
     UPLOAD_AVATAR = FE_PATH + AVATAR_PATH
+
+    try:
+        env = Env()
+        env.read_env()
+        MYSQL_USER = env('MYSQL_USER')
+        MYSQL_PASSWORD = env('MYSQL_PASSWORD')
+        MYSQL_DATABASE = env('MYSQL_DATABASE')
+    except EnvError as e:
+        exit(e)
 
     # 邮箱配置
     MAIL_SERVER = 'smtp.exmail.qq.com'

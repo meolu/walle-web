@@ -64,11 +64,8 @@ def create_app(config_object=ProdConfig):
         register_socketio(app)
 
     try:
-        PYTHONIOENCODING='utf-8'
         reload(sys)
         sys.setdefaultencoding('utf-8')
-        # import codecs
-        # sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
     except NameError:
         pass
 
