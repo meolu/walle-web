@@ -28,17 +28,15 @@ before_script:
   - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
 
-env:
-  # Set MySQL/Rails environment
-  - MYSQL_USER=root
-  - MYSQL_PASSWORD=walle
-  - MYSQL_DATABASE=walle
-  - MYSQL_ROOT_PASSWORD=walle
-  - MYSQL_HOST=127.0.0.1
-  - MYSQL_PORT=3306
-
 script:
   - echo "#script#"
+  # Set MySQL/Rails environment
+  - export MYSQL_USER=root
+  - export MYSQL_PASSWORD=walle
+  - export MYSQL_DATABASE=walle
+  - export MYSQL_ROOT_PASSWORD=walle
+  - export MYSQL_HOST=127.0.0.1
+  - export MYSQL_PORT=3306
   - export FLASK_APP=waller.py
   - python -m flask test
 
