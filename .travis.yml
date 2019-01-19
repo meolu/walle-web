@@ -27,14 +27,14 @@ before_script:
   # exit-zero treats all errors as warnings.  The GitHub editor is 127 chars wide
   - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
   - mkdir -p /tmp/walle/{logs,library,webroot,releases}
-env:
-  # Set MySQL/Rails environment
-  -  MYSQL_USER=root
-  -  MYSQL_PASSWORD=walle
-  -  MYSQL_DATABASE=walle
-  -  MYSQL_ROOT_PASSWORD=walle
+
 script:
   - echo "#script#"
+  # Set MySQL/Rails environment
+  - export MYSQL_USER=root
+  - export MYSQL_PASSWORD=walle
+  - export MYSQL_DATABASE=walle
+  - export MYSQL_ROOT_PASSWORD=walle
   - export FLASK_APP=waller.py
   - python -m flask test
 notifications:
