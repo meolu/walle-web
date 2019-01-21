@@ -108,4 +108,5 @@ Code Visualization
 
  [https://www.youtube.com/watch?v=AIir52mETMY](https://www.youtube.com/watch?v=AIir52mETMY)
 
+Walle star趋势图
  [![Sparkline](https://stars.medv.io/meolu/walle-web.svg)](https://stars.medv.io/meolu/walle-web)
