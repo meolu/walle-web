@@ -169,6 +169,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
 
     @classmethod
     def fresh_session(cls):
+        session['project_master'] = []
         # 0.超管
         if current_user.role == SUPER:
             return True
