@@ -91,7 +91,6 @@ class MemberModel(SurrogatePK, Model):
         }
         query = self.query.filter(*filters)
         projects = query.with_entities(MemberModel.source_id).all()
-        current_app.logger.error(projects)
         return [project[0] for project in projects]
 
     def update_group(self, members, group_name=None):

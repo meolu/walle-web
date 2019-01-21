@@ -198,8 +198,6 @@ class TaskModel(SurrogatePK, Model):
         if self.status in [self.status_doing, self.status_fail, self.status_success]:
             self.rollback_count[self.project_id] += 1
 
-        current_app.logger.error(self.rollback_count[self.project_id])
-        current_app.logger.error(self.keep_version_num)
         if self.rollback_count[self.project_id] <= self.keep_version_num \
             and self.status in [self.status_doing, self.status_fail, self.status_success] \
             and self.ex_link_id:
