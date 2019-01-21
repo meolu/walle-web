@@ -68,7 +68,7 @@ class WalleSocketIO(Namespace):
         wi = Deployer(project_id=self.room)
         try:
             tags = wi.list_tag()
-            emit('tags', {'event': 'tags', 'data': tags}, room=self.room)
+            emit('tags', {'event': 'tags', 'data': tags.reverse()}, room=self.room)
         except Exception as e:
             emit('tags', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
 
