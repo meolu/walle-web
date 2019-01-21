@@ -107,3 +107,5 @@ Code Visualization
  [![Watch the video](https://img.youtube.com/vi/AIir52mETMY/0.jpg)](https://www.youtube.com/watch?v=AIir52mETMY)
 
  [https://www.youtube.com/watch?v=AIir52mETMY](https://www.youtube.com/watch?v=AIir52mETMY)
+
+ [![Sparkline](https://stars.medv.io/meolu/walle-web.svg)](https://stars.medv.io/meolu/walle-web)
