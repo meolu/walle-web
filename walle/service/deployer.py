@@ -401,7 +401,7 @@ class Deployer:
             tags = tags.split('\n')
             return [color_clean(tag.strip()) for tag in tags]
 
-        return None
+        return []
 
     def list_branch(self):
         self.init_repo()
