@@ -16,7 +16,7 @@ flask-socketio==3.0.2
 
 # Database
 Flask-SQLAlchemy==2.3.2
-psycopg2==2.7.1
+psycopg2==2.7.5
 SQLAlchemy==1.2.14
 mysqlclient==1.3.13
 marshmallow==2.15.1
