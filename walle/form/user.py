@@ -17,7 +17,7 @@ from wtforms import PasswordField, StringField
 from wtforms import validators, ValidationError
 from wtforms.validators import Regexp
 
-validator_regx_password = "^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}"
+validator_regx_password = "^.*(?=.*[a-z])(?=.*[A-Z])(?=.*\d){6,}"
 
 class UserForm(FlaskForm):
     email = StringField('email', [validators.email()])
