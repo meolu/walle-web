@@ -134,7 +134,7 @@ class MemberModel(SurrogatePK, Model):
 
     def update_project(self, project_id, members, group_name=None):
         space_info = model.project.ProjectModel.query.filter_by(id=project_id).first().to_json()
-        space_members, count, user_ids = self.members(group_id=space_info['space_id'])
+        space_members, count, user_ids = self.members(group_id=space_info['space_id'], size=-1)
         update_uids = []
 
         for member in members:
@@ -192,7 +192,10 @@ class MemberModel(SurrogatePK, Model):
         query = query.add_columns(MemberModel.access_level, UserModel.id)
 
         count = query.count()
-        data = query.order_by(MemberModel.id.asc()).offset(int(size) * int(page)).limit(size).all()
+        query = query.order_by(MemberModel.id.asc())
+        if size > 0:
+            query = query.offset(int(size) * int(page)).limit(size)
+        data = query.all()
 
         current_app.logger.info(data)
         list = []
