@@ -39,6 +39,9 @@ class UserForm(FlaskForm):
             'password': generate_password_hash(self.password.data),
             'email': self.email.data,
             'role': self.role.data if self.role.data else '',
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
         }
 
 

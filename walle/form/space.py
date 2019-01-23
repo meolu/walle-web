@@ -39,4 +39,7 @@ class SpaceForm(FlaskForm):
             'name': self.name.data if self.name.data else '',
             'user_id': self.user_id.data if self.user_id.data else '',
             'status': 1,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
         }

@@ -93,4 +93,7 @@ class ProjectForm(FlaskForm):
                                                                               Notice.by_dingding] else '',
             'notice_hook': self.notice_hook.data if self.notice_hook.data else '',
             'task_audit': self.task_audit.data if self.task_audit.data else 0,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
         }
