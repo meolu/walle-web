@@ -19,11 +19,15 @@ from datetime import datetime
 
 class EnvironmentForm(FlaskForm):
     env_name = StringField('env_name', [validators.Length(min=1, max=100)])
-    status = StringField('status', [validators.Length(min=0, max=10)])
+    status = StringField('status', [])
+    space_id = None
     env_id = None
 
     def set_env_id(self, env_id):
         self.env_id = env_id
+
+    def set_space_id(self, space_id):
+        self.space_id = space_id
 
     def validate_env_name(self, field):
         filters = {
@@ -42,8 +46,8 @@ class EnvironmentForm(FlaskForm):
 
     def form2dict(self):
         return {
-            'env_name': self.name.data if self.name.data else '',
-            'space_id': self.space_id,
+            'name': self.env_name.data,
+            'space_id': current_user.space_id(),
             'status': 1,
             'created_at': datetime.now(),
             'updated_at': datetime.now(),
