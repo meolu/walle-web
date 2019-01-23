@@ -9,7 +9,7 @@
 APP="waller.py"
 
 function init() {
-    echo "init walle"
+    echo "Initing walle"
     echo "----------------"
     which pip
     if [ $? != "0" ]; then
@@ -33,34 +33,34 @@ function requirement() {
     pip install -r ./requirements/prod.txt
 }
 function start() {
-    echo "start walle"
+    echo "Starting walle"
     echo "----------------"
     source ./venv/bin/activate
     mkdir -p logs
     nohup python $APP >> logs/runtime.log 2>&1 &
-    echo -e "Starting walle:                 [\033[32m ok \033[0m]"
+    echo -e "Start walle:                 [\033[32m ok \033[0m]"
     echo -e "runtime: \033[32m logs/runtime.log \033[0m"
     echo -e "error: \033[32m logs/error.log \033[0m"
 }
  
 function stop() {
-    echo "stop walle"
+    echo "Stoping walle"
     echo "----------------"
     # 获取进程 PID
     PID=$(ps -ef | grep $APP | grep -v grep | awk '{print $2}') 
     # 杀死进程
     kill -9 $PID
+    echo -e "Stop walle:                  [\033[32m ok \033[0m]"
 }
  
 function restart() {
-    echo "restart walle"
-    echo "----------------"
     stop
+    echo ""
     start
 }
 
 function upgrade() {
-    echo "upgrade walle"
+    echo "Upgrading walle"
     echo "----------------"
     cd $(dirname $0)
     echo -e "建议先暂存本地修改\033[33m git stash\033[0m，更新后再弹出\033[33m git stash pop\033[0m，处理冲突。"
@@ -91,7 +91,7 @@ echo "                                                                          
 }
 
 function migration() {
-    echo "migration walle"
+    echo "Migration walle"
     echo "----------------"
     source venv/bin/activate
     export FLASK_APP=waller.py
@@ -105,40 +105,31 @@ function migration() {
 
 case "$1" in
     init )
-        echo "************************************************"
+        walle_banner
         init
-        echo "************************************************"
         ;;
     start )
-        echo "************************************************"
         walle_banner
         start
-        echo "************************************************"
         ;;
     stop )
-        echo "************************************************"
+        walle_banner
         stop
-        echo "************************************************"
         ;;
     restart )
-        echo "************************************************"
+        walle_banner
         restart
-        echo "************************************************"
         ;;
     upgrade )
-        echo "************************************************"
         walle_banner
         upgrade
         requirement
         migration
         echo -e "\033[32m walle 更新成功. \033[0m \033[33m 建议重启服务 sh admin.sh restart\033[0m"
-        echo "************************************************"
         ;;
     migration )
-        echo "************************************************"
         walle_banner
         migration
-        echo "************************************************"
         ;;
     * )
         walle_banner
