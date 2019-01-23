@@ -347,6 +347,9 @@ class Deployer:
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 
+        # 清理现场
+        self.cleanup_remote(waller)
+
     def post_release_service(self, waller):
         '''
         代码部署完成后,服务启动工作,如: nginx重启
@@ -484,6 +487,12 @@ class Deployer:
             result = self.localhost.local(command, wenv=self.config())
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
+
+    def cleanup_remote(self, waller):
+        command = 'rm -rf `ls -t | tail -n +{keep_version_num}`'.format(
+            keep_version_num=int(self.project_info['keep_version_num']) + 1)
+        with waller.cd(self.project_info['target_releases']):
+            result = waller.run(command, exception=False, wenv=self.config())
 
     def logs(self):
         return RecordModel().fetch(task_id=self.task_id)
