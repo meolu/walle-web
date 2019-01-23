@@ -68,6 +68,28 @@ function upgrade() {
     git pull
 }
 
+function walle_banner() {
+
+echo "                                                                                            ";
+echo "                                                          llllllllllllll                     ";
+echo "                                                           l::::l l::::l                     ";
+echo "wwwwwww           wwwww           wwwwww aaaaaaaaaaaaa     l::::l l::::l     eeeeeeeeeeee    ";
+echo " w:::::w         w:::::w         w:::::w a::::::::::::a    l::::l l::::l   ee::::::::::::ee  ";
+echo "  w:::::w       w:::::::w       w:::::w  aaaaaaaaa:::::a   l::::l l::::l  e::::::eeeee:::::ee";
+echo "   w:::::w     w:::::::::w     w:::::w            a::::a   l::::l l::::l e::::::e     e:::::e";
+echo "    w:::::w   w:::::w:::::w   w:::::w      aaaaaaa:::::a   l::::l l::::l e:::::::eeeee::::::e";
+echo "     w:::::w w:::::w w:::::w w:::::w     aa::::::::::::a   l::::l l::::l e:::::::::::::::::e ";
+echo "      w:::::w:::::w   w:::::w:::::w     a::::aaaa::::::a   l::::l l::::l e::::::eeeeeeeeeee  ";
+echo "       w:::::::::w     w:::::::::w     a::::a    a:::::a   l::::l l::::l e:::::::e           ";
+echo "        w:::::::w       w:::::::w      a::::a    a:::::a   l::::l l::::l e::::::::e          ";
+echo "         w:::::w         w:::::w       a:::::aaaa::::::a   l::::l l::::l  e::::::::eeeeeeee  ";
+echo "          w:::w           w:::w         a::::::::::aa::a   l::::: l:::::l  ee:::::::::::::e  ";
+echo "           www             www           aaaaaaaaaa  aaaa llllllllllllllll    eeeeeeeeeeeeee  ";
+echo "                                                                                            ";
+
+
+}
+
 function migration() {
     echo "migration walle"
     echo "----------------"
@@ -89,6 +111,7 @@ case "$1" in
         ;;
     start )
         echo "************************************************"
+        walle_banner
         start
         echo "************************************************"
         ;;
@@ -104,6 +127,7 @@ case "$1" in
         ;;
     upgrade )
         echo "************************************************"
+        walle_banner
         upgrade
         requirement
         migration
@@ -112,12 +136,15 @@ case "$1" in
         ;;
     migration )
         echo "************************************************"
+        walle_banner
         migration
         echo "************************************************"
         ;;
     * )
+        walle_banner
         echo "************************************************"
         echo "Usage: sh admin {init|start|stop|restart|upgrade|migration}"
         echo "************************************************"
         ;;
 esac
+
