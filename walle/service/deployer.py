@@ -489,8 +489,12 @@ class Deployer:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
     def cleanup_remote(self, waller):
-        command = 'rm -rf `ls -t | tail -n +{keep_version_num}`'.format(
-            keep_version_num=int(self.project_info['keep_version_num']) + 1)
+        command = 'rm -rf {task_id}_*.tgz'.format(task_id=self.task_id)
+        with waller.cd(self.project_info['target_releases']):
+            result = waller.run(command, exception=False, wenv=self.config)
+
+        command = 'rm -rf `ls -t {task_id}_* | tail -n +{keep_version_num}`'.format(
+            task_id=self.task_id, keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, exception=False, wenv=self.config())
 
