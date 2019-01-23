@@ -489,14 +489,14 @@ class Deployer:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
     def cleanup_remote(self, waller):
-        command = 'rm -rf {task_id}_*.tgz'.format(task_id=self.task_id)
+        command = 'rm -rf {project_id}_*.tgz'.format(project_id=self.project_info['id'])
         with waller.cd(self.project_info['target_releases']):
-            result = waller.run(command, exception=False, wenv=self.config)
+            result = waller.run(command, wenv=self.config())
 
-        command = 'rm -rf `ls -t {task_id}_* | tail -n +{keep_version_num}`'.format(
-            task_id=self.task_id, keep_version_num=int(self.project_info['keep_version_num']) + 1)
+        command = 'rm -rf `ls -t {project_id}_* | tail -n +{keep_version_num}`'.format(
+            project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with waller.cd(self.project_info['target_releases']):
-            result = waller.run(command, exception=False, wenv=self.config())
+            result = waller.run(command, wenv=self.config())
 
     def logs(self):
         return RecordModel().fetch(task_id=self.task_id)
@@ -558,7 +558,7 @@ class Deployer:
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
-                    current_app.logger.error(e)
+                    current_app.logger.exception(e)
                     self.errors[host] = e.message
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_fail, host=host,
@@ -593,7 +593,7 @@ class Deployer:
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
-                    current_app.logger.error(e)
+                    current_app.logger.exception(e)
                     self.errors[host] = e.message
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_fail, host=host,
