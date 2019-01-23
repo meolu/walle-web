@@ -14,6 +14,7 @@ from flask_login import current_user
 from walle.model.environment import EnvironmentModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
+from datetime import datetime
 
 
 class EnvironmentForm(FlaskForm):
@@ -38,3 +39,13 @@ class EnvironmentForm(FlaskForm):
     def validate_status(self, field):
         if field.data and int(field.data) not in [1, 2]:
             raise ValidationError('非法的状态')
+
+    def form2dict(self):
+        return {
+            'env_name': self.name.data if self.name.data else '',
+            'space_id': self.space_id,
+            'status': 1,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
+        }

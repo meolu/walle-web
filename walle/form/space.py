@@ -13,6 +13,7 @@ except ImportError:
 from walle.model.space import SpaceModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
+from datetime import datetime
 
 
 class SpaceForm(FlaskForm):
