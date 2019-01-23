@@ -15,6 +15,7 @@ from walle.model.project import ProjectModel
 from walle.model.task import TaskModel
 from wtforms import IntegerField, StringField
 from wtforms import validators
+from datetime import datetime
 
 
 class TaskForm(FlaskForm):
@@ -55,4 +56,6 @@ class TaskForm(FlaskForm):
             'file_transmission_mode': self.file_transmission_mode.data if self.file_transmission_mode.data else 0,
             'file_list': self.file_list.data if self.file_list.data else '',
             'is_rollback': 0,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
         }

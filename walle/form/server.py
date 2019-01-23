@@ -13,6 +13,7 @@ except ImportError:
 from walle.model.server import ServerModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
+from datetime import datetime
 
 
 class ServerForm(FlaskForm):
@@ -38,4 +39,7 @@ class ServerForm(FlaskForm):
             'user': self.user.data,
             'port': self.port.data if self.port.data else 22,
             'status': 1,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
         }

@@ -347,6 +347,9 @@ class Deployer:
         # 个性化，用户重启的不一定是NGINX，可能是tomcat, apache, php-fpm等
         # self.post_release_service(waller)
 
+        # 清理现场
+        self.cleanup_remote(waller)
+
     def post_release_service(self, waller):
         '''
         代码部署完成后,服务启动工作,如: nginx重启
@@ -485,6 +488,16 @@ class Deployer:
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
+    def cleanup_remote(self, waller):
+        command = 'rm -rf {project_id}_*.tgz'.format(project_id=self.project_info['id'])
+        with waller.cd(self.project_info['target_releases']):
+            result = waller.run(command, wenv=self.config())
+
+        command = 'rm -rf `ls -t {project_id}_* | tail -n +{keep_version_num}`'.format(
+            project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
+        with waller.cd(self.project_info['target_releases']):
+            result = waller.run(command, wenv=self.config())
+
     def logs(self):
         return RecordModel().fetch(task_id=self.task_id)
 
@@ -545,7 +558,7 @@ class Deployer:
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
-                    current_app.logger.error(e)
+                    current_app.logger.exception(e)
                     self.errors[host] = e.message
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_fail, host=host,
@@ -580,7 +593,7 @@ class Deployer:
                     emit('success', {'event': 'finish', 'data': {'host': host, 'message': host + ' 部署完成！'}}, room=self.task_id)
                 except Exception as e:
                     is_all_servers_success = False
-                    current_app.logger.error(e)
+                    current_app.logger.exception(e)
                     self.errors[host] = e.message
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_fail, host=host,

@@ -68,16 +68,14 @@ class EnvironmentModel(Model):
         data = self.query.filter(EnvironmentModel.status.notin_([self.status_remove])).filter_by(id=self.id).first()
         return data.to_json() if data else []
 
-    def add(self, env_name, space_id):
-        env = EnvironmentModel(name=env_name, status=self.status_open, space_id=space_id)
+    def add(self, *args, **kwargs):
+        data = dict(*args)
+        env = EnvironmentModel(**data)
 
         db.session.add(env)
         db.session.commit()
 
-        if env.id:
-            self.id = env.id
-
-        return env.id
+        return env.to_json()
 
     def update(self, env_name, status, env_id=None):
         role = EnvironmentModel.query.filter_by(id=self.id).first()

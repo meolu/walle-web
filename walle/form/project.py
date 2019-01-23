@@ -15,6 +15,7 @@ from walle.model.project import ProjectModel
 from walle.service.notice import Notice
 from wtforms import StringField
 from wtforms import validators, ValidationError
+from datetime import datetime
 
 
 class ProjectForm(FlaskForm):
@@ -93,4 +94,7 @@ class ProjectForm(FlaskForm):
                                                                               Notice.by_dingding] else '',
             'notice_hook': self.notice_hook.data if self.notice_hook.data else '',
             'task_audit': self.task_audit.data if self.task_audit.data else 0,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
         }

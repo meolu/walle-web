@@ -55,8 +55,8 @@ class TaskModel(SurrogatePK, Model):
     file_transmission_mode = db.Column(Integer)
     file_list = db.Column(Text)
     is_rollback = db.Column(Integer)
-    created_at = db.Column(DateTime, default=current_time)
-    updated_at = db.Column(DateTime, default=current_time, onupdate=current_time)
+    created_at = db.Column(DateTime, default=datetime.now())
+    updated_at = db.Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
     taskMdl = None
 

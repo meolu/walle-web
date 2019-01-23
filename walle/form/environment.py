@@ -14,15 +14,20 @@ from flask_login import current_user
 from walle.model.environment import EnvironmentModel
 from wtforms import StringField
 from wtforms import validators, ValidationError
+from datetime import datetime
 
 
 class EnvironmentForm(FlaskForm):
     env_name = StringField('env_name', [validators.Length(min=1, max=100)])
-    status = StringField('status', [validators.Length(min=0, max=10)])
+    status = StringField('status', [])
+    space_id = None
     env_id = None
 
     def set_env_id(self, env_id):
         self.env_id = env_id
+
+    def set_space_id(self, space_id):
+        self.space_id = space_id
 
     def validate_env_name(self, field):
         filters = {
@@ -38,3 +43,13 @@ class EnvironmentForm(FlaskForm):
     def validate_status(self, field):
         if field.data and int(field.data) not in [1, 2]:
             raise ValidationError('非法的状态')
+
+    def form2dict(self):
+        return {
+            'name': self.env_name.data,
+            'space_id': current_user.space_id(),
+            'status': 1,
+            'created_at': datetime.now(),
+            'updated_at': datetime.now(),
+
+        }
