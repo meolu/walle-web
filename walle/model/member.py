@@ -49,7 +49,8 @@ class MemberModel(SurrogatePK, Model):
         SpaceModel = model.space.SpaceModel
         filters = {
             MemberModel.status.notin_([self.status_remove]),
-            MemberModel.source_type == self.source_type_group
+            MemberModel.source_type == self.source_type_group,
+            SpaceModel.status.notin_([self.status_remove]),
         }
         query = self.query.filter(*filters).with_labels()\
             .with_entities(MemberModel.source_id, MemberModel.access_level, SpaceModel.name)
