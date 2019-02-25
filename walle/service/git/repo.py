@@ -90,7 +90,8 @@ class Repo:
         # 去除 origin/HEAD -> 当前指向
         # 去除远端前缀
         branches = PyRepo(self.path).remote().refs
-        return [str(branch).strip().lstrip('origin/') for branch in branches if
+        # fixbug https://github.com/meolu/walle-web/issues/705
+        return [str(branch).strip().lstrip('origin').lstrip('/') for branch in branches if
                 not str(branch).strip().startswith('origin/HEAD')]
 
     def tags(self):
