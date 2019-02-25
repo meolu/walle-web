@@ -88,10 +88,15 @@ class Waller(Connection):
             return result
 
         except Exception as e:
-            current_app.logger.exception(e)
-
             # TODO 貌似可能的异常有很多种，需要分层才能完美解决 something wrong without e.result
-            error = e.result if 'result' in e else e.message
+            current_app.logger.exception(e)
+            if hasattr(e, 'message'):
+                error = e.message
+            elif hasattr(e, 'result'):
+                error = e.result
+            else:
+                error = str(e)
+
             RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
                                       task_id=wenv['task_id'], status=1, host=self.host, user=self.user,
                                       command=command, success='', error=error)
@@ -101,7 +106,7 @@ class Waller(Connection):
                 )
             else:
                 message = 'task_id=%s, user:%s host:%s command:%s, status=1, message:%s' % (
-                    wenv['task_id'], self.user, self.host, command, e.message
+                    wenv['task_id'], self.user, self.host, command, error
                 )
             current_app.logger.error(message, exc_info=1)
 

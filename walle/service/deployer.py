@@ -22,6 +22,7 @@ from walle.service.utils import color_clean
 from walle.service.utils import excludes_format, includes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
+from walle.service.git.repo import Repo
 from flask_login import current_user
 
 class Deployer:
@@ -395,77 +396,23 @@ class Deployer:
         return errors
 
     def list_tag(self):
-        self.init_repo()
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
 
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git tag -l'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-            tags = result.stdout.strip()
-            tags = tags.split('\n')
-            return [color_clean(tag.strip()) for tag in tags]
-
-        return []
+        return repo.tags()
 
     def list_branch(self):
-        self.init_repo()
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
 
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git pull'
-            result = self.localhost.local(command, wenv=self.config())
-
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_pull_fail, message=result.stdout)
-
-            current_app.logger.info(self.dir_codebase_project)
-
-            command = 'git branch -r'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-
-            # if result.exited != Code.Ok:
-            #     raise WalleError(Code.shell_run_fail)
-
-            # TODO 三种可能: false, error, success
-            branches = result.stdout.strip()
-            branches = branches.split('\n')
-            # 去除 origin/HEAD -> 当前指向
-            # 去除远端前缀
-            branches = [branch.strip().lstrip('origin/') for branch in branches if
-                        not branch.strip().startswith('origin/HEAD')]
-            return branches
-
-        return None
+        return repo.branches()
 
     def list_commit(self, branch):
-        self.init_repo()
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git checkout %s && git pull' % (branch)
-            self.localhost.local(command, wenv=self.config())
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
+        return repo.commits(branch)
 
-            command = 'git log -50 --pretty="%h #@_@# %an #@_@# %s"'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-            current_app.logger.info(result.stdout)
-
-            commit_log = result.stdout.strip()
-            current_app.logger.info(commit_log)
-            commit_list = commit_log.split('\n')
-            commits = []
-            for commit in commit_list:
-                if not re.search('^.+ #@_@# .+ #@_@# .*$', commit):
-                    continue
-
-                commit_dict = commit.split(' #@_@# ')
-                current_app.logger.info(commit_dict)
-                commits.append({
-                    'id': commit_dict[0],
-                    'name': commit_dict[1],
-                    'message': commit_dict[2],
-                })
-
-            return commits
-
-        # TODO
-        return None
-
+    # 待废弃，迁移到gitpython
     def init_repo(self):
         if not os.path.exists(self.dir_codebase_project):
             # 检查 目录是否存在
@@ -481,6 +428,7 @@ class Deployer:
             command = 'rm -rf %s' % (self.dir_codebase_project)
             self.localhost.local(command, wenv=self.config())
 
+            # 切换到gitpython模式
             command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
             current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
 

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+import gevent.monkey
+gevent.monkey.patch_all()
+
 import logging
 import sys
-
 import os
 from flask import Flask, render_template, current_app
 from flask_restful import Api
