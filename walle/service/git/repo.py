@@ -45,10 +45,10 @@ class Repo:
         if not os.path.exists(self.path):
             os.makedirs(self.path)
         # git clone
-        if not self.is_git_dir():
-            return self.clone(url)
-        else:
+        if self.is_git_dir():
             return self.pull()
+        else:
+            return self.clone(url)
 
     def clone(self, url):
         '''
@@ -69,8 +69,8 @@ class Repo:
         @return:
         '''
         repo = PyRepo(self.path)
-        print(repo.active_branch)
-        return repo.remote().pull(repo.active_branch)
+
+        return repo.remote().pull()
 
     def checkout_2_branch(self, branch):
         PyRepo(self.path).git.checkout(branch)
