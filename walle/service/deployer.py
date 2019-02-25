@@ -349,6 +349,7 @@ class Deployer:
         # self.post_release_service(waller)
 
         # 清理现场
+        self.cleanup_local()
         self.cleanup_remote(waller)
 
     def post_release_service(self, waller):
@@ -436,8 +437,14 @@ class Deployer:
             if result.exited != Code.Ok:
                 raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
+    def cleanup_local(self):
+        # clean local package
+        command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        with self.localhost.cd(self.local_codebase):
+            result = self.localhost.local(command, wenv=self.config())
+
     def cleanup_remote(self, waller):
-        command = 'rm -rf {project_id}_*.tgz'.format(project_id=self.project_info['id'])
+        command = 'rm -rf {project_id}_{task_id}_*.tgz'.format(project_id=self.project_info['id'], task_id=self.task_id)
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
 
