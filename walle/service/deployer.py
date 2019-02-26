@@ -350,7 +350,6 @@ class Deployer:
         # self.post_release_service(waller)
 
         # 清理现场
-        self.cleanup_local()
         self.cleanup_remote(waller)
 
     def post_release_service(self, waller):
@@ -484,6 +483,8 @@ class Deployer:
                 notice_info['title'] = '上线部署失败'
                 notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
 
+        # 清理本地
+        self.cleanup_local()
         if success:
             emit('success', {'event': 'finish', 'data': {'message': '部署完成，辛苦了，为你的努力喝彩！'}}, room=self.task_id)
         else:
