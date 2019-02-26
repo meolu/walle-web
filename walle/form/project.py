@@ -53,7 +53,7 @@ class ProjectForm(FlaskForm):
 
     def form2dict(self):
         return {
-            'name': self.name.data if self.name.data else '',
+            'name': self.name.data.replace('"', '').replace("'", ''),
             'user_id': current_user.id,
 
             'status': self.status.data if self.status.data else 1,
