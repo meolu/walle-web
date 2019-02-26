@@ -40,7 +40,7 @@ class TaskForm(FlaskForm):
         task_status = TaskModel.status_new if project_info[
                                                   'task_audit'] == ProjectModel.task_audit_true else TaskModel.status_pass
         return {
-            'name': self.name.data.replace('"', ''),
+            'name': self.name.data.replace('"', '').replace("'", ''),
             'user_id': current_user.id,
             'user_name': current_user.username,
             'project_id': self.project_id.data,
