@@ -1,5 +1,7 @@
 FROM python:2.7
 
+MAINTAINER from Alenx<alenx.hai@live.com>
+
 RUN mkdir /opt/walle-web && mkdir -p /data/walle
 
 ADD ./requirements/prod.txt /usr/app/
