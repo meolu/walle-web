@@ -81,7 +81,8 @@ class Deployer:
 
             self.custom_global_env = {
                 'WEBROOT': str(self.project_info['target_root']),
-                'CURRENT_RELEASE': str(self.release_version),
+                'VERSION': str(self.release_version),
+                'CURRENT_RELEASE': str(self.project_info['target_releases']),
                 'BRANCH': str(self.taskMdl.get('branch')),
                 'TAG': str(self.taskMdl.get('tag')),
                 'COMMIT_ID': str(self.taskMdl.get('commit_id')),
