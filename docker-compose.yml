@@ -28,7 +28,7 @@ services:
       - /tmp/walle/codebase/:/tmp/walle/codebase/
       - /tmp/walle/logs/:/opt/walle-web/logs/
       - /root/.ssh:/root/.ssh/
-    command: bash -c "cd /opt/walle-web/ && /bin/bash admin.sh migration &&  python waller.py"
+    command: bash -c "cd /opt/walle_home/ && /bin/bash admin.sh migration &&  python waller.py"
     expose:
       - "5000"
     depends_on:
