@@ -84,6 +84,7 @@ class Repo:
         '''
         PyRepo(self.path).git.checkout(branch)
         # PyRepo(self.path).head.set_reference(branch)
+        # 方法有问题，只是做了reset，没有checkout
         PyRepo(self.path).head.set_commit(commit)
 
     def checkout_2_tag(self, tag):
