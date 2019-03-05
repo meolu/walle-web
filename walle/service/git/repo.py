@@ -76,8 +76,18 @@ class Repo:
         PyRepo(self.path).git.checkout(branch)
 
     def checkout_2_commit(self, branch, commit):
-        PyRepo(self.path).head.set_reference(branch)
+        '''
+        @todo 未完成
+        @param branch:
+        @param commit:
+        @return:
+        '''
+        PyRepo(self.path).git.checkout(branch)
+        # PyRepo(self.path).head.set_reference(branch)
         PyRepo(self.path).head.set_commit(commit)
+
+    def checkout_2_tag(self, tag):
+        PyRepo(self.path).git.checkout(tag)
 
     def branches(self):
         '''
