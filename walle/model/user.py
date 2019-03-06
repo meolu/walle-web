@@ -27,7 +27,7 @@ class UserModel(UserMixin, SurrogatePK, Model):
     status_active = 1
     status_blocked = 2
 
-    current_time = datetime.now()
+    current_time = datetime.now
     password_hash = 'sadfsfkk'
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)

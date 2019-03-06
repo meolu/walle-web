@@ -24,7 +24,7 @@ class MenuModel(SurrogatePK, Model):
 
     status_open = 1
     status_close = 2
-    current_time = datetime.now()
+    current_time = datetime.now
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
