@@ -26,6 +26,8 @@ class ProjectModel(SurrogatePK, Model):
 
     task_audit_true = 1
     task_audit_false = 0
+    repo_mode_branch = 'branch'
+    repo_mode_tag = 'tag'
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)

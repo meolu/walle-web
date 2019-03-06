@@ -180,13 +180,12 @@ class Deployer:
 
             result = self.localhost.local(command, wenv=self.config())
 
-        # 更新到指定 commit_id
-        with self.localhost.cd(self.local_codebase + self.release_version):
-            command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
-            result = self.localhost.local(command, wenv=self.config())
-
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_fail, message=result.stdout)
+        # 更新到指定 branch/commit_id 或 tag
+        repo = Repo(self.local_codebase + self.release_version)
+        if self.project_info['repo_mode'] == ProjectModel.repo_mode_branch:
+            repo.checkout_2_commit(branch=self.taskMdl['branch'], commit=self.taskMdl['commit_id'])
+        else:
+            repo.checkout_2_tag(tag=self.taskMdl['tag'])
 
     def post_deploy(self):
 
@@ -413,29 +412,10 @@ class Deployer:
         repo.init(url=self.project_info['repo_url'])
         return repo.commits(branch)
 
-    # 待废弃，迁移到gitpython
     def init_repo(self):
-        if not os.path.exists(self.dir_codebase_project):
-            # 检查 目录是否存在
-            command = 'mkdir -p %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
-
-        with self.localhost.cd(self.dir_codebase_project):
-            is_git_dir = self.localhost.local('[ -d ".git" ] && git status', exception=False, wenv=self.config())
-
-        if is_git_dir.exited != Code.Ok:
-            # 否则当作新项目检出完整代码
-            # 检查 目录是否存在
-            command = 'rm -rf %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
-
-            # 切换到gitpython模式
-            command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
-            current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
-
-            result = self.localhost.local(command, wenv=self.config())
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_init_fail, message=result.stdout)
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
+        # @todo 没有做emit
 
     def cleanup_local(self):
         # clean local package
