@@ -54,14 +54,21 @@ class MemberModel(SurrogatePK, Model):
         }
         query = self.query.filter(*filters).with_labels()\
             .with_entities(MemberModel.source_id, MemberModel.access_level, SpaceModel.name)
-        if user_id:
+        if user_id and current_user.role != SUPER:
             query = query.filter_by(user_id=user_id)
 
         query = query.join(SpaceModel, SpaceModel.id == MemberModel.source_id)
 
         spaces = query.all()
         current_app.logger.info(spaces)
-        return {space[0]: {'id': space[0], 'role': space[1], 'name': space[2]} for space in spaces}
+        global_space = {0: {
+            'id': 0,
+            'role': 'ONWER',
+            'name': '全局空间'
+        }}
+        spaces = {space[0]: {'id': space[0], 'role': space[1], 'name': space[2]} for space in spaces}
+        global_space.update(spaces)
+        return global_space
 
     def projects(self, user_id=None, space_id=None):
         """
