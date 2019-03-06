@@ -18,7 +18,7 @@ from walle.service.rbac.role import *
 # 上线单
 class TaskModel(SurrogatePK, Model):
     __tablename__ = 'tasks'
-    current_time = datetime.now()
+    current_time = datetime.now
     # 状态：0新建提交，1审核通过，2审核拒绝，3上线中，4上线完成，5上线失败
     status_new = 0
     status_pass = 1
@@ -55,8 +55,8 @@ class TaskModel(SurrogatePK, Model):
     file_transmission_mode = db.Column(Integer)
     file_list = db.Column(Text)
     is_rollback = db.Column(Integer)
-    created_at = db.Column(DateTime, default=datetime.now())
-    updated_at = db.Column(DateTime, default=datetime.now(), onupdate=datetime.now())
+    created_at = db.Column(DateTime, default=datetime.now)
+    updated_at = db.Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     taskMdl = None
 

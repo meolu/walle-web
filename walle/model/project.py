@@ -20,7 +20,7 @@ from walle.service.rbac.role import *
 class ProjectModel(SurrogatePK, Model):
     # 表的名字:
     __tablename__ = 'projects'
-    current_time = datetime.now()
+    current_time = datetime.now
     status_close = 0
     status_open = 1
 

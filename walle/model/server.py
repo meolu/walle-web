@@ -18,7 +18,7 @@ from walle.service.rbac.role import *
 class ServerModel(SurrogatePK, Model):
     __tablename__ = 'servers'
 
-    current_time = datetime.now()
+    current_time = datetime.now
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
