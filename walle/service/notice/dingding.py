@@ -45,7 +45,7 @@ class Dingding(Notice):
         @return:
         '''
         headers = {'Content-Type': 'application/json;charset=UTF-8'}
-        for hook in project_info['notice_hook'].split(','):
+        for hook in project_info['notice_hook'].split(';'):
             response = requests.post(hook, data=json.dumps(data).encode('utf-8'), headers=headers)
             # @todo增加可能错误到console中显示
 
