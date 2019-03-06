@@ -453,7 +453,8 @@ class Deployer:
                 'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
                 'branch': self.taskMdl.get('branch'),
                 'commit': self.taskMdl.get('commit_id'),
-                'is_branch': self.project_info['repo_mode'],
+                'tag': self.taskMdl.get('tag'),
+                'repo_mode': self.project_info['repo_mode'],
             }
             notice = Notice.create(self.project_info['notice_type'])
             if success:
