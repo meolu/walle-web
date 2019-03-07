@@ -166,13 +166,13 @@ class Repo:
 
     def tags(self):
         '''
-        获取所有tag
+        获取所有tag，按时间倒序
 
         @param branch:
         @param kwargs:
         @return:
         '''
-        return [str(tag) for tag in PyRepo(self.path).tags]
+        return [str(tag) for tag in PyRepo(self.path).tags][-10:]
 
     def commits(self, branch):
         '''
