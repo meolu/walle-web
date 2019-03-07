@@ -8,11 +8,18 @@
 """
 from . import Notice
 from walle.service import emails
+from walle.model.project import ProjectModel
 
 
 class Email(Notice):
 
     def deploy_task(self, project_info, notice_info):
+
+        if notice_info['repo_mode'] == ProjectModel.repo_mode_tag:
+            version = notice_info['tag']
+        else:
+            version = '%s/%s' % (notice_info['branch'], notice_info['commit'])
+
         '''
         上线单新建, 上线完成, 上线失败
 
@@ -31,8 +38,7 @@ class Email(Notice):
                 <br><br> <strong>项目</strong>：%s
                 <br><br> <strong>任务</strong>：%s
                 <br><br> <strong>分支</strong>：%s
-                <br><br> <strong>版本</strong>：%s
                 <br><br><br><img src='http://walle-web.io/dingding.jpg'> """ % (
                 notice_info['username'], notice_info['title'], notice_info['project_name'], notice_info['task_name'],
-                notice_info['branch'], notice_info['commit'])
+                version)
         emails.send_email(project_info['notice_hook'], notice_info['title'], message, '')

@@ -21,7 +21,7 @@ from walle.service.rbac.role import *
 class MemberModel(SurrogatePK, Model):
     __tablename__ = 'members'
 
-    current_time = datetime.now()
+    current_time = datetime.now
     group_id = None
     project_id = None
 
