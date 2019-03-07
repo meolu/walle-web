@@ -102,8 +102,7 @@ class Repo:
         @param kwargs:
         @return:
         '''
-        tags = PyRepo(self.path).git.tag(sort="taggerdate").split('\n')
-        return tags[::-1]
+        return [str(tag) for tag in PyRepo(self.path).tags][-10:]
 
     def commits(self, branch):
         '''
