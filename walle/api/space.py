@@ -134,7 +134,7 @@ class SpaceAPI(SecurityResource):
             if 'members' in request.form:
                 members = json.loads(request.form['members'])
                 members.append(member)
-            MemberModel(group_id=space_id).update_group(members=members)
+                MemberModel(group_id=space_id).update_group(members=members)
             return self.render_json(data=space.item())
         else:
             return self.render_error(code=Code.form_error, message=form.errors)
