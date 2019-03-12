@@ -16,8 +16,8 @@ from walle.config.settings import Config
 class ProdConfig(Config):
     """Production configuration."""
     ENV = 'prod'
-    DEBUG = False
-    SQLALCHEMY_ECHO = False
+    DEBUG = True
+    SQLALCHEMY_ECHO = True
 
     # 服务启动 @TODO
     # HOST 修改为与 nginx server_name 一致.
@@ -28,7 +28,7 @@ class ProdConfig(Config):
     SSL = False
 
     # 数据库设置 @TODO
-    SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:1234523456@localhost:3306/walle?charset=utf8'
 
     # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'

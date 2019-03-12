@@ -8,7 +8,8 @@
     :author: wushuiyong@walle-web.io
 """
 
-from flask import request, current_app, abort
+from flask import request, abort
+
 from walle.api.api import SecurityResource
 from walle.form.task import TaskForm
 from walle.model.task import TaskModel
@@ -19,13 +20,22 @@ from walle.service.rbac.role import *
 class TaskAPI(SecurityResource):
     actions = ['audit', 'reject', 'rollback']
 
-    def get(self, task_id=None):
+    def get(self, task_id=None, general_action=None):
         """
         fetch project list or one item
         /project/<int:project_id>
         :return:
         """
         super(TaskAPI, self).get()
+
+        if general_action == 'status':
+            statuses = TaskModel.status_memo
+            return self.render_json(
+                data={
+                    'list': [{'status': k, 'status_memo': statuses[k]} for k in
+                             statuses],
+                    'count': len(statuses)
+                })
 
         return self.item(task_id) if task_id else self.list()
 
@@ -39,8 +49,18 @@ class TaskAPI(SecurityResource):
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
 
-        task_list, count = TaskModel().list(page=page, size=size, kw=kw, space_id=self.space_id)
-        return self.list_json(list=task_list, count=count, enable_create=permission.role_upper_reporter() and current_user.role != SUPER)
+        # 可选搜索字段
+        project = request.args.get("project", None, type=str)
+        environment = request.args.get("environment", None, type=str)
+        status = request.args.get("status", None, type=int)
+
+        task_list, count = TaskModel().list(page=page, size=size, kw=kw,
+                                            space_id=self.space_id,
+                                            project=project,
+                                            environment=environment,
+                                            status=status)
+        return self.list_json(list=task_list, count=count,
+                              enable_create=permission.role_upper_reporter() and current_user.role != SUPER)
 
     def item(self, task_id):
         """
