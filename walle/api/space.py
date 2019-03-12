@@ -130,6 +130,7 @@ class SpaceAPI(SecurityResource):
             ret = space.update(data)
             # create group
             member = {"user_id": data['user_id'], "role": OWNER}
+            members = []
             if 'members' in request.form:
                 members = json.loads(request.form['members'])
                 members.append(member)
