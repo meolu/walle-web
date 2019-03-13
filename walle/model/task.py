@@ -109,7 +109,8 @@ class TaskModel(SurrogatePK, Model):
         # 依赖环境(environment)进行筛选
         if kwargs.get("environment", None) is not None:
             query = query.filter(
-                EnvironmentModel.name.like('%%%s%%' % kwargs.get("environment")))
+                EnvironmentModel.name.like(
+                    '%%%s%%' % kwargs.get("environment")))
 
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
@@ -122,7 +123,6 @@ class TaskModel(SurrogatePK, Model):
                                   ProjectModel.keep_version_num)
 
         count = query.count()
-        print(query)
 
         data = query.order_by(TaskModel.id.desc()) \
             .offset(int(size) * int(page)).limit(size) \
