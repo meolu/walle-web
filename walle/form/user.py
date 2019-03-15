@@ -48,7 +48,11 @@ class UserForm(FlaskForm):
 
 
 class RegistrationForm(UserForm):
-    pass
+
+    def validate_username(self, field):
+        """ username muse be unique """
+        if UserModel.query.filter_by(username=field.data).count():
+            raise ValidationError('此用户名已经被注册')
 
 
 class UserUpdateForm(FlaskForm):
