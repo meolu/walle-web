@@ -10,15 +10,63 @@
 import os
 import re
 import os.path as osp
+import getpass
 import git as PyGit
 from git import Repo as PyRepo
+from walle.model.record import RecordModel
 
 
 class Repo:
+
+    '''
+    @todo
+    需要把websocket接入
+    '''
     path = None
 
     def __init__(self, path=None):
         self.path = path
+
+
+    def log(self, wenv):
+        '''
+
+        @param wenv:
+
+            @param stage:
+            @param sequence:
+            @param user_id:
+            @param task_id:
+            @param status:
+            @param host:
+            @param user:
+            @param command:
+            @param success:
+            @param error:
+
+        @return:
+        '''
+        RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
+                                  task_id=wenv['task_id'], status=exitcode, host='127.0.0.1', user=getpass.getuser(),
+                                  command=result.command, success=stdout,
+                                  error=stderr)
+
+    def websocket(self):
+        ws_dict = {
+            'user': getpass.getuser(),
+            'host': '127.0.0.1',
+            'cmd': command,
+            'status': exitcode,
+            'stage': wenv['stage'],
+            'sequence': wenv['sequence'],
+            'success': stdout,
+            'error': stderr,
+        }
+        if wenv['console']:
+            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+
+        pass
+
 
     def is_git_dir(self):
         '''
@@ -73,11 +121,33 @@ class Repo:
         return repo.remote().pull()
 
     def checkout_2_branch(self, branch):
+        '''
+        切换到某个分支
+
+        @param branch:
+        @return:
+        '''
         PyRepo(self.path).git.checkout(branch)
 
     def checkout_2_commit(self, branch, commit):
-        PyRepo(self.path).head.set_reference(branch)
-        PyRepo(self.path).head.set_commit(commit)
+        '''
+        切换分支的某个commit
+
+        @param branch:
+        @param commit:
+        @return:
+        '''
+        self.checkout_2_branch(branch=branch)
+        PyRepo(self.path).git.reset('--hard', commit)
+
+    def checkout_2_tag(self, tag):
+        '''
+        切换到tag
+
+        @param tag:
+        @return:
+        '''
+        PyRepo(self.path).git.checkout(tag)
 
     def branches(self):
         '''

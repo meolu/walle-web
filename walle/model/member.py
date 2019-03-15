@@ -21,7 +21,7 @@ from walle.service.rbac.role import *
 class MemberModel(SurrogatePK, Model):
     __tablename__ = 'members'
 
-    current_time = datetime.now()
+    current_time = datetime.now
     group_id = None
     project_id = None
 
@@ -114,11 +114,19 @@ class MemberModel(SurrogatePK, Model):
         }
         MemberModel.query.filter(*filters).delete()
 
+        member_role = []
+
         current_app.logger.info(members)
         # insert all
         for member in members:
             current_app.logger.info(member)
             current_app.logger.info(member['role'])
+
+            # 过滤重复数据 同一空间下同一用户不能有同样的角色
+            if (int(member['user_id']), str(member['role']).upper()) in member_role:
+                continue
+            member_role.append((member['user_id'], member['role'].upper()))
+
             update = {
                 'user_id': member['user_id'],
                 'source_id': self.group_id,
@@ -172,7 +180,7 @@ class MemberModel(SurrogatePK, Model):
 
         return ret
 
-    def members(self, group_id=None, project_id=None, page=0, size=10, kw=None):
+    def members(self, group_id=None, project_id=None, page=0, size=None, kw=None):
         """
         获取单条记录
         :param role_id:
@@ -194,7 +202,7 @@ class MemberModel(SurrogatePK, Model):
 
         count = query.count()
         query = query.order_by(MemberModel.id.asc())
-        if size > 0:
+        if size:
             query = query.offset(int(size) * int(page)).limit(size)
         data = query.all()
 

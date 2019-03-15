@@ -86,9 +86,9 @@ class Deployer:
                 'BRANCH': str(self.taskMdl.get('branch')),
                 'TAG': str(self.taskMdl.get('tag')),
                 'COMMIT_ID': str(self.taskMdl.get('commit_id')),
-                'PROJECT_NAME': str(self.project_info['name']),
+                'PROJECT_NAME': str(self.project_info['name']).replace('"', '').replace("'", '').replace(" ", '_'),
                 'PROJECT_ID': str(self.project_info['id']),
-                'TASK_NAME': str(self.taskMdl.get('name')),
+                'TASK_NAME': str(self.taskMdl.get('name')).replace('"', '').replace("'", '').replace(" ", '_'),
                 'TASK_ID': str(self.task_id),
                 'DEPLOY_USER': str(self.taskMdl.get('user_name')),
                 'DEPLOY_TIME': str(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
@@ -180,13 +180,12 @@ class Deployer:
 
             result = self.localhost.local(command, wenv=self.config())
 
-        # 更新到指定 commit_id
-        with self.localhost.cd(self.local_codebase + self.release_version):
-            command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
-            result = self.localhost.local(command, wenv=self.config())
-
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_fail, message=result.stdout)
+        # 更新到指定 branch/commit_id 或 tag
+        repo = Repo(self.local_codebase + self.release_version)
+        if self.project_info['repo_mode'] == ProjectModel.repo_mode_branch:
+            repo.checkout_2_commit(branch=self.taskMdl['branch'], commit=self.taskMdl['commit_id'])
+        else:
+            repo.checkout_2_tag(tag=self.taskMdl['tag'])
 
     def post_deploy(self):
 
@@ -278,9 +277,9 @@ class Deployer:
             self.previous_release_version = os.path.basename(result.stdout).strip()
 
             # 1. create a tmp link dir
-            current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
-            command = 'ln -sfn %s/%s %s' % (
-                self.project_info['target_releases'], self.release_version, current_link_tmp_dir)
+            current_link_tmp_dir = 'current-tmp-%s' % (self.task_id)
+            command = 'ln -sfn %s %s' % (
+                self.release_version, current_link_tmp_dir)
             result = waller.run(command, wenv=self.config())
 
             # 2. make a soft link from release to tmp link
@@ -413,29 +412,10 @@ class Deployer:
         repo.init(url=self.project_info['repo_url'])
         return repo.commits(branch)
 
-    # 待废弃，迁移到gitpython
     def init_repo(self):
-        if not os.path.exists(self.dir_codebase_project):
-            # 检查 目录是否存在
-            command = 'mkdir -p %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
-
-        with self.localhost.cd(self.dir_codebase_project):
-            is_git_dir = self.localhost.local('[ -d ".git" ] && git status', exception=False, wenv=self.config())
-
-        if is_git_dir.exited != Code.Ok:
-            # 否则当作新项目检出完整代码
-            # 检查 目录是否存在
-            command = 'rm -rf %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
-
-            # 切换到gitpython模式
-            command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
-            current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
-
-            result = self.localhost.local(command, wenv=self.config())
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_init_fail, message=result.stdout)
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
+        # @todo 没有做emit
 
     def cleanup_local(self):
         # clean local package
@@ -473,7 +453,8 @@ class Deployer:
                 'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
                 'branch': self.taskMdl.get('branch'),
                 'commit': self.taskMdl.get('commit_id'),
-                'is_branch': self.project_info['repo_mode'],
+                'tag': self.taskMdl.get('tag'),
+                'repo_mode': self.project_info['repo_mode'],
             }
             notice = Notice.create(self.project_info['notice_type'])
             if success:

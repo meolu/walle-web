@@ -106,7 +106,6 @@ class EnvironmentAPI(SecurityResource):
             env = EnvironmentModel(id=env_id)
 
             data = form.form2dict()
-            env_new = env.add(data)
 
             ret = env.update(env_name=form.env_name.data, status=form.status.data)
             return self.render_json(data=env.item())

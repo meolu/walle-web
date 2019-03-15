@@ -155,7 +155,7 @@ class TaskAPI(SecurityResource):
             raise WalleError(code=Code.rollback_error)
 
         task['id'] = None
-        task['name'] = task['name'] + ' - 回滚此次上线'
+        task['name'] = task['name'] + '-回滚此次上线'
         task['link_id'] = task['ex_link_id']
         task['ex_link_id'] = ''
         task['is_rollback'] = 1

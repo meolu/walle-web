@@ -20,12 +20,14 @@ from walle.service.rbac.role import *
 class ProjectModel(SurrogatePK, Model):
     # 表的名字:
     __tablename__ = 'projects'
-    current_time = datetime.now()
+    current_time = datetime.now
     status_close = 0
     status_open = 1
 
     task_audit_true = 1
     task_audit_false = 0
+    repo_mode_branch = 'branch'
+    repo_mode_tag = 'tag'
 
     # 表的结构:
     id = db.Column(Integer, primary_key=True, autoincrement=True)
