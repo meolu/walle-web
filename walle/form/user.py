@@ -6,6 +6,7 @@
     :created time: 2017-03-19 15:50:07
     :author: wushuiyong@walle-web.io
 """
+
 try:
     from flask_wtf import FlaskForm  # Try Flask-WTF v0.13+
 except ImportError:
@@ -51,7 +52,7 @@ class RegistrationForm(UserForm):
 
     def validate_username(self, field):
         """ username muse be unique """
-        if UserModel.query.filter_by(username=field.data).count():
+        if UserModel.query.filter(UserModel.username == field.data, UserModel.username != -1).count():
             raise ValidationError('此用户名已经被注册')
 
 
