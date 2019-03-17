@@ -278,8 +278,9 @@ class Deployer:
 
             # 1. create a tmp link dir
             current_link_tmp_dir = 'current-tmp-%s' % (self.task_id)
-            command = 'ln -sfn %s %s' % (
-                self.release_version, current_link_tmp_dir)
+            command = 'ln -sfn {library}/{version} {library}/{current_tmp}'.format(
+                library=self.project_info['target_releases'], version=self.release_version,
+                current_tmp=current_link_tmp_dir)
             result = waller.run(command, wenv=self.config())
 
             # 2. make a soft link from release to tmp link
