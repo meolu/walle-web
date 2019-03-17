@@ -47,7 +47,9 @@ class GitlabAPI(SecurityResource):
 
         :return:
         """
+        from flask import request
         current_app.logger.info('action ====> %s' % (action))
+        current_app.logger.info(request.form)
         return self.render_json(data={'dd':'DDDD'})
 
     def menu(self):
