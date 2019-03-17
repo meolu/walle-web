@@ -11,7 +11,7 @@ from datetime import datetime
 from sqlalchemy import String, Integer, DateTime, Text
 
 from walle import model
-from walle.model.database import db, Model, SurrogatePK
+from walle.model.database import db, Model, SurrogatePK, or_
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 
@@ -65,17 +65,7 @@ class TaskModel(SurrogatePK, Model):
     def table_name(self):
         return self.__tablename__
 
-    #
-    # def list(self, page=0, size=10, kw=''):
-    #     data = Task.query.order_by('id').offset(int(size) * int(page)).limit(size).all()
-    #     return [p.to_json() for p in data]
-    #
-    # def one(self):
-    #     project_info = Project.query.filter_by(id=self.taskMdl.get('project_id')).one().to_json()
-    #     return dict(project_info, **self.taskMdl)
-    #
-
-    def list(self, page=0, size=10, space_id=None, kw=None, **kwargs):
+    def list(self, page=0, size=10, space_id=None, kw=None):
         """
         获取分页列表
         :param page:
@@ -86,12 +76,6 @@ class TaskModel(SurrogatePK, Model):
         self.rollback_count.clear()
         query = TaskModel.query.filter(
             TaskModel.status.notin_([self.status_remove]))
-        if kw:
-            query = query.filter(TaskModel.name.like('%' + kw + '%'))
-
-        # 依赖状态(status)进行筛选
-        if kwargs.get("status", None) is not None:
-            query = query.filter(TaskModel.status == kwargs.get("status"))
 
         # 关联 projects
         ProjectModel = model.project.ProjectModel
@@ -106,21 +90,17 @@ class TaskModel(SurrogatePK, Model):
         query = query.filter(
             EnvironmentModel.status.notin_([self.status_remove]))
 
-        # 依赖环境(environment)进行筛选
-        if kwargs.get("environment", None) is not None:
-            query = query.filter(
-                EnvironmentModel.name.like(
-                    '%%%s%%' % kwargs.get("environment")))
-
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
-            # 依赖项目(project)进行筛选
-            if kwargs.get("project", None) is not None:
-                query = query.filter(
-                    ProjectModel.name.like('%%%s%%' % kwargs.get("project")))
 
         query = query.add_columns(ProjectModel.name, EnvironmentModel.name,
                                   ProjectModel.keep_version_num)
+        if kw:
+            query = query.filter(or_(
+                TaskModel.name.like('%%%s%%' % kw),
+                ProjectModel.name.like('%%%s%%' % kw),
+                EnvironmentModel.name.like('%%%s%%' % kw),
+            ))
 
         count = query.count()
 
