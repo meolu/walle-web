@@ -37,18 +37,6 @@ class TestApiTask(TestApiBase):
         'file_list': u'*.log'
     }
 
-    task_data_environment = {
-        'environment_name': '测试环境',
-    }
-
-    task_data_status = {
-        'status': 1,
-    }
-
-    task_data_project = {
-        'project_name': 'walden-瓦尔登',
-    }
-
     task_data_2_update = {
         'name': u'The Second Bill Edit',
         'project_id': 1,
@@ -128,66 +116,6 @@ class TestApiTask(TestApiBase):
         resp_dict = resp_json(resp)
 
         compare_in(self.task_data_2, resp_dict['data']['list'].pop())
-        compare_req_resp(response, resp)
-
-    def test_get_list_search_project(self, user, testapp, client):
-        """test list should return tasks base on the environment"""
-        query = {
-            'page': 1,
-            'size': 1,
-            'project': 'wal',
-        }
-        response = {
-            'count': 2,
-        }
-        resp = client.get('%s/?%s' % (self.uri_prefix, urlencode(query)))
-        response_success(resp)
-        resp_dict = resp_json(resp)
-
-        compare_in(self.task_data_project, resp_dict['data']['list'].pop())
-        compare_req_resp(response, resp)
-
-    def test_get_list_search_environment(self, user, testapp, client):
-        """test list should return tasks base on the environment"""
-        query = {
-            'page': 1,
-            'size': 10,
-            'environment': '测试',
-        }
-        response = {
-            'count': 2,
-        }
-        resp = client.get('%s/?%s' % (self.uri_prefix, urlencode(query)))
-        response_success(resp)
-        resp_dict = resp_json(resp)
-
-        compare_in(self.task_data_environment, resp_dict['data']['list'].pop())
-        compare_req_resp(response, resp)
-
-    def test_get_list_search_status(self, user, testapp, client):
-        """test list should return tasks base on the environment"""
-        query = {
-            'page': 1,
-            'size': 2,
-            'status': 1,
-        }
-        response = {
-            'count': 2,
-        }
-        resp = client.get('%s/?%s' % (self.uri_prefix, urlencode(query)))
-        response_success(resp)
-        resp_dict = resp_json(resp)
-
-        compare_in(self.task_data_status, resp_dict['data']['list'].pop())
-        compare_req_resp(response, resp)
-
-    def test_get_list_task_statuses(self, user, client):
-        resp = client.get('%s/status' % self.uri_prefix)
-        response_success(resp)
-        resp_dict = resp_json(resp)
-        response = {
-            'count': 6,
-        }
         compare_req_resp(response, resp)
 
     def test_get_update(self, user, testapp, client):
