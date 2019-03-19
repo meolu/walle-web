@@ -99,7 +99,12 @@ class UserAPI(SecurityResource):
                     <br> <br>Welcome to walle, it cost a lot of time and lock to meet you, enjoy it : )
                     <br><br>name: %s<br>password: %s""" \
                               % (user.username, user.email, form.password.data)
-            emails.send_email(user.email, 'Welcome to walle', message, '')
+
+            try:
+                emails.send_email(user.email, 'Welcome to walle', message, '')
+            except Exception as e:
+                # todo, responses error message to the front.
+                current_app.logger.warning(e)
 
             return self.render_json(data=user.item(user_id=user.id))
         return self.render_error(code=Code.form_error, message=form.errors)
