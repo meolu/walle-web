@@ -10,6 +10,17 @@
 #########################################################################
 #!/bin/bash
 
+# ubuntu 高版本 sh 指向的是 dash 而非 bash。 dash 无法使用 function 关键字以及 source 等命令。
+# 如果检测到 sh 指向的是 dash， 那么将使用 bash 重新执行脚本，然后在参数末尾加上一个 flag， 表示此次运行是修正过的， 避免陷入死循环。
+fix_ubuntu_bash="fix-sh-in-ubuntu"
+
+if [ ! -n "`echo $@ | grep $fix_ubuntu_bash$`" ]; then
+    if [ -n "`ls -l /bin/sh | grep "dash"`" ]; then
+        bash $0 $@ $fix_ubuntu_bash
+        exit
+    fi
+fi
+
 APP="waller.py"
 
 function init() {
