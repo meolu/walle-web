@@ -429,7 +429,7 @@ class Deployer:
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
 
-        command = 'ls -t {project_id}_* | head -{keep_version_num} | xargs rm -rf'.format(
+        command = 'ls -t {project_id}_* | tail -n +{keep_version_num} | xargs rm -rf'.format(
             project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
