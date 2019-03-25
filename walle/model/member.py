@@ -202,7 +202,7 @@ class MemberModel(SurrogatePK, Model):
 
         count = query.count()
         query = query.order_by(MemberModel.id.asc())
-        if size:
+        if size and size>0:
             query = query.offset(int(size) * int(page)).limit(size)
         data = query.all()
 
