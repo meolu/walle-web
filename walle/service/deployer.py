@@ -83,18 +83,18 @@ class Deployer:
             format_export = lambda val: '"%s"' % str(val).replace('"', '').replace("'", '')
 
             self.custom_global_env = {
-                'WEBROOT': format_export(self.project_info['target_root']),
-                'VERSION': format_export(self.release_version),
-                'CURRENT_RELEASE': format_export(self.project_info['target_releases']),
+                'WEBROOT': str(self.project_info['target_root']),
+                'VERSION': str(self.release_version),
+                'CURRENT_RELEASE': str(self.project_info['target_releases']),
                 'BRANCH': format_export(self.taskMdl.get('branch')),
-                'TAG': format_export(self.taskMdl.get('tag')),
-                'COMMIT_ID': format_export(self.taskMdl.get('commit_id')),
+                'TAG': str(self.taskMdl.get('tag')),
+                'COMMIT_ID': str(self.taskMdl.get('commit_id')),
                 'PROJECT_NAME': format_export(self.project_info['name']),
-                'PROJECT_ID': format_export(self.project_info['id']),
+                'PROJECT_ID': str(self.project_info['id']),
                 'TASK_NAME': format_export(self.taskMdl.get('name')),
-                'TASK_ID': format_export(self.task_id),
-                'DEPLOY_USER': format_export(self.taskMdl.get('user_name')),
-                'DEPLOY_TIME': format_export(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
+                'TASK_ID': str(self.task_id),
+                'DEPLOY_USER': str(self.taskMdl.get('user_name')),
+                'DEPLOY_TIME': str(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
             }
 
             if self.project_info['task_vars']:
