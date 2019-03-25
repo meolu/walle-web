@@ -68,4 +68,4 @@ class UserUpdateForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('email', [validators.Length(min=6, max=35),
                                   Regexp(r'^(.+)@(.+)\.(.+)', message='邮箱格式不正确')])
-    password = PasswordField('Password', [validators.Length(min=6, max=35)])
+    password = PasswordField('Password', [validators.Length(min=6)])
