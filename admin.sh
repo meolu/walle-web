@@ -66,7 +66,7 @@ function SystemName() {
         raspbian)
             echo "安装/更新可能缺少的依赖"
             sudo apt update -y
-            sudo apt install -y gcc g++ python-dev virtualenv python-pip libpq-dev libffi-dev libssl-dev
+            sudo apt install -y gcc g++ python-dev virtualenv python-pip libpq-dev libffi-dev libssl-dev libmariadbd18 libmariadbd-dev
             ;;
 
         *)
