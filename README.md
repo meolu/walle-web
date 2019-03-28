@@ -2,7 +2,10 @@
 
 Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
-[![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)  [![Join the chat at https://gitter.im/meolu/walle-web](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/meolu/walle-web``?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<p align="left">
+    <a href='https://travis-ci.org/meolu/walle-web'><img src='https://travis-ci.org/meolu/walle-web.svg?branch=master' alt="Build Status"></a>  
+    <a href='https://gitter.im/meolu/walle-web'><img src='https://badges.gitter.im/Join%20Chat.svg'></a>
+</p>
 
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0.0`了！！！
 
