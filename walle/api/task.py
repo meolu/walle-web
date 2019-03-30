@@ -8,7 +8,8 @@
     :author: wushuiyong@walle-web.io
 """
 
-from flask import request, current_app, abort
+from flask import request, abort
+
 from walle.api.api import SecurityResource
 from walle.form.task import TaskForm
 from walle.model.task import TaskModel
@@ -40,6 +41,7 @@ class TaskAPI(SecurityResource):
         kw = request.values.get('kw', '')
 
         task_list, count = TaskModel().list(page=page, size=size, kw=kw, space_id=self.space_id)
+
         return self.list_json(list=task_list, count=count, enable_create=permission.role_upper_reporter() and current_user.role != SUPER)
 
     def item(self, task_id):

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Test Apis."""
-import urllib
 
 from walle.model.task import TaskModel
 from .factories import TestApiBase
@@ -107,7 +106,7 @@ class TestApiTask(TestApiBase):
         query = {
             'page': 1,
             'size': 1,
-            'kw': self.task_name_2
+            'kw': self.task_name_2,
         }
         response = {
             'count': 1,
@@ -122,7 +121,8 @@ class TestApiTask(TestApiBase):
     def test_get_update(self, user, testapp, client):
         """Login successful."""
         # 1.update
-        resp = client.put('%s/%d' % (self.uri_prefix, self.task_data_2['id']), data=self.task_data_2_update)
+        resp = client.put('%s/%d' % (self.uri_prefix, self.task_data_2['id']),
+                          data=self.task_data_2_update)
 
         response_success(resp)
         compare_req_resp(self.task_data_2_update, resp)
@@ -135,7 +135,8 @@ class TestApiTask(TestApiBase):
     def test_get_update_audit(self, user, testapp, client):
         """Login successful."""
         # 1.update
-        resp = client.put('%s/%d/audit' % (self.uri_prefix, self.task_data_2['id']))
+        resp = client.put(
+            '%s/%d/audit' % (self.uri_prefix, self.task_data_2['id']))
 
         response_success(resp)
         assert resp_json(resp)['data']['status'] == TaskModel.status_pass
@@ -143,7 +144,8 @@ class TestApiTask(TestApiBase):
     def test_get_update_reject(self, user, testapp, client):
         """Login successful."""
         # 1.update
-        resp = client.put('%s/%d/reject' % (self.uri_prefix, self.task_data_2['id']))
+        resp = client.put(
+            '%s/%d/reject' % (self.uri_prefix, self.task_data_2['id']))
 
         response_success(resp)
         assert resp_json(resp)['data']['status'] == TaskModel.status_reject
@@ -151,7 +153,8 @@ class TestApiTask(TestApiBase):
     def test_get_remove(self, user, testapp, client):
         """Login successful."""
         # 1.create another role
-        resp = client.post('%s/' % (self.uri_prefix), data=self.task_data_remove)
+        resp = client.post('%s/' % (self.uri_prefix),
+                           data=self.task_data_remove)
         server_id = resp_json(resp)['data']['id']
         response_success(resp)
 

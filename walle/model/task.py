@@ -9,8 +9,9 @@
 from datetime import datetime
 
 from sqlalchemy import String, Integer, DateTime, Text
+
 from walle import model
-from walle.model.database import db, Model, SurrogatePK
+from walle.model.database import db, Model, SurrogatePK, or_
 from walle.service.extensions import permission
 from walle.service.rbac.role import *
 
@@ -56,22 +57,13 @@ class TaskModel(SurrogatePK, Model):
     file_list = db.Column(Text)
     is_rollback = db.Column(Integer)
     created_at = db.Column(DateTime, default=datetime.now)
-    updated_at = db.Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    updated_at = db.Column(DateTime, default=datetime.now,
+                           onupdate=datetime.now)
 
     taskMdl = None
 
     def table_name(self):
         return self.__tablename__
-
-    #
-    # def list(self, page=0, size=10, kw=''):
-    #     data = Task.query.order_by('id').offset(int(size) * int(page)).limit(size).all()
-    #     return [p.to_json() for p in data]
-    #
-    # def one(self):
-    #     project_info = Project.query.filter_by(id=self.taskMdl.get('project_id')).one().to_json()
-    #     return dict(project_info, **self.taskMdl)
-    #
 
     def list(self, page=0, size=10, space_id=None, kw=None):
         """
@@ -82,24 +74,34 @@ class TaskModel(SurrogatePK, Model):
         :return:
         """
         self.rollback_count.clear()
-        query = TaskModel.query.filter(TaskModel.status.notin_([self.status_remove]))
-        if kw:
-            query = query.filter(TaskModel.name.like('%' + kw + '%'))
+        query = TaskModel.query.filter(
+            TaskModel.status.notin_([self.status_remove]))
 
         # 关联 projects
         ProjectModel = model.project.ProjectModel
-        query = query.join(ProjectModel, TaskModel.project_id == ProjectModel.id)
+        query = query.join(ProjectModel,
+                           TaskModel.project_id == ProjectModel.id)
         query = query.filter(ProjectModel.status.notin_([self.status_remove]))
 
         # 关联 environments
         EnvironmentModel = model.environment.EnvironmentModel
-        query = query.join(EnvironmentModel, EnvironmentModel.id == ProjectModel.environment_id)
-        query = query.filter(EnvironmentModel.status.notin_([self.status_remove]))
+        query = query.join(EnvironmentModel,
+                           EnvironmentModel.id == ProjectModel.environment_id)
+        query = query.filter(
+            EnvironmentModel.status.notin_([self.status_remove]))
 
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
 
-        query = query.add_columns(ProjectModel.name, EnvironmentModel.name, ProjectModel.keep_version_num)
+        query = query.add_columns(ProjectModel.name, EnvironmentModel.name,
+                                  ProjectModel.keep_version_num)
+        if kw:
+            query = query.filter(or_(
+                TaskModel.name.like('%%%s%%' % kw),
+                ProjectModel.name.like('%%%s%%' % kw),
+                EnvironmentModel.name.like('%%%s%%' % kw),
+            ))
+
         count = query.count()
 
         data = query.order_by(TaskModel.id.desc()) \
@@ -123,7 +125,9 @@ class TaskModel(SurrogatePK, Model):
         :return:
         """
         id = id if id else self.id
-        data = self.query.filter(TaskModel.status.notin_([self.status_remove])).filter_by(id=id).first()
+        data = self.query.filter(
+            TaskModel.status.notin_([self.status_remove])).filter_by(
+            id=id).first()
         if not data:
             return []
 
@@ -136,15 +140,15 @@ class TaskModel(SurrogatePK, Model):
 
     def add(self, *args, **kwargs):
         data = dict(*args)
-        project = TaskModel(**data)
+        task = TaskModel(**data)
 
-        db.session.add(project)
+        db.session.add(task)
         db.session.commit()
 
-        if project.id:
-            self.id = project.id
+        if task.id:
+            self.id = task.id
 
-        return project.to_json()
+        return task.to_json()
 
     def update(self, *args, **kwargs):
         update_data = dict(*args)
@@ -177,7 +181,8 @@ class TaskModel(SurrogatePK, Model):
             'link_id': self.link_id,
             'ex_link_id': self.ex_link_id,
             'servers': self.servers,
-            'servers_info': ServerModel.fetch_by_id(self.servers.split(',')) if self.servers else '',
+            'servers_info': ServerModel.fetch_by_id(
+                self.servers.split(',')) if self.servers else '',
             'commit_id': self.commit_id,
             'branch': self.branch,
             'tag': self.tag,
@@ -195,23 +200,40 @@ class TaskModel(SurrogatePK, Model):
 
         if self.project_id not in self.rollback_count:
             self.rollback_count[self.project_id] = 0
-        if self.status in [self.status_doing, self.status_fail, self.status_success]:
+        if self.status in [self.status_doing, self.status_fail,
+                           self.status_success]:
             self.rollback_count[self.project_id] += 1
 
         if self.rollback_count[self.project_id] <= self.keep_version_num \
-            and self.status in [self.status_doing, self.status_fail, self.status_success] \
+            and self.status in [self.status_doing, self.status_fail,
+                                self.status_success] \
             and self.ex_link_id:
             enable_rollback = True
         else:
             enable_rollback = False
 
         return {
-            'enable_view': True if self.status in [self.status_doing, self.status_fail, self.status_success] else False,
-            'enable_update': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_reject]),
-            'enable_delete': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new, self.status_pass, self.status_reject]),
+            'enable_view': True if self.status in [self.status_doing,
+                                                   self.status_fail,
+                                                   self.status_success] else False,
+            'enable_update': (permission.enable_uid(
+                self.user_id) or permission.role_upper_developer() or is_project_master) and (
+                                 self.status in [self.status_new,
+                                                 self.status_reject]),
+            'enable_delete': (permission.enable_uid(
+                self.user_id) or permission.role_upper_developer() or is_project_master) and (
+                                 self.status in [self.status_new,
+                                                 self.status_pass,
+                                                 self.status_reject]),
             'enable_create': False,
-            'enable_online': (permission.enable_uid(self.user_id) or permission.role_upper_developer() or is_project_master) and (self.status in [self.status_pass, self.status_fail, self.status_doing]),
-            'enable_audit': (permission.role_upper_developer() or is_project_master) and (self.status in [self.status_new]),
+            'enable_online': (permission.enable_uid(
+                self.user_id) or permission.role_upper_developer() or is_project_master) and (
+                                 self.status in [self.status_pass,
+                                                 self.status_fail,
+                                                 self.status_doing]),
+            'enable_audit': (
+                                permission.role_upper_developer() or is_project_master) and (
+                                self.status in [self.status_new]),
             'enable_rollback': enable_rollback
         }
 
