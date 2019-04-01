@@ -491,10 +491,10 @@ class Deployer:
                     waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
                     waller.init_env(env=self.custom_global_env)
 
-                    self.connections[host] = waller
-                    self.prev_release(self.connections[host])
-                    self.release(self.connections[host])
-                    self.post_release(self.connections[host])
+                    self.connections[self.task_id] = waller
+                    self.prev_release(self.connections[self.task_id])
+                    self.release(self.connections[self.task_id])
+                    self.post_release(self.connections[self.task_id])
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_success, host=host,
                                               user=server_info['user'], command='')
@@ -526,10 +526,10 @@ class Deployer:
                     waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
                     waller.init_env(env=self.custom_global_env)
 
-                    self.connections[host] = waller
-                    self.prev_release_custom(self.connections[host])
-                    self.release(self.connections[host])
-                    self.post_release(self.connections[host])
+                    self.connections[self.task_id] = waller
+                    self.prev_release_custom(self.connections[self.task_id])
+                    self.release(self.connections[self.task_id])
+                    self.post_release(self.connections[self.task_id])
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_success, host=host,
                                               user=server_info['user'], command='')
