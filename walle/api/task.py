@@ -39,7 +39,12 @@ class TaskAPI(SecurityResource):
         size = int(request.args.get('size', 10))
         kw = request.values.get('kw', '')
 
-        task_list, count = TaskModel().list(page=page, size=size, kw=kw, space_id=self.space_id)
+        user_id = request.values.get('user_id', '')
+        # TODO 将来更多的权限模式下，高级权限下可以选择多个用户user_id，用英文逗号分割
+        if int(user_id) != current_user.id and permission.role_upper_master():
+            user_id = None
+
+        task_list, count = TaskModel().list(page=page, size=size, kw=kw, space_id=self.space_id, user_id=user_id)
         return self.list_json(list=task_list, count=count, enable_create=permission.role_upper_reporter() and current_user.role != SUPER)
 
     def item(self, task_id):
