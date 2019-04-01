@@ -100,7 +100,7 @@ class TaskModel(SurrogatePK, Model):
             query = query.filter(ProjectModel.space_id == space_id)
 
         if user_id:
-            query = query.filter(TaskModel.user_id == user_id)
+            query = query.filter(TaskModel.user_id.in_(user_id))
 
         query = query.add_columns(ProjectModel.name, EnvironmentModel.name, ProjectModel.keep_version_num)
         count = query.count()
