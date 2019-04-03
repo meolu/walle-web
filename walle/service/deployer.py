@@ -22,6 +22,7 @@ from walle.service.utils import color_clean
 from walle.service.utils import excludes_format, includes_format
 from walle.service.notice import Notice
 from walle.service.waller import Waller
+from walle.service.git.repo import Repo
 from flask_login import current_user
 
 class Deployer:
@@ -78,19 +79,24 @@ class Deployer:
             )
             current_app.logger.info(self.taskMdl)
 
+            # 将环境变量包在 "" 里，防止特殊字符报错
+            format_export = lambda val: '"%s"' % str(val).replace('"', '').replace("'", '')
+
             self.custom_global_env = {
                 'WEBROOT': str(self.project_info['target_root']),
-                'CURRENT_RELEASE': str(self.release_version),
-                'BRANCH': str(self.taskMdl.get('branch')),
+                'VERSION': str(self.release_version),
+                'CURRENT_RELEASE': str(self.project_info['target_releases']),
+                'BRANCH': format_export(self.taskMdl.get('branch')),
                 'TAG': str(self.taskMdl.get('tag')),
                 'COMMIT_ID': str(self.taskMdl.get('commit_id')),
-                'PROJECT_NAME': '"{}"'.format(self.project_info['name']),
+                'PROJECT_NAME': format_export(self.project_info['name']),
                 'PROJECT_ID': str(self.project_info['id']),
-                'TASK_NAME': '"{}"'.format(self.taskMdl.get('name')),
+                'TASK_NAME': format_export(self.taskMdl.get('name')),
                 'TASK_ID': str(self.task_id),
                 'DEPLOY_USER': str(self.taskMdl.get('user_name')),
                 'DEPLOY_TIME': str(time.strftime('%Y%m%d-%H:%M:%S', time.localtime(time.time()))),
             }
+
             if self.project_info['task_vars']:
                 task_vars = [i.strip() for i in self.project_info['task_vars'].split('\n') if i.strip() and not i.strip().startswith('#')]
                 for var in task_vars:
@@ -178,13 +184,12 @@ class Deployer:
 
             result = self.localhost.local(command, wenv=self.config())
 
-        # 更新到指定 commit_id
-        with self.localhost.cd(self.local_codebase + self.release_version):
-            command = 'git reset -q --hard %s' % (self.taskMdl.get('commit_id'))
-            result = self.localhost.local(command, wenv=self.config())
-
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_fail, message=result.stdout)
+        # 更新到指定 branch/commit_id 或 tag
+        repo = Repo(self.local_codebase + self.release_version)
+        if self.project_info['repo_mode'] == ProjectModel.repo_mode_branch:
+            repo.checkout_2_commit(branch=self.taskMdl['branch'], commit=self.taskMdl['commit_id'])
+        else:
+            repo.checkout_2_tag(tag=self.taskMdl['tag'])
 
     def post_deploy(self):
 
@@ -276,9 +281,10 @@ class Deployer:
             self.previous_release_version = os.path.basename(result.stdout).strip()
 
             # 1. create a tmp link dir
-            current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
-            command = 'ln -sfn %s/%s %s' % (
-                self.project_info['target_releases'], self.release_version, current_link_tmp_dir)
+            current_link_tmp_dir = 'current-tmp-%s' % (self.task_id)
+            command = 'ln -sfn {library}/{version} {library}/{current_tmp}'.format(
+                library=self.project_info['target_releases'], version=self.release_version,
+                current_tmp=current_link_tmp_dir)
             result = waller.run(command, wenv=self.config())
 
             # 2. make a soft link from release to tmp link
@@ -395,105 +401,39 @@ class Deployer:
         return errors
 
     def list_tag(self):
-        self.init_repo()
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
 
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git tag -l'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-            tags = result.stdout.strip()
-            tags = tags.split('\n')
-            return [color_clean(tag.strip()) for tag in tags]
-
-        return []
+        return repo.tags()
 
     def list_branch(self):
-        self.init_repo()
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
 
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git pull'
-            result = self.localhost.local(command, wenv=self.config())
-
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_pull_fail, message=result.stdout)
-
-            current_app.logger.info(self.dir_codebase_project)
-
-            command = 'git branch -r'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-
-            # if result.exited != Code.Ok:
-            #     raise WalleError(Code.shell_run_fail)
-
-            # TODO 三种可能: false, error, success
-            branches = result.stdout.strip()
-            branches = branches.split('\n')
-            # 去除 origin/HEAD -> 当前指向
-            # 去除远端前缀
-            branches = [branch.strip().lstrip('origin/') for branch in branches if
-                        not branch.strip().startswith('origin/HEAD')]
-            return branches
-
-        return None
+        return repo.branches()
 
     def list_commit(self, branch):
-        self.init_repo()
-        with self.localhost.cd(self.dir_codebase_project):
-            command = 'git checkout %s && git pull' % (branch)
-            self.localhost.local(command, wenv=self.config())
-
-            command = 'git log -50 --pretty="%h #@_@# %an #@_@# %s"'
-            result = self.localhost.local(command, pty=False, wenv=self.config())
-            current_app.logger.info(result.stdout)
-
-            commit_log = result.stdout.strip()
-            current_app.logger.info(commit_log)
-            commit_list = commit_log.split('\n')
-            commits = []
-            for commit in commit_list:
-                if not re.search('^.+ #@_@# .+ #@_@# .*$', commit):
-                    continue
-
-                commit_dict = commit.split(' #@_@# ')
-                current_app.logger.info(commit_dict)
-                commits.append({
-                    'id': commit_dict[0],
-                    'name': commit_dict[1],
-                    'message': commit_dict[2],
-                })
-
-            return commits
-
-        # TODO
-        return None
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
+        return repo.commits(branch)
 
     def init_repo(self):
-        if not os.path.exists(self.dir_codebase_project):
-            # 检查 目录是否存在
-            command = 'mkdir -p %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
+        repo = Repo(self.dir_codebase_project)
+        repo.init(url=self.project_info['repo_url'])
+        # @todo 没有做emit
 
-        with self.localhost.cd(self.dir_codebase_project):
-            is_git_dir = self.localhost.local('[ -d ".git" ] && git status', exception=False, wenv=self.config())
-
-        if is_git_dir.exited != Code.Ok:
-            # 否则当作新项目检出完整代码
-            # 检查 目录是否存在
-            command = 'rm -rf %s' % (self.dir_codebase_project)
-            self.localhost.local(command, wenv=self.config())
-
-            command = 'git clone %s %s' % (self.project_info['repo_url'], self.dir_codebase_project)
-            current_app.logger.info('cd %s  command: %s  ' % (self.dir_codebase_project, command))
-
+    def cleanup_local(self):
+        # clean local package
+        command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        with self.localhost.cd(self.local_codebase):
             result = self.localhost.local(command, wenv=self.config())
-            if result.exited != Code.Ok:
-                raise WalleError(Code.shell_git_init_fail, message=result.stdout)
 
     def cleanup_remote(self, waller):
-        command = 'rm -rf {project_id}_*.tgz'.format(project_id=self.project_info['id'])
+        command = 'rm -rf {project_id}_{task_id}_*.tgz'.format(project_id=self.project_info['id'], task_id=self.task_id)
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
 
-        command = 'rm -rf `ls -t {project_id}_* | tail -n +{keep_version_num}`'.format(
+        command = 'find ./ -name "{project_id}_*" -print | ls -t | tail -n +{keep_version_num} | xargs rm -rf'.format(
             project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with waller.cd(self.project_info['target_releases']):
             result = waller.run(command, wenv=self.config())
@@ -518,7 +458,8 @@ class Deployer:
                 'task_name': '%s ([%s](%s))' % (self.taskMdl.get('name'), self.task_id, Notice.task_url(project_name=self.project_info['name'], task_id=self.task_id)),
                 'branch': self.taskMdl.get('branch'),
                 'commit': self.taskMdl.get('commit_id'),
-                'is_branch': self.project_info['repo_mode'],
+                'tag': self.taskMdl.get('tag'),
+                'repo_mode': self.project_info['repo_mode'],
             }
             notice = Notice.create(self.project_info['notice_type'])
             if success:
@@ -528,6 +469,8 @@ class Deployer:
                 notice_info['title'] = '上线部署失败'
                 notice.deploy_task(project_info=self.project_info, notice_info=notice_info)
 
+        # 清理本地
+        self.cleanup_local()
         if success:
             emit('success', {'event': 'finish', 'data': {'message': '部署完成，辛苦了，为你的努力喝彩！'}}, room=self.task_id)
         else:
@@ -548,10 +491,10 @@ class Deployer:
                     waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
                     waller.init_env(env=self.custom_global_env)
 
-                    self.connections[host] = waller
-                    self.prev_release(self.connections[host])
-                    self.release(self.connections[host])
-                    self.post_release(self.connections[host])
+                    self.connections[self.task_id] = waller
+                    self.prev_release(self.connections[self.task_id])
+                    self.release(self.connections[self.task_id])
+                    self.post_release(self.connections[self.task_id])
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_success, host=host,
                                               user=server_info['user'], command='')
@@ -583,10 +526,10 @@ class Deployer:
                     waller = Waller(host=host, user=server_info['user'], port=server_info['port'], inline_ssh_env=True)
                     waller.init_env(env=self.custom_global_env)
 
-                    self.connections[host] = waller                   
-                    self.prev_release_custom(self.connections[host])
-                    self.release(self.connections[host])
-                    self.post_release(self.connections[host])
+                    self.connections[self.task_id] = waller
+                    self.prev_release_custom(self.connections[self.task_id])
+                    self.release(self.connections[self.task_id])
+                    self.post_release(self.connections[self.task_id])
                     RecordModel().save_record(stage=RecordModel.stage_end, sequence=0, user_id=current_user.id,
                                               task_id=self.task_id, status=RecordModel.status_success, host=host,
                                               user=server_info['user'], command='')

@@ -3,7 +3,7 @@ name: Bug-报告
 about: 更详细的描述更利用问题解决
 title: BUG
 labels: bug
-assignees: meolu
+assignees: henyihanwobushi, meolu, aSmallPing, ZouHongxue
 
 ---
 
@@ -27,4 +27,4 @@ error...
 
 **运行环境**
  - OS: [e.g. Centos 7.x]
- - 版本 [e.g. 2.0.0]
+ - 版本 [e.g. aba77b36] walle首页信息处显示

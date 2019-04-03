@@ -51,20 +51,9 @@ class ProjectForm(FlaskForm):
     def set_id(self, id):
         self.id = id
 
-    def validate_name(self, field):
-        filters = {
-            ProjectModel.status.notin_([ProjectModel.status_remove]),
-            ProjectModel.name == field.data,
-            ProjectModel.space_id == current_user.space_id(),
-        }
-        server = ProjectModel.query.filter(*filters).first()
-        # 新建时,项目名不可与
-        if server and server.id != self.id:
-            raise ValidationError('该项目已重名')
-
     def form2dict(self):
         return {
-            'name': self.name.data if self.name.data else '',
+            'name': self.name.data.replace('"', '').replace("'", ''),
             'user_id': current_user.id,
 
             'status': self.status.data if self.status.data else 1,

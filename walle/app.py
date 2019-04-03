@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+import gevent.monkey
+gevent.monkey.patch_all()
+
 import logging
 import sys
-
 import os
+import threading
+
 from flask import Flask, render_template, current_app
 from flask_restful import Api
 from walle import commands
@@ -185,7 +189,9 @@ def register_socketio(app):
         return app
     socketio.init_app(app, async_mode='gevent')
     socketio.on_namespace(WalleSocketIO(namespace='/walle'))
-    socketio.run(app, debug=True, host=app.config.get('HOST'), port=app.config.get('PORT'))
+    socket_args = {"debug": app.config.get('DEBUG'), "host": app.config.get('HOST'), "port": app.config.get('PORT')}
+    socket_thread = threading.Thread(target=socketio.run, name="socket_thread", args=(app, ), kwargs=socket_args)
+    socket_thread.start()
     return app
 
 

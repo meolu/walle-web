@@ -2,7 +2,10 @@
 
 Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
-[![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+<p align="left">
+    <a href='https://travis-ci.org/meolu/walle-web'><img src='https://travis-ci.org/meolu/walle-web.svg?branch=master' alt="Build Status"></a>  
+    <a href='https://gitter.im/meolu/walle-web'><img src='https://badges.gitter.im/Join%20Chat.svg'></a>
+</p>
 
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0.0`了！！！
 
@@ -60,12 +63,28 @@ Roadmap
 - [x] **2.0.1**  2019-01-13
     - ~~项目配置添加自定义变量~~
     - ~~Python 3.7+兼容~~
-- **2.0.2**  2019-01-20
-    - `Dashboard`（全新的玩法，欢迎提issue）
-    - 在线PPT介绍
-- **2.1.0**  2019-01-27 :new:新年版
-    - `CAS`
-    - 冲刺`github` 7000 `star`（靠你们和你们的同事们了）
+- **2.1.0**  2019-03-22
+    - 超管权限完善
+    - `Dashboard` 1.0（全新的玩法，欢迎提issue）
+    - ~~3月24日开源中国苏州源创会-[开源综合技术主题](https://www.oschina.net/event/2303765)《开源构建多空间可视化一键部署Devops平台》~~
+- **2.2.0**  2019-04-22
+    - webhook (gitlab)
+    - 上线时间记录、命令与结果拆分、实时console
+    - 宿主机资源监控
+- **2.3.0**  2019-05-27
+    - 插件化：maven、npm
+    - pipeline式
+- **2.4.0**  2019-06-17
+    - i18n 国际化
+- **2.5.0**  2019-07-29
+    - 上线单Diff
+    - 消息通知定制化：钉钉、邮件、企业微信
+- **2.6.0**  2019-08-19
+    - 批量管理服务器
+    - 跨空间复制项目
+    - App打包平台
+    - `Dashboard` 2.0
+- 更多需求收集中
 
 
 Discussing
@@ -84,8 +103,14 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-ye.jpg" width="244" height="314" alt="叶歆昊微信" align=left />
 
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-zouhongxue.jpg" width="244" height="314" alt="keep learn微信" align=left />
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-xupengfei.jpg" width="244" height="314" alt="Flying 微信" align=left />
+
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-jiangyongping.jpg" width="244" height="314" alt="小平 微信" align=left />
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 新的惊喜
 =========================

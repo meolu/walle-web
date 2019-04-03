@@ -6,6 +6,7 @@
     :created time: 2017-03-19 15:50:07
     :author: wushuiyong@walle-web.io
 """
+
 try:
     from flask_wtf import FlaskForm  # Try Flask-WTF v0.13+
 except ImportError:
@@ -48,7 +49,11 @@ class UserForm(FlaskForm):
 
 
 class RegistrationForm(UserForm):
-    pass
+
+    def validate_username(self, field):
+        """ username muse be unique """
+        if UserModel.query.filter(UserModel.username == field.data, UserModel.username != -1).count():
+            raise ValidationError('此用户名已经被注册')
 
 
 class UserUpdateForm(FlaskForm):
@@ -63,4 +68,4 @@ class UserUpdateForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = StringField('email', [validators.Length(min=6, max=35),
                                   Regexp(r'^(.+)@(.+)\.(.+)', message='邮箱格式不正确')])
-    password = PasswordField('Password', [validators.Length(min=6, max=35)])
+    password = PasswordField('Password', [validators.Length(min=6)])

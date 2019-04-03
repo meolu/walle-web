@@ -16,7 +16,7 @@ from walle.model.database import db, Model
 class RecordModel(Model):
     # 表的名字:
     __tablename__ = 'records'
-    current_time = datetime.now()
+    current_time = datetime.now
     #
     stage_end = 'end'
     #
