@@ -72,11 +72,12 @@ class Deployer:
             self.project_info = self.taskMdl.get('project_info')
 
             # copy to a local version
-            self.release_version = '{project_id}_{task_id}_{timestamp}'.format(
-                project_id=self.project_info['id'],
-                task_id=self.task_id,
-                timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())),
-            )
+            self.release_version = self.taskMdl.get('link_id') if (self.taskMdl.get("is_rollback")) else \
+                '{project_id}_{task_id}_{timestamp}'.format(
+                    project_id=self.project_info['id'],
+                    task_id=self.task_id,
+                    timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())),
+                )
             current_app.logger.info(self.taskMdl)
 
             # 将环境变量包在 "" 里，防止特殊字符报错
@@ -519,7 +520,6 @@ class Deployer:
 
         try:
             is_all_servers_success = True
-            self.release_version = self.taskMdl.get('link_id')
             for server_info in self.servers:
                 host = server_info['host']
                 try:
