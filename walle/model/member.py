@@ -141,6 +141,29 @@ class MemberModel(SurrogatePK, Model):
 
         return ret
 
+    def change_owner(self, old_owner_id, new_owner_id):
+        # change owner for space
+        if not new_owner_id or str(new_owner_id) == str(old_owner_id):
+            return
+
+        filters = {
+            MemberModel.source_id == self.group_id,
+            MemberModel.source_type == self.source_type_group,
+            MemberModel.user_id.in_([old_owner_id, new_owner_id])
+        }
+        MemberModel.query.filter(*filters).delete(synchronize_session=False)
+
+        update = {
+            'user_id': new_owner_id,
+            'source_id': self.group_id,
+            'source_type': self.source_type_group,
+            'access_level': OWNER,
+            'status': self.status_available,
+        }
+        m = MemberModel(**update)
+        db.session.add(m)
+        db.session.commit()
+
     def update_project(self, project_id, members, group_name=None):
         space_info = model.project.ProjectModel.query.filter_by(id=project_id).first().to_json()
         space_members, count, user_ids = self.members(group_id=space_info['space_id'], size=-1)
