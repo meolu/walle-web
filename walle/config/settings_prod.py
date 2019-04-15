@@ -49,3 +49,6 @@ class ProdConfig(Config):
     MAIL_DEFAULT_SENDER = 'service@walle-web.io'
     MAIL_USERNAME = 'service@walle-web.io'
     MAIL_PASSWORD = 'Ki9y&3U82'
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = False
