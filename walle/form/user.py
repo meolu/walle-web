@@ -52,7 +52,7 @@ class RegistrationForm(UserForm):
 
     def validate_username(self, field):
         """ username muse be unique """
-        if UserModel.query.filter(UserModel.username == field.data, UserModel.username != -1).count():
+        if UserModel.query.filter(UserModel.username == field.data, UserModel.status != -1).count():
             raise ValidationError('此用户名已经被注册')
 
 
