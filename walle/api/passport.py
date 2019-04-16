@@ -52,7 +52,7 @@ class PassportAPI(ApiResource):
                     if current_app.config.get("COOKIE_ENABLE"):
                         remember = True
                     current_app.logger.info("remember me(记住我)功能是否开启,{}".format(remember))
-                    login_user(user, remember=remember)
+                    login_user(user)
                     user.fresh_session()
                 except WalleError as e:
                     return self.render_json(code=e.code, data=Code.code_msg[e.code])
