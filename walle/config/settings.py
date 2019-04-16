@@ -49,3 +49,6 @@ class Config(object):
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = False

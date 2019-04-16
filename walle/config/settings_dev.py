@@ -33,3 +33,6 @@ class DevConfig(Config):
     CODE_BASE = '/tmp/walle/codebase/'
 
     SQLALCHEMY_ECHO = True
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = False
