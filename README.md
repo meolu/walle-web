@@ -7,6 +7,8 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
     <a href='https://gitter.im/meolu/walle-web'><img src='https://badges.gitter.im/Join%20Chat.svg'></a>
 </p>
 
+**优质大数据人才候选人**：有几个非常优质的**大数据研发**朋友，做过公司级别的**类 BDP 的 BI 报表平台**，有做过公司级别的**实时 SQL 计算平台**，有做过公司级别的**元数据管理及 adhoc 平台**。由于公司原因，在找工作，有需要的同学请加我微信wu-shuiyong，备注来意，谢谢。
+
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0.0`了！！！
 
 walle 让用户代码发布终于可以不只能选择 jenkins！支持各种web代码发布，php、java、python、go等代码的发布、回滚可以通过web来一键完成。walle 一个可自由配置项目，更人性化，高颜值，支持git、多用户、多语言、多项目、多环境同时部署的开源上线部署系统。
