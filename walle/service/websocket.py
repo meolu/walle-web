@@ -62,7 +62,7 @@ class WalleSocketIO(Namespace):
             branches = wi.list_branch()
             emit('branches', {'event': 'branches', 'data': branches}, room=self.room)
         except Exception as e:
-            emit('branches', {'event': 'error', 'data': {'message': e.message}}, room=self.room)
+            emit('branches', {'event': 'error', 'data': {'message': e.message or str(e)}}, room=self.room)
 
     def on_tags(self, message=None):
         wi = Deployer(project_id=self.room)
