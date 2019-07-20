@@ -6,7 +6,7 @@ from datetime import timedelta
 
 class Config(object):
     """Base configuration."""
-    VERSION = '2.0.0'
+    VERSION = '2.0.1'
 
     SECRET_KEY = os.environ.get('WALLE_SECRET', 'secret-key')
     APP_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -49,3 +49,6 @@ class Config(object):
     # 轮转数量是 10 个
     LOG_FILE_BACKUP_COUNT = 10
     LOG_FORMAT = "%(asctime)s %(thread)d %(message)s"
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = False

@@ -32,3 +32,6 @@ class TestConfig(Config):
 
     # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = True

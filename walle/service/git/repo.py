@@ -28,44 +28,45 @@ class Repo:
         self.path = path
 
 
-    def log(self, wenv):
-        '''
-
-        @param wenv:
-
-            @param stage:
-            @param sequence:
-            @param user_id:
-            @param task_id:
-            @param status:
-            @param host:
-            @param user:
-            @param command:
-            @param success:
-            @param error:
-
-        @return:
-        '''
-        RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
-                                  task_id=wenv['task_id'], status=exitcode, host='127.0.0.1', user=getpass.getuser(),
-                                  command=result.command, success=stdout,
-                                  error=stderr)
-
-    def websocket(self):
-        ws_dict = {
-            'user': getpass.getuser(),
-            'host': '127.0.0.1',
-            'cmd': command,
-            'status': exitcode,
-            'stage': wenv['stage'],
-            'sequence': wenv['sequence'],
-            'success': stdout,
-            'error': stderr,
-        }
-        if wenv['console']:
-            emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
-
-        pass
+    # What follows is the risk code for flake8.
+    # def log(self, wenv):
+    #     '''
+    #
+    #     @param wenv:
+    #
+    #         @param stage:
+    #         @param sequence:
+    #         @param user_id:
+    #         @param task_id:
+    #         @param status:
+    #         @param host:
+    #         @param user:
+    #         @param command:
+    #         @param success:
+    #         @param error:
+    #
+    #     @return:
+    #     '''
+    #     RecordModel().save_record(stage=wenv['stage'], sequence=wenv['sequence'], user_id=wenv['user_id'],
+    #                               task_id=wenv['task_id'], status=exitcode, host='127.0.0.1', user=getpass.getuser(),
+    #                               command=result.command, success=stdout,
+    #                               error=stderr)
+    #
+    # def websocket(self):
+    #     ws_dict = {
+    #         'user': getpass.getuser(),
+    #         'host': '127.0.0.1',
+    #         'cmd': command,
+    #         'status': exitcode,
+    #         'stage': wenv['stage'],
+    #         'sequence': wenv['sequence'],
+    #         'success': stdout,
+    #         'error': stderr,
+    #     }
+    #     if wenv['console']:
+    #         emit('console', {'event': 'task:console', 'data': ws_dict}, room=wenv['task_id'])
+    #
+    #     pass
 
 
     def is_git_dir(self):
@@ -166,13 +167,13 @@ class Repo:
 
     def tags(self):
         '''
-        获取所有tag
+        获取所有tag，按时间倒序
 
         @param branch:
         @param kwargs:
         @return:
         '''
-        return [str(tag) for tag in PyRepo(self.path).tags]
+        return [str(tag) for tag in PyRepo(self.path).tags][-10:]
 
     def commits(self, branch):
         '''

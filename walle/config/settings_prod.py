@@ -29,6 +29,10 @@ class ProdConfig(Config):
 
     # 数据库设置 @TODO
     SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/walle?charset=utf8'
+    # 阿里云RDS强制释放空闲连接导致经常报错 mysql server has gone way
+    # 适当修改该参数即可 单位为秒
+    # N秒不用的连接自动释放
+    # SQLALCHEMY_POOL_RECYCLE = 30
 
     # 本地代码检出路径（用户查询分支, 编译, 打包） #TODO
     CODE_BASE = '/tmp/walle/codebase/'
@@ -49,3 +53,6 @@ class ProdConfig(Config):
     MAIL_DEFAULT_SENDER = 'service@walle-web.io'
     MAIL_USERNAME = 'service@walle-web.io'
     MAIL_PASSWORD = 'Ki9y&3U82'
+
+    # 登录cookie 防止退出浏览器重新登录
+    COOKIE_ENABLE = False

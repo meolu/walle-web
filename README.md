@@ -2,7 +2,12 @@
 
 Walle 2.0 - [官方主页](https://www.walle-web.io)
 =========================
-[![Build Status](https://travis-ci.org/meolu/walle-web.svg?branch=master)](https://travis-ci.org/meolu/walle-web)
+<p align="left">
+    <a href='https://travis-ci.org/meolu/walle-web'><img src='https://travis-ci.org/meolu/walle-web.svg?branch=master' alt="Build Status"></a>  
+    <a href='https://gitter.im/meolu/walle-web'><img src='https://badges.gitter.im/Join%20Chat.svg'></a>
+</p>
+
+**字节跳动内推**：效率工程招聘大数据研发、数据分析师，机会极佳，请勿错过。请各位朋友扩散下有需要的同学，请加我微信wu-shuiyong，备注来意，帮助内推，君子成人之美，谢谢。
 
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0.0`了！！！
 
@@ -63,8 +68,7 @@ Roadmap
 - **2.1.0**  2019-03-22
     - 超管权限完善
     - `Dashboard` 1.0（全新的玩法，欢迎提issue）
-    - 3月24日开源中国苏州源创会-[开源综合技术主题](https://www.oschina.net/event/2303765)《开源构建多空间可视化一键部署Devops平台》
-    - 冲刺`github` 10000 `star`（靠你们和你们的同事们了）
+    - ~~3月24日开源中国苏州源创会-[开源综合技术主题](https://www.oschina.net/event/2303765)《开源构建多空间可视化一键部署Devops平台》~~
 - **2.2.0**  2019-04-22
     - webhook (gitlab)
     - 上线时间记录、命令与结果拆分、实时console
@@ -101,8 +105,14 @@ Discussing
 
 <img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-ye.jpg" width="244" height="314" alt="叶歆昊微信" align=left />
 
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-zouhongxue.jpg" width="244" height="314" alt="keep learn微信" align=left />
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-xupengfei.jpg" width="244" height="314" alt="Flying 微信" align=left />
+
+<img src="https://raw.githubusercontent.com/meolu/walle-web/master/screenshot/weixin-jiangyongping.jpg" width="244" height="314" alt="小平 微信" align=left />
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 新的惊喜
 =========================

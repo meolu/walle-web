@@ -10,7 +10,7 @@ from datetime import datetime
 
 from sqlalchemy import String, Integer, DateTime
 from walle import model
-from walle.model.database import db, Model
+from walle.model.database import db, Model, or_
 from walle.service.extensions import permission
 
 
@@ -39,13 +39,13 @@ class EnvironmentModel(Model):
         :param kw:
         :return:
         """
+        SpaceModel = model.space.SpaceModel
         query = self.query.filter(EnvironmentModel.status.notin_([self.status_remove]))
         if kw:
-            query = query.filter(EnvironmentModel.name.like('%' + kw + '%'))
+            query = query.filter(or_(EnvironmentModel.name.like('%' + kw + '%'), SpaceModel.name.like('%' + kw + '%')))
         if space_id:
             query = query.filter(EnvironmentModel.space_id == space_id)
 
-        SpaceModel = model.space.SpaceModel
         query = query.join(SpaceModel, SpaceModel.id == EnvironmentModel.space_id)
         query = query.add_columns(SpaceModel.name)
         count = query.count()

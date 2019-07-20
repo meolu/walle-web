@@ -73,7 +73,7 @@ class TaskModel(SurrogatePK, Model):
     #     return dict(project_info, **self.taskMdl)
     #
 
-    def list(self, page=0, size=10, space_id=None, kw=None):
+    def list(self, page=0, size=10, space_id=None, user_id=None, kw=None):
         """
         获取分页列表
         :param page:
@@ -98,6 +98,9 @@ class TaskModel(SurrogatePK, Model):
 
         if space_id:
             query = query.filter(ProjectModel.space_id == space_id)
+
+        if user_id:
+            query = query.filter(TaskModel.user_id.in_(user_id))
 
         query = query.add_columns(ProjectModel.name, EnvironmentModel.name, ProjectModel.keep_version_num)
         count = query.count()

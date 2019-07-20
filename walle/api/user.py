@@ -103,7 +103,7 @@ class UserAPI(SecurityResource):
             try:
                 emails.send_email(user.email, 'Welcome to walle', message, '')
             except Exception as e:
-                # todo, responses error message to the front.
+                # todo, response error message to the front.
                 current_app.logger.warning(e)
 
             return self.render_json(data=user.item(user_id=user.id))
