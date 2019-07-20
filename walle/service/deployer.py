@@ -380,7 +380,7 @@ class Deployer:
                 errors.append({
                     'title': '远程目标机器免密码登录失败',
                     'why': '远程目标机器：%s 错误：%s' % (server_info['host'], result.stdout),
-                    'how': '在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/ssh_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
+                    'how': '在宿主机中配置免密码登录，把宿主机用户%s的~/.ssh/id_rsa.pub添加到远程目标机器用户%s的~/.ssh/authorized_keys。了解更多：http://walle-web.io/docs/troubleshooting.html' % (
                     pwd.getpwuid(os.getuid())[0], server_info['host']),
                 })
 
