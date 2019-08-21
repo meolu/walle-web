@@ -41,3 +41,4 @@ pycrypto==2.6.1
 pytz==2015.7
 requests==2.20.0
 GitPython==2.1.11
+pymysql ==0.9.3
