@@ -19,4 +19,5 @@ login_manager = LoginManager()
 mail = Mail()
 
 permission = Permission()
-socketio = SocketIO(engineio_logger=True, logger=True)
+# socketio = SocketIO(engineio_logger=True, logger=True) 无法正常拉取git仓库
+socketio = SocketIO(engineio_logger=True, logger=True, cors_allowed_origins=[])
