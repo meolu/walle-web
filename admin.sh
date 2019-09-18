@@ -41,7 +41,7 @@ function init() {
 
 function requirement() {
     source ./venv/bin/activate
-    pip install -r ./requirements/prod.txt
+    pip install -r ./requirements/prod.txt -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
 }
 
 function SystemName() {
@@ -54,7 +54,8 @@ function SystemName() {
                 python get-pip.py
             fi
             echo "安装/更新可能缺少的依赖: mysql-community-devel gcc gcc-c++ python-devel"
-            sudo yum install -y mysql-devel gcc gcc-c++ python-devel MySQL-python
+            # 安装python-devel报错 yum install yum-utils ,yum clean all  yum -y install python-devel
+            sudo yum install -y yum-utils mariadb-devel mysql-devel --skip-broken gcc gcc-c++ python-devel MySQL-python
             ;;
 
         debian|ubuntu|devuan)
@@ -136,7 +137,7 @@ echo "                                                                          
 function migration() {
     echo "Migration walle"
     echo "----------------"
-   source ./venv/bin/activate
+    source ./venv/bin/activate
     export FLASK_APP=waller.py
     flask db upgrade
     if [ $? == "0" ]; then
@@ -147,6 +148,8 @@ function migration() {
 }
 
 case "$1" in
+    require)
+        requirement;;
     init )
         walle_banner
         init
@@ -177,7 +180,7 @@ case "$1" in
     * )
         walle_banner
         echo "************************************************"
-        echo "Usage: sh admin {init|start|stop|restart|upgrade|migration}"
+        echo "Usage: sh admin {init|require|start|stop|restart|upgrade|migration}"
         echo "************************************************"
         ;;
 esac

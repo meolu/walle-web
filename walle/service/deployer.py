@@ -104,7 +104,7 @@ class Deployer:
                     var_list = var.split('=', 1)
                     if len(var_list) != 2:
                         continue
-                    self.custom_global_env[var_list[0]] = var_list[1]
+                    self.custom_global_env[var_list[0].strip()] = var_list[1].strip()
 
             self.localhost.init_env(env=self.custom_global_env)
 
