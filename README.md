@@ -7,7 +7,7 @@ Walle 2.0 - [官方主页](https://www.walle-web.io)
     <a href='https://gitter.im/meolu/walle-web'><img src='https://badges.gitter.im/Join%20Chat.svg'></a>
 </p>
 
-**字节跳动内推**：效率工程招聘大数据研发、数据分析师，机会极佳，请勿错过。请各位朋友扩散下有需要的同学，请加我微信wu-shuiyong，备注来意，帮助内推，君子成人之美，谢谢。
+**字节跳动内推**：ToB Lark 招聘大数据研发、数据分析师，机会极佳，请勿错过。请各位朋友扩散下有需要的同学，[直达内推链接](https://job.toutiao.com/referral/pc/position/detail/?token=MTsxNTcxMTA2MDM0NTkyOzY3MDQwNDI5MDQ2MTQzMDczMzY7NjcxODk1MDE2MDEzMjQ3NTE0OQ%3D%3D)，帮助内推，君子成人之美，谢谢。
 
 功能强大，且免费开源的`walle-web 瓦力`终于更新`2.0.0`了！！！
 
