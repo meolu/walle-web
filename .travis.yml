@@ -6,7 +6,6 @@ matrix:
   include:
     - python: "2.7"    
     - python: "3.7"
-      dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
 install:
   - echo "#install#"
   # For some reason Travis' build envs have wildly different pip/setuptools
