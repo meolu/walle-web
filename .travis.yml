@@ -2,10 +2,9 @@ language: python
 cache:
   directories:
     - $HOME/.cache/pip
-matrix:
-  include:
-    - python: "2.7"    
-    - python: "3.7"
+python:
+  - "2.7"    
+  - "3.8"
 install:
   - echo "#install#"
   # For some reason Travis' build envs have wildly different pip/setuptools
