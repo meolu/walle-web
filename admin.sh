@@ -39,9 +39,14 @@ function init() {
     echo -e "\033[32m welcome to walle 2.0 \033[0m"
 }
 
+# 如果有依赖安装失败 可以试下豆瓣源 在pip 结尾加上 -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
 function requirement() {
     source ./venv/bin/activate
-    pip install -r ./requirements/prod.txt -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+    if ! pip install -r ./requirements/prod.txt
+    then
+      echo "install requirements failed"
+      exit 1
+    fi
 }
 
 function SystemName() {
