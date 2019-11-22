@@ -29,7 +29,7 @@ Flask-WTF==0.14.2
 WTForms==2.1
 
 # Deployment
-gunicorn>=19.1.1
+gunicorn==19.1.1
 
 # Auth
 Flask-Login==0.4.0
