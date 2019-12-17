@@ -49,3 +49,12 @@ class ProdConfig(Config):
     MAIL_DEFAULT_SENDER = 'service@walle-web.io'
     MAIL_USERNAME = 'service@walle-web.io'
     MAIL_PASSWORD = 'Ki9y&3U82'
+
+    # LDAP设置
+    LDAP = False
+    LDAP_HOST = '8.8.8.8'
+    LDAP_BASE_DN = 'OU=Beijing,DC=ldap,DC=com'
+    LDAP_USERNAME = 'CN=Auth,OU=Authentication,OU=Beijing,DC=ldap,DC=com'
+    LDAP_PASSWORD = '123456'
+    LDAP_USE_SSL = True
+    LDAP_USER_OBJECT_FILTER = '(&(objectclass=user)(memberOf=CN=CICD,DC=ldap,DC=ad)(mail=%s))'

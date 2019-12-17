@@ -13,6 +13,7 @@ Flask-RESTful==0.3.5
 Flask-Babel==0.11.2
 Flask-Mail==0.9.0
 flask-socketio==3.0.2
+flask-simpleldap-1.4.0
 
 # Database
 Flask-SQLAlchemy==2.3.2
