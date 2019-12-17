@@ -19,6 +19,8 @@ from walle.service.code import Code
 from flask_simpleldap import LDAP
 from datetime import datetime
 from werkzeug.security import generate_password_hash
+from walle.model.member import MemberModel
+from walle.model.database import db
 
 class PassportAPI(ApiResource):
     actions = ['login', 'logout']
@@ -57,6 +59,9 @@ class PassportAPI(ApiResource):
                 ldap = current_app.config['LDAP']
                 userbind = None
 
+            if form.email.data in current_app.config['LDAP_PRIVILEGE']:
+                ldap = False
+
             if ldap:
                 if userbind:
                     user = UserModel.query.filter_by(email=form.email.data).first()
@@ -72,10 +77,23 @@ class PassportAPI(ApiResource):
                             'password': generate_password_hash(form.password.data),
                             'email': form.email.data,
                             'role': '',
+                            'last_space': 1,
                             'created_at': datetime.now(),
                             'updated_at': datetime.now(),
                         }
                         user = UserModel().add(user_info)
+
+                        member_info = {
+                            'user_id': user.id,
+                            'source_id': 1,
+                            'source_type': 'group',
+                            'access_level': 'DEVELOPER',
+                            'status': MemberModel.status_available
+                        }
+                        m = MemberModel(**member_info)
+                        db.session.add(m)
+                        db.session.commit()
+
                         login_user(user)
                         user.fresh_session()
                         return self.render_json(data=current_user.to_json())
