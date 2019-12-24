@@ -95,7 +95,7 @@ class Repo:
             os.makedirs(self.path)
         # git clone
         if self.is_git_dir():
-            self.checkout_2_branch(branch)
+            #self.checkout_2_branch(branch)
             return self.pull()
         else:
             return self.clone(url)
