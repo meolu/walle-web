@@ -130,6 +130,7 @@ class Repo:
         @return:
         '''
         PyRepo(self.path).git.checkout(branch)
+        PyRepo(self.path).git.pull()
 
     def checkout_2_commit(self, branch, commit):
         '''
