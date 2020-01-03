@@ -283,16 +283,19 @@ class Deployer:
 
             # 1. create a tmp link dir
             current_link_tmp_dir = 'current-tmp-%s' % (self.task_id)
-            command = 'ln -sfn {library}/{version} {library}/{current_tmp}'.format(
-                library=self.project_info['target_releases'], version=self.release_version,
-                current_tmp=current_link_tmp_dir)
+            #command = 'ln -sfn {library}/{version} {library}/{current_tmp}'.format(
+            #    library=self.project_info['target_releases'], version=self.release_version,
+            #    current_tmp=current_link_tmp_dir)
+            #command = 'ln -sfn %s %s' % (self.release_version, current_link_tmp_dir)
+            command = 'ln -sfn %s/%s %s' % (
+            self.project_info['target_releases'], self.release_version, current_link_tmp_dir)
             result = waller.run(command, wenv=self.config())
 
             # 2. make a soft link from release to tmp link
 
             # 3. move tmp link to webroot
             current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
-            command = 'mv -fT %s %s' % (current_link_tmp_dir, self.project_info['target_root'])
+            command = 'mv -f %s %s' % (current_link_tmp_dir, self.project_info['target_root'])
             result = waller.run(command, wenv=self.config())
 
     def rollback(self, waller):
@@ -320,7 +323,7 @@ class Deployer:
 
             # 3. move tmp link to webroot
             current_link_tmp_dir = '%s/current-tmp-%s' % (self.project_info['target_releases'], self.task_id)
-            command = 'mv -fT %s %s' % (current_link_tmp_dir, self.project_info['target_root'])
+            command = 'mv -f %s %s' % (current_link_tmp_dir, self.project_info['target_root'])
             result = waller.run(command, wenv=self.config())
 
     def release_untar(self, waller):
@@ -355,7 +358,7 @@ class Deployer:
         # self.post_release_service(waller)
 
         # 清理现场
-        self.cleanup_remote(waller)
+        #self.cleanup_remote(waller)
 
     def post_release_service(self, waller):
         '''
@@ -425,7 +428,8 @@ class Deployer:
 
     def cleanup_local(self):
         # clean local package
-        command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        #command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        command = 'ls -t ./ | grep "^{project_id}_" | tail -n +{keep_version_num} | xargs rm -rf'.format(project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with self.localhost.cd(self.local_codebase):
             result = self.localhost.local(command, wenv=self.config())
 
