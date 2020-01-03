@@ -358,7 +358,7 @@ class Deployer:
         # self.post_release_service(waller)
 
         # 清理现场
-        #self.cleanup_remote(waller)
+        self.cleanup_remote(waller)
 
     def post_release_service(self, waller):
         '''
@@ -428,8 +428,8 @@ class Deployer:
 
     def cleanup_local(self):
         # clean local package
-        #command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
-        command = 'ls -t ./ | grep "^{project_id}_" | tail -n +{keep_version_num} | xargs rm -rf'.format(project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
+        command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        #command = 'ls -t ./ | grep "^{project_id}_" | tail -n +{keep_version_num} | xargs rm -rf'.format(project_id=self.project_info['id'], keep_version_num=int(self.project_info['keep_version_num']) + 1)
         with self.localhost.cd(self.local_codebase):
             result = self.localhost.local(command, wenv=self.config())
 
