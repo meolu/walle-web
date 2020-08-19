@@ -14,9 +14,9 @@
 # 如果检测到 sh 指向的是 dash， 那么将使用 bash 重新执行脚本，然后在参数末尾加上一个 flag， 表示此次运行是修正过的， 避免陷入死循环。
 fix_ubuntu_bash="fix-sh-in-ubuntu"
 
-if [ ! -n "`echo $@ | grep $fix_ubuntu_bash$`" ]; then
-    if [ -n "`ls -l /bin/sh | grep "dash"`" ]; then
-        bash $0 $@ $fix_ubuntu_bash
+if [[ ! -n "$(echo $@ | grep ${fix_ubuntu_bash})" ]]; then
+    if [[ -n "$(ls -l /bin/sh | grep "dash")" ]]; then
+        bash $0 $@ ${fix_ubuntu_bash}
         exit
     fi
 fi
