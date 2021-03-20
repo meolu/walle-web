@@ -8,7 +8,7 @@ gevent-websocket==0.10.1
 Flask==1.0.2
 MarkupSafe==1.0
 Werkzeug==0.15.3
-Jinja2==2.10
+Jinja2==2.11.3
 Flask-RESTful==0.3.5
 Flask-Babel==0.11.2
 Flask-Mail==0.9.0
