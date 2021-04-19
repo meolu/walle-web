@@ -171,8 +171,8 @@ class UserModel(UserMixin, SurrogatePK, Model):
     def fresh_session(cls):
         session['project_master'] = []
         # 0.超管
-        if current_user.role == SUPER:
-            return True
+        # if current_user.role == SUPER:
+        #     return True
 
         spaces = current_user.has_spaces()
 

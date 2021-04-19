@@ -61,11 +61,10 @@ class GeneralAPI(SecurityResource):
         UserModel.fresh_session()
         # TODO
         # 超管不需要展示空间列表
-        if current_user.role != SUPER:
-            space = {
-                'current': session['space_info'],
-                'available': session['space_list'],
-            }
+        space = {
+            'current': session['space_info'],
+            'available': session['space_list'],
+        }
         data = {
             'user': user,
             'menu': menu,
