@@ -425,7 +425,7 @@ class Deployer:
 
     def cleanup_local(self):
         # clean local package
-        command = 'rm -rf {project_id}_{task_id}_*'.format(project_id=self.project_info['id'], task_id=self.task_id)
+        command = 'rm -rf {project_id}*'.format(project_id=self.project_info['id'])
         with self.localhost.cd(self.local_codebase):
             result = self.localhost.local(command, wenv=self.config())
 
