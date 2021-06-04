@@ -95,8 +95,9 @@ class Repo:
             os.makedirs(self.path)
         # git clone
         if self.is_git_dir():
-            self.checkout_2_branch(branch)
-            return self.pull()
+            #self.checkout_2_branch(branch)
+            #return self.pull()
+            return self.checkout_pull_branch(branch)
         else:
             return self.clone(url)
 
@@ -130,6 +131,16 @@ class Repo:
         @return:
         '''
         PyRepo(self.path).git.checkout(branch)
+
+    def checkout_pull_branch(self, branch):
+        '''
+        切换到某个分支并拉取最新代码
+
+        @param branch:
+        @return:
+        '''
+        PyRepo(self.path).git.checkout(branch)
+        PyRepo(self.path).git.pull()
 
     def checkout_2_commit(self, branch, commit):
         '''
