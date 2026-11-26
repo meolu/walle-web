@@ -94,9 +94,13 @@ class ProjectAPI(SecurityResource):
     def create(self):
         form = ProjectForm(request.form, csrf=False)
         if form.validate_on_submit():
+            if not self._environment_in_space(form.environment_id.data):
+                return self.render_json(code=-1)
             # add project
             project = ProjectModel()
             data = form.form2dict()
+            if current_user.role != SUPER:
+                data['space_id'] = self.space_id
             project_new = project.add(data)
             if not project_new:
                 return self.render_json(code=-1)
@@ -122,8 +126,12 @@ class ProjectAPI(SecurityResource):
         form.set_id(project_id)
         if form.validate_on_submit():
             server = ProjectModel().get_by_id(project_id)
+            if not self._environment_in_space(form.environment_id.data):
+                return self.render_json(code=-1)
             repo_url_origin = server.repo_url
             data = form.form2dict()
+            if current_user.role != SUPER:
+                data['space_id'] = server.space_id
             # a new type to update a model
             ret = server.update(data)
             # maybe sth changed by git
