@@ -17,6 +17,7 @@ class TestConfig(Config):
 
     ENV = 'test'
     TESTING = True
+    SECRET_KEY = 'test-only-walle-secret-key-for-tests'
     DEBUG = True
 
     # 服务启动 @TODO

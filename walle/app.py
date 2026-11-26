@@ -41,6 +41,7 @@ def create_app(config_object=ProdConfig):
     """
     app = Flask(__name__.split('.')[0])
     app.config.from_object(config_object)
+    ProdConfig.validate_secret_key(app.config.get('SECRET_KEY'))
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
