@@ -68,6 +68,8 @@ class TaskAPI(SecurityResource):
 
         form = TaskForm(request.form, csrf=False)
         if form.validate_on_submit():
+            if not self._project_in_space(form.project_id.data):
+                return self.render_json(code=-1)
             task_new = TaskModel()
             data = form.form2dict()
             task_new_info = task_new.add(data)
@@ -99,6 +101,8 @@ class TaskAPI(SecurityResource):
         form = TaskForm(request.form, csrf=False)
         form.set_id(task_id)
         if form.validate_on_submit():
+            if not self._project_in_space(form.project_id.data):
+                return self.render_json(code=-1)
             task = TaskModel().get_by_id(task_id)
             data = form.form2dict()
             # a new type to update a model
